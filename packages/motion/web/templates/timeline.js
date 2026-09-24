@@ -242,19 +242,50 @@
     if (falsy(P.breaks)) breaks = false;
     return { labels, breaks };
   }
+  const HERO_KEYS = ["hero", "big", "gross", "groß", "intro"];
+  const SUB_KEYS = ["sub", "subtitle", "untertitel", "line2", "zeile2", "zusatz"];
+  const SUBAT_KEYS = ["subAt", "sub_at", "subtitleAt", "subtitle_at"];
+  const HEROUNTIL_KEYS = ["heroUntil", "hero_until", "heroOut", "hero_out", "heroEnd", "hero_end", "until", "bis"];
   function parseTitle(P) {
     const v = pick(P, ["title", "titel", "heading", "headline", "ueberschrift", "überschrift", "caption"]);
     if (v === undefined || typeof v === "boolean") return null;
     let text = v, at = pick(P, ["titleAt", "title_at", "titelAt"]), tone = null;
+    let hero = pick(P, ["titleHero", "title_hero", "heroTitle", "hero_title"]), sub = pick(P, ["titleSub", "title_sub"]);
+    let subAt = pick(P, ["titleSubAt", "title_sub_at"]), heroUntil = pick(P, ["heroUntil", "hero_until", "titleHeroUntil"]);
+    let compact = null;
     if (v && typeof v === "object" && !Array.isArray(v)) {
       text = pick(v, ["text", "label", "title", "titel"]);
       const a = pick(v, AT_KEYS); if (a !== undefined) at = a;
       tone = toneColor(pick(v, TONE_KEYS));
+      const h = pick(v, HERO_KEYS); if (h !== undefined) hero = h;
+      const sb = pick(v, SUB_KEYS); if (sb !== undefined) sub = sb;
+      const sa = pick(v, SUBAT_KEYS); if (sa !== undefined) subAt = sa;
+      const hu = pick(v, HEROUNTIL_KEYS); if (hu !== undefined) heroUntil = hu;
+      const cp = pick(v, ["compact", "short", "kurz"]); if (typeof cp === "string" && cp.trim()) compact = cp;
     }
     if (Array.isArray(text)) text = text.join(" ");
     if (text === undefined || text === null || typeof text === "boolean") return null;
-    text = String(text).replace(/\s+/g, " ").trim();
-    return text ? { text: text.slice(0, 140), at, tone } : null;
+    text = String(text);
+    // Heldentitel: true | Sekunden (Ende der großen Phase) | { until }
+    let heroOn = false;
+    if (hero && typeof hero === "object" && !Array.isArray(hero)) {
+      heroOn = !falsy(pick(hero, ["on", "enabled", "an"]));
+      const hu = pick(hero, HEROUNTIL_KEYS.concat(["at", "t"])); if (hu !== undefined) heroUntil = hu;
+    } else if (typeof hero === "number" && isFinite(hero)) { heroOn = hero > 0; if (hero > 1) heroUntil = hero; }
+    else if (typeof hero === "string" && /^\s*\d/.test(hero)) { heroOn = true; heroUntil = hero; }
+    else heroOn = truthy(hero);
+    // Zeilenumbruch im Text = Hauptzeile / Zusatzzeile (nur, wenn keine eigene Zusatzzeile gesetzt ist)
+    if ((sub === undefined || sub === null || sub === "") && /\n/.test(text)) {
+      const parts = text.split(/\n+/);
+      text = parts.shift(); sub = parts.join(" ");
+    }
+    text = text.replace(/\s+/g, " ").trim();
+    sub = sub === undefined || sub === null || typeof sub === "boolean" ? "" : String(Array.isArray(sub) ? sub.join(" ") : sub).replace(/\s+/g, " ").trim().slice(0, 100);
+    if (!text && sub) { text = sub; sub = ""; }
+    if (!text) return null;
+    const trimEnd = (x) => x.replace(/[\s,;:·–—-]+$/, "");
+    const full = compact ? String(compact).replace(/\s+/g, " ").trim() : sub ? trimEnd(text) + ", " + sub : text;
+    return { text: full.slice(0, 140), main: text.slice(0, 100), sub, at, subAt, tone, hero: heroOn, heroUntil };
   }
 
   // ---------------- Textumbruch ----------------
