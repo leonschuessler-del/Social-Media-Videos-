@@ -57,7 +57,10 @@ Topic (manual|discovery) ──score──▶ SELECTED
 - **Jeder** Provider-Call läuft durch `recordUsage` → `cost_entries` (Provider, Modell, Capability, Einheiten, USD/EUR, failed, retry, coveredByQuota, requestId). Video.costEur wird mitgeführt.
 - `BudgetGuard.assertCanSpend` **vor** jedem kostenpflichtigen Call (Schätzung) → `BudgetExceededError` → Video **PAUSED** (Mensch entscheidet).
 - `CapacityManager` (Token-Bucket je `provider:capability`) + `reportLimit` bei 429/insufficient_quota → `CapacityExhaustedError` → Video **WAITING_FOR_CAPACITY** mit `resumeAfter`; `capacity.resume`-Cron plant neu. **Kein Wechsel auf Fremdanbieter.**
-- Scale-Gate: `project.maxVideosPerDay`; Priorisierung über Topic-Score (beste zuerst).
+- Scale-Gate: `project.maxVideosPerDay` zählt jedes heute eingeplante Video.
+- **Produktionsplaner** (`planProduction`, Cron täglich 06:00 Europe/Berlin): neue Ideen → günstiges Text-Scoring → Filter (Score, Faktenrisiko, Originalität) → Priorität absteigend → nur so viele Videos starten, wie das Tageslimit erlaubt. Der Rest bleibt SCORED in der Queue. Teure Generierung beginnt erst für ausgewählte Themen („100 Ideen → wenige Renders“).
+- **Kill Switch** persistent in `system_flags` (API/CLI), Worker prüfen vor jedem Job und jeder Stufe.
+- **Experimente** (`experimentReport`): Gruppierung nach Attribut (hookType, visualStyle, thumbnailVariant …), Kennzahl (APV, AVD, Subs/1k, RPM, Profit), Aussage nur bei n ≥ 30 je Gruppe und getrennten 95%-Konfidenzintervallen.
 
 ## Sicherheit
 

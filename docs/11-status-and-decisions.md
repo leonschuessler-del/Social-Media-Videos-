@@ -10,7 +10,10 @@ _Stand: 2026-09-24 (wird bei jedem Meilenstein aktualisiert)_
 
 - **E2E-Vertical-Slice grün** (`packages/pipeline/src/e2e.test.ts`, Mock-Provider, echter FFmpeg-Render, ~2,5 min):
   Thema „Was passiert, wenn ein Aufzugseil reißt?“ → RESEARCH (7 Claims, 4 Quellen) → FACT_CHECK (Urteile je Claim, 1 Korrektur) → SCRIPT (6 Sektionen, HOOK zuerst) → STORYBOARD (10 Szenen) → ASSETS (8 Bilder + Infografik + Textkarte) → VOICE (Wort-Zeitstempel) → EDIT (MP4 1080×1920, ≈55 s, −13,9 LUFS, Wort-Captions, Overlays, Musik-Ducking) → QA (8 Checks, PASS, Score > 0,6) → REVIEW (SAFE) → APPROVE → READY → Mock-Upload → SCHEDULED. Kosten-Ledger: > 10 Einträge, 0 € (Mock). Originalitäts-Check blockiert Duplikat-Thema.
-- Unit-Tests (30): State Machine, Scoring, Budget, Capacity, Usage/Preise, Ähnlichkeit, Szenen-Alignment, Publish-Slot, ASS/SRT-Captions, OpenAI-Helfer.
+- Unit-Tests (33): State Machine, Scoring, Budget, Capacity, Usage/Preise, Ähnlichkeit, Szenen-Alignment, Publish-Slot, ASS/SRT-Captions, OpenAI-Helfer, Produktionsplaner (Tageslimit, Kill Switch), Experiment-Report (Mindeststichprobe, 95%-KI).
+- **Orchestrator-Integrationstest grün** (`apps/server/src/jobs.test.ts`): pg-boss auf PostgreSQL, `video.produce` → 9 automatische Übergänge SELECTED → … → REVIEW, Kosten-Ledger in Postgres.
+- **Longform-Render verifiziert** (Mock): 1920×1080, 165,7 s, −13,9 LUFS, Wort-Captions, Overlays, 3 Thumbnails.
+- Tests haben während der Entwicklung echte Fehler gefunden und behoben: LUFS-Parsing in der Audio-QA, xfade-Timebase/Offset-Drift (Video kürzer als Ton), pg-boss-Singleton verwarf Folge-Jobs, **Scale-Gate zählte eingeplante Videos nicht** (Tageslimit umgehbar).
 - PgStore-Integrationstest gegen PostgreSQL 16 (Migration, CRUD, Kosten-Snapshot, Asset-Reuse, Analytics-Upsert).
 - QA hat während der Entwicklung einen echten Messfehler gefunden (LUFS-Parsing) – der Check greift.
 
@@ -20,7 +23,8 @@ _Stand: 2026-09-24 (wird bei jedem Meilenstein aktualisiert)_
 - Mock-Visual-QA bewertet Platzhalterbilder pauschal mit 0,7 – im Mock ist Visual-QA `SEMI_AUTOMATED`.
 - `gpt-6-astra`-Preise in Quellen uneinheitlich (5–10 $ / 25–50 $ pro 1M) → konservativ 10/50 in Preistabelle, `unknown=true`.
 - Storyboard-Narrationsverteilung: bei inkonsistenter LLM-Ausgabe wird das Skript deterministisch gleichmäßig auf Szenen verteilt (Bild-Text-Sync dann gröber).
-- Kill Switch per API wirkt prozessweit nur im API-Prozess; der Worker liest `KILL_SWITCH` aus der Env (harter Stopp = Env setzen + Neustart). Persistenter Schalter in DB ist ein kleiner Folgeschritt.
+- Kill Switch ist persistent (`system_flags`), Worker übernehmen ihn innerhalb von ~5 s vor dem nächsten Job bzw. der nächsten Stufe. Eine bereits laufende FFmpeg-Stufe wird nicht hart abgebrochen (läuft zu Ende, danach Stopp).
+- Render-Dauer: Longform-Mock (16 Szenen, 2,75 min) ≈ 10–12 min auf 4 vCPU, weil Ken-Burns bei 2× Überabtastung CPU-intensiv ist. Für 10-min-Longforms (≈ 60 Szenen) sind ≈ 40–60 min Render pro Video auf 4 vCPU zu erwarten → Worker-Parallelität/CPU entsprechend dimensionieren oder Überabtastung auf 1,5× senken.
 - Live-Modus (OpenAI) ist implementiert, aber mangels Key **nicht live getestet** – erste Live-Runs werden Prompt-/Parameter-Anpassungen brauchen (Responses-API-Feldnamen, Bildgrößen, Stimme).
 
 ## Blocker (benötigen dich)
@@ -39,6 +43,8 @@ _Stand: 2026-09-24 (wird bei jedem Meilenstein aktualisiert)_
 
 ## Nächste Schritte
 
-1. E2E vollständig grün (QA-Frame-Extraktion), Longform-Mock-Lauf.
-2. Commit/Push, dann Live-Slice sobald B1 vorliegt.
-3. Integrationstest Worker-Kette; Minimal-Dashboard.
+1. Live-Slice (erstes echtes Short mit OpenAI), sobald B1 vorliegt – danach Prompt-/Stil-Iteration anhand echter Bilder und Stimme.
+2. Google-Cloud-Projekt + OAuth + Audit-Antrag parallel starten (B2), erster privater Upload.
+3. Musikbibliothek befüllen (B4), Stimme wählen (B5).
+4. Render-Performance für echte Longforms messen und Worker dimensionieren.
+5. Abgleich Kosten-Ledger ↔ OpenAI Usage/Costs API (Admin-Key) als täglicher Job.

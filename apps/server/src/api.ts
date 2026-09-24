@@ -7,7 +7,7 @@ import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
 import PgBoss from "pg-boss";
 import { logger, STAGES } from "@content-os/core";
-import { createTopic, reviewDecision, scoreTopicWithLLM, discoverTopics, seedProject01 } from "@content-os/pipeline";
+import { createTopic, reviewDecision, scoreTopicWithLLM, discoverTopics, seedProject01, planProduction, experimentReport } from "@content-os/pipeline";
 import { authUrl, exchangeCode } from "@content-os/providers";
 import { bootstrap } from "./bootstrap.ts";
 import { QUEUES } from "./jobs.ts";
@@ -30,7 +30,7 @@ api.use("*", async (c, next) => {
 // Minimal-Dashboard (statisch, ohne Build-Schritt) – Review-Queue, Player, Usage, Kill Switch
 api.get("/", async (c) => c.html(await readFile(join(dirname(fileURLToPath(import.meta.url)), "..", "public", "index.html"), "utf8")));
 
-api.get("/health", (c) => c.json({ ok: true, killSwitch: app.ctx.isKilled(), providerMode: app.env.PROVIDER_MODE }));
+api.get("/health", async (c) => c.json({ ok: true, killSwitch: await app.ctx.refreshKillSwitch(), providerMode: app.env.PROVIDER_MODE }));
 
 // --- Overview (Dashboard-Daten) ---
 api.get("/overview", async (c) => {
@@ -84,20 +84,31 @@ api.get("/videos/:id", async (c) => {
   ]);
   return c.json({ video: v, research, script, storyboard, qa, assets, costs, audit, reviews, analytics });
 });
-api.post("/videos/:id/run", async (c) => c.json({ jobId: await boss.send(QUEUES.stage, { videoId: c.req.param("id") }, { singletonKey: `stage:${c.req.param("id")}` }) }, 202));
+api.post("/videos/:id/run", async (c) => c.json({ jobId: await boss.send(QUEUES.stage, { videoId: c.req.param("id") }) }, 202));
 api.post("/videos/:id/review", zValidator("json", z.object({ reviewer: z.string().default("operator"), decision: z.enum(["APPROVE", "REJECT", "REGENERATE", "FIX"]), targetStage: z.enum(STAGES).optional(), notes: z.string().optional() })), async (c) => {
   const v = await reviewDecision(app.ctx, c.req.param("id"), c.req.valid("json"));
-  if (v.stage === "READY" || v.status === "QUEUED") await boss.send(QUEUES.stage, { videoId: v.id }, { singletonKey: `stage:${v.id}` });
+  if (v.stage === "READY" || v.status === "QUEUED") await boss.send(QUEUES.stage, { videoId: v.id });
   return c.json(v);
 });
 api.post("/videos/:id/pause", async (c) => c.json(await app.store.videos.update(c.req.param("id"), { status: "PAUSED", statusReason: "manuell pausiert" })));
-api.post("/videos/:id/resume", async (c) => { const v = await app.store.videos.update(c.req.param("id"), { status: "QUEUED", statusReason: undefined, resumeAfter: undefined }); await boss.send(QUEUES.stage, { videoId: v.id }, { singletonKey: `stage:${v.id}` }); return c.json(v); });
+api.post("/videos/:id/resume", async (c) => { const v = await app.store.videos.update(c.req.param("id"), { status: "QUEUED", statusReason: undefined, resumeAfter: undefined }); await boss.send(QUEUES.stage, { videoId: v.id }); return c.json(v); });
 api.get("/videos/:id/asset/:assetId", async (c) => {
   const a = await app.store.assets.get(c.req.param("assetId"));
   if (!a || a.videoId !== c.req.param("id")) return c.json({ error: "not found" }, 404);
   const storage = app.ctx.registry.pick("storage", ["s3", "local"], "storage");
   const buf = await storage.get(a.storageKey);
   return new Response(new Uint8Array(buf), { headers: { "content-type": a.mimeType, "content-length": String(buf.length) } });
+});
+
+// --- Planung & Experimente ---
+api.post("/projects/:id/plan", async (c) => {
+  const r = await planProduction(app.ctx, c.req.param("id"));
+  for (const v of r.started) await boss.send(QUEUES.stage, { videoId: v.id });
+  return c.json({ ...r, started: r.started.map((v) => v.id) });
+});
+api.get("/projects/:id/experiments", zValidator("query", z.object({ dimension: z.enum(["hookType", "visualStyle", "thumbnailVariant", "titleVariant", "voiceId", "format", "language", "publishHour", "durationBucket"]), metric: z.enum(["views", "averagePercentageViewed", "averageViewDurationSec", "subscribersPer1k", "rpmUsd", "profitEur"]), minN: z.coerce.number().int().min(5).optional() })), async (c) => {
+  const q = c.req.valid("query");
+  return c.json(await experimentReport(app.store, { projectId: c.req.param("id"), dimension: q.dimension, metric: q.metric, minSamplePerGroup: q.minN, usdEur: app.env.USD_EUR_RATE }));
 });
 
 // --- Usage / Kosten ---
@@ -109,9 +120,8 @@ api.get("/audit", async (c) => c.json(await app.store.audit.list({ entityId: c.r
 
 // --- Kill Switch (Laufzeit) ---
 api.post("/kill-switch", zValidator("json", z.object({ enabled: z.boolean() })), async (c) => {
-  process.env.KILL_SWITCH = c.req.valid("json").enabled ? "true" : "false";
-  await app.store.audit.log({ actor: "api", action: "kill_switch", entityType: "system", entityId: "kill_switch", details: { enabled: c.req.valid("json").enabled } });
-  return c.json({ killSwitch: app.ctx.isKilled(), note: "Wirkt prozessweit für API; Worker liest KILL_SWITCH aus Env – für harten Stopp Worker-Env setzen und neu starten." });
+  await app.ctx.setKillSwitch(c.req.valid("json").enabled, "api");
+  return c.json({ killSwitch: app.ctx.isKilled(), note: "Persistent in DB (system_flags). Worker übernehmen den Zustand innerhalb von ~5 s vor dem nächsten Job/der nächsten Stufe. KILL_SWITCH=true in der Env übersteuert immer." });
 });
 
 // --- YouTube OAuth (offizieller Flow) ---

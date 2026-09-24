@@ -10,8 +10,12 @@ export interface PipelineContext {
   budget: BudgetGuard;
   capacity: CapacityManager;
   logger: Logger;
-  /** Kill Switch (aus Env oder Laufzeit) */
+  /** Kill Switch (Env ODER persistentes DB-Flag; synchron auf gecachtem Wert) */
   isKilled: () => boolean;
+  /** Lädt das persistente Kill-Switch-Flag neu (max. alle 5 s) und gibt den Zustand zurück. */
+  refreshKillSwitch: () => Promise<boolean>;
+  /** Setzt das persistente Flag – wirkt auf API UND alle Worker (Audit-Log). */
+  setKillSwitch: (enabled: boolean, by: string) => Promise<void>;
 }
 
 export function createContext(input: { env: Env; store: Store; registry: ProviderRegistry; logger?: Logger; capacity?: CapacityManager }): PipelineContext {
@@ -24,5 +28,21 @@ export function createContext(input: { env: Env; store: Store; registry: Provide
     "openai:llm": { maxPerWindow: 200, windowSeconds: 60 },
     "openai:tts": { maxPerWindow: 30, windowSeconds: 60 },
   });
-  return { env, store, registry, router, usage, budget, capacity, logger: input.logger ?? baseLogger, isKilled: () => env.KILL_SWITCH || process.env.KILL_SWITCH === "true" };
+  const kill = { flag: false, checkedAt: 0 };
+  const ctx: PipelineContext = {
+    env, store, registry, router, usage, budget, capacity, logger: input.logger ?? baseLogger,
+    isKilled: () => env.KILL_SWITCH || process.env.KILL_SWITCH === "true" || kill.flag,
+    refreshKillSwitch: async () => {
+      if (Date.now() - kill.checkedAt < 5_000) return ctx.isKilled();
+      kill.flag = (await store.flags.get<boolean>("kill_switch")) === true;
+      kill.checkedAt = Date.now();
+      return ctx.isKilled();
+    },
+    setKillSwitch: async (enabled: boolean, by: string) => {
+      await store.flags.set("kill_switch", enabled, by);
+      await store.audit.log({ actor: by, action: "kill_switch", entityType: "system", entityId: "kill_switch", details: { enabled } });
+      kill.flag = enabled; kill.checkedAt = Date.now();
+    },
+  };
+  return ctx;
 }

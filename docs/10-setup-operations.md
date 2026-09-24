@@ -11,7 +11,7 @@
 pnpm install
 cp .env.example .env          # Werte eintragen (nur Namen sind dokumentiert, nie Secrets committen)
 pnpm db:migrate               # Migrationen (packages/db/drizzle)
-pnpm test                     # Unit + E2E (offline, Mock-Provider, echter FFmpeg-Render)
+pnpm test                     # Unit + E2E + Integration (Postgres-Tests werden ohne DB übersprungen)
 
 # Vertical Slice per CLI (ohne Dashboard)
 pnpm cli produce --memory                                   # Aufzugseil-Short, In-Memory, bis REVIEW
@@ -20,6 +20,9 @@ pnpm cli produce --title "Was passiert in einer Mikrowelle wirklich?" --format S
 pnpm cli status
 pnpm cli review <videoId> --decision APPROVE --publish      # SAFE MODE Freigabe + Upload/Schedule (Mock oder YouTube)
 pnpm cli providers                                          # Provider-Status (AVAILABLE/MOCK/BLOCKED/DISABLED)
+pnpm cli plan                                               # Ideen bewerten, beste bis Tageslimit einplanen
+pnpm cli experiments --dimension visualStyle --metric averagePercentageViewed
+pnpm cli kill-switch on|off                                 # persistenter Kill Switch (wirkt auf alle Worker)
 
 # Dienste
 pnpm dev:api      # http://localhost:3000 (Bearer API_TOKEN)
@@ -57,7 +60,7 @@ Ohne Einträge nutzt der Renderer ein synthetisches Ambient-Pad (eigene Erzeugun
 
 ## API-Kurzreferenz (Bearer API_TOKEN)
 
-`GET /health` · `GET /overview` · `GET/POST /projects…` · `POST /projects/:id/topics` · `POST /projects/:id/topics/discover` · `POST /topics/:id/produce` · `GET /videos?stage=REVIEW` · `GET /videos/:id` · `GET /videos/:id/asset/:assetId` (Stream) · `POST /videos/:id/review {decision}` · `POST /videos/:id/run|pause|resume` · `GET /usage` · `GET /audit` · `POST /kill-switch {enabled}`
+`GET /` (Review-Seite) · `GET /health` · `GET /overview` · `POST /projects/:id/plan` · `GET /projects/:id/experiments?dimension=…&metric=…` · `GET/POST /projects…` · `POST /projects/:id/topics` · `POST /projects/:id/topics/discover` · `POST /topics/:id/produce` · `GET /videos?stage=REVIEW` · `GET /videos/:id` · `GET /videos/:id/asset/:assetId` (Stream) · `POST /videos/:id/review {decision}` · `POST /videos/:id/run|pause|resume` · `GET /usage` · `GET /audit` · `POST /kill-switch {enabled}`
 
 ## Deployment
 

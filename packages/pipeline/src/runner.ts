@@ -42,12 +42,14 @@ export async function createVideoForTopic(ctx: PipelineContext, topicId: string,
 export async function runStage(ctx: PipelineContext, videoId: string): Promise<StageOutcome> {
   let video = await ctx.store.videos.get(videoId);
   if (!video) throw new ContentOsError("NOT_FOUND", `Video ${videoId}`);
-  if (ctx.isKilled()) throw new ContentOsError("KILL_SWITCH", "Kill Switch aktiv");
+  if (await ctx.refreshKillSwitch()) throw new ContentOsError("KILL_SWITCH", "Kill Switch aktiv");
   const project = await ctx.store.projects.get(video.projectId);
   if (!project) throw new ContentOsError("NOT_FOUND", "Projekt");
   const from = video.stage;
   if (video.status === "PAUSED" || video.status === "REJECTED" || video.status === "DEAD_LETTER") return { video, from, to: from, status: video.status, note: "nicht ausführbar" };
   if (video.status === "WAITING_FOR_CAPACITY" && video.resumeAfter && new Date(video.resumeAfter) > new Date()) return { video, from, to: from, status: video.status, note: `wartet bis ${video.resumeAfter}` };
+  // RUNNING-Guard: kein Doppellauf derselben Stufe (Job-Duplikate, Neustarts). Nach 4 h gilt ein RUNNING als verwaist.
+  if (video.status === "RUNNING" && Date.now() - new Date(video.updatedAt).getTime() < 4 * 3600_000) return { video, from, to: from, status: video.status, note: "läuft bereits" };
 
   const attempt = video.stageAttempt + 1;
   video = await ctx.store.videos.update(videoId, { status: "RUNNING", stageAttempt: attempt, statusReason: undefined, resumeAfter: undefined });

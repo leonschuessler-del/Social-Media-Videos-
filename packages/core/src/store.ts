@@ -79,7 +79,7 @@ export interface Store {
     get(id: string): Promise<Video | undefined>;
     list(f: VideoFilter): Promise<Video[]>;
     update(id: string, patch: Partial<Video>): Promise<Video>;
-    /** Anzahl Videos eines Projekts, die heute (UTC) in Produktion gestartet wurden (Scale-Gate). */
+    /** Anzahl Videos eines Projekts, die heute (UTC) angelegt/eingeplant wurden (Scale-Gate). */
     countStartedToday(projectId: string, now: Date): Promise<number>;
   };
   qa: { create(q: Omit<QAReport, "id" | "createdAt"> & { id?: string }): Promise<QAReport>; get(id: string): Promise<QAReport | undefined> };
@@ -93,6 +93,7 @@ export interface Store {
   };
   reviews: { create(r: Omit<ReviewDecision, "id" | "at"> & { id?: string }): Promise<ReviewDecision>; listByVideo(videoId: string): Promise<ReviewDecision[]> };
   audit: { log(e: Omit<AuditEntry, "id" | "at">): Promise<void>; list(f: { entityId?: string; limit?: number }): Promise<AuditEntry[]> };
+  flags: { get<T = unknown>(key: string): Promise<T | undefined>; set(key: string, value: unknown, by: string): Promise<void> };
 }
 
 // ---------------------------------------------------------------------------
@@ -142,6 +143,7 @@ export function createMemoryStore(): Store {
   const analytics = new Table<AnalyticsSnapshot>();
   const reviews = new Table<ReviewDecision>();
   const audit: AuditEntry[] = [];
+  const flags = new Map<string, unknown>();
   const now = () => new Date().toISOString();
 
   const store: Store = {
@@ -209,7 +211,8 @@ export function createMemoryStore(): Store {
       async update(id, patch) { return videos.update(id, { ...patch, updatedAt: now() }); },
       async countStartedToday(projectId, at) {
         const day = at.toISOString().slice(0, 10);
-        return videos.all().filter((v) => v.projectId === projectId && v.createdAt.slice(0, 10) === day && v.stage !== "IDEA" && v.stage !== "SCORED" && v.stage !== "SELECTED").length;
+        // Jedes heute angelegte Video zählt (ab SELECTED ist es für die Produktion eingeplant)
+        return videos.all().filter((v) => v.projectId === projectId && v.createdAt.slice(0, 10) === day).length;
       },
     },
     qa: {
@@ -249,6 +252,10 @@ export function createMemoryStore(): Store {
     audit: {
       async log(e) { audit.push({ ...e, id: newId("aud"), at: now() }); },
       async list(f) { return audit.filter((a) => !f.entityId || a.entityId === f.entityId).slice(-(f.limit ?? 100)); },
+    },
+    flags: {
+      async get<T>(key: string) { return flags.get(key) as T | undefined; },
+      async set(key, value) { flags.set(key, structuredClone(value)); },
     },
   };
   return store;

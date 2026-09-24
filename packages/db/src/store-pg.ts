@@ -136,7 +136,8 @@ export function createPgStore(db: Db): Store {
       async update(id, patch) { const [r] = await db.update(t.videos).set({ ...undef({ ...patch }), updatedAt: new Date().toISOString() }).where(eq(t.videos.id, id)).returning(); return rowToVideo(r!); },
       async countStartedToday(projectId, now) {
         const dayStart = new Date(now); dayStart.setUTCHours(0, 0, 0, 0);
-        const [r] = await db.select({ c: sql<number>`count(*)::int` }).from(t.videos).where(and(eq(t.videos.projectId, projectId), gte(t.videos.createdAt, dayStart.toISOString()), sql`${t.videos.stage} NOT IN ('IDEA','SCORED','SELECTED')`));
+        const dayEnd = new Date(dayStart.getTime() + 86_400_000);
+        const [r] = await db.select({ c: sql<number>`count(*)::int` }).from(t.videos).where(and(eq(t.videos.projectId, projectId), gte(t.videos.createdAt, dayStart.toISOString()), sql`${t.videos.createdAt} < ${dayEnd.toISOString()}`));
         return r?.c ?? 0;
       },
     },
@@ -187,6 +188,10 @@ export function createPgStore(db: Db): Store {
         const rows = await db.select().from(t.auditLog).where(f.entityId ? eq(t.auditLog.entityId, f.entityId) : undefined).orderBy(desc(t.auditLog.at)).limit(f.limit ?? 100);
         return rows.map((r): AuditEntry => ({ id: r.id, at: r.at, actor: r.actor, action: r.action, entityType: r.entityType, entityId: r.entityId, details: r.details as Record<string, unknown> }));
       },
+    },
+    flags: {
+      async get<T>(key: string) { const [r] = await db.select().from(t.systemFlags).where(eq(t.systemFlags.key, key)); return r ? (r.value as T) : undefined; },
+      async set(key, value, by) { await db.insert(t.systemFlags).values({ key, value, updatedBy: by, updatedAt: new Date().toISOString() }).onConflictDoUpdate({ target: t.systemFlags.key, set: { value, updatedBy: by, updatedAt: new Date().toISOString() } }); },
     },
   };
   return store;

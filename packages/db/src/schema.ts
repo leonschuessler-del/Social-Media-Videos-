@@ -229,3 +229,11 @@ export const capacityWindows = pgTable("capacity_windows", {
   windowStart: doublePrecision("window_start").notNull(),
   blockedUntil: doublePrecision("blocked_until"),
 });
+
+/** System-Flags (z. B. persistenter Kill Switch), von API und Worker gelesen. */
+export const systemFlags = pgTable("system_flags", {
+  key: text("key").primaryKey(),
+  value: jsonb("value").notNull(),
+  updatedAt: ts("updated_at").notNull().defaultNow(),
+  updatedBy: text("updated_by").notNull().default("system"),
+});

@@ -10,7 +10,7 @@ import { Command } from "commander";
 import { createMemoryStore, loadEnv, logger, type Store } from "@content-os/core";
 import { createDb, createPgStore, runMigrations } from "@content-os/db";
 import { buildRegistry } from "@content-os/providers";
-import { createContext, createTopic, createVideoForTopic, MockLLMProvider, reviewDecision, runStage, runUntil, seedProject01, ELEVATOR_TOPIC } from "@content-os/pipeline";
+import { createContext, createTopic, createVideoForTopic, MockLLMProvider, reviewDecision, runStage, runUntil, seedProject01, ELEVATOR_TOPIC, planProduction, experimentReport } from "@content-os/pipeline";
 
 async function setup(memory: boolean) {
   const env = loadEnv();
@@ -64,6 +64,23 @@ program.command("status").description("Pipeline-Übersicht").action(async () => 
   console.table(videos.map((v) => ({ id: v.id.slice(0, 14), format: v.format, stage: v.stage, status: v.status, score: v.qualityScore?.toFixed(2), costEur: v.costEur.toFixed(3), reason: (v.statusReason ?? "").slice(0, 50) })));
   console.log("Heute:", await store.costs.summarize({ since: dayStart }));
   await close();
+});
+
+program.command("plan").description("Neue Ideen bewerten und die besten bis zum Tageslimit starten (ohne Ausführung)").option("--memory", "", false).action(async (o) => {
+  const { ctx, project, close } = await setup(o.memory);
+  const r = await planProduction(ctx, project.id);
+  console.log(JSON.stringify({ ...r, started: r.started.map((v) => v.id) }, null, 2)); await close();
+});
+
+program.command("experiments").description("Experiment-Report (nur belastbar ab Mindeststichprobe)").requiredOption("--dimension <d>").requiredOption("--metric <m>").action(async (o) => {
+  const { store, project, close } = await setup(false);
+  console.log(JSON.stringify(await experimentReport(store, { projectId: project.id, dimension: o.dimension, metric: o.metric }), null, 2)); await close();
+});
+
+program.command("kill-switch <state>").description("Persistenten Kill Switch setzen: on|off").action(async (state) => {
+  const { ctx, close } = await setup(false);
+  await ctx.setKillSwitch(state === "on", "cli");
+  console.log(`Kill Switch: ${ctx.isKilled() ? "AKTIV" : "aus"}`); await close();
 });
 
 program.command("providers").description("Provider-Status (AVAILABLE / MOCK / BLOCKED_BY_PROVIDER / DISABLED)").action(async () => {
