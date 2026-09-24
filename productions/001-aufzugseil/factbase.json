@@ -1,0 +1,897 @@
+[
+ {
+  "id": "suspension_en_min_number_diameter",
+  "claim_de": "Nach EN 81-20 hängen Fahrkorb und Gegengewicht an Stahldrahtseilen (oder Ketten). Es sind mindestens zwei voneinander unabhängige Tragseile vorgeschrieben, ihr Nenndurchmesser muss mindestens 8 mm betragen, und der Durchmesser von Treib- und Umlenkscheiben muss mindestens das 40-Fache des Seildurchmessers sein.",
+  "detail": "Mindestdurchmesser 8 mm. Dünnere Seile sind nur zulässig, wenn eine Benannte Stelle (Notified Body) nachweist, dass sie gleich sicher sind. D/d ≥ 40: Bei einem 8-mm-Seil ergibt das eine Scheibe von mindestens 320 mm (eigene Rechnung). Auch das Unterschreiten von D/d = 40 geht nur mit Sonderzulassung, etwa bei PFEIFER DRAKO 250T mit 6, 6,5 und 8 mm. Die Seilendverbindungen müssen mindestens 80 % der Mindestbruchkraft des Seils aushalten.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://elevatorworld.com/article/suspension-means-for-lifts/",
+   "https://standards.iteh.ai/catalog/standards/cen/c4e0e4cb-a4be-4e98-b941-e36bcbf86e0d/en-81-20-2020",
+   "https://www.pfeifer.info/en/products-services/products/ropes-and-rope-accessories/unassembled-ropes/unassembled-round-strand-ropes/round-strand-rope-non-rotation-resistant/drako-250t.html",
+   "https://www.elevator.tr/en/glossary/rope"
+  ],
+  "caveats": "Den Normtext von EN 81-20 konnte ich nicht direkt lesen, weil WebFetch für alle Normen- und Fachseiten blockiert war. Die Angaben stammen aus Suchtreffer-Auszügen von Elevator World, Seilherstellern und Fachglossaren. Die Mindestzahl 'zwei' folgt außerdem aus der Regel 'Sicherheitsfaktor 16 bei zwei Seilen' und aus EN 81-1 (Vorgängernorm; laut de.wikipedia 'Aufzugsanlage': 16-fache Seilsicherheit bei zwei Tragseilen). | Online nicht nachgeprüft: Das Suchbudget war aufgebraucht, und WebFetch wurde für jeden Host blockiert, auch für Wikipedia, ISO, PFEIFER, Elevator World und dir.ca.gov. Das Urteil beruht auf eigenem Fachwissen. EN 81-1 (9.1/9.2.1) und EN 81-20 (5.5.1/5.5.2) enthalten wörtlich diese Anforderungen: Stahldrahtseile oder Ketten, Nenndurchmesser mindestens 8 mm, mindestens zwei unabhängige Seile, D/d mindestens 40 unabhängig von der Litzenzahl, Endverbindungen mindestens 80 % der Mindestbruchkraft. Genau genommen bezieht sich D/d auf den Teilkreisdurchmesser von Scheiben, Rollen und Trommeln. Zur Detail-Aussage 'nur mit Benannter Stelle': Die Norm selbst enthält keine solche Ausnahme. Wer von der harmonisierten Norm abweicht, muss die grundlegenden Anforderungen der Aufzugsrichtlinie 2014/33/EU auf anderem Weg nachweisen, in der Praxis meist über eine Baumusterprüfung bei einer Benannten Stelle. Besser so formulieren. Die Rechnung 40 × 8 mm = 320 mm stimmt."
+ },
+ {
+  "id": "suspension_en_safety_factor",
+  "claim_de": "Der Sicherheitsfaktor der Tragseile muss nach EN 81-20/EN 81-50 bei Treibscheibenaufzügen mit drei oder mehr Seilen mindestens 12 betragen, bei nur zwei Seilen mindestens 16.",
+  "detail": "Definition nach EN 81-20:2014: Verhältnis der Mindestbruchkraft eines Seils (in N) zur größten Kraft in diesem Seil, wenn der Fahrkorb mit Nennlast in der untersten Haltestelle steht. Zusätzlich verlangt EN 81-50, Abschnitt 5.12, eine Berechnung, die die äquivalente Zahl der Umlenkungen (Nequiv) und das Verhältnis D/d berücksichtigt. Diese Berechnung kann einen höheren Mindestwert ergeben: In einem veröffentlichten Rechenbeispiel mit D/d = 40 und Nequiv = 7 ergibt sich Sf = 16. Maßgeblich ist der höhere der beiden Werte.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://elevatorworld.com/article/on-the-safety-factor-of-suspension-ropes/",
+   "https://elevatorworld.com/article/suspension-means-for-lifts/",
+   "https://liftescalatorlibrary.org/paper_indexing/papers/00000063.pdf",
+   "https://www.oipeec.org/product/how-to-define-the-minimum-number-of-suspension-ropes-in-elevators/"
+  ],
+  "caveats": "Die Werte 12 und 16 und die Definition sind in mehreren unabhängigen Suchauszügen bestätigt. Den Wert für Trommelantrieb (vermutlich ebenfalls 12, wie in EN 81-1) konnte ich nicht belegen, deshalb fehlt er hier. Der Faktor gilt pro Seil, nicht für das ganze Seilpaket. | Online nicht nachgeprüft (alle Hosts blockiert, Suchbudget erschöpft). Die Werte 12 und 16 und die Definition (Mindestbruchkraft eines Seils geteilt durch die größte Seilkraft bei Fahrkorb mit Nennlast in der untersten Haltestelle) entsprechen EN 81-1 9.2.2 und EN 81-20 5.5.2. Beim Trommelantrieb bzw. formschlüssigen Antrieb mit Seilen gilt ebenfalls 12, bei Ketten 10; das ist aus dem Gedächtnis und nicht belegt. Ich habe die EN-81-50-Formel (früher EN 81-1 Anhang N) selbst nachgerechnet: Mit D/d = 40 und Nequiv = 7 ergibt sich Sf ≈ 16,4, mit Nequiv = 3 etwa 12,05. Das Rechenbeispiel mit Sf ≈ 16 ist also plausibel. Maßgeblich ist der höhere der beiden Werte, das stimmt."
+ },
+ {
+  "id": "suspension_iso8100_transition",
+  "claim_de": "EN 81-20 und EN 81-50 sollen durch die überarbeiteten Normen EN ISO 8100-1 und EN ISO 8100-2 (Ausgabe 2026) abgelöst werden; für den Wechsel ist eine mehrjährige Übergangszeit vorgesehen. Die Grundregel für den Mindest-Sicherheitsfaktor (12, bei nur zwei Tragmitteln 16) gilt nach Branchenangaben weiter.",
+  "detail": "Laut ELA-Vergleichsdokument (März 2026) enthalten die neuen Normen auch Anforderungen an Tragmittel, die keine Stahldrahtseile sind (z. B. Gurte). Liftinstituut und TÜV SÜD berichten über den Übergang; die Harmonisierung in Europa war für 2026 erwartet.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.ela-aisbl.eu/wp-content/uploads/2026/03/EN_ISO_8100-12_Comparison_EN-81-2050_Condensed_Version-9.pdf",
+   "https://www.liftinstituut.com/newsroom/129-the-latest-news-on-the-en-iso-8100-development",
+   "https://www.iso.org/standard/80554.html",
+   "https://www.tuvsud.com/en/newsroom/press-releases/2025/november/tuev-sued-supports-transition-to-iso-8100-1-and-8100-2"
+  ],
+  "caveats": "Die Angaben stammen nur aus Suchauszügen; das ELA-PDF selbst konnte ich nicht öffnen. Für ein Video mit Stand 2026 sollte man 'EN 81-20 bzw. künftig EN ISO 8100-1' sagen. | Nicht nachprüfbar: Die Seiten von ELA, Liftinstituut, ISO und TÜV SÜD waren blockiert. Dass es Nachfolgenormen gibt, passt zu meinem Kenntnisstand. Eine ISO 8100-1/-2 gibt es schon seit 2019, damals inhaltlich gleich EN 81-20/50; die Fassungen von 2026 sind Überarbeitungen. Weder die 36 Monate Übergangsfrist noch die Aussage, dass die 12/16-Regel unverändert bleibt, konnte ich unabhängig bestätigen. Wann die alten Normen in der EU die Vermutungswirkung verlieren, hängt von der Veröffentlichung im Amtsblatt (OJEU) ab und nicht allein vom Erscheinungsdatum. Deshalb besser vorsichtig formulieren, etwa: 'EN 81-20 bzw. künftig EN ISO 8100-1'."
+ },
+ {
+  "id": "suspension_asme_number_diameter",
+  "claim_de": "Nach dem nordamerikanischen Regelwerk (ASME A17.1 und davon abgeleitete Landesvorschriften) braucht ein Treibscheibenaufzug mindestens drei Tragseile, ein Trommelaufzug mindestens zwei. Der Mindestdurchmesser von Drahtseilen liegt bei 9,5 mm (3/8 Zoll).",
+  "detail": "Die Regel steht in ASME A17.1 Abschnitt 2.20.4 ('Minimum Number and Diameter of Suspension Ropes') und wörtlich ähnlich in den California Elevator Safety Orders (§3042, §1604.25). Neuere ASME-Ausgaben erlauben neben Drahtseilen auch 'noncircular elastomeric-coated steel suspension members' (beschichtete Stahlgurte), für die ASME A17.6 die Anforderungen festlegt.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://up.codes/s/minimum-number-and-diameter-of-suspension-ropes",
+   "https://www.dir.ca.gov/title8/3042.html",
+   "https://www.asme.org/codes-standards/find-codes-standards/a17-6-standard-elevator-suspension-compensation-governor-systems"
+  ],
+  "caveats": "Die kalifornischen Paragrafen beruhen zum Teil auf älteren ASME-Ausgaben. Die aktuelle Fassung von A17.1-2025 konnte ich nicht direkt einsehen. Wichtiger Unterschied: In Europa sind zwei Seile zulässig (dann aber mit Sicherheitsfaktor 16), in den USA sind es mindestens drei. | Online nicht nachgeprüft (UpCodes und dir.ca.gov blockiert). Aus meiner Kenntnis von ASME A17.1, Abschnitt 2.20.4: mindestens drei Seile bzw. Tragmittel bei Treibscheibe und zwei bei Trommel, Mindestdurchmesser 9,5 mm (0.375 in), Außendraht mindestens 0,56 mm. Neuere Ausgaben sprechen allgemein von 'suspension members'. Beschichtete Stahlgurte regelt ASME A17.6 (Teil 3). Die 9,5 mm gelten nur für Drahtseile, deshalb habe ich das in der Formulierung ergänzt. Der Vergleich mit Europa ist richtig: dort sind zwei Seile erlaubt, dann aber mit Sicherheitsfaktor 16."
+ },
+ {
+  "id": "suspension_asme_safety_factor",
+  "claim_de": "ASME A17.1 verlangt für Tragseile einen Sicherheitsfaktor, der mit der Seilgeschwindigkeit steigt: bei Personenaufzügen von 7,6 bei 50 ft/min (etwa 0,25 m/s) bis auf rund 11,9 bei hohen Geschwindigkeiten.",
+  "detail": "Die Werte stehen in Tabelle 2.20.3 von ASME A17.1; Zwischenwerte liest man aus Figure 8.2.7 ab. Die kalifornische Tabelle 3042E1 nennt für Personenaufzüge 7,60 bei 50 ft/min und 11,90 bei 1400 bis 1500 ft/min, für Lastenaufzüge 6,65 bzw. 10,55. Maßgeblich ist die tatsächliche Geschwindigkeit der Tragmittel bei Nenngeschwindigkeit des Fahrkorbs.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://www.dir.ca.gov/title8/3042.html",
+   "https://up.codes/s/suspension-members-and-factor-of-safety",
+   "https://nationalelevatorindustry.org/wp-content/uploads/2019/08/publicreviewdraft16.pdf"
+  ],
+  "caveats": "Die Suchauszüge waren nicht einheitlich: Einer nannte 11,70 bei 1100 ft/min, ein anderer 11,90 bei 1400 bis 1500 ft/min. Die genauen aktuellen ASME-Tabellenwerte habe ich nicht verifiziert; vorsichtig formuliert: 'etwa 7,6 bis knapp 12'. Die US-Werte sind nicht direkt mit den EN-Werten 12/16 vergleichbar, weil Berechnungsgrundlagen und Mindestseilzahl verschieden sind. | Online nicht nachgeprüft. Die klassische Tabelle (ASME A17.1 Table 2.20.3, gleich der kalifornischen Table 3042E1) habe ich so im Gedächtnis: Personenaufzüge 7,60 bei 50 fpm, 11,70 bei 1100 fpm, 11,90 bei 1400 bis 1500 fpm; Lastenaufzüge 6,65 bzw. 10,55. Die beiden Suchauszüge widersprechen sich also nicht, sie nennen nur verschiedene Zeilen derselben Tabelle. Zwischenwerte stehen in Figure 8.2.7. Wichtiger Unterschied in der Methode: Bei ASME wird der Faktor für den ganzen Seilsatz berechnet (f = S·N/W, also Bruchkraft eines Seils mal Seilzahl geteilt durch die statische Gesamtlast). In EN 81 gilt er pro Seil. Die Zahlen sind deshalb nicht direkt vergleichbar; die Einschränkung im Entwurf ist richtig."
+ },
+ {
+  "id": "suspension_typical_count",
+  "claim_de": "Personenaufzüge mit Treibscheibe hängen in der Praxis meist an etwa drei bis acht parallelen Tragseilen, von denen jedes für sich um ein Vielfaches seiner Betriebslast ausgelegt ist.",
+  "detail": "HowStuffWorks nennt 3 bis 7 Seile; andere Fachquellen nennen 5 bis 8 bei getriebelosen Maschinen oder 4 bis 8. Eigene Rechnung auf Basis der EN-Definition, bei gleichmäßiger Lastverteilung und mindestens Sf = 12 pro Seil: Die Bruchkraft eines einzelnen Seils ist mindestens 12/n mal die gesamte statische Last. Bei 6 Seilen könnte also ein Seil allein statisch noch etwa das Doppelte der vollen Last halten. Reißt eines von 4 Seilen, sinkt der Sicherheitsfaktor der übrigen rechnerisch von 12 auf etwa 9.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://science.howstuffworks.com/transport/engines-equipment/elevator3.htm",
+   "https://elevatorworld.com/article/ropes-and-traction/",
+   "https://www.tkelevator.com/us-en/tools/classroom-on-demand/ropes-or-hoists.html"
+  ],
+  "caveats": "Für die typische Spanne gibt es keine Norm; die Angaben der Quellen weichen voneinander ab. Die Rechnungen sind eigene Ableitungen und berücksichtigen keine dynamischen Lasten, keine Biegewechsel und keine ungleiche Seilspannung. Die im Netz häufige Aussage 'jedes Seil trägt allein die volle Kabine' stammt meist von Servicefirmen und ist nicht normativ belegt. | Online nicht nachgeprüft (HowStuffWorks und TK Elevator blockiert). Die Spanne ist keine Norm, und die Quellen weichen voneinander ab. Soweit ich mich erinnere, nennt HowStuffWorks eher 'vier bis acht' als '3 bis 7', was aber in '3 bis 8' liegt. Die Aussage ist mit 'meist etwa' ausreichend vorsichtig. Einschränkungen: In der EU sind zwei Seile zulässig (mit Sf 16), viele neue Aufzüge hängen an Gurten statt Seilen, und große Anlagen haben auch mehr als 8 Seile. Die eigenen Rechnungen stimmen: Bruchkraft je Seil mindestens 12/n mal die Gesamtlast, bei 6 Seilen also etwa das Doppelte der Last; reißt eines von 4 Seilen, sinkt der Faktor auf 12·3/4 = 9. Wichtig: 'Betriebslast' bedeutet hier den Lastanteil des einzelnen Seils, nicht die ganze Kabine. Die verbreitete Behauptung 'jedes Seil trägt allein die volle Kabine' ist nicht normativ belegt und sollte im Video nicht vorkommen."
+ },
+ {
+  "id": "suspension_rope_construction",
+  "claim_de": "Das klassische Aufzugseil ist ein 8-litziges Rundlitzenseil (8×19, Seale- oder Warrington-Machart) mit Fasereinlage aus Naturfaser (z. B. Sisal) oder Kunstfaser. Die Einlage dient als Schmiermittelspeicher und als elastisches Bett für die Litzen.",
+  "detail": "PFEIFER: 8-litzige Seile mit Naturfasereinlage sind die häufigste Lösung für normale Treibscheibenaufzüge. Übliche Bezeichnung: 8×19 Seale FC 1370/1770, also 8 Litzen zu je 19 Drähten, Fasereinlage und zwei Festigkeitsklassen. Die Außendrähte sind weicher (1370 N/mm²), um die Treibscheibe zu schonen; die Innendrähte sind fester (1770 N/mm²). Varianten mit Stahleinlage (IWRC) sind höher belastbar, z. B. DRAKO 250T als 8×19W-IWRC. Die Anforderungen stehen in EN 12385-5 und ISO 4344 (Stahldrahtseile für Aufzüge, 6 bis 38 mm Durchmesser).",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://www.pfeifer.info/en/products-services/products/ropes-and-rope-accessories/unassembled-ropes/unassembled-round-strand-ropes/round-strand-rope-non-rotation-resistant/8x19s-nfc.html",
+   "https://certex.de/en/webshop-catalogue/steel-wire-ropes-accessories/steel-wire-ropes/elevator-ropes",
+   "https://www.iso.org/standard/79195.html",
+   "https://standards.iteh.ai/catalog/standards/cen/3b8c692c-f3eb-4487-95fa-93bddea3e90d/en-12385-5-2021",
+   "https://www.reropes.co.uk/blog/choosing-8x19-lift-rope-construction/"
+  ],
+  "caveats": "Die Erklärung der Festigkeitsklassen 1370/1770 und der Funktion der Fasereinlage stammt teils aus einem Händler-Blog (Re-Ropes); sie passt aber zu den Herstellerangaben. Bei 6×19 ergeben sich andere Drahtzahlen. Hochleistungsaufzüge verwenden oft Seile mit Stahl- oder Mischeinlage. | Online nicht nachgeprüft (PFEIFER, CERTEX, ISO und iTeh blockiert). Nach meinem Fachwissen stimmt das: 8×19 Seale mit Fasereinlage ist die Standardbauart. Bei der Doppelfestigkeit 1370/1770 haben die Außendrähte die niedrigere Festigkeit, die Innendrähte die höhere. Die Fasereinlage speichert Schmiermittel und stützt die Litzen. Einschränkungen: Historisch gab es auch 6-litzige Seile. In Nordamerika ist 8×25 Filler verbreitet. Bei maschinenraumlosen Aufzügen und kleinen D/d-Verhältnissen setzen sich Stahl- oder Mischeinlagen (IWRC, 'semi-steel') durch. Den genauen Durchmesserbereich im Anwendungsbereich von ISO 4344 und EN 12385-5 ('6 bis 38 mm') konnte ich nicht überprüfen."
+ },
+ {
+  "id": "suspension_rope_diameter_strength",
+  "claim_de": "Tragseile von Personenaufzügen haben meist etwa 8 bis 13 mm Nenndurchmesser, bei großen Anlagen auch 16 mm und mehr. Ein 8-mm-Seil hat je nach Bauart eine Mindestbruchkraft von grob 30 bis 47 kN – das entspricht etwa 3 bis knapp 5 Tonnen Gewichtskraft.",
+  "detail": "PFEIFER DRAKO 250T (8×19W-IWRC) mit 8 mm: 43,3 kN (Festigkeit 1570) bzw. 46,6 kN (1770). Für 8×19 Seale mit Naturfasereinlage 1370/1770 fand ich eine Tabelle mit etwa 30,5 kN (8 mm), 48,2 kN (10 mm) und 80,7 kN (13 mm). Herstellerübersichten nennen allgemein 8 bis 16 mm Durchmesser und 40 bis 180 kN Bruchkraft. Zum Vergleich: PFEIFER 8×19S NFC mit 18 mm schafft 154 kN.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.pfeifer.info/en/products-services/products/ropes-and-rope-accessories/unassembled-ropes/unassembled-round-strand-ropes/round-strand-rope-non-rotation-resistant/drako-250t.html",
+   "https://certex.no/en/products/steel-wire-rope-and-accessories/steel-wire-ropes/elevator-ropes/drako-250t-p615107",
+   "https://www.pfeifer.info/en/products-services/products/ropes-and-rope-accessories/unassembled-ropes/unassembled-round-strand-ropes/round-strand-rope-non-rotation-resistant/8x19s-nfc.html",
+   "https://www.elevator.tr/en/glossary/rope"
+  ],
+  "caveats": "Bei der Fasereinlagen-Tabelle (30,5 / 48,2 / 80,7 kN) konnte ich die genaue Herkunft nicht eindeutig einem Hersteller zuordnen, weil nur der Suchauszug vorlag. Die Bruchkräfte hängen stark von Einlage und Drahtfestigkeit ab. Die kN-Werte sind mit g = 9,81 m/s² in Tonnen umgerechnet. | Datenblätter nicht einsehbar (PFEIFER und Certex blockiert). Ich habe die Werte auf innere Stimmigkeit geprüft. Die FC-Tabelle (30,5 / 48,2 / 80,7 kN bei 8 / 10 / 13 mm) passt zu einem Bruchkraftfaktor K ≈ 0,307 bei einer Ersatzfestigkeit von 1570 N/mm². Das ist für 8×19-FC plausibel. Bei den DRAKO-250T-Werten (43,3 kN bei 1570, 46,6 kN bei 1770) ergeben sich zwei verschiedene K-Werte (0,431 und 0,411), obwohl K bei gleicher Machart gleich sein müsste. Diese Werte sollte man vor der Verwendung mit dem Datenblatt abgleichen. Umrechnung: 46,6 kN / 9,81 = 4,75 t, also eher 4,8 t als 4,7 t. In Nordamerika sind Durchmesser von 1/2 bis 5/8 Zoll (12,7 bis 15,9 mm) üblich; '8 bis 13 mm' beschreibt daher vor allem den europäischen Markt."
+ },
+ {
+  "id": "suspension_discard_criteria",
+  "claim_de": "Aufzugseile müssen abgelegt werden, wenn Drahtbrüche, Verschleiß, Korrosion oder Verformungen festgelegte Grenzen überschreiten. Auch eine deutliche Abnahme des Seildurchmessers ist ein Ablegegrund – Hersteller nennen etwa 6 % unter dem Nenndurchmesser als Grenze.",
+  "detail": "Laut Gustav Wolf verweist EN 12385 für die Ablegekriterien auf ISO 4344; dort stehen sie in einem informativen Anhang (Annex E der Ausgabe 2004, Annex G der Ausgabe 2022). Drahtbrüche werden über zwei Bezugslängen gezählt: 6 × d (etwa eine Schlaglänge, die rund 6 × d beträgt) und 30 × d (etwa fünf Schlaglängen). Die 6-%-Regel nennt PFEIFER DRAKO. ISO 4309 regelt eigentlich Kranseile und wird für Aufzüge höchstens analog herangezogen.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.gustav-wolf.de/Seile/Aufzugseile/Ablegereife/",
+   "https://www.pfeifer.info/out/assets/PFEIFER-DRAKO_DRAHTSEILE-IN-AUFZUEGEN_TECHNISCHE-INFORMATIONEN_DE.PDF",
+   "https://www.iso.org/standard/31563.html",
+   "https://www.iso.org/standard/43597.html"
+  ],
+  "caveats": "Die genauen Drahtbruchzahlen aus der ISO-4344-Tabelle für 8×19 konnte ich nicht einsehen (Normtext und Herstellerseiten per WebFetch blockiert), deshalb nenne ich hier keine Zahl. Andere Quellen setzen die Durchmessergrenze unterschiedlich an, z. B. etwa 3 % bei Seilen bis 8 mm und etwa 6 % bei größeren (US-Praxis). Vorsichtiger Wert: 'um etwa 6 %'. | Nicht nachprüfbar (Gustav Wolf, PFEIFER und ISO blockiert). Die allgemeinen Ablegegründe stimmen. Die 6-%-Grenze kommt nur aus einer Herstellerquelle; andere Regelwerke setzen anders an, z. B. ASME mit absoluten Grenzen oder etwa 3 % bei dünnen Seilen. 'Sofortige Ablage' und 'selbst auf einem kurzen Stück' sind nicht belegt und schärfer als die üblichen Formulierungen; beides habe ich entfernt. Die Bezugslängen 6d und 30d stammen aus ISO 4309, das für Kranseile gilt. Ob ISO 4344 für Aufzugseile genau diese Längen verwendet, konnte ich nicht prüfen. Für die Anhang-Bezeichnungen (Annex E bzw. G) gilt dasselbe."
+ },
+ {
+  "id": "suspension_asme_crown_breaks",
+  "claim_de": "Nach nordamerikanischen Kriterien (ASME A17.1/A17.6) muss ein 8-litziges Aufzugseil unter normalen Bedingungen ausgetauscht werden, wenn es in einer Schlaglänge mehr als etwa 32 gleichmäßig verteilte Außendrahtbrüche hat. Bei ungünstigen Bedingungen wie Verschleiß oder Rostbildung ('Rouge') liegen die Grenzen deutlich niedriger.",
+  "detail": "6-litzige Seile: 24 verteilte, 12 ungleich verteilte und 4 nebeneinanderliegende Brüche; ungünstig 12/6/4; mit Rouge 8/4. 8- und 9-litzige Seile: 32/16/4; ungünstig 16/8/4; mit Rouge 10/5. Brüche in den Tälern zwischen den Litzen (Valley Breaks): höchstens einer pro Schlaglänge, bei Rouge keiner. Laut Draka sind höhere Grenzwerte (24–30 bzw. 32–40) zulässig, wenn monatlich eine sachkundige Person prüft. Wird ein Seil ausgetauscht, wird der ganze Seilsatz erneuert.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.prysmian.com/sites/default/files/atoms/files/Tech-Tip-2.pdf",
+   "https://drakaehc.com/wp-content/uploads/2022/09/Draka-EHC-Tech-Tip-2-Rope-Replacement-Criteria-230822.pdf",
+   "https://elevatorworld.com/article/inspection-of-elevator-ropes-part-one/"
+  ],
+  "caveats": "Die Tabellenwerte kommen aus Suchauszügen von Herstellerdokumenten, die sich auf ASME stützen; das Original habe ich nicht gesehen. Je nach ASME-Ausgabe kann die Tabelle abweichen. Das ist das US-Regime; in Europa gelten ISO 4344 und die Herstellerangaben. | Nicht nachprüfbar (Prysmian, Draka und Elevator World blockiert). Die Werte passen zu dem, was ich von der klassischen ASME-Austauschtabelle weiß: 6-litzig 24/12/4, 8-litzig 32/16/4; ungünstig 12/6/4 bzw. 16/8/4; mit Rouge 8/4 bzw. 10/5; Brüche in den Tälern praktisch nicht zulässig. Die genauen Werte, die höheren Grenzen bei monatlicher Prüfung durch eine sachkundige Person (24–30 bzw. 32–40) und die Pflicht, den ganzen Seilsatz zu tauschen, konnte ich aber nicht prüfen. Je nach Ausgabe gibt es möglicherweise Ausnahmen, etwa für ein einzelnes beschädigtes Seil in einem neuen Satz. Deshalb im Video die Zahlen als Größenordnung nennen und das Regelwerk ausdrücklich angeben."
+ },
+ {
+  "id": "suspension_counterweight",
+  "claim_de": "Das Gegengewicht eines Treibscheibenaufzugs wiegt so viel wie der leere Fahrkorb plus etwa 40 bis 50 % der Nennlast. Der Motor muss deshalb nur den Unterschied zwischen beiden Seiten bewegen.",
+  "detail": "TK Elevator: Kabinengewicht plus 40 bis 50 % der Nennlast bestimmen das Gegengewicht. HowStuffWorks: Das Gegengewicht entspricht etwa dem Fahrkorb bei 40 % Beladung. Bei etwa halber Beladung ist das System nahezu im Gleichgewicht; bei leerem Fahrkorb ist die Gegengewichtsseite schwerer.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://www.tkelevator.com/us-en/tools/classroom-on-demand/counterweights.html",
+   "https://science.howstuffworks.com/transport/engines-equipment/elevator3.htm",
+   "https://elevatorworld.com/article/counterweight-evolution/"
+  ],
+  "caveats": "Die genaue Ausgleichsquote legt der Hersteller fest, sie ist keine Normvorgabe. Historisch wurden auch 40 % statt 50 % verwendet, laut Elevator World etwa in Australien während des Krieges. | Online nicht nachgeprüft (TK Elevator und HowStuffWorks blockiert). Dass die Ausgleichsquote bei 40 bis 50 % liegt, ist in der Fachliteratur Standard; eine Norm schreibt sie nicht vor. 'Nur den Unterschied' vereinfacht: Der Motor muss außerdem Trägheit, Reibung und bei großer Förderhöhe das Seilgewicht bewältigen, sofern keine Unterseile das Seilgewicht ausgleichen. Für ein Video ist die Aussage als Vereinfachung in Ordnung."
+ },
+ {
+  "id": "suspension_traction_principle",
+  "claim_de": "Beim Treibscheibenaufzug sind die Seile an der Treibscheibe nicht befestigt, sondern liegen nur in ihren Rillen. Die Kraft wird allein durch Reibung übertragen: Die Rillen klemmen die Seile je nach Form und Unterschnitt unterschiedlich stark ein.",
+  "detail": "Das Verhältnis der Seilkräfte auf beiden Seiten beschreibt die Euler-Eytelwein-Gleichung: T1/T2 ≤ e^(f·α), mit Reibwert f (abhängig von der Rillenform) und Umschlingungswinkel α. EN 81-50 (Abschnitt 5.11) verlangt, dass die Treibfähigkeit bei Beladung (Prüfung mit 125 % Nennlast) und bei einer Notbremsung erhalten bleibt. Sitzen dagegen Fahrkorb oder Gegengewicht auf dem Puffer auf, muss sie verloren gehen: Die Seile rutschen durch, damit die Maschine den Fahrkorb nicht weiter nach oben ziehen kann. Doppelte Umschlingung oder 2:1-Aufhängung vergrößern die Treibfähigkeit.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://www.tkelevator.com/us-en/tools/classroom-on-demand/ropes-or-hoists.html",
+   "https://www.tkelevator.com/us-en/company/insights/2022/elevators-101-rope-configurations.html",
+   "https://liftescalatorlibrary.org/paper_indexing/papers/00000063.pdf",
+   "https://elevatorworld.com/article/fred-hymans-and-the-theory-of-rope-traction-part-one/"
+  ],
+  "caveats": "Die 125 % stammen aus Suchauszügen zur Traktions- und Bremsprüfung nach EN 81-20/50; die genaue Klausel habe ich nicht wörtlich gesehen. Die Bedingungen gelten auch für Seile ohne Seilriss und sind eine eigene Sicherheitsebene, unabhängig von der Fangvorrichtung. | Online nicht nachgeprüft. Die Kernaussage ist Lehrbuchwissen und stimmt, ebenso die Euler-Eytelwein-Beziehung T1/T2 ≤ e^(f·α). Im Detailtext stecken zwei Fehler. (1) Eine 2:1-Aufhängung vergrößert die Treibfähigkeit (das Kraftverhältnis T1/T2) nicht: Sie halbiert die Seilkräfte auf beiden Seiten, das Verhältnis bleibt gleich. Nur eine größere Umschlingung, etwa durch doppelte Umschlingung, oder ein höherer Reibwert durch die Rillenform verbessern die Treibfähigkeit. (2) Die Bedingung 'Fahrkorb blockiert' in EN 81-20/81-50 lautet ungefähr so: Liegt das Gegengewicht auf dem Puffer auf und dreht die Maschine in Aufwärtsrichtung, darf der leere Fahrkorb nicht angehoben werden. 'Fahrkorb oder Gegengewicht auf dem Puffer' ist also ungenau. Die 125 % Nennlast bei der Beladungsbedingung passen zu meinem Kenntnisstand."
+ },
+ {
+  "id": "suspension_equalization_monitoring",
+  "claim_de": "EN 81-20 verlangt an mindestens einem Seilende eine selbsttätige Einrichtung zum Ausgleich der Seilspannungen. Hängt der Fahrkorb an nur zwei Seilen, muss ein elektrischer Sicherheitsschalter den Aufzug stillsetzen, sobald sich ein Seil ungewöhnlich stark gegenüber dem anderen längt oder lockert.",
+  "detail": "Werden Federn zum Ausgleich eingesetzt, müssen sie auf Druck arbeiten. Elektrische Sicherheitseinrichtungen nach EN 81-20 müssen die Fahrt sofort verhindern oder unterbrechen. Seilendverbindungen müssen mindestens 80 % der Mindestbruchkraft aufnehmen können.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://elevatorworld.com/article/suspension-means-for-lifts/",
+   "https://elevatorworld.com/article/electrical-safety-devices-in-elevators/",
+   "https://www.reropes.co.uk/blog/rope-tension-equalisation-lift-performance/"
+  ],
+  "caveats": "Das stützt sich auf Suchauszüge, die EN 81-20 zusammenfassen; den Normtext selbst habe ich nicht eingesehen. Die genaue Klauselnummer ist nicht verifiziert. | Online nicht nachgeprüft. Nach meiner Kenntnis stimmt die Aussage fast wörtlich mit EN 81-1 9.5.1–9.5.3 überein, und EN 81-20 5.5.5 hat sie übernommen. Der Inhalt: selbsttätiger Spannungsausgleich an mindestens einem Seilende; Ausgleichsfedern müssen auf Druck arbeiten; bei Aufhängung an zwei Seilen oder Ketten setzt eine elektrische Sicherheitseinrichtung den Aufzug still, wenn sich ein Seil abnormal gegenüber dem anderen längt. Die Klauselnummer in EN 81-20 habe ich nicht überprüft."
+ },
+ {
+  "id": "suspension_otis_gen2_belts",
+  "claim_de": "Otis ersetzt beim um das Jahr 2000 eingeführten Gen2-System die runden Stahlseile durch flache, mit Polyurethan ummantelte Stahlgurte von nur etwa 3 mm Dicke. Dadurch genügt eine Treibscheibe von unter 10 cm Durchmesser, und die Antriebsmaschine fällt laut Otis deutlich kleiner aus.",
+  "detail": "Otis gibt an, dass die Gurte ohne Schmierung doppelt so lange halten wie herkömmliche Stahlseile und 20 % leichter sind. Die Maschine sei bis zu 50 % effizienter als eine herkömmliche Getriebemaschine. Die Stahlcorde im Gurt kann man nicht sehen. Deshalb überwacht das elektronische PULSE-System ihren Zustand rund um die Uhr, statt dass nach gebrochenen Drähten gesucht wird. SAFed (UK) weist darauf hin, dass es für Gurte ohne PULSE (etwa 2000 bis 2005) keine festgelegte Prüfmethode und kein Ablegekriterium gibt. Die Gurte gelten bisher als sehr langlebig.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.otis.com/en/us/products-services/products/gen2-premier",
+   "https://www.otis.com/documents/256045/6552829/OTIS-Gen2MOD_Final.pdf/b2d0ba43-491b-7ae7-ec73-a710f9d7ba9e?t=1594735223630",
+   "https://pdf.archiexpo.com/pdf/otis/gen2mod/32-372863.html",
+   "https://www.safed.co.uk/publications-home/tc2-machinery-lift-crane/policy-statements-for-download/51-guidance-on-otis-gen-2-pulse/file",
+   "https://elevatorworld.com/article/20-years-of-innovation/"
+  ],
+  "caveats": "'Doppelt so lang' ist eine Herstellerangabe; eine Nicht-Otis-Quelle nennt 'bis zu dreimal'. Die 3 mm Dicke und etwa 30 mm Breite stammen aus Ersatzteil- und Sekundärquellen. Für den Scheibendurchmesser nennt die Otis-Broschüre 80 mm, andere Quellen etwa 88 mm; vorsichtig: 'unter 10 cm'. | Nicht nachprüfbar (Otis, ArchiExpo, SAFed und Elevator World blockiert). Richtig nach meinem Kenntnisstand: Gen2 wurde um 2000 eingeführt und arbeitet mit polyurethanbeschichteten Stahlgurten, die etwa 3 mm dick und rund 30 mm breit sind. Die Stahlcorde lassen sich nicht direkt ansehen, deshalb überwacht Otis sie elektronisch mit PULSE. Unbestätigt bzw. uneinheitlich sind der Scheibendurchmesser (80 oder 88 mm), '70 % kleiner', '20 % leichter', 'doppelt' oder 'dreimal' so lange Lebensdauer und '50 % effizienter'. Das sind Werbeangaben des Herstellers und sollten, wenn überhaupt, ausdrücklich als 'laut Otis' und gerundet genannt werden. Die SAFed-Aussage zu Anlagen ohne PULSE konnte ich nicht prüfen."
+ },
+ {
+  "id": "suspension_schindler_kone_alternatives",
+  "claim_de": "Auch andere Hersteller ersetzen klassische Stahlseile: Schindler setzt bei seinen maschinenraumlosen Aufzügen auf 'Suspension Traction Media' (STM), also Stahlcorde in einem Kunststoffmantel. KONE entwickelte für sehr hohe Gebäude das UltraRope mit Kohlefaserkern und reibungsstarker Beschichtung, das nach Herstellerangaben nur einen Bruchteil eines vergleichbaren Stahlseils wiegt.",
+  "detail": "Laut Schindler ermöglicht STM einen um 70 % kleineren Motor und kleinere Treibscheiben und ersetzt schwerere, weniger biegsame Stahlseile, z. B. beim Schindler 3300 und 5500 (Einführung des 5500 im Jahr 2015). Laut KONE sinken mit UltraRope die bewegten Massen in einem 500 m hohen Gebäude von etwa 27.000 kg auf etwa 13.000 kg; Förderhöhen bis 1 km werden möglich. Im Jeddah Tower sollen vier Aufzüge UltraRope erhalten.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.schindler.com/en/media/news-press-releases/schindler-5500-mrl-elevator-for-mid-rise-buildings.html",
+   "https://www.schindler.com/content/dam/website/us/docs/elevators/schindler-3300/schindler-3300-mrl-elevator-brochure.pdf/_jcr_content/renditions/original./schindler-3300-mrl-elevator-brochure.pdf",
+   "https://www.kone.com/ultrarope/",
+   "https://www.kone.com/en/news-and-insights/releases/kone-to-equip-jeddah-tower--the-world-s-tallest-building-to-be-in-saudi-arabia-with-people-flow--solutions-2025-10-08.aspx"
+  ],
+  "caveats": "Beim Mantelmaterial von STM widersprechen sich die Quellen: Eine Schindler-nahe Beschreibung nennt EPDM, Sekundärquellen wie das Fandom-Wiki nennen Polyurethan. Deshalb neutral 'Elastomer-/Kunststoffmantel' sagen. Die Aussage 'seit 2005 in praktisch allen Schindler-MRL' stammt nur aus Sekundärquellen. Die UltraRope-Zahlen sind Herstellerangaben, und UltraRope betrifft Hochhäuser, nicht den typischen Wohnhausaufzug. | Nicht nachprüfbar (Schindler und KONE blockiert). Richtig nach meinem Kenntnisstand: Schindler STM besteht aus Stahlcorden mit Kunststoff- oder Elastomermantel und wird bei den MRL-Modellen 3300 und 5500 eingesetzt. KONE UltraRope ist ein Flachseil aus Kohlefaser mit reibungsstarker Beschichtung, das laut KONE Förderhöhen bis etwa 1 km ermöglicht. Nicht bestätigen konnte ich: 'etwa ein Fünftel' des Gewichts, die Massen 27.000 kg bzw. 13.000 kg bei 500 m, '70 % kleinerer Motor', die Einführung 2015 in den USA und 'vier Aufzüge mit UltraRope im Jeddah Tower'. Letzteres stammt ursprünglich aus der Ankündigung von 2014; ob es nach der Neuvergabe 2025 noch gilt, ist offen. Deshalb habe ich 'ein Fünftel' durch 'einen Bruchteil' ersetzt und das Mantelmaterial neutral formuliert."
+ },
+ {
+  "id": "safety_chain_governor_principle",
+  "claim_de": "Der Geschwindigkeitsbegrenzer arbeitet unabhängig von den Tragseilen: Ein eigenes, dünnes Begrenzerseil läuft als geschlossene Schleife von der Begrenzer-Seilrolle oben über eine gewichtsbelastete Spannrolle in der Schachtgrube und ist am Auslösehebel der Fangvorrichtung auf dem Fahrkorb befestigt. Bei Übergeschwindigkeit schwenken Fliehgewichte nach außen, der Begrenzer blockiert das Seil, und das stehende Seil zieht am weiterfahrenden Fahrkorb die Fangkeile gegen die Führungsschienen.",
+  "detail": "Otis: 'If the governor spins too fast, flyweights inside the governor spring outward, tripping a device that grabs the governor rope. The now-motionless governor rope pulls on the safeties ... The safeties clamp onto the hoistway rails'. Otis nennt die Reihenfolge: zuerst Maschinenbremse, dann Fangvorrichtung. Die Spannrolle in der Grube hält das Seil gespannt (PFB: Spanngewicht, mit Sicherheitskontakt, der bei Schlaffseil/übermäßiger Längung den Strom abschaltet). Der Mechanismus ist rein mechanisch und funktioniert daher auch bei Stromausfall (dt. Wikipedia, nur als Hinweis). Es gibt auch Varianten mit Nockenbahn statt Fliehgewichten und elektronische Begrenzer.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://www.otis.com/en/us/tools-resources/high-rise-safety-systems",
+   "https://patents.google.com/patent/WO2003072479A1/en",
+   "https://pfb.it/en/news/326060/co-je-to-a-jak-funguje-napinak",
+   "https://de.wikipedia.org/wiki/Geschwindigkeitsbegrenzer_(Aufzug)"
+  ],
+  "caveats": "WebFetch war für alle Hosts gesperrt; Inhalte stammen aus Suchmaschinen-Snippets der genannten Seiten. Bauformen variieren (Fliehgewicht-, Pendel-/Nockenbahn-Begrenzer, elektronische Begrenzer bei Schindler/KONE u.a.); bei maschinenraumlosen Anlagen sitzt der Begrenzer oft im Schachtkopf, nicht im Maschinenraum. | Ich konnte nichts unabhängig im Web prüfen: Das WebSearch-Budget der Sitzung war aufgebraucht (200/200), und jeder WebFetch-Versuch wurde vom Egress-Proxy blockiert (bode-components, elevatorworld, up.codes, dir.ca.gov, iso.org, de.wikipedia, umwelt-online, kone.co.uk). Ich bewerte deshalb nach Fachkenntnis der klassischen Bauart (EN 81-1 9.9 / EN 81-20 5.6.2.2). Die Beschreibung stimmt für den klassischen Fliehkraft-Begrenzer mit Seil. Das festgehaltene Seil hebt über das Auslösegestänge die Keile bzw. Rollen an die Schiene. Die Aussage ist aber etwas zu allgemein. Es gibt Pendel-/Nockenbegrenzer, federbelastete statt gewichtsbelastete Spannvorrichtungen, am Fahrkorb montierte Begrenzer und elektronische Systeme ganz ohne Begrenzerseil. Fürs Video empfehle ich 'in der klassischen Bauform'."
+ },
+ {
+  "id": "safety_chain_tripping_speed_en81",
+  "claim_de": "Nach EN 81-20 (Abschnitt 5.6.2.2.1.1) muss der Geschwindigkeitsbegrenzer bei mindestens 115 % der Nenngeschwindigkeit auslösen, aber unterhalb einer vom Fangvorrichtungstyp abhängigen Obergrenze: 0,8 m/s (Sperrfang, außer Rollentyp), 1 m/s (Sperrfang mit eingeschlossener Rolle), 1,5 m/s (Sperrfang mit Dämpfung sowie Bremsfang bei Nenngeschwindigkeit bis 1 m/s) bzw. 1,25·v + 0,25/v in m/s (Bremsfang bei Nenngeschwindigkeit über 1 m/s).",
+  "detail": "Beispiel (eigene Rechnung): Nenngeschwindigkeit v = 1,6 m/s -> Auslösefenster 1,84 m/s (115 %) bis 2,16 m/s (1,25·1,6 + 0,25/1,6). Bei v = 1,0 m/s: 1,15 m/s bis < 1,5 m/s. Bode (Hersteller) nennt als typische Auslösegeschwindigkeiten u.a. 0,70 / 0,85 / 1,25 / 2,00 / 2,50 m/s und einen Einsatzbereich seiner Begrenzer von 0,50 bis 3,40 m/s; die Auslösegeschwindigkeit legt der Aufzughersteller fest.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://www.idrostech.com/speed-governor-safetygear-elevator/",
+   "https://elevatorworld.com/article/elevator-safety-components/",
+   "https://bode-components.com/en/knowledge-overspeed-governor/",
+   "http://www.greenspun.com/bboard/q-and-a-fetch-msg.tcl?msg_id=00Coka"
+  ],
+  "caveats": "Normtext selbst (EN 81-20, kostenpflichtig; PDF-Kopien bei nobelcert.com/normsplash gesperrt) konnte nicht direkt gelesen werden. Die Formel 1,25·v + 0,25/v ist nur über ein Forum-Snippet und Hersteller-Snippets belegt, entspricht aber der seit EN 81-1 bekannten Regel. Eine Sekundärquelle schreibt ungenau, der Begrenzer müsse 'genau bei 115 %' auslösen - korrekt ist 'mindestens 115 %'. Japanische Anlagen folgen anderen Regeln (Toshiba: Überdrehzahlschalter bei >1,3-facher Nenngeschwindigkeit). | Keine Web-Prüfung möglich (Suchbudget erschöpft, alle Hosts gesperrt). Die vier Grenzwerte und die Formel 1,25·v + 0,25/v entsprechen wörtlich der bekannten Regel aus EN 81-1 9.9.1. Sie wurde meines Wissens unverändert in EN 81-20 5.6.2.2.1.1 übernommen; dort steht zusätzlich die Empfehlung, bei v > 1 m/s nahe am Wert aus d) zu bleiben. Die Beispielrechnung habe ich nachgerechnet: 1,15·1,6 = 1,84 und 1,25·1,6 + 0,25/1,6 = 2,156. Ein kleiner Punkt: Die Obergrenze gilt streng als 'kleiner als'. Die Klauselnummer konnte ich nicht am Primärtext prüfen."
+ },
+ {
+  "id": "safety_chain_electric_switch",
+  "claim_de": "Bevor die mechanische Fangvorrichtung greift, schaltet ein elektrischer Sicherheitsschalter am Geschwindigkeitsbegrenzer den Antrieb ab und lässt die Maschinenbremse einfallen: Nach EN 81-20 muss dies bei Nenngeschwindigkeiten über 1 m/s vor Erreichen der Auslösegeschwindigkeit geschehen, bei bis zu 1 m/s spätestens bei Erreichen der Auslösegeschwindigkeit.",
+  "detail": "EN 81-20 (5.6.2.2.1): 'the overspeed governor or another device shall, by means of an electric safety device in conformity with 5.11.2, initiate the stopping of the lift machine before the car speed, either up or down, reaches the tripping speed'; Bode: für v > 1 m/s ist ein 'Vorabschalter' (pre-cut-off switch) nötig. Zusätzlich muss ein elektrischer Sicherheitsschalter am Fahrkorb die Maschine spätestens beim Einrücken der Fangvorrichtung stillsetzen. US-Vergleich (ASME A17.1 / Cal. Title 8 §3036): Für 0,75-2,5 m/s (150-500 ft/min) muss der Begrenzerschalter abwärts bei höchstens 90 % der mechanischen Auslösegeschwindigkeit öffnen. Otis: Der Begrenzer 'first engaging the machine brake, then engaging the car safeties'. Die Folge ist oft nur ein Nothalt mit eingeschlossenen Fahrgästen (TSBC-Untersuchung).",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://bode-components.com/en/knowledge-overspeed-governor/",
+   "https://www.otis.com/en/us/tools-resources/high-rise-safety-systems",
+   "https://www.dir.ca.gov/title8/3036.html",
+   "https://up.codes/s/speed-governors",
+   "https://www.technicalsafetybc.ca/regulatory-resources/incident-investigations/tripped-overspeed-governor-electrical-switch-initates-emergency-stop-entraps-elevator"
+  ],
+  "caveats": "EN-Normzitat nur aus Suchsnippet (Bode/Hersteller-Anleitungen). Eine Sekundärquelle behauptet vereinfachend 'elektrisch bei 115 %, mechanisch bei 125 %' - das ist keine Normformulierung und sollte nicht verwendet werden. | Keine Web-Prüfung möglich. Der Inhalt deckt sich mit EN 81-1 9.9.11.1 und EN 81-20 5.6.2.2.1.6: 'initiate the stopping of the lift machine before the car speed, either up or down, reaches the tripping speed ... for rated speeds not exceeding 1 m/s ... at the latest at the moment the tripping speed is reached'. Drei Feinheiten: (1) Die Norm verlangt das vom Begrenzer 'oder einer anderen Einrichtung'. (2) Es gilt in beiden Fahrtrichtungen. (3) Bei v ≤ 1 m/s dürfen Schalter und mechanisches Auslösen praktisch gleichzeitig erfolgen. Das Einrücken der Keile folgt aber mechanisch nach, deshalb ist 'bevor greift' vertretbar. Die ASME-Angabe von 90 % im Detailfeld ist plausibel, konnte ich aber nicht prüfen."
+ },
+ {
+  "id": "safety_chain_gear_types",
+  "claim_de": "Nach EN 81-20 darf die Fahrkorb-Fangvorrichtung nur bis zu einer Nenngeschwindigkeit von 0,63 m/s eine Sperrfangvorrichtung (Momentanfang, sofortiges Blockieren) sein; darüber ist eine Bremsfangvorrichtung (progressiver Fang mit begrenzter Bremskraft) vorgeschrieben, bei Gegengewichts-Fangvorrichtungen ab über 1 m/s.",
+  "detail": "Elevator World: EN 81-20 (2014) begrenzt Sperrfang auf 0,63 m/s, während die britische BS 2655-1 (1970) noch 0,75 m/s erlaubte. Die ältere EN 81-1 (9.8.2.1) erlaubte für den Fahrkorb zusätzlich 'Sperrfang mit Dämpfung' (buffered effect) bis 1 m/s; die Auslösegrenze 1,5 m/s für diesen Typ steht weiterhin in EN 81-20. Hersteller-Datenblätter (Gervall) spezifizieren Sperrfangvorrichtungen entsprechend für max. 0,63 m/s Nenngeschwindigkeit und max. 1,00 m/s Auslösegeschwindigkeit. Frühere deutsche TRA 200 verlangte Bremsfang erst ab 0,85 m/s.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://elevatorworld.com/article/history-of-the-safety-gear/",
+   "https://elevatorworld.com/article/elevator-safety-components/",
+   "https://www.gervall.co.uk/32-instantaneous-safety-gear",
+   "https://de.wikipedia.org/wiki/Fangvorrichtung"
+  ],
+  "caveats": "Ob EN 81-20 für den Fahrkorb im Bereich 0,63-1 m/s noch 'Sperrfang mit Dämpfung' zulässt, ist in den Snippets widersprüchlich: EN 81-1 erlaubte es ausdrücklich; eine Hersteller-Blogquelle (shliftech) schreibt, unter EN 81-20 sei das bei Neuanlagen nicht mehr zulässig. Vorsichtige Aussage fürs Video: 'Sperrfang nur bis 0,63 m/s, darüber Bremsfang'. | Keine Web-Prüfung möglich. Nach meiner Kenntnis von EN 81-20 5.6.2.1.2 muss der Fahrkorb-Fang über 0,63 m/s ein Bremsfang sein, der Gegengewichts- bzw. Ausgleichsgewichts-Fang über 1 m/s. Zusätzlich gilt: Hat der Fahrkorb mehrere Fangvorrichtungen, müssen alle Bremsfänge sein. Nach EN 81-1 9.8.2.1 war am Fahrkorb bis 1 m/s noch ein 'Sperrfang mit Dämpfung' erlaubt. Ob diese Option in EN 81-20 für den Fahrkorb wegfiel, konnte ich nicht am Primärtext prüfen. Die vorsichtige Kernaussage des Claims ist davon nicht betroffen."
+ },
+ {
+  "id": "safety_chain_progressive_retardation",
+  "claim_de": "Eine Bremsfangvorrichtung muss den mit Nennlast beladenen Fahrkorb aus dem freien Fall mit einer mittleren Verzögerung zwischen 0,2 gn und 1,0 gn (gn = 9,81 m/s²) anhalten; angestrebt wird in der Praxis etwa 0,6 gn.",
+  "detail": "EN 81-20 / EN 81-50: 'The average retardation for a progressive safety gear in the case of free-fall of the car with rated load or the counterweight shall lie between 0.2 gn and 1 gn.' Elevator World: idealerweise ca. 0,6 gn; unter 0,2 gn wird der Bremsweg zu lang, bei 1,0 gn wird der Halt sehr hart. Die EN 81-50-Typprüfung zielt auf eine mittlere Verzögerung von 0,6 gn. Historisch: Die deutsche TRA 200 (Abschnitt 252.1) erlaubte 0,2 g bis 1,4 g. Physik (eigene Rechnung): Während der Fangbremsung spüren Fahrgäste das (1 + a/g)-fache ihres Gewichts, bei 0,6 gn also das 1,6-fache, bei 1 gn das Doppelte.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://elevatorworld.com/article/engineering-for-safety/",
+   "https://elevatorworld.com/article/progressive-safety-gears-and-engineering/",
+   "https://nobelcert.com/DataFiles/FreeUpload/EN%2081-50-2014.pdf",
+   "https://www.umwelt-online.de/recht/t_regeln/tra/200/50.htm",
+   "https://www.sciencedirect.com/science/article/abs/pii/S0263224117303883"
+  ],
+  "caveats": "Normtext nur über Suchsnippet des Norm-PDFs zitiert (direkter Abruf gesperrt). Es handelt sich um MITTLERE Verzögerung; momentane Spitzen können höher liegen (Forschung zur Verzögerungsvariabilität). Der Wert 1,4 g gilt nur für die alte deutsche TRA 200, nicht für EN 81. | Keine Web-Prüfung möglich. Die Spanne 0,2 gn bis 1 gn als mittlere Verzögerung im freien Fall mit Nennlast ist eine Kernanforderung aus EN 81-1 9.8.4 und EN 81-20. Der Wert 0,6 gn passt zur Typprüfformel (EN 81-1 Anhang F / EN 81-50): zulässige Masse = Bremskraft/16, wobei 16 ≈ gn·(1+0,6). Die Physik (1 + a/g) stimmt. Wichtig: Das ist ein Mittelwert. Spitzen können höher liegen, und bei leerem Fahrkorb ist die Verzögerung wegen der festen Klemmkraft größer."
+ },
+ {
+  "id": "safety_chain_stopping_distance",
+  "claim_de": "Rein rechnerisch (s = v²/2a, ohne Ansprech- und Einrückweg) ergibt sich bei der höchstzulässigen Auslösegeschwindigkeit von rund 2,16 m/s (Nenngeschwindigkeit 1,6 m/s) ein Fang-Bremsweg von etwa 0,24 m bei 1 gn, 0,4 m bei 0,6 gn und 1,2 m bei 0,2 gn; bei langsameren Aufzügen entsprechend weniger. Der tatsächliche Weg hängt zusätzlich von Beladung, Ansprechverzögerung und Bauart ab.",
+  "detail": "Eigene kinematische Rechnung s = v²/(2a), ohne Ansprech- und Klemmweg: Auslösung 1,5 m/s -> 0,115 m (1 gn) / 0,19 m (0,6 gn) / 0,57 m (0,2 gn). Auslösung 2,16 m/s -> 0,24 / 0,40 / 1,19 m. Schnellläufer mit 2,5 m/s Nenngeschwindigkeit (Auslösung bis 3,2 m/s) -> 0,53 m bis 2,65 m. Konsistent mit Elevator World: Bei 1 m/s gilt ein Gleitweg von mindestens 5 cm und höchstens 25 cm als konform (entspricht genau 1 gn bzw. 0,2 gn bei 1 m/s). Hersteller-Blog (Firgelli) rechnet für 2.000 kg bei 0,5 g rund 345 mm, bei 0,2 g rund 864 mm.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://elevatorworld.com/article/engineering-for-safety/",
+   "https://www.firgelliauto.com/blogs/mechanisms/elevator-safety-gear",
+   "https://www.sciencedirect.com/science/article/pii/S2590123026000010"
+  ],
+  "caveats": "Zahlen sind abgeleitete Rechenwerte, keine Normwerte. Reale Wege zusätzlich: Reaktionsweg bis zum Blockieren des Begrenzerseils und Einziehen der Keile (einige cm bis dm), zudem ist die tatsächliche Geschwindigkeit beim Eingriff höher als die Auslösegeschwindigkeit. Firgelli-Zahlen setzen andere Anfangsgeschwindigkeiten voraus (nicht nachprüfbar). Der Snippet-Satz zu 5-25 cm bei 1 m/s stammt aus einem Artikel, der sich auf Prüfpraxis (Türkei/EU) bezieht. | Die Rechnung stimmt: 2,16²/(2·9,81) = 0,238 m, geteilt durch 0,6 ergibt 0,40 m, geteilt durch 0,2 ergibt 1,19 m. Es sind aber abgeleitete Modellwerte, keine Norm- oder Messwerte. Die Formulierung 'liegt bei typischen Personenaufzügen im Bereich von 10 cm bis gut einem Meter' klingt empirisch und ist nicht belegt. Es fehlen der Weg bis zum Einrücken und der Geschwindigkeitszuwachs zwischen Auslösen und Greifen. Außerdem hängt die Verzögerung von der Last ab: Ein leerer Fahrkorb hält kürzer. Deshalb nur als Rechenbeispiel formulieren. Keine Web-Prüfung möglich."
+ },
+ {
+  "id": "safety_chain_gear_mechanism",
+  "claim_de": "Eine Sperrfangvorrichtung klemmt den Fahrkorb mit Rolle oder Keil schlagartig an den Führungsschienen fest (sehr kurzer Weg, harter Stoß), während eine Bremsfangvorrichtung Bremsbacken bzw. Keile federbelastet an die Schiene presst und die Bewegungsenergie über einen definierten Gleitweg in Reibungswärme umwandelt.",
+  "detail": "Sperrfang: 'blockiert durch eine Rolle auf einer schiefen Ebene bis zum vollständigen Stillstand' und ist wegen der Stoßlast nur für niedrige Geschwindigkeiten geeignet; Bremsfang wurde daraus weiterentwickelt. Wittur-Patent: Konsole umgreift die Führungsschiene, passive und aktive Bremsbacke beidseits der Schiene. Toshiba: Die Fangbremse treibt einen Keil in den Spalt zur Führungsschiene. Forschungsartikel (2026): Sperrfang bietet kurzen Bremsweg, aber erheblichen Stoß auf den Fahrkorb; zudem kann das zurückschwingende Gegengewicht den Fahrkorb wieder anheben und so den Fang lösen. EN 81-20: Nach dem Fangen darf sich der Fahrkorbboden um höchstens 5 % neigen.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://www.sciencedirect.com/science/article/pii/S2590123026000010",
+   "https://www.freepatentsonline.com/DE102006062754A1.html",
+   "https://www.toshiba-elevator.co.jp/elv/infoeng/elevator_basics/rope/governor.html",
+   "https://de.wikipedia.org/wiki/Fangvorrichtung"
+  ],
+  "caveats": "Die 5-%-Neigungsgrenze ist nur über Snippets (EN 81-20/EN 81-41-Entwurf) belegt. Konstruktionen unterscheiden sich stark je Hersteller (Keil-, Rollen-, Exzenter-, Scheibenfeder-Ausführungen; bidirektionale Fänge für Auf- und Abwärts). | Keine Web-Prüfung möglich. Die Beschreibung passt zu den Normdefinitionen. Beim Sperrfang greift der Fang praktisch sofort voll, ohne elastisches Glied. Beim Bremsfang begrenzt ein Federelement (Tellerfedern, U- oder Blattfeder) die Klemmkraft und damit die Verzögerung. Auch die 5-%-Neigungsgrenze des Fahrkorbbodens im Detailfeld entspricht meiner Normkenntnis (EN 81-1 9.8.7, in EN 81-20 übernommen). Die Bauformen unterscheiden sich je Hersteller."
+ },
+ {
+  "id": "safety_chain_machine_brake",
+  "claim_de": "Die Maschinenbremse eines Treibscheibenaufzugs ist eine elektromechanische Federdruckbremse: Druckfedern pressen die Beläge an Bremsscheibe oder -trommel, nur ein bestromter Elektromagnet lüftet sie; fällt der Strom aus oder öffnet der Sicherheitskreis, fällt sie automatisch ein.",
+  "detail": "EN 81-20 (5.9.2.2): Die Bremse allein muss den abwärts fahrenden Fahrkorb bei Nenngeschwindigkeit mit 125 % Nennlast stillsetzen können. Alle mechanischen Bauteile, die an der Bremswirkung auf die Bremsfläche beteiligt sind, müssen in mindestens zwei Sätzen vorhanden sein; fällt ein Satz aus, muss der andere den Fahrkorb mit Nennlast (100 %) abwärts bei Nenngeschwindigkeit noch verzögern und halten. Elevator World weist darauf hin, dass ein Satz allein bei Ausgleichsfaktor 0,5 nur ca. 87,5 % ... die 110-%-Überlasttoleranz nicht sicher abdeckt (Diskussion). Federbremsen gelten als 'fail-safe'. KONE prüft Bremsmoment und -kapazität automatisch täglich.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://elevatorworld.com/article/braking-capacity-requirements-of-elevators/",
+   "https://elevatorworld.com/article/the-application-of-electromechanical-spring-set-brakes-in-mrl-machines/",
+   "https://www.elevator.tr/en/glossary/machine-brake",
+   "https://www.kone.co.uk/Images/KONE-Factsheet-EN81-20-50_tcm45-32332.pdf"
+  ],
+  "caveats": "Normtext nur über Snippets. Eine Sekundärquelle (elevator.tr) knüpft die Zweikreisigkeit an 'Nenngeschwindigkeit > 0,3 m/s' - das ist nicht verifiziert; die Aussage 'mechanische Teile in mindestens zwei Sätzen' ist die belastbarere Formulierung. Die Maschinenbremse ist ein Betriebs- und Haltebremse, nicht für den Tragseilriss zuständig: Reißen alle Tragseile, hilft sie nicht, dann greift die Fangvorrichtung. | Keine Web-Prüfung möglich. Das deckt sich mit EN 81-1 12.4 und EN 81-20 5.9.2.2. Die Bremse muss automatisch einfallen, wenn die Netzspannung oder die Steuerspannung ausfällt. Die Bremskraft kommt aus geführten Druckfedern (die Norm erlaubt formal auch Gewichte). Das Offenhalten erfordert dauernden Stromfluss, der von zwei unabhängigen elektrischen Einrichtungen unterbrochen wird. Der Wert 125 % und die zwei Sätze mechanischer Teile im Detailfeld sind ebenfalls korrekt. Die in der Detailspalte zitierte 'Elevator World'-Aussage zu 87,5 % ist unverständlich wiedergegeben und sollte nicht verwendet werden."
+ },
+ {
+  "id": "safety_chain_ucmp",
+  "claim_de": "Seit EN 81-1/2+A3 (2009) - verpflichtend für alle ab 1. Januar 2012 in Verkehr gebrachten Aufzüge und fortgeführt in EN 81-20, Abschnitt 5.6.7 - muss eine UCM-Schutzeinrichtung eine ungewollte Fahrkorbbewegung bei offener Tür erkennen und den Fahrkorb spätestens 1,20 m nach Verlassen der Haltestelle stoppen und halten.",
+  "detail": "Auslöser sind Einzelfehler in Antrieb oder Steuerung, durch die der Fahrkorb mit offenen Türen von der Haltestelle wegfährt - weltweit bei Anlagen verschiedener Hersteller mit schweren Unfällen. Aufbau: Erkennung (spätestens beim Verlassen der Entriegelungszone), Auslösung und Stoppelement (z.B. selbstüberwachte zweikreisige Maschinenbremse, Seilbremse, Fangvorrichtung, bei Hydraulik Ventile). Nach Normkenntnis zusätzlich: Abstand Schwellenkante zur Unterkante Fahrkorbschürze max. 0,20 m und freie Höhe zwischen Schwelle und Türsturz mind. 1,00 m (nicht verifiziert, s. Caveats). KONE nennt automatisierte tägliche Prüfung des Bremsmoments als UCM-Baustein.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://aufzugsberatung.com/normen-und-gesetze/schutz-gegen-unbeabsichtigte-bewegung-des-fahrkorbes-ucm-unintended-car-movement/",
+   "https://www.lift-journal.de/autarke-ucm-erkennung-nach-en-81-20",
+   "https://elevatorworld.com/article/the-importance-of-checking-the-compatibility-of-all-systems-and-subsystems-in-ucmp/",
+   "https://www.designingbuildings.co.uk/wiki/Lift_Standards:_EN_81-20_and_EN_81-50",
+   "https://www.kone.co.uk/Images/KONE-Factsheet-EN81-20-50_tcm45-32332.pdf"
+  ],
+  "caveats": "Nur die 1,2-m-Grenze ist durch mehrere Snippets bestätigt; die Werte 0,20 m (Schürze) und 1,00 m (freie Höhe) stammen aus eigener Normkenntnis und konnten nicht am Primärtext geprüft werden. Eine Quelle nennt für A3 'max. 1000 mm', eine andere 990 mm bei 2000 mm Türhöhe - die Grenzen hängen von Türhöhe/Schürzenlänge ab. UCM betrifft ausdrücklich nicht den Tragmittelbruch. | Keine Web-Prüfung möglich. Nach meiner Kenntnis stimmen die Eckdaten. A3 erschien Ende 2009, die Vermutungswirkung der Vorgängerfassung endete am 31.12.2011, und in EN 81-20 5.6.7 steht die Grenze von 1,20 m ab der Haltestelle. Dort stehen auch 0,20 m Schürzenabstand und mindestens 1,00 m freie Höhe; das bestätigt die Detailwerte, ist aber nicht am Primärtext geprüft. Streng juristisch sind harmonisierte Normen freiwillig. 'Verpflichtend' heißt hier 'faktisch Stand der Technik bzw. Pflicht zur Vermutungswirkung'. 'Bei offener Tür' bedeutet genau: Schachttür nicht verriegelt und Fahrkorbtür nicht geschlossen. Die Grenzwerte gelten für jede Last bis 100 %."
+ },
+ {
+  "id": "safety_chain_ascending_overspeed",
+  "claim_de": "Weil das Gegengewicht etwa so schwer ist wie der Fahrkorb plus 40-50 % der Nennlast, kann ein leerer Fahrkorb bei Bremsversagen nach oben 'abstürzen'; EN 81-20 (5.6.6) fordert deshalb eine Schutzeinrichtung gegen Übergeschwindigkeit des aufwärts fahrenden Fahrkorbs, die ab mindestens 115 % der Nenngeschwindigkeit anspricht und den leeren Fahrkorb mit höchstens 1 gn verzögert.",
+  "detail": "Die Einrichtung muss den Fahrkorb stoppen oder mindestens auf die Auslegungsgeschwindigkeit des Gegengewichtspuffers abbremsen; das Stoppelement darf auf Fahrkorb, Gegengewicht, Seilsystem (Trag- oder Unterseile) oder Treibscheibe wirken - typisch sind bidirektionale Fangvorrichtungen, Seilbremsen oder die (redundante) Treibscheibenbremse. US-Behörde MSHA: In fünf Jahren mindestens 18 dokumentierte Fälle, in denen aufwärts fahrende Kabinen gegen die Schachtdecke prallten, bei leerem Fahrkorb nach Versagen der mechanischen Bremse. In ASME A17.1 steht die Anforderung in 2.19.1 (seit Ausgabe 2000). KONE: EN 81-20 erweitert den Schutz auch auf Rettungs-/Evakuierungsbetrieb.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://elevatorworld.com/article/elevators-tend-to-fall-upward-too/",
+   "https://arlweb.msha.gov/s&hinfo/paper5.htm",
+   "https://www.tkelevator.com/us-en/tools/classroom-on-demand/counterweights.html",
+   "https://www.asme.org/getmedia/05d3cb98-f573-42f4-b8ad-86a26682091a/a17-1_csa-b44_2019-table-of-contents.pdf",
+   "https://www.kone.co.uk/Images/KONE-Factsheet-EN81-20-50_tcm45-32332.pdf"
+  ],
+  "caveats": "Die MSHA-Statistik bezieht sich auf Bergwerksaufzüge in den USA, nicht auf Personenaufzüge in Gebäuden. Das Gegengewichts-Verhältnis 40-50 % ist Branchenpraxis, keine feste Normvorgabe. Die 1-gn-Grenze und die 115-%-Schwelle stammen aus Snippets zu EN 81-20 5.6.6 bzw. EN 81-1 9.10. | Keine Web-Prüfung möglich. Das entspricht EN 81-1 9.10 und EN 81-20 5.6.6 für Treibscheibenaufzüge. Die Einrichtung muss die Aufwärtsbewegung ab mindestens 115 % erkennen, höchstens bis zur Auslösegrenze. Sie muss den Fahrkorb stoppen oder auf die Auslegungsgeschwindigkeit des Gegengewichtspuffers abbremsen. Der leere Fahrkorb darf dabei höchstens mit 1 gn verzögert werden. Die Ausgleichsquote von 40-50 % ist Branchenpraxis, keine Normvorgabe. Die MSHA-Zahlen im Detailfeld betreffen Bergwerksaufzüge und sollten nicht auf Gebäudeaufzüge übertragen werden."
+ },
+ {
+  "id": "safety_chain_governor_rope",
+  "claim_de": "Das Begrenzerseil ist bewusst überdimensioniert: Nach EN 81-20 muss seine Mindestbruchkraft mindestens das 8-Fache der Seilzugkraft beim Auslösen betragen, und der Begrenzer muss beim Auslösen eine Zugkraft von mindestens 300 N im Seil erzeugen.",
+  "detail": "Bei Treibscheiben-Begrenzern wird mit Reibwert μmax = 0,2 gerechnet. Nach Normkenntnis: Mindestseildurchmesser 6 mm, Rollendurchmesser mind. 30-facher Seildurchmesser, Zugkraft mindestens der größere Wert aus 300 N und dem Doppelten der zum Einrücken der Fangvorrichtung nötigen Kraft (Teilaspekte nicht verifiziert). Die Spannvorrichtung in der Grube ist mit einem elektrischen Kontakt versehen, der bei Seilriss oder übermäßiger Längung den Antrieb stoppt.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://bode-components.com/en/knowledge-governor-rope-requirements/",
+   "https://www.scribd.com/document/737415872/OSG-Calculation",
+   "https://pfb.it/en/news/326060/co-je-to-a-jak-funguje-napinak"
+  ],
+  "caveats": "Faktor 8, μ = 0,2 und 300 N sind im Snippet belegt; 6 mm, D/d = 30 und 'doppelte Einrückkraft' stammen aus eigener Normkenntnis und sind nicht primär geprüft - im Video nur Faktor 8 und 300 N verwenden. | Keine Web-Prüfung möglich. Nach meiner Kenntnis stimmt das mit EN 81-1 9.9.4/9.9.6 überein, übernommen in EN 81-20 5.6.2.2. Beim Treibscheibenbegrenzer gilt Sicherheitsfaktor 8 mit μmax = 0,2. Die Zugkraft beim Auslösen muss der größere Wert aus 300 N und dem Doppelten der Einrückkraft der Fangvorrichtung sein. Die '300 N' im Claim sind also die Untergrenze und damit korrekt, aber vereinfacht. Auch die im Detailfeld genannten Werte (Nenndurchmesser ≥ 6 mm, D/d ≥ 30, Schlaffseilkontakt an der Spannvorrichtung) decken sich mit meiner Normkenntnis. 'Bewusst überdimensioniert' ist eine Wertung, keine Normformulierung."
+ },
+ {
+  "id": "safety_chain_suspension_ropes",
+  "claim_de": "Die Tragseile selbst sind die erste Sicherheitsebene: EN 81-20 verlangt mindestens zwei voneinander unabhängige Tragmittel und bei Treibscheibenaufzügen mit drei oder mehr Seilen einen Sicherheitsfaktor von mindestens 12 (bei zwei Seilen mindestens 16) zwischen Mindestbruchkraft und maximaler statischer Seillast.",
+  "detail": "Definition laut Elevator World: Verhältnis der Mindestbruchkraft eines Seils zur maximalen Kraft in diesem Seil, wenn der Fahrkorb mit Nennlast an der untersten Haltestelle steht. Populärdarstellung (Skyline Atlas): Aufzugsseile tragen das 12- bis 16-Fache der zulässigen Last. Deshalb ist der gleichzeitige Riss aller Tragseile extrem unwahrscheinlich; Fangvorrichtung und Begrenzer sind die unabhängige Rückfallebene.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://elevatorworld.com/article/on-the-safety-factor-of-suspension-ropes/",
+   "https://www.elevator.tr/en/glossary/rope",
+   "https://www.skylineatlas.com/can-elevators-crash/"
+  ],
+  "caveats": "Snippets nennen unterschiedliche Klauselnummern (5.5.1 vs. 5.5.2); EN 81-50 enthält zusätzlich eine Berechnungsmethode, nach der der tatsächlich erforderliche Faktor (abhängig von Umlenkungen/Biegewechseln) höher als 12 sein kann. Skyline-Atlas-Aussage zu 'Sicherheitsseilen' ist unpräzise und sollte nicht übernommen werden. | Keine Web-Prüfung möglich. Die Werte entsprechen EN 81-1 9.2 bzw. EN 81-20 5.5.2: mindestens zwei unabhängige Seile oder Ketten, Faktor ≥ 12 bei drei oder mehr Seilen, ≥ 16 bei zwei Seilen, ≥ 12 bei Trommelantrieb. Die Definition 'Fahrkorb mit Nennlast an der untersten Haltestelle' stimmt. Wichtig: Der Faktor darf außerdem nicht kleiner sein als der nach EN 81-50 berechnete Wert, der Umlenkungen und Biegewechsel berücksichtigt; real sind die Faktoren oft höher. Stahlseile müssen zudem mindestens 8 mm Nenndurchmesser haben, und D/d muss mindestens 40 betragen."
+ },
+ {
+  "id": "safety_chain_release_reset",
+  "claim_de": "Eine abwärts wirkende Fangvorrichtung lässt sich nach dem Einrücken nur lösen, indem der Fahrkorb (bzw. das Gegengewicht) angehoben wird; das Lösen erfordert das Eingreifen einer sachkundigen Person, und der Aufzug geht erst nach deren Prüfung und dem Rückstellen des elektrischen Fangschalters wieder in Betrieb.",
+  "detail": "EN 81-41 (auf EN 81-20 aufbauend) formuliert ausdrücklich: 'Release of the safety gear on the carrier, counterweight or balancing weight shall only be possible by raising the carrier, counterweight or balancing weight.' Praxis moderner Bremsfangvorrichtungen: Fahrkorb 100-200 mm anheben, die Keile fallen durch Eigengewicht oder Rückstellfeder zurück. Der elektrische Fangschalter am Fahrkorb bleibt bis zur Rückstellung offen.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.leia.co.uk/wp-content/uploads/2018/02/QTC-N1811-FprEN-81-41-Vertical-lifting-platforms-for-final-vote-comments-to-LEIA-by-2-March.pdf",
+   "https://elevatorworld.com/article/elevator-safety-components/"
+  ],
+  "caveats": "Direkter EN-81-20-Wortlaut nicht einsehbar; das wörtliche Zitat stammt aus dem EN-81-41-Entwurf (Plattformlifte). Die 100-200-mm-Angabe stammt aus einem nicht-normativen Snippet. | Keine Web-Prüfung möglich. EN 81-1 9.8.8 verlangt: Das Lösen einer eingerückten Fangvorrichtung erfordert eine sachkundige Person, und Lösen sowie automatische Rückstellung sind nur durch Anheben von Fahrkorb bzw. Gegengewicht möglich. Nach meiner Kenntnis steht das sinngemäß auch in EN 81-20. Der Claim stützt sich aber nur auf den Entwurf von EN 81-41 (Plattformlifte). Er übergeht außerdem, dass bidirektionale Fänge bzw. Fänge gegen Aufwärts-Übergeschwindigkeit in Gegenrichtung (durch Absenken) gelöst werden. Und die sachkundige Person ist schon für das Lösen selbst nötig, nicht erst danach. Die Angabe 100-200 mm Anheben ist nicht belegt."
+ },
+ {
+  "id": "safety_chain_standards_status",
+  "claim_de": "EN 81-20 und EN 81-50 erschienen 2014 und sind für alle ab 1. September 2017 in Verkehr gebrachten neuen Aufzüge maßgeblich (sie lösten EN 81-1/-2 ab; EN 81-20 wurde 2020 überarbeitet). Als Nachfolger wurden die Normen EN ISO 8100-1/-2 erarbeitet, die EN 81-20/-50 nach einer Übergangsfrist ablösen sollen.",
+  "detail": "ISO 8100-1:2026 ist bei ISO veröffentlicht; laut Normungsportalen ist die Rücknahme von EN 81-20:2020 zum 17. Juni 2026 vermerkt; ELA und Liftinstituut sprechen von Harmonisierung im 3. Quartal 2026 und einer Übergangszeit von 36 Monaten, in der Zertifizierungen weiter auf EN 81-20/-50 beruhen können. Die Grundarchitektur der Sicherheitskette (Begrenzer, Fang, Bremse, UCMP, Aufwärts-Übergeschwindigkeit) bleibt erhalten.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.leia.co.uk/bs-en-81-20-bs-en-81-50-published/",
+   "https://www.liftinstituut.com/knowledge-center/20-standards-directives/4-new-standards-en-81-20-and-en-81-50-harmonized-and-effective",
+   "https://www.iso.org/standard/80553.html",
+   "https://www.ela-aisbl.eu/wp-content/uploads/2026/03/EN_ISO_8100-12_Comparison_EN-81-2050_Condensed_Version-9.pdf",
+   "https://genorma.com/en/standards/en-81-20-2020"
+  ],
+  "caveats": "Übergangs- und Rücknahmedaten sind in den Quellen nicht ganz konsistent (Rücknahme 17.06.2026 vs. 36 Monate Übergang ab Veröffentlichung). Ob einzelne Zahlenwerte (z.B. Auslösegrenzen, UCM-Abstände) in ISO 8100-1 unverändert übernommen wurden, konnte nicht geprüft werden - im Video besser 'nach EN 81-20' formulieren. | Keine Web-Prüfung möglich. Sicher sind die Veröffentlichung 2014 und der Stichtag 1.9.2017; die Rücknahme von EN 81-1/-2 erfolgte zum 31.8.2017. Der genaue Monat 'Juli 2014' ist unsicher: Die nationalen Ausgaben (BS, DIN) erschienen später, deshalb nur '2014' sagen. Treffender als 'in Betrieb genommen' ist 'in Verkehr gebracht' im Sinne der Aufzugsrichtlinie. Dass EN ISO 8100-1/-2 im Jahr 2026 erschienen ist und wann EN 81-20:2020 zurückgezogen wird, konnte ich nicht prüfen; die Quellen widersprechen sich (17.06.2026 vs. 36 Monate Übergang). 'werden 2026 ersetzt' ist deshalb zu absolut. Außerdem fehlt die Überarbeitung EN 81-20:2020."
+ },
+ {
+  "id": "safety_chain_asme_comparison",
+  "claim_de": "Auch der nordamerikanische Code ASME A17.1 verlangt, dass der Geschwindigkeitsbegrenzer frühestens bei 115 % der Nenngeschwindigkeit auslöst (Höchstwerte in Tabelle 2.18.2.1), und fordert seit der Ausgabe 2000 in Abschnitt 2.19 Schutz gegen Aufwärts-Übergeschwindigkeit und ungewollte Fahrkorbbewegung.",
+  "detail": "Laut Snippet: Für Nenngeschwindigkeiten bis 2000 ft/min (ca. 10 m/s) mindestens 115 %; darüber höchstens 120 % der Nenngeschwindigkeit. Beispiel aus Tabelle 2.18.2.1: Nenngeschwindigkeit 0-125 ft/min -> max. Auslösung 175 ft/min, max. Schalterauslösung 150 ft/min. Otis (populär): Begrenzer löst bei 15-25 % Überschreitung aus. Seit 2000 sind ASME A17.1 und CSA B44 weitgehend identisch.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://up.codes/s/speed-governors",
+   "https://www.asme.org/getmedia/05d3cb98-f573-42f4-b8ad-86a26682091a/a17-1_csa-b44_2019-table-of-contents.pdf",
+   "https://www.otis.com/en/us/tools-resources/high-rise-safety-systems",
+   "https://arlweb.msha.gov/s&hinfo/paper5.htm"
+  ],
+  "caveats": "Der Satz 'mindestens 115 % bis 2000 fpm, darüber max. 120 %' stammt aus einem zusammenfassenden Snippet und ist in sich nicht ganz schlüssig (Unter- vs. Obergrenze); Tabellenwerte nur teilweise gesehen. Die Angabe '15 bis 25 Prozent' ist zwischen Otis-Seite und MSHA-Papier nicht eindeutig zuordenbar. | Keine Web-Prüfung möglich. Nach meiner Kenntnis stimmt ASME A17.1 2.18.2.1: Auslösung bei nicht weniger als 115 % der Nenngeschwindigkeit, Höchstwerte nach Tabelle 2.18.2.1. Abschnitt 2.19 (Ascending Car Overspeed and Unintended Car Movement Protection) kam mit A17.1-2000, zeitgleich mit der Harmonisierung mit CSA B44. Einzelwerte im Detailfeld habe ich nicht geprüft und würde sie nicht verwenden: 175/150 ft/min, 120 % über 2000 fpm, 'Otis 15-25 %'. In der Praxis gilt der Code je nach Bundesstaat bzw. Provinz und der dort übernommenen Ausgabe."
+ },
+ {
+  "id": "physics_buffers_freefall_speeds",
+  "claim_de": "Ohne Luftwiderstand erreicht ein frei fallender Fahrkorb nach v = √(2·g·h) aus 10 m Fallhöhe rechnerisch etwa 14 m/s (≈50 km/h), aus 30 m etwa 24 m/s (≈87 km/h) und aus 100 m etwa 44 m/s (≈160 km/h). Das sind Idealwerte, real liegen die Geschwindigkeiten etwas darunter.",
+  "detail": "Eigene Rechnung mit g = 9,81 m/s², Start aus dem Stillstand, ohne Reibung/Luft. Zeiten t = √(2h/g). 3 m (ca. 1 Stockwerk): 7,7 m/s = 27,6 km/h, 0,78 s. 10 m: 14,0 m/s = 50,4 km/h, 1,43 s. 30 m: 24,3 m/s = 87,3 km/h, 2,47 s. 100 m: 44,3 m/s = 159,5 km/h, 4,52 s. 300 m (Empire-State-Fall 1945): 76,7 m/s = 276 km/h, 7,8 s (rein theoretisch). Plausibilitätscheck: Physiker C. Baird (West Texas A&M) nennt für 165 ft (≈15 Stockwerke, ≈50 m) ≈72 mph; eigene Rechnung ergibt ≈70 mph (31,4 m/s), also konsistent.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://www.wtamu.edu/~cbaird/sq/2012/12/05/if-im-on-an-elevator-that-breaks-loose-and-plummets-down-the-shaft-can-i-avoid-harm-by-jumping-at-the-last-second/",
+   "https://theconversation.com/ive-always-wondered-if-youre-in-a-falling-elevator-can-you-really-save-yourself-by-jumping-99597"
+  ],
+  "caveats": "Werte sind Idealwerte (Vakuum, keine Führungsreibung, kein Gegengewicht, kein Luftpolster). Real ist die Geschwindigkeit kleiner. Außerdem fällt ein Personenaufzug praktisch nie frei, weil die Fangvorrichtung nach wenigen Zentimetern greift. Die Formel ist Schulphysik, die Zahlen sind selbst gerechnet (nicht aus einer Quelle zitiert). Bakers 72 mph weichen leicht von der eigenen Rechnung (≈70 mph) ab, vermutlich Rundung. Hinweis: WebFetch war für alle Hosts gesperrt, alle Quellen wurden nur über Suchsnippets geprüft. | Selbst nachgerechnet (g = 9,81): 3 m → 7,67 m/s / 27,6 km/h / 0,78 s. 10 m → 14,01 m/s / 50,4 km/h / 1,43 s. 30 m → 24,26 m/s / 87,3 km/h / 2,47 s. 100 m → 44,29 m/s / 159,5 km/h / 4,52 s. 300 m → 76,7 m/s / 276 km/h / 7,82 s. Alle Werte stimmen. Wichtig: 165 ft (50,3 m) ergeben rechnerisch 70,3 mph, nicht 72 mph. Die angeblichen 72 mph von Baird passen also nicht genau zur Formel. Sie gehören aber nicht zum claim_de. Die Webrecherche war nicht möglich: Das Suchbudget war aufgebraucht, und alle Hosts waren für Fetch/curl gesperrt (403). Das Urteil beruht deshalb nur auf Schulphysik und der eigenen Rechnung."
+ },
+ {
+  "id": "physics_buffers_governor_trip_speeds",
+  "claim_de": "Nach EN 81-20 (5.6.2.2.1.1) muss der Geschwindigkeitsbegrenzer die Fahrkorb-Fangvorrichtung bei mindestens 115 % der Nenngeschwindigkeit auslösen, aber unterhalb von 0,8 m/s bei Sperrfangvorrichtungen (außer Rollenbauart), 1,0 m/s bei Sperrfang in Rollenbauart, 1,5 m/s bei Bremsfangvorrichtungen für Nenngeschwindigkeiten bis 1 m/s und 1,25·v + 0,25/v (in m/s) bei Bremsfangvorrichtungen über 1 m/s.",
+  "detail": "Beispiele (eigene Rechnung): v = 1,6 m/s → Auslösung zwischen 1,84 und 2,16 m/s; v = 2,5 m/s → zwischen 2,88 und 3,23 m/s. Der Begrenzer arbeitet rein mechanisch (Fliehkraft am Seilrad, Begrenzerseil zieht am Fanghebel). Laut Suchsnippet darf der Abstand zwischen den Auslösepunkten am Begrenzer, bezogen auf die Seilbewegung, höchstens 250 mm betragen. Sperrfangvorrichtungen sind nur bis 0,63 m/s Nenngeschwindigkeit zulässig, darüber ist ein Bremsfang (progressiv) vorgeschrieben.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.idrostech.com/speed-governor-safetygear-elevator/",
+   "https://bode-components.com/en/knowledge-overspeed-governor/",
+   "https://elevatorworld.com/article/elevator-safety-components/",
+   "https://www.elevator.tr/en/glossary/progressive-safety-gear"
+  ],
+  "caveats": "Der Normtext EN 81-20 selbst war nicht abrufbar (kostenpflichtig, WebFetch blockiert). Die Grenzwerte stammen aus übereinstimmenden Snippets von Herstellern und Fachportalen. Ob der Rollen-Sperrfang (1,0 m/s) für Neuanlagen noch anerkannt wird, ist laut einer Quelle je nach Prüfstelle unterschiedlich. ASME A17.1 (USA) verwendet eigene Tabellenwerte. | Die Zahlen decken sich mit meinem Wissen über EN 81-1 9.9.1 und EN 81-20 5.6.2.2.1.1, und die Beispielrechnungen stimmen (1,6 m/s → 1,84 bis 2,16 m/s; 2,5 m/s → 2,875 bis 3,225 m/s). Kleine Korrektur: Die Norm formuliert 'less than', also 'unterhalb von', nicht 'spätestens bei'. Unsicher ist die Kategorie 'Sperrfang mit Dämpfung' (instantaneous with buffered effect). Sie stammt sicher aus EN 81-1. In EN 81-20 sind Sperrfangvorrichtungen nur noch bis 0,63 m/s zulässig, und diese Kategorie ist dort möglicherweise gestrichen. Deshalb fehlt sie in der korrigierten Fassung. Die 250-mm-Angabe im Detail ließ sich nicht prüfen. Den Normtext konnte ich nicht einsehen, und eine Webprüfung war nicht möglich (Suchbudget aufgebraucht, Hosts gesperrt)."
+ },
+ {
+  "id": "physics_buffers_time_to_trip",
+  "claim_de": "Reißen bei einem 1-m/s-Aufzug in Abwärtsfahrt alle Seile, erreicht der Fahrkorb rechnerisch (idealer freier Fall) die Mindest-Auslösegeschwindigkeit von 1,15 m/s nach etwa 0,015 s und 16 mm Weg, die Obergrenze von 1,5 m/s nach rund 0,05 s und 64 mm. Dazu kommen die Reaktionszeit des Begrenzers, die Einrückzeit der Fangkeile und der Bremsweg. Real bewegt sich die Kabine bis zum Stillstand eher einige Dezimeter.",
+  "detail": "Eigene Rechnung: Δt = (v_Auslösung − v_Nenn)/g, Δs = (v_A² − v_N²)/(2g). Aus dem Stillstand (Kabine hält im Stockwerk): 1,15 m/s nach 0,12 s und 67 mm; 1,5 m/s nach 0,15 s und 115 mm. 1,6-m/s-Aufzug: Auslösung bei 1,84 bis 2,16 m/s nach 0,025 bis 0,057 s und 4 bis 11 cm. 2,5 m/s: bis 3,23 m/s nach 0,074 s und 21 cm. Danach bremst ein Bremsfang mit durchschnittlich 0,2 bis 1 g. Beispiel: aus 1,5 m/s mit 0,6 g ergeben sich ≈19 cm Bremsweg (eigene Rechnung). TK Elevator gibt an, dass die Kabine nach dem Eingreifen der Fangbacken in etwa 6,5 inch (≈16,5 cm) steht.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://www.tkelevator.com/us-en/tools/classroom-on-demand/governor-module.html",
+   "https://www.idrostech.com/speed-governor-safetygear-elevator/",
+   "https://www.kone.com/global/en/newsroom/stories/top-6-elevator-myths-debunked.html"
+  ],
+  "caveats": "Idealisiert: Die Rechnung nimmt einen echten freien Fall mit g an. Real verzögern Führungsreibung, Seilreste und Luft. Nicht enthalten sind die Reaktionszeit des Begrenzers (die Klinke muss in die nächste Rastung fallen) und die Einrückzeit der Fangkeile. Der gesamte Fallweg liegt deshalb eher im Dezimeterbereich als bei wenigen Millimetern. Die 6,5 inch von TK Elevator beschreiben den US-Kontext und gelten nicht normativ für jede Anlage. Fallzeiten und -wege sind selbst gerechnet. | Selbst nachgerechnet: Δt = 0,0153 s und Δs = 16,4 mm (bis 1,15 m/s), Δt = 0,051 s und Δs = 63,7 mm (bis 1,5 m/s). Aus dem Stillstand: 0,117 s / 67 mm und 0,153 s / 115 mm. 1,6 m/s: 0,024 bis 0,057 s und 4,2 bis 10,6 cm. 2,5 m/s → 3,225 m/s: 0,074 s / 21 cm. Bremsweg aus 1,5 m/s bei 0,6 g: 19 cm. Alles korrekt. Die Rechnung ist aber idealisiert. Führungsreibung, Hängekabel und Kompensationsseile verringern die Beschleunigung, und die Totzeiten fehlen, wie die eigenen Caveats schon sagen. Die TK-Elevator-Angabe von 6,5 inch ließ sich nicht prüfen (Webzugriff gesperrt) und sollte nicht als Normwert dargestellt werden."
+ },
+ {
+  "id": "physics_buffers_safety_gear_deceleration",
+  "claim_de": "Ein Bremsfang muss einen frei fallenden Fahrkorb mit Nennlast mit einer mittleren Verzögerung zwischen 0,2 g und 1,0 g abbremsen. Die Fahrgäste spüren dabei im Mittel etwa das 1,2- bis 2-fache ihres Körpergewichts. Kurze Spitzen oder eine leichter beladene Kabine können darüber liegen.",
+  "detail": "Die Bandbreite 0,2 bis 1 gn für Bremsfangvorrichtungen mit Nennlast im freien Fall ist in EN 81-50 und EN 81-20 festgelegt. Ein Hersteller nennt ≈0,6 g als typischen Zielwert. Das gefühlte Gewicht bei einer Verzögerung a nach oben ist m·(g + a), also das 1,2- bis 2-fache. Sperrfangvorrichtungen bremsen deutlich abrupter und sind deshalb nur bis 0,63 m/s zulässig.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://pfb.it/en/news/325810/lift-safety-gear-how-it-works",
+   "https://www.elevator.tr/en/glossary/progressive-safety-gear",
+   "https://www.firgelliauto.com/blogs/mechanisms/elevator-safety-gear"
+  ],
+  "caveats": "Der Normtext war nicht direkt einsehbar, die Angabe beruht auf mehreren übereinstimmenden Snippets. Die Grenzen gelten für Nennlast. Bei leerer oder überladener Kabine weicht die Verzögerung ab. Die ≈0,6 g sind ein Hersteller-Richtwert und keine Normvorgabe. Die Umrechnung ins gefühlte Gewicht ist eigene Physik. | Die Anforderung '0,2 gn bis 1 gn mittlere Verzögerung bei freiem Fall mit Nennlast' für Bremsfangvorrichtungen kenne ich aus EN 81-1 (9.8.4) und EN 81-20 (5.6.2.1.x), mit Prüfung nach EN 81-50. Sie gilt als gesichert. Die Physik stimmt: gefühlte Last = m·(g + a) → 1,2 bis 2,0. Einschränkung: Das sind Mittelwerte. Momentane Spitzen können höher liegen, und bei leerer Kabine wird der Fahrkorb stärker verzögert, weil die Bremskraft gleich bleibt und die Masse kleiner ist. Der ≈0,6-g-Wert des Herstellers ist nicht geprüft. Webzugriff war nicht möglich."
+ },
+ {
+  "id": "physics_buffers_buffer_types_speed_limits",
+  "claim_de": "Nach EN 81-20 sind energiespeichernde Puffer (lineare Stahlfedern oder nichtlineare Polyurethanpuffer) nur bis 1,0 m/s Nenngeschwindigkeit zulässig, energieverzehrende Hydraulik-/Ölpuffer dagegen bei jeder Nenngeschwindigkeit.",
+  "detail": "Energiespeichernde Puffer speichern die Stoßenergie elastisch und geben sie zum Teil zurück (Rückprall). Energieverzehrende Puffer drücken Öl durch Drosselöffnungen und wandeln die Energie in Wärme um. Nach dem Entlasten fahren sie selbsttätig in die Ausgangslage zurück. Nach der älteren EN 81-1 waren energiespeichernde Puffer mit gedämpfter Rückbewegung bis 1,6 m/s erlaubt, ab 1,6 m/s waren Ölpuffer Pflicht. In den USA (ASME A17.1, vgl. kalifornisches Title 8 §3031) gilt: Federpuffer bis 200 ft/min (≈1,0 m/s), darüber Ölpuffer. Puffer sitzen in der Schachtgrube unter dem Fahrkorb und unter dem Gegengewicht.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://elevatorworld.com/article/elevator-safety-components/",
+   "https://etn-shop.com/en/lift-elevator-program/lift-buffers/en-81-20-50-lift-directive-2014-33-eu",
+   "https://journals.sagepub.com/doi/10.1177/1687814019835046",
+   "https://www.dir.ca.gov/title8/3031.html"
+  ],
+  "caveats": "Die 1,6-m/s-Regel für Puffer mit gedämpfter Rückbewegung stammt aus EN 81-1. Ob EN 81-20 sie unverändert übernommen hat, ließ sich nicht verifizieren. Für ein deutsches Video sollte man sich an die sichere Aussage halten: Speicherpuffer bis 1 m/s, Ölpuffer immer. Die 200 ft/min stammen aus kalifornischem Recht, das auf ASME A17.1 verweist. | Das entspricht meinem Wissen zu EN 81-20 5.8.x und EN 81-1 10.3.3 bis 10.3.5. Energiespeichernde Puffer mit gedämpfter Rückbewegung waren nach EN 81-1 bis 1,6 m/s erlaubt. In EN 81-20 ist diese Kategorie meines Wissens entfallen, das ist aber nicht geprüft, deshalb hier weggelassen. Die US-Angabe (Federpuffer bis 200 ft/min ≈ 1,0 m/s, Ölpuffer bei jeder Geschwindigkeit) passt zu ASME A17.1. Den Normtext konnte ich nicht einsehen, eine Webprüfung war nicht möglich."
+ },
+ {
+  "id": "physics_buffers_stroke_formula",
+  "claim_de": "Der Mindesthub eines Ölpuffers (energieverzehrend) entspricht dem Bremsweg bei 115 % der Nenngeschwindigkeit und einer Verzögerung von 1 g, also (1,15·v)²/(2·9,81) ≈ 0,0674·v² Meter. Das sind rund 7 cm bei 1 m/s, 1,69 m bei 5 m/s und 6,74 m bei 10 m/s, solange der Hub nicht durch eine Verzögerungsüberwachung an den Endhaltestellen verkürzt werden darf.",
+  "detail": "Linear energiespeichernde Puffer (Federn) brauchen den doppelten Hub, ≈0,135·v², mindestens aber 65 mm: 135 mm bei 1 m/s (eigene Rechnung). Weitere Werte für Ölpuffer (eigene Rechnung): 1,6 m/s → 0,17 m; 2,5 m/s → 0,42 m; 4 m/s → 1,08 m. Mit Endhaltestellen-Verzögerungsüberwachung darf der Hub reduziert werden (unter EN 81-1 auf 50 % bzw. 1/3; Mindesthub laut Hersteller Oleo dann 420 mm bzw. 540 mm). Für Hochgeschwindigkeitsaufzüge baut Oleo vierstufige Teleskoppuffer (HSL 115: Puffer-Nenngeschwindigkeit 11,55 m/s, für Aufzüge bis 20 m/s mit Geschwindigkeitsüberwachung).",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/9546074",
+   "https://www.oleoinc.com/elevator-safety",
+   "https://www.oleoinc.com/products/view/hsl-115",
+   "https://elevatorworld.com/article/elevator-safety-components/"
+  ],
+  "caveats": "Die 0,0674·v² samt den Beispielen 1,685 m (5 m/s) und 6,74 m (10 m/s) stehen im US-Patent mit Bezug auf EN 81-1:1998. Die 0,135·v² und 65 mm sind nur über ein Snippet (Elevator World) belegt, passen aber physikalisch (doppelter Wert). Die Regeln für den reduzierten Hub unterscheiden sich im Detail zwischen EN 81-1, EN 81-20 und ASME. Die 420/540 mm stammen aus einem Hersteller-Snippet. | Formel nachgerechnet: 1,3225/19,62 = 0,0674. Werte: 1 m/s 0,067 m, 1,6 m/s 0,173 m, 2,5 m/s 0,421 m, 4 m/s 1,078 m, 5 m/s 1,685 m, 10 m/s 6,74 m. Alle korrekt. Die Formel sowie 0,135·v² und mindestens 65 mm für lineare Federpuffer kenne ich aus EN 81-1 10.4 und EN 81-20 5.8.2. Den reduzierten Hub bei Endhaltestellen-Überwachung (50 % bis 4 m/s, mindestens 0,42 m; ein Drittel über 4 m/s, mindestens 0,54 m) kenne ich aus EN 81-1 10.4.3.2. Er passt zu den 420/540 mm aus der Hersteller-Angabe. Die Oleo-HSL-115-Daten ließen sich nicht prüfen. Webzugriff war gesperrt."
+ },
+ {
+  "id": "physics_buffers_deceleration_limits",
+  "claim_de": "Nach EN 81-20 (Nachweis durch die Typprüfung nach EN 81-50) muss ein energieverzehrender Puffer, ebenso ein nichtlinearer Speicherpuffer, einen mit Nennlast frei fallenden Fahrkorb, der mit 115 % der Nenngeschwindigkeit aufschlägt, mit einer mittleren Verzögerung von höchstens 1 g abfangen. Verzögerungen über 2,5 g dürfen nicht länger als 0,04 s dauern.",
+  "detail": "Bei der Typprüfung werden Prüfmassen im freien Fall auf den Puffer fallen gelassen, mit einer Aufprallgeschwindigkeit von mindestens 0,8 m/s. Die Führung muss so reibungsarm sein, dass beim Aufprall mindestens 0,9 gn erreicht werden. Getestet werden die größte und die kleinste zulässige Masse. Für Fahrgäste bedeuten 1 g im Mittel etwa das doppelte Körpergewicht, 2,5 g kurzzeitig das 3,5-fache (eigene Umrechnung). Laut Oleo lässt sich die ideale Kennlinie nur für eine bestimmte Masse erreichen, weil die Kabinenmasse mit der Beladung schwankt.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://nobelcert.com/DataFiles/FreeUpload/EN%2081-50-2014.pdf",
+   "https://www.oleoinc.com/elevator-safety",
+   "https://www.researchgate.net/publication/389268550_Evaluation_of_EN_81-20_Requirements_with_regard_to_Car_Deceleration_during_Buffering_Process_of_Lifts"
+  ],
+  "caveats": "Das Norm-PDF war nicht direkt abrufbar, der Wortlaut ist über Suchsnippets belegt, die übereinstimmen. Die Grenzwerte gelten für den Auslegungsfall (115 % Nenngeschwindigkeit), nicht für einen Absturz aus großer Höhe. | Die Zahlenwerte (mittlere Verzögerung ≤ 1 gn, über 2,5 gn höchstens 0,04 s, Bezug 115 % Nenngeschwindigkeit bei Nennlast) stimmen mit meinem Wissen zu EN 81-1 10.4.3.3 und EN 81-20 5.8.2.2 überein. Zwei Ungenauigkeiten: (1) Die Anforderung steht in EN 81-20, EN 81-50 regelt die Prüfung. 'Nach EN 81-50' ist daher unscharf. (2) 'Ein Puffer' verallgemeinert: Das Kriterium gilt für energieverzehrende und nichtlineare energiespeichernde Puffer. Lineare Federpuffer werden über den Hub (0,135·v²) definiert. Die Prüfdetails im Detail-Text (mindestens 0,8 m/s Aufprall, 0,9 gn Führung) ließen sich nicht prüfen. Das Norm-PDF war nicht abrufbar, Webzugriff war gesperrt."
+ },
+ {
+  "id": "physics_buffers_overload_at_freefall",
+  "claim_de": "Ein Grubenpuffer ist für einen Aufprall mit etwa 115 % der Nenngeschwindigkeit ausgelegt und nicht für einen Sturz aus großer Höhe. Nach 10 m freiem Fall brächte ein Fahrkorb rechnerisch rund 150-mal so viel Bewegungsenergie mit, wie der Puffer eines 1-m/s-Aufzugs laut Auslegung aufnehmen soll.",
+  "detail": "Eigene Rechnung: Die Energie wächst mit v². (14,0 m/s ÷ 1,15 m/s)² ≈ 148 nach 10 m, ≈445 nach 30 m und ≈1.480 nach 100 m. Würde ein Aufprall mit 14 m/s auf 135 mm Federhub gleichmäßig abgebremst, ergäbe das rechnerisch im Mittel ≈74 g. Tatsächlich schlägt der Puffer durch, und der Rest der Energie trifft auf Kabinenboden und Grube. Deshalb schützt vor dem Absturz die Fangvorrichtung und nicht der Puffer. Der Puffer ist die letzte Stufe für Überfahrten mit geringer Geschwindigkeit (z. B. bei versagender Steuerung).",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://www.oleoinc.com/elevator-safety",
+   "https://www.kone.com/global/en/newsroom/stories/top-6-elevator-myths-debunked.html",
+   "https://www.dir.ca.gov/title8/3031.html"
+  ],
+  "caveats": "Die Verhältniszahlen und die ≈74 g sind eigene Überschlagsrechnungen mit vereinfachtem Modell (konstante Verzögerung, starre Kabine, keine Verformung). Echte Crashverläufe hängen von Kabinenstruktur, Pufferkennlinie und Luftpolster ab. Die Quellen belegen nur die Auslegung auf 115 % bzw. 1 g, nicht die hier gerechneten Faktoren. | Selbst nachgerechnet: (14,01/1,15)² = 148 (10 m), 445 (30 m), 1.484 (100 m). 14 m/s auf 135 mm Hub bei konstanter Verzögerung: 74,1 g. Die Arithmetik stimmt. Die Auslegung auf 115 % der Nenngeschwindigkeit ist normativ korrekt (EN 81-20 5.8). Der Vergleich gilt pro Masseneinheit, also bei gleicher Kabinenmasse. Das Modell ist vereinfacht, wie in den Caveats beschrieben. Nur als Größenordnung formulieren, deshalb 'rechnerisch' ergänzt."
+ },
+ {
+  "id": "physics_buffers_jump_myth_physics",
+  "claim_de": "Ein Sprung kurz vor dem Aufprall könnte die Aufprallgeschwindigkeit bestenfalls um die Absprunggeschwindigkeit eines Menschen senken, grob 2 bis 3 m/s. Aus rund 50 m (≈15 Stockwerke) ergäbe der freie Fall rechnerisch etwa 31 m/s (≈113 km/h bzw. ≈70 mph), mit Sprung wären es immer noch etwa 28 m/s (≈103 km/h). Physiker wie Christopher Baird kommen in ihren Beispielrechnungen auf dieselbe Größenordnung.",
+  "detail": "Bei 0,5 m Sprunghöhe beträgt die Absprunggeschwindigkeit v = √(2·g·0,5) ≈ 3,1 m/s (eigene Rechnung, passt zu Bairds ≈7 mph). Beispiel 10 m (eigene Rechnung): 14,0 m/s minus 3 m/s ergibt 11 m/s. Man schlägt dann auf dem schon stehenden Boden so auf, als wäre man aus ≈6,2 m gefallen, und hat noch ≈62 % der Energie. Praktische Probleme: Im freien Fall ist man schwerelos und schwebt, es gibt also keinen Bodendruck zum Abstoßen. Den Zeitpunkt kennt man nicht. Bei 14 m/s legt die Kabine in 0,1 s schon 1,4 m zurück. Naked Scientists: Beine, die kräftig genug für so einen Sprung wären, würden dabei brechen. Illinois Physics Van: Nach einem Sprung trifft man auf einen schon starren Boden, statt zusammen mit der Kabine gebremst zu werden.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.wtamu.edu/~cbaird/sq/2012/12/05/if-im-on-an-elevator-that-breaks-loose-and-plummets-down-the-shaft-can-i-avoid-harm-by-jumping-at-the-last-second/",
+   "https://www.thenakedscientists.com/articles/questions/could-i-survive-falling-elevator-jumping-last-second",
+   "https://van.physics.illinois.edu/ask/listing/139",
+   "https://theconversation.com/ive-always-wondered-if-youre-in-a-falling-elevator-can-you-really-save-yourself-by-jumping-99597"
+  ],
+  "caveats": "Die ≈3 m/s Absprunggeschwindigkeit sind aus einer typischen Sprunghöhe von 0,5 m abgeleitet und nicht direkt zitiert. Trainierte Springer schaffen mehr, Menschen in Panik weniger. Bairds 72 mph für 165 ft liegen leicht über der eigenen Rechnung (≈70 mph). Die 6,2-m-Äquivalenzhöhe und der Energieanteil sind eigene Rechnungen. | Die Kernaussage ist physikalisch richtig: Die Geschwindigkeit sinkt nur um die Absprunggeschwindigkeit, und selbst das ist im freien Fall kaum umsetzbar. Aber: 165 ft (50,3 m) ergeben rechnerisch 70,3 mph, nicht 72 mph. Die zitierten Baird-Werte (72 → 65 mph) passen also nicht exakt zur Formel und ließen sich nicht prüfen (wtamu.edu gesperrt, Suchbudget erschöpft). Die ≈3 m/s gelten für 0,5 m Sprunghöhe (3,13 m/s ≈ 7 mph). Untrainierte Erwachsene springen eher 0,3 bis 0,4 m hoch, also 2,4 bis 2,8 m/s. Deshalb '2 bis 3 m/s'. Die 6,2-m-Äquivalenzhöhe und die 62 % Restenergie für 10 m sind rechnerisch korrekt. Das exakte Baird-Zitat vor der Verwendung im Original prüfen."
+ },
+ {
+  "id": "physics_buffers_mythbusters",
+  "claim_de": "Die MythBusters testeten den Sprung-Mythos 2004 in der Folge „Elevator of Death“. Ergebnis: widerlegt („busted“), denn ein Sprung kann die Fallgeschwindigkeit nur unwesentlich verringern.",
+  "detail": "Für den Test nutzten sie einen alten Aufzug in einem Gebäude, das abgerissen werden sollte, und mussten mehrere Sicherheitssysteme ausschalten. Die Fangbremse ließ sich laut Wikiquote überraschend einfach deaktivieren. Adam Savage: „Anticlimactically enough, I believe I've disabled the entire mechanism by removing this simple pin.“ Die Tragseile für das Gegengewicht durchzutrennen, dauerte dagegen länger. Ein Aufzugsexperte riet spekulativ, sich lieber auf den Boden zu legen. Außerdem vermuteten Adam und Jamie, dass die Überlebende des Empire-State-Unglücks von 1945 durch ein Luftpolster im engen Schacht und die Federwirkung des schlaffen Seils gerettet wurde.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://en.wikipedia.org/wiki/MythBusters_(2004_season)",
+   "https://mythresults.com/episode17",
+   "https://www.imdb.com/title/tt0768469/",
+   "https://en.wikiquote.org/wiki/MythBusters"
+  ],
+  "caveats": "Die Folgennummer ist je nach Quelle verschieden: Plex/Apple TV zählen Staffel 2, Folge 9; mythresults zählt Folge 17 (fortlaufend); Discovery GO „S3 E4“; Amazon „Season 3 – Episode 17“. Das Sendedatum 6.10.2004 ist dagegen einheitlich. Fallhöhe und gemessene Beschleunigungswerte des Tests (Dummy „Buster“) ließen sich nicht verifizieren, also keine Zahlen dazu nennen. Wikipedia und Fanseiten dienen hier nur als Hinweis. Für das Video am besten den Originalclip oder den offiziellen Discovery-Clip verwenden. | Dass die MythBusters den Aufzugs-Sprung-Mythos 2004 in 'Elevator of Death' getestet und als 'busted' bewertet haben, entspricht meinem Wissen. Das genaue Erstausstrahlungsdatum (6. Oktober 2004), das Wikiquote-Zitat und die Details zur Deaktivierung der Fangvorrichtung ließen sich nicht unabhängig prüfen. Wikipedia, Wikiquote, IMDb und mythresults waren gesperrt, das Suchbudget war erschöpft. Deshalb das Datum im Sprechertext besser weglassen oder am Originalclip bzw. an Discovery prüfen. Die Folgennummer ist ohnehin uneinheitlich. Die Empire-State-Deutung von Adam und Jamie ist nicht verifiziert."
+ },
+ {
+  "id": "physics_buffers_passenger_posture",
+  "claim_de": "In einem wirklich frei fallenden Fahrkorb wären die Fahrgäste nahezu schwerelos, weil Kabine und Körper gleich schnell fallen. Welche Körperhaltung beim Aufprall am besten wäre, ist ungeklärt. Populärwissenschaftliche Quellen empfehlen teils flaches Liegen, teils Stehen mit gebeugten Knien, belastbare Daten gibt es dazu nicht.",
+  "detail": "Live Science: Liegend auf dem Rücken wird die Kraft auf die ganze Körperfläche verteilt, und Wirbelsäule und lange Knochen liegen quer zur Stoßrichtung. Weil man aber schwebt, müsste man sich aktiv am Boden festhalten. Illinois Physics Van: Stehen mit ungestreckten Knien, die Beine wirken wie eine Knautschzone (wie bei Fallschirmspringern) und schützen Gehirn und Organe. Luke Barnes (The Conversation) nennt das Hinlegen eine schlechte Idee, weil Kopfverletzungen die häufigste Todesursache bei Stürzen sind.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.livescience.com/33445-how-survive-falling-elevator.html",
+   "https://van.physics.illinois.edu/ask/listing/139",
+   "https://theconversation.com/ive-always-wondered-if-youre-in-a-falling-elevator-can-you-really-save-yourself-by-jumping-99597"
+  ],
+  "caveats": "Die Quellen widersprechen sich, und empirische Daten gibt es praktisch keine. Im Video sollte das als offene Frage dargestellt werden. Die Zuordnung des Zitats gegen das Hinlegen zu Barnes/The Conversation beruht auf Suchsnippets und sollte vor Verwendung am Originaltext geprüft werden. Wichtiger ist die Einordnung, dass die Situation dank Fangvorrichtung praktisch nicht vorkommt. | Die Schwerelosigkeit im freien Fall ist Physik und korrekt. Genau genommen ist man nur 'nahezu' schwerelos, weil Führungsreibung und Luft den Fall leicht bremsen. Die Zuordnung der Empfehlungen (Live Science: Liegen; Illinois Physics Van: gebeugte Knie; Barnes/The Conversation gegen das Liegen wegen Kopfverletzungen) konnte ich nicht prüfen. Alle diese Hosts waren gesperrt, das Suchbudget war erschöpft. Die Zuordnung wirkt plausibel, sollte aber vor namentlicher Nennung im Video am Original geprüft werden. Die Kernaussage 'Fachleute sind uneins, keine Daten' ist vorsichtig und vertretbar."
+ },
+ {
+  "id": "physics_buffers_piston_air_cushion",
+  "claim_de": "Ein fallender Fahrkorb verdichtet die Luft unter sich ähnlich wie ein Kolben. In einem hypothetisch luftdichten Schacht würde der Überdruck die Kabine rasch abbremsen. Wie weit sie dabei fällt, hängt von der Länge der Luftsäule und der Dichtheit des Schachts ab. Echte Schächte sind nicht dicht (Türspalte, Öffnungen), daher ist der Effekt meist deutlich schwächer.",
+  "detail": "Laut Barnes muss der Spalt zwischen Kabine und (luftdichtem) Schacht dünner als etwa 30 bis 50 cm sein, damit die Luft wirksam eingeschlossen wird. Entweicht die Luft durch Spalte und Schachttüren schneller, als die Kabine sie verdichtet, oder drückt der Überdruck die unteren Türen auf, fällt die Kabine trotzdem schnell. Zum Vergleich der offene Luftwiderstand (eigene Überschlagsrechnung: 1.500 kg, 3 m², cw ≈ 1): nach 10 m Fall ≈2 % des Gewichts, nach 100 m ≈24 %, Endgeschwindigkeit ≈90 m/s. Ohne Kolbeneffekt ist der Luftwiderstand bei üblichen Fallhöhen also klein.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://theconversation.com/ive-always-wondered-if-youre-in-a-falling-elevator-can-you-really-save-yourself-by-jumping-99597",
+   "https://science.howstuffworks.com/science-vs-myth/everyday-myths/question730.htm",
+   "https://en.wikipedia.org/wiki/Piston_effect"
+  ],
+  "caveats": "Die 50 cm und 30 bis 50 cm sind grobe Abschätzungen von Barnes (nur über Snippets gelesen) und keine Messwerte. Echte Schächte sind nicht luftdicht (Türspalte, Öffnungen, oft mehrere Kabinen im selben Schacht). Die Luftwiderstandswerte sind eigene Schätzungen mit angenommenen Werten für Masse, Fläche und cw. Nur als Größenordnung verwenden. | Das Prinzip (Kolbeneffekt) stimmt. Die pauschale Zahl 'nur etwa 50 cm' ist physikalisch fragwürdig. Eigene Überschlagsrechnung: Um ≈1.500 kg auf ≈2,5 bis 3 m² zu tragen, braucht es ≈5 bis 6 kPa Überdruck, also ≈5 bis 6 % Verdichtung. Statisch fällt die Kabine damit etwa 5 bis 6 % der Luftsäule unter ihr: ≈0,5 m bei 10 m Luftsäule, aber ≈5 m bei 100 m. Dynamisch kommt ein Überschwingen hinzu. Die 50 cm gelten also nur für eine bestimmte Geometrie. Die Spaltbreite von 30 bis 50 cm ist geschwindigkeitsabhängig: Nach meiner Abschätzung reichen bei 14 m/s schon ≈6 cm Spalt, damit die Luft weitgehend entweicht. Barnes' Originalzahlen ließen sich nicht prüfen (theconversation.com gesperrt). Die Luftwiderstandswerte (Endgeschwindigkeit ≈89 m/s; ≈2,5 % des Gewichts bei 10 m, ≈24 % bei 100 m) sind rechnerisch korrekt."
+ },
+ {
+  "id": "physics_buffers_betty_lou_oliver",
+  "claim_de": "Die Liftführerin Betty Lou Oliver überlebte am 28. Juli 1945 im Empire State Building einen Absturz über 75 Stockwerke (über 300 m), nachdem ein B-25-Bomber das Gebäude getroffen und die Aufzugsseile beschädigt hatte. Guinness World Records führt das als längsten überlebten Aufzugsabsturz.",
+  "detail": "Laut Guinness fielen die gerissenen Seile zuerst in die Grube und rollten sich dort zu einem federnden Polster auf. Gleichzeitig bremste die im Schacht verdichtete Luft die Kabine. Oliver erlitt Brüche an Becken, Rücken und Hals. Zum Vergleich (eigene Rechnung): Ein echter freier Fall über 300 m hätte ohne Luft ≈77 m/s (≈276 km/h) ergeben, was die Kabine offensichtlich nicht erreichte.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://www.guinnessworldrecords.com/world-records/73541-longest-fall-survived-in-a-lift-elevator",
+   "https://www.guinnessworldrecords.com/news/2023/10/how-an-elevator-attendant-survived-a-1-000-ft-fall-down-the-empire-state-building-759670",
+   "https://en.wikipedia.org/wiki/1945_Empire_State_Building_B-25_crash"
+  ],
+  "caveats": "Die Erklärung (Seilspirale plus Luftpolster) ist eine nachträgliche Deutung und keine Messung. Die Angaben zur Fallhöhe schwanken zwischen „75 Stockwerke“ und „über 300 m / 1.000 ft“. Es handelte sich um eine Anlage von 1945, deren Fangvorrichtung durch die Explosion beschädigt bzw. unwirksam gewesen sein dürfte. Das ist nicht verifiziert, also im Video nicht als Fakt darstellen. | Datum (28.7.1945), B-25-Absturz, beschädigte Aufzugsseile, 75 Stockwerke, schwere Verletzungen (Becken, Rücken, Hals) und der Guinness-Rekord 'Longest fall survived in a lift' entsprechen meinem Wissen und sind gut dokumentiert. Die Guinness-Seiten ließen sich nicht abrufen (gesperrt). Die Erklärung mit Seilspirale und Luftpolster ist eine nachträgliche Deutung und sollte im Video als solche gekennzeichnet werden ('vermutlich'). 'Bis heute' besser als 'laut Guinness' formulieren. Die Rechnung von 76,7 m/s für 300 m stimmt."
+ },
+ {
+  "id": "physics_buffers_why_no_freefall",
+  "claim_de": "In der Praxis fällt ein Treibscheibenaufzug so gut wie nie frei: Er hängt an mehreren Tragseilen, deren Gesamttragfähigkeit ein Vielfaches der Last beträgt (Sicherheitsfaktor mindestens 12). Laut Herstellern kann meist schon ein einzelnes Seil die beladene Kabine halten. Sollten doch alle Seile reißen, erkennt der mechanische Geschwindigkeitsbegrenzer die Übergeschwindigkeit und löst die Fangvorrichtung an den Führungsschienen aus.",
+  "detail": "HowStuffWorks nennt typischerweise 4 bis 8 Seile. Nach EN 81-20 (Abschnitt 5.5) beträgt der Sicherheitsfaktor der Tragmittel mindestens 12 bei Treibscheibenantrieb mit drei oder mehr Seilen und 16 bei zwei Seilen. KONE: Actionszenen mit Funken sprühenden Führungsschienen und ungebremst rasender Kabine sind „pure cinema“. Die Kette der Schutzstufen: Seilredundanz, dann Begrenzer und Fangvorrichtung (rein mechanisch, ohne Strom), dann Puffer als letzte Stufe für niedrige Geschwindigkeiten.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.kone.com/global/en/newsroom/stories/top-6-elevator-myths-debunked.html",
+   "https://science.howstuffworks.com/science-vs-myth/everyday-myths/question730.htm",
+   "https://www.elevator.tr/en/glossary/rope",
+   "https://www.tkelevator.com/us-en/tools/classroom-on-demand/governor-module.html"
+  ],
+  "caveats": "Die Sicherheitsfaktoren 12/16 sind nur über ein Fachportal-Snippet belegt, der Normtext war nicht einsehbar. Die Zahl von 4 bis 8 Seilen ist eine typische Angabe und keine Normvorgabe. Moderne Anlagen nutzen teils Gurte statt Seilen. Seilstatistik und Normdetails behandelt vermutlich ein anderes Teilthema; hier dienen sie nur als Kontext. | Mechanik (Begrenzer → Fangvorrichtung, rein mechanisch) und Sicherheitsfaktoren (12 bei Treibscheibe mit ≥3 Seilen, 16 bei 2 Seilen, EN 81-1 9.2.2 / EN 81-20 5.5.2) entsprechen meinem Wissen. Mit Sicherheitsfaktor 12 und bis zu 12 Seilen hat jedes Seil allein rechnerisch einen Faktor ≥ 1. Die Aussage 'jedes Seil hält allein' ist damit plausibel, das KONE-Zitat ließ sich aber nicht prüfen (kone.com gesperrt). Das absolute 'fällt nicht frei' ist überzogen: Seltene Fälle (Empire State 1945, schlecht gewartete Anlagen) gibt es. Deshalb auf 'so gut wie nie' abgeschwächt. Moderne Anlagen nutzen teils Gurte statt Seilen."
+ },
+ {
+  "id": "physics_buffers_ascending_overspeed",
+  "claim_de": "Weil das Gegengewicht beim Treibscheibenaufzug in der Regel schwerer ist als die leere Kabine, verlangt EN 81-20 (Abschnitt 5.6.6) zusätzlich einen Schutz gegen Übergeschwindigkeit des aufwärts fahrenden Fahrkorbs. Bei versagender Bremse würde eine leere oder schwach beladene Kabine nach oben beschleunigen statt nach unten zu fallen.",
+  "detail": "Das Gegengewicht gleicht die Kabine plus einen Teil der Nennlast aus. Laut Suchsnippet ist bei Treibscheibenanlagen eine auch aufwärts wirkende Fangvorrichtung oder ein gleichwertiges Mittel nötig, sobald der Ausgleichsfaktor über 5 % liegt. EN 81-20 hat diesen Schutz auf Rettungssituationen ausgeweitet. Für das Video ist das ein Perspektivwechsel: Das realistischere Risiko einer ungewollten Bewegung liegt nicht beim Seilriss, sondern bei Bremse und Steuerung.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://www.kone.co.uk/Images/KONE-Factsheet-EN81-20-50_tcm45-32332.pdf",
+   "https://www.thenbs.com/knowledge/new-standards-for-lifts-en-81-20-and-en-81-50"
+  ],
+  "caveats": "Das 5-%-Kriterium und die Zuordnung zu Abschnitt 5.6.6 stammen aus Suchsnippets und wurden nicht am Normtext geprüft. Der typische Ausgleichsanteil des Gegengewichts (oft 40 bis 50 % Nennlast genannt) wurde hier nicht verifiziert und fehlt deshalb bewusst. Der Punkt liegt am Rand des Teilthemas und ist als Kontext gedacht. | Die Pflicht zum Schutz gegen aufwärts gerichtete Übergeschwindigkeit bei Treibscheibenaufzügen (EN 81-1 9.10, EN 81-20 5.6.6; 5.6.7 ist der Schutz gegen unbeabsichtigte Bewegung) entspricht meinem Wissen. Die Begründung über das Gegengewicht ist physikalisch richtig. Die Norm selbst nennt den Grund allerdings nicht, deshalb 'in der Regel'. Nicht prüfbar sind die Details im Detail-Text: das 5-%-Kriterium und die Ausweitung auf Rettungssituationen. Das 5-%-Kriterium kenne ich aus EN 81-20 nicht, es sollte weggelassen werden. KONE-Factsheet und NBS waren nicht abrufbar."
+ },
+ {
+  "id": "history_01",
+  "claim_de": "Elisha Graves Otis führte seine Fangvorrichtung 1854 im New Yorker Crystal Palace öffentlich vor, auf der „Exhibition of the Industry of All Nations“ (eröffnet 1853). Er stand selbst auf der hochgezogenen Plattform, dann wurde das Tragseil gekappt. Späteren Darstellungen zufolge tat das ein Helfer, laut einer Zeitungsnotiz von 1854 schnitt Otis es selbst durch.",
+  "detail": "Die Ausstellung wurde am 14. Juli 1853 eröffnet. Die Otis-Vorführung fiel in die Fortsetzung der Ausstellung im Jahr 1854. Laut Otis-Firmenchronik hatte Otis die Vorführung mit dem Schausteller P. T. Barnum vereinbart. Nach dem Schnitt sackte die Plattform nur „ein paar Zoll“ (few inches) ab, dann hielt die Fangbremse sie fest. Ein zeitgenössischer Kurzbericht erschien am 30. Mai 1854 in der New York Daily Tribune. Daraus schließen Sekundärquellen, dass die Vorführungen ab etwa Mai 1854 liefen.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://www.otis.com/en/us/our-company/history",
+   "https://elevatorworld.com/article/elisha-otis-improved-elevator/",
+   "https://elevatorworld.com/article/elisha-otis-at-crystal-palace-part-2/",
+   "https://en.wikipedia.org/wiki/Exhibition_of_the_Industry_of_All_Nations"
+  ],
+  "caveats": "Einige populäre Quellen, darunter ein Artikel der American Heritage, nennen fälschlich 1853. Das ist das Eröffnungsjahr der Ausstellung, nicht das Jahr der Vorführung. Ein genaues Tagesdatum ist nicht belegt, und Otis führte die Plattform wohl mehrfach vor. Zur Höhe gibt es nur Legenden-Angaben (etwa „rund 30 Fuß“), keine belastbare Zahl. WebFetch war für alle Hosts gesperrt. Der Inhalt stammt aus den Suchausschnitten dieser Seiten. | Einschränkung dieser Sitzung: Das WebSearch-Budget war aufgebraucht (0 Suchen möglich). WebFetch war für otis.com, wikipedia.org, elevatorworld.com, americanheritage.com und alle weiteren Quell-Hosts gesperrt. Das Urteil beruht auf Hintergrundwissen, nicht auf in dieser Sitzung gelesenen Seiten. Der Kern gilt allgemein als Konsens: 1854, Crystal Palace, Otis auf der Plattform, Seil gekappt, Plattform hält. Ebenso der Eröffnungstermin 14.07.1853 und die Fortsetzung 1854, als Barnum Präsident der Crystal-Palace-Gesellschaft war. Eine Unstimmigkeit gibt es: Das in history_02 zitierte Tribune-Zitat („occasionally cuts the rope“) spricht dafür, dass der Erfinder selbst schnitt. „Ließ durchtrennen“ entspricht dagegen der späteren Legende mit dem Helfer und der Axt. Nicht geprüft habe ich, ob Barnum die Vorführung vereinbarte oder bezahlte; in manchen Darstellungen ist von 100 US-Dollar die Rede. Ebenfalls ungeprüft sind die Formulierung „a few inches“ in der Otis-Chronik und das Tribune-Datum 30.05.1854. Barnum daher höchstens als „laut Otis“ bringen."
+ },
+ {
+  "id": "history_02",
+  "claim_de": "Der berühmte Ausruf „All safe, gentlemen, all safe!“ stammt aus späteren Darstellungen. In den wenigen bekannten Berichten von 1854 kommt er nicht vor. Eine Notiz in der New York Daily Tribune erwähnt nur, dass der Erfinder beim Auf- und Abfahren „gelegentlich das Seil durchschneidet“.",
+  "detail": "Die New York Daily Tribune schrieb am 30. Mai 1854 über den Erfinder, „who, as he rides up and down the platform occasionally cuts the rope by which it is supported“. In großen US-Blättern tauchte das Ereignis 1854 nur an zwei Randstellen auf: in dieser Tribune-Notiz und in Scientific American. Der Kulturhistoriker Andreas Bernard nennt die Gründungsgeschichte in „Lifted: A Cultural History of the Elevator“ (NYU Press, 2014; dt. Original „Die Geschichte des Fahrstuhls“) eine nachträgliche Konstruktion der Otis Elevator Company, rund 57 Jahre nach dem Ereignis (also um 1911). Eine ausführliche Schilderung schrieb 1911 Otis' Sohn Charles. Bernard zufolge war der Aufzug selbst das Werk vieler Mechaniker, angestoßen durch das Drahtseil (1834). Otis hat den Aufzug also nicht erfunden, sondern die automatische Fangsicherung populär gemacht.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://elevatorworld.com/article/elisha-otis-improved-elevator/",
+   "https://www.americanheritage.com/all-safe-gentlemen-all-safe",
+   "https://www.jstor.org/stable/j.ctt9qfdf1",
+   "https://networks.h-net.org/node/20317/reviews/185017/cardon-bernard-lifted-cultural-history-elevator",
+   "https://academic.oup.com/ahr/article-abstract/120/2/637/45657"
+  ],
+  "caveats": "Die Formulierung schwankt: mal „All safe, gentlemen“, mal „All safe, gentlemen, all safe!“, teils ergänzt um Details wie das Ziehen des Zylinders. Diese Ausschmückungen stammen aus späteren Darstellungen. Im Video sollte das Zitat als „überliefert“ oder „Legende“ markiert werden, nicht als belegter Wortlaut. Den Tribune-Wortlaut kenne ich nur aus Suchausschnitten von Sekundärquellen (Elevator World), nicht aus dem Original. | Keine Quelle abrufbar, WebSearch und WebFetch waren gesperrt. Plausibel und mit meinem Hintergrundwissen vereinbar: Das Zitat ist nicht zeitgenössisch belegt. Andreas Bernard (Lifted, NYU Press 2014; dt. „Die Geschichte des Fahrstuhls“, S. Fischer 2006) beschreibt die Gründungsszene als nachträgliche Konstruktion der Firma. Zu absolut ist „der einzige bekannte Tageszeitungsbericht“. Das lässt sich nicht belegen, und Scientific American war eine Wochenschrift, keine Tageszeitung. Nicht geprüft habe ich: die „rund 57 Jahre“ bzw. 1911, eine Schilderung durch Charles Otis 1911 und den genauen Tribune-Wortlaut. Die Aussage im Detail-Feld, Otis habe nur die Fangsicherung „populär gemacht“, ist eine Interpretation. Auch für den Bergbau gab es vor Otis Fangvorrichtungen, daher im Video nicht als Tatsache formulieren."
+ },
+ {
+  "id": "history_03",
+  "claim_de": "Otis' Fangvorrichtung beruhte auf einem Fail-safe-Prinzip: Solange das Seil zog, blieben federbelastete Sperrklinken ausgerückt. Riss das Seil, drückten Federn die Klinken in Zahnstangen mit hakenförmigen Zähnen zu beiden Seiten. Die Zahnstangen führten zugleich die Plattform. In populären Darstellungen der frühen Version ist dafür von einer Wagenfeder die Rede.",
+  "detail": "Die Feder saß oben auf der Plattform und war mit dem Tragseil verbunden. Bei Seilbruch fiel die Seilspannung schlagartig weg. Die Feder öffnete sich „wie ein Kiefer“ und rastete mit beiden Enden in die sägezahnartigen Ratschenbalken an den Schachtseiten ein. Die Zahnstangen dienten zugleich als Führungsschienen. Heute nennt man dieses Prinzip Fail-safe: Der Normalbetrieb (Seilzug) hält die Bremse offen, und der Fehlerfall (Wegfall der Seilkraft) löst sie ohne Fremdenergie aus. Scientific American beschrieb 1854 das Ergebnis: „If the rope should break … the platform will be sustained“.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.asme.org/topics-resources/content/elisha-graves-otis",
+   "https://www.scientificamerican.com/blog/anecdotes-from-the-archive/hold-the-elevator-how-otis-s-early-systems-worked/",
+   "https://time.com/4700084/elevator-patent-history-otis-safety/",
+   "https://patentimages.storage.googleapis.com/f4/ef/a4/33a4e29a3b9ce5/US31128.pdf",
+   "https://patentimages.storage.googleapis.com/f4/ef/a4/33a4e29a3b9ce5/US31128.pdf"
+  ],
+  "caveats": "Die Beschreibung mit „Wagenfeder“ und „Kiefer“ stammt aus Sekundärquellen (Suchausschnitte, vermutlich ASME/TIME). Die Patentzeichnung von 1861 konnte ich nicht direkt einsehen, weil WebFetch gesperrt war. Wichtig für die Einordnung: Moderne Fangvorrichtungen reagieren auf Übergeschwindigkeit, ausgelöst über einen Geschwindigkeitsbegrenzer mit eigenem Seil (EN 81-20/-50, ASME A17.1). Sie reagieren nicht bloß auf den Wegfall der Seilspannung. Das ist nicht mehr Otis' Originalprinzip. | Den Patentscan US 31.128 (1861) habe ich direkt gelesen und gerendert. Er bestätigt das Prinzip: Zahnstangen C an den Seitenpfosten mit hakenförmigen, nach oben geneigten Zähnen. Die Plattformpfosten a a sind senkrecht genutet und nehmen die Zahnstangen auf, diese dienen also als Führung. Dazu kommen Knickhebel E mit Sperrklinken f und die Federn e und g. Das Seil G greift oben an der Stange F an. Wörtlich heißt es: „In case the rope G should break … the pawls f f, in consequence of being released from the pull of said rope, will immediately be thrown in connection with the racks C C by the springs e g g“. Das Patent nennt weder eine (gebrauchte) Wagenfeder noch einen „Kiefer“. Diese Details kommen nur aus Sekundärquellen, die ich nicht abrufen konnte, und beziehen sich vermutlich auf die Version von 1853/54. Das Scientific-American-Zitat habe ich nicht geprüft. Der Hinweis im Caveat auf moderne Geschwindigkeitsbegrenzer (EN 81-20/-50) ist sachlich richtig."
+ },
+ {
+  "id": "history_05",
+  "claim_de": "Scientific American stellte Otis' Aufzug mit Fangvorrichtung im November 1854 mit Abbildung vor (Ausgabe vom 25. November 1854), und auch europäische Fachblätter griffen die Erfindung auf.",
+  "detail": "Zitat aus dem Artikel: „If the rope should break, or be loosened from the driving shaft, or disconnected from the motive power accidentally, the platform will be sustained, and no injury or accident can possibly occur“. Auch europäische Fachblätter berichteten, nämlich das Practical Mechanic's Journal und Dinglers Polytechnisches Journal. Für ein deutsches Publikum ist das ein interessanter Hinweis darauf, dass die Erfindung schon 1854/55 in deutschsprachiger Fachliteratur auftauchte.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.scientificamerican.com/blog/anecdotes-from-the-archive/hold-the-elevator-how-otis-s-early-systems-worked/",
+   "https://elevatorworld.com/article/elisha-otis-improved-elevator/"
+  ],
+  "caveats": "Datum und Zitat stammen aus Suchausschnitten. Den Originalscan von Scientific American vom 25.11.1854 habe ich nicht selbst gesehen. Wann genau Dinglers Polytechnisches Journal berichtete, habe ich nicht geprüft. | Keine Quelle abrufbar. Das Datum ist plausibel: Der 25.11.1854 war ein Samstag, und Scientific American erschien damals samstags. Nicht belegbar ist die Superlativ-Aussage „erste illustrierte US-Beschreibung“, sie sollte gestrichen werden. Das Zitat habe ich nicht geprüft. Ob Practical Mechanic's Journal und Dinglers Polytechnisches Journal berichteten und wann, habe ich ebenfalls nicht geprüft, dingler.culture.hu-berlin.de war gesperrt. Der Hinweis auf deutschsprachige Fachliteratur „schon 1854/55“ ist daher unbestätigt."
+ },
+ {
+  "id": "history_06",
+  "claim_de": "Otis entwickelte die Sicherung um 1852 als Mechaniker in einer Bettgestell-Fabrik in Yonkers (New York). Laut Otis verkaufte er seinen ersten Aufzug am 20. September 1853 an den New Yorker Unternehmer Benjamin Newhouse.",
+  "detail": "In der Fabrik sollte ein Lastenaufzug schweres Gerät in obere Stockwerke heben. Sekundärquellen nennen sie „Maize & Burns bedstead factory“. Beim Erstverkauf kostete der Aufzug 300 US-Dollar. Laut Otis/Elevator World (Beitrag „170 Jahre erster Verkauf“, 2023) nahm Otis, selbst Hauptmann einer Artilleriekompanie in Yonkers, als Teilzahlung eine Kanone mitsamt Lafette im Wert von 58,65 US-Dollar an. Das Datum 20.9.1853 gilt bei Otis als Gründungsdatum des Unternehmens.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://elevatorworld.com/news/daily-news/otis-marks-170-years-since-first-elevator-sale/",
+   "https://www.otis.com/en/uk/news?cn=otis-marks-170-years-since-first-elevator-sale",
+   "https://westchestermagazine.com/Westchester-Magazine/September-2014/Founded-In-Yonkers-Otis-Elevators-Took-American-Industry-To-New-Heights"
+  ],
+  "caveats": "Das Kanonen-Detail kenne ich nur aus Suchausschnitten. Es wird dem Otis-/Elevator-World-Beitrag zugeordnet, den ich nicht vollständig lesen konnte. Laut einigen Quellen kaufte Newhouse zwei Lastenaufzüge zu je 300 Dollar; das ist nicht bestätigt. Auch der Firmenname der Bettgestell-Fabrik ist nur sekundär belegt. | Keine Quelle abrufbar, otis.com und elevatorworld.com waren gesperrt. Nach Hintergrundwissen gilt als Standardüberlieferung: 1852, Yonkers, Bettgestell-Fabrik von Josiah Maize (Maize & Burns), Lastenaufzug. Den ersten Verkauf im Jahr 1853 datiert Otis selbst. Ungeprüft sind das Tagesdatum 20.09.1853, Newhouse als „Möbelfabrikant“, der Preis von 300 US-Dollar, das Kanonen-Detail (58,65 US-Dollar) und dass der 20.09. bei Otis als Gründungsdatum gilt. Otis nennt allgemein 1853 als Gründungsjahr. Das Kanonen-Detail im Video nur mit „laut Otis“ bringen oder weglassen."
+ },
+ {
+  "id": "history_07",
+  "claim_de": "Laut der Firmenchronik von Otis verkaufte das Unternehmen 1854 acht und 1855 fünfzehn Aufzüge, also noch eine kleine Zahl.",
+  "detail": "Die Otis-Firmengeschichte formuliert: „The company sells eight elevators in 1854 and 15 in 1855.“ Andere Sekundärquellen schreiben „seven more in 1854“, also sieben zusätzlich zum ersten Verkauf. Das ist mit acht insgesamt vereinbar.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.otis.com/en/us/our-company/history"
+  ],
+  "caveats": "Die Zahlen stammen aus der Unternehmenschronik, also einer Eigendarstellung. Die Zählweise weicht ab: 8 insgesamt oder 7 zusätzlich. Für das Video empfehle ich „eine Handvoll“ oder „acht“ mit Quellenangabe Otis. | Die Otis-Chronik war nicht abrufbar, die Zahlen sind hier nicht geprüft. Sie wären ohnehin eine Eigendarstellung. Der Kausalsatz „Nach der Vorführung stiegen die Verkäufe“ gibt das Firmennarrativ wieder. Bernard (siehe history_02) bezweifelt ja gerade, dass die Messevorführung der Durchbruch war. Deshalb im Video keinen Kausalzusammenhang behaupten, nur die Zahlen mit Quellenangabe Otis nennen."
+ },
+ {
+  "id": "history_08",
+  "claim_de": "Der erste kommerzielle Personenaufzug mit Otis-Fangvorrichtung ging am 23. März 1857 im fünfgeschossigen Geschäftshaus des Porzellan- und Glaswarenhändlers E. V. Haughwout in Betrieb, 488 Broadway, Ecke Broome Street, New York (heute SoHo). Angetrieben wurde er mit Dampf.",
+  "detail": "Das Gebäude aus Gusseisen steht noch und ist seit dem 23. November 1965 New Yorker Wahrzeichen. Die Landmarks Preservation Commission nannte es „the Parthenon of New York's Iron Age“. Angetrieben wurde der Aufzug von einer Dampfmaschine im Keller. Laut Otis-Chronik gehörte Mary Todd Lincoln zur wohlhabenden Kundschaft. Die Adresse wird teils als 488–492 Broadway angegeben.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://www.otis.com/en/us/our-company/history",
+   "https://villagepreservation.org/2021/03/23/the-technological-breakthrough-in-our-midst-that-allowed-buildings-to-grow-tall/",
+   "https://www.ebsco.com/research-starters/history/first-passenger-elevator",
+   "https://en.wikipedia.org/wiki/E._V._Haughwout_Building"
+  ],
+  "caveats": "Mindestens eine Webquelle nennt den Aufzug fälschlich „hydraulic“. Belegt ist ein dampfgetriebener Aufzug. „Erster Personenaufzug“ heißt hier: erster kommerzieller Personenaufzug mit Fangvorrichtung. Personenaufzüge ohne diese Sicherung gab es schon vorher. Der originale Aufzug ist nicht erhalten; das habe ich nicht separat geprüft, daher nicht behaupten. | Keine Quelle abrufbar. Nach Hintergrundwissen weitgehend Konsens: 23.03.1857, 488 Broadway/Broome St., Dampfantrieb, Gusseisenfassade, fünf Geschosse. Das Gebäude ist seit dem 23.11.1965 Wahrzeichen und steht noch. „Kaufhaus“ ist ungenau, Haughwout handelte mit Porzellan, Glas, Silber und Leuchtern, daher „Geschäftshaus“. Ungeprüft sind die Zuschreibung des „Parthenon“-Zitats an die Landmarks Preservation Commission und dass die Otis-Chronik Mary Todd Lincoln erwähnt. Belegt ist nach meiner Kenntnis, dass Haughwout Porzellan für das Weiße Haus der Lincolns lieferte."
+ },
+ {
+  "id": "history_09",
+  "claim_de": "Der Haughwout-Aufzug fuhr nur rund 40 Fuß pro Minute, also etwa 0,2 m/s bzw. 0,7 km/h, langsamer als Schrittgeschwindigkeit.",
+  "detail": "40 ft/min = 0,67 ft/s = 0,203 m/s ≈ 0,73 km/h. Das ist langsamer als gemütliches Gehen. Zum Vergleich für das Video: moderne Hochhausaufzüge fahren ein Vielfaches schneller (keine Zahl recherchiert).",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://en.wikipedia.org/wiki/E._V._Haughwout_Building",
+   "https://villagepreservation.org/2021/03/23/the-technological-breakthrough-in-our-midst-that-allowed-buildings-to-grow-tall/"
+  ],
+  "caveats": "Die Geschwindigkeit ist in mehreren Sekundärquellen einheitlich angegeben (40 ft/min bzw. 0,67 ft/s). Die 300 Dollar können mit dem Preis des Erstverkaufs von 1853 verwechselt sein. Für das Video den Preis weglassen oder mit „angeblich“ versehen. Eine Primärquelle wie den LPC-Designation-Report konnte ich nicht einsehen. | Die Umrechnung stimmt: 40 ft/min = 0,2032 m/s = 0,73 km/h. Die 40 ft/min entsprechen der verbreiteten Angabe, konnte ich hier aber nicht abrufen. Für den Preis von 300 US-Dollar fand ich keinen Beleg. Er ist wahrscheinlich mit dem Erstverkauf von 1853 verwechselt, daher streichen."
+ },
+ {
+  "id": "history_10",
+  "claim_de": "Otis erhielt am 15. Januar 1861 das US-Patent Nr. 31.128 („Improvement in Hoisting Apparatus“) für einen Aufzug mit automatischer Sperrklinken-Fangvorrichtung. Er starb weniger als drei Monate später, am 8. April 1861.",
+  "detail": "Das Patent wurde an „E. G. Otis, of Yonkers, New York“ erteilt. Die Firma führten seine Söhne weiter. Das Patent kam also erst rund sieben Jahre nach der Crystal-Palace-Vorführung.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://patentimages.storage.googleapis.com/f4/ef/a4/33a4e29a3b9ce5/US31128.pdf",
+   "https://patents.google.com/patent/US31128A/en",
+   "https://patents.harnessip.com/?p=333",
+   "https://patentimages.storage.googleapis.com/f4/ef/a4/33a4e29a3b9ce5/US31128.pdf"
+  ],
+  "caveats": "Das genaue Todesdatum (üblicherweise 8. April 1861) war nicht Teil der Suchergebnisse und ist hier nicht verifiziert. Belegt ist nur „weniger als drei Monate nach der Patenterteilung“. | Den Patentscan habe ich direkt gelesen. Er zeigt „E. G. OTIS, OF YONKERS, NEW YORK. IMPROVEMENT IN HOISTING APPARATUS. Specification forming part of Letters Patent No. 31,128, dated January 15, 1861“, auf dem Zeichnungsblatt „Patented Jan. 15, 1861“. Anspruch 1 betrifft Sperrklinken und hakenförmige Zahnstangen für den Fall, dass das Seil bricht. Das Todesdatum 8. April 1861 ist Hintergrundwissen und hier nicht abgerufen. Zwischen Patent und Tod liegen 83 Tage, also weniger als drei Monate. „Rund sieben Jahre nach der Vorführung“ ist korrekt, genauer sind es etwa sechseinhalb Jahre."
+ },
+ {
+  "id": "history_11",
+  "claim_de": "Am Samstag, dem 28. Juli 1945, gegen 9:40 Uhr prallte ein B-25-Mitchell-Bomber der US Army Air Forces im dichten Nebel gegen die Nordseite des Empire State Building, auf Höhe des 79. Stockwerks. 14 Menschen starben: 3 Besatzungsmitglieder und 11 Menschen im Gebäude.",
+  "detail": "Pilot war Lt. Col. William F. Smith Jr. Der rund zehn Tonnen schwere Bomber flog mit mehr als 200 mph (über 320 km/h). Der Aufprall lag etwa 913–935 ft (rund 280 m) über der Straße, zwischen dem 78. und 80. Stock. Etwa zwei Dutzend Menschen wurden verletzt. In der Fassade blieb ein Loch von rund 18 × 20 Fuß (ca. 5,5 × 6 m). Der Schaden betrug knapp 1 Mio. US-Dollar, die Tragstruktur blieb intakt. Unter den Toten waren Mitarbeiter des Catholic War Relief Office im 79. Stock.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://www.archives.nyc/blog/2019/10/18/the-empire-state-plane-crash-july-28-1945",
+   "https://www.smithsonianmag.com/smart-news/july-1945-b-25-bomber-crashed-empire-state-building-180956103/",
+   "https://www.history.com/this-day-in-history/july-28/plane-crashes-into-empire-state-building",
+   "https://en.wikipedia.org/wiki/1945_Empire_State_Building_B-25_crash"
+  ],
+  "caveats": "Eine CBS-Überschrift nennt „19 Killed“. Die große Mehrheit der Quellen nennt 14 Tote, darunter das NYC Department of Records, Smithsonian und History.com; im Video 14 verwenden. Einzelne Quellen geben 9:49 Uhr statt 9:40 Uhr an. Die Aufprallhöhe schwankt je nach Quelle zwischen 913 und 935 ft. | Keine Quelle abrufbar. Der Wochentag ist nachgerechnet: Der 28.07.1945 war ein Samstag. Alle Kernangaben entsprechen der Standardüberlieferung: Pilot Lt. Col. William F. Smith Jr., 14 Tote (3 + 11), Loch von etwa 18 × 20 Fuß, Schaden von knapp 1 Mio. US-Dollar, rund zwei Dutzend Verletzte. 913–935 ft entsprechen etwa 278–285 m. Kleine Präzisierung: Es war die US Army Air Forces."
+ },
+ {
+  "id": "history_12",
+  "claim_de": "Beim Aufprall 1945 flog ein Triebwerk durch das Gebäude hindurch, trat an der Südseite aus und landete auf einem Dach in der West 33rd Street, wo es einen Brand auslöste. Das andere Triebwerk stürzte mit Teilen des Fahrwerks in einen Aufzugsschacht und beschädigte dabei Aufzugsseile.",
+  "detail": "Das durchschlagende Triebwerk trat an der Südseite aus, fiel rund 900 Fuß tief auf das Dach eines Nachbargebäudes und löste dort einen Brand aus, der ein Penthouse-Atelier zerstörte. Das zweite Triebwerk fiel in den Schacht. Im Gebäude brannte es laut Quellen länger als 40 Minuten. Laut Elevator World (Beitrag „75 Years, 75 Floors“) durchtrennte das Triebwerk zuerst das Seil des Geschwindigkeitsbegrenzers (governor rope) und dann die Tragseile von Aufzug Nr. 6.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.archives.nyc/blog/2019/10/18/the-empire-state-plane-crash-july-28-1945",
+   "https://elevatorworld.com/article/75-years-75-floors/",
+   "https://www.baruch.cuny.edu/nycdata/disasters/aircrafts-empire_state_bldg.html",
+   "https://en.wikipedia.org/wiki/1945_Empire_State_Building_B-25_crash"
+  ],
+  "caveats": "Die Reihenfolge „erst Governor-Seil, dann Tragseile“ und die Nummer 6 stammen aus einem Suchausschnitt, der dem Elevator-World-Artikel zugeordnet ist. Den Volltext konnte ich nicht lesen. Eine populäre Quelle (Rare Historical Photos o. ä.) behauptet, in der Kabine seien drei Frauen gewesen und zwei hätten überlebt. Das widerspricht den übrigen Quellen, die nur Betty Lou Oliver nennen. Ungesichert, nicht verwenden. | Keine Quelle abrufbar. Nach Hintergrundwissen stimmt der Weg der Triebwerke: eines durch die Südseite auf ein Nachbardach mit zerstörtem Penthouse-Atelier, das andere samt Fahrwerksteilen in einen Schacht. „Durchtrennte die Seile“ ist wohl zu stark. Standarddarstellungen sprechen von beschädigten oder geschwächten Seilen. Wären die Tragseile ganz durchtrennt gewesen, hätte die Kabine nicht erst später mit Oliver abstürzen können. Unbestätigt sind die Reihenfolge „erst Begrenzerseil, dann Tragseile“ und die Nummer „Aufzug Nr. 6“. Im Detail-Feld steht „brannte länger als 40 Minuten“; verbreitet ist dagegen, der Brand sei innerhalb von etwa 40 Minuten gelöscht worden. Das bitte korrigieren."
+ },
+ {
+  "id": "history_13",
+  "claim_de": "Die Aufzugsführerin Betty Lou Oliver (19 oder 20 Jahre alt) überlebte am 28. Juli 1945 den Absturz ihrer Kabine über rund 75 Stockwerke bis ins Untergeschoss. Guinness World Records führt das als „Longest fall survived in a lift (elevator)“.",
+  "detail": "Oliver war 19 oder 20 Jahre alt; die Quellen weichen ab. Sie arbeitete am 80. Stock, wurde beim Aufprall aus ihrer stehenden Kabine geschleudert und erlitt schwere Verbrennungen. Ersthelfer setzten sie in eine andere Kabine, um sie nach unten zu bringen. Deren beschädigte Seile rissen, und die Kabine stürzte laut Smithsonian vom 75. Stock bis ins Untergeschoss (sub-basement). Retter mussten sie aus dem Wrack schneiden. Sie hatte Becken, Rücken und Hals gebrochen. Guinness gibt die Fallhöhe mit „75 storeys (over 300 m or 1,000 ft)“ an.",
+  "verdict": "SUPPORTED",
+  "sources": [
+   "https://www.guinnessworldrecords.com/world-records/73541-longest-fall-survived-in-a-lift-elevator",
+   "https://www.guinnessworldrecords.com/news/2023/10/how-an-elevator-attendant-survived-a-1-000-ft-fall-down-the-empire-state-building-759670",
+   "https://www.smithsonianmag.com/smart-news/july-1945-b-25-bomber-crashed-empire-state-building-180956103/",
+   "https://www.archives.nyc/blog/2019/10/18/the-empire-state-plane-crash-july-28-1945"
+  ],
+  "caveats": "Die Fallhöhe ist umstritten. Laut Guinness sind es „über 300 m / 1.000 ft“. Eigene Plausibilitätsrechnung, nicht aus Quellen: Der 79. Stock liegt bei 913–935 ft. Daraus ergeben sich für 75 Stockwerke etwa 870–890 ft (ca. 265–270 m) plus Untergeschoss, also eher knapp 300 m als deutlich darüber. Vorsichtiger Wert fürs Video: „rund 75 Stockwerke, fast 300 Meter“. Eine AOL-Schlagzeile nennt „80 Stories“, gemeint ist wohl ihr Arbeitsstockwerk. Ein Suchausschnitt, der Smithsonian zugeordnet ist, nennt „79-foot fall“. Das ist offensichtlich ein Fehler und nicht zu verwenden. Beim Alter nennt Guinness 20, Smithsonian 19. | Keine Quelle abrufbar, guinnessworldrecords.com und smithsonianmag.com waren gesperrt. Der Ablauf entspricht der Standardüberlieferung: Oliver wurde am 80. Stock verletzt, in eine andere Kabine gesetzt, die beschädigten Seile rissen, die Kabine fiel etwa 75 Stockwerke bis ins Untergeschoss. Der Recordtitel passt zum URL-Slug. Den Zusatz „bis heute“ weglassen, weil der aktuelle Stand nicht geprüft ist. Die Guinness-Angabe „über 300 m / 1.000 ft“ ist nach der eigenen Plausibilitätsrechnung eher zu hoch, sie ergibt knapp 270 m plus Untergeschoss. Im Video „rund 75 Stockwerke“ ohne Meterzahl oder „fast 300 Meter“ sagen."
+ },
+ {
+  "id": "history_14",
+  "claim_de": "Warum Betty Lou Oliver überlebte, ist nicht genau geklärt. Als wahrscheinliche Gründe nennen Quellen zwei Effekte: ein Luftpolster, das sich unter der fallenden Kabine im Schacht staute, und durchtrennte Seile, die sich in der Schachtgrube aufhäuften und den Aufprall wie eine Feder dämpften. Warum die Fangvorrichtung nicht griff, ist nicht sicher belegt. Ein Fachbeitrag nennt ein ebenfalls beschädigtes Begrenzerseil.",
+  "detail": "Laut Guinness wirkte die Luft unter der Kabine als „softening cushion“. Laut Smithsonian sammelten sich mehr als 1.000 Fuß (über 300 m) durchtrennten Seils am Schachtboden und dämpften den Aufprall. Zusätzlich habe möglicherweise eine Tasche komprimierter Luft den Fall verlangsamt. Elevator World spricht von Unterseilen/Ausgleichsseilen (compensating cables), die in der Grube wie eine Spiralfeder wirkten. Technischer Kern für das Video: Das Unglück war ein Fehler gemeinsamer Ursache (common-mode failure). Tragseile und Auslöseseil der Fangvorrichtung fielen gleichzeitig aus, also genau die Redundanz, die normalerweise schützt.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.guinnessworldrecords.com/world-records/73541-longest-fall-survived-in-a-lift-elevator",
+   "https://www.smithsonianmag.com/smart-news/july-1945-b-25-bomber-crashed-empire-state-building-180956103/",
+   "https://elevatorworld.com/article/75-years-75-floors/",
+   "https://www.iflscience.com/the-woman-that-survived-her-elevator-falling-for-75-floors-74732"
+  ],
+  "caveats": "Beide Erklärungen sind nachträgliche Rekonstruktionen ohne Messdaten, und wie viel jeder Effekt beitrug, ist unbekannt. Eine Quelle nennt zusätzlich eine „emergency elevator brake“, die den Fall leicht verlangsamt habe. Das widerspricht der Aussage, das Begrenzerseil sei durchtrennt gewesen, und ist unbestätigt. Einzelne Quellen behaupten, der Vorfall habe zur Verlegung von Sicherheitskomponenten auf die fassadenabgewandte Schachtseite und zu weiteren Sicherheitsverbesserungen geführt. Dafür fand ich keine belastbare Quelle, also nicht verwenden. Dass Oliver fünf Monate später wieder als Aufzugsführerin arbeitete, steht nur in populären Sekundärquellen und ist unbestätigt. | Keine Quelle abrufbar. Die beiden Erklärungen, Luftpolster und aufgehäuftes Seil, entsprechen der üblichen populären Darstellung. Es sind nachträgliche Rekonstruktionen ohne Messdaten. Die Quellen sind uneinheitlich: Mal ist es durchtrenntes Tragseil, mal sind es Ausgleichsseile (compensating cables), und teils werden Notbremsen erwähnt. Dass das Begrenzerseil durchtrennt war, stammt nur aus einem ungeprüften Elevator-World-Ausschnitt und ist nicht als Tatsache zu formulieren. Die Einordnung als Fehler gemeinsamer Ursache (common-mode failure) ist eine redaktionelle Deutung. Sie ist nur haltbar, wenn der Ausfall des Begrenzerseils belegt ist."
+ },
+ {
+  "id": "safety_reality_us_deaths_total",
+  "claim_de": "Eine ältere Auswertung des US-Forschungszentrums CPWR (Datenbasis etwa 1992–2003) kam auf rund 30 Todesfälle und etwa 17.000 ernsthafte Verletzungen pro Jahr in den USA. Die Zahlen gelten für Aufzüge und Fahrtreppen zusammen, Beschäftigte eingerechnet.",
+  "detail": "CPWR-Bericht 'Deaths and Injuries Involving Elevators and Escalators' (M. McCann, 2006, später überarbeitet). Datenbasis: BLS Census of Fatal Occupational Injuries (CFOI) für Arbeitsunfälle und CPSC/NEISS (Notaufnahmedaten) für Fahrgäste, Zeitraum etwa 1992–2003. Laut Bericht entfallen rund 90 % der Todesfälle auf Aufzüge und etwa 60 % der schweren Verletzungen, der Rest auf Fahrtreppen. Die Zahlen gelten für Aufzüge und Fahrtreppen zusammen und schließen Beschäftigte mit ein.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.cpwr.com/wp-content/uploads/publications/elevator_escalator_BLSapproved_2.pdf",
+   "https://www.cpsc.gov/Research--Statistics/NEISS-Injury-Data",
+   "https://www.bls.gov/iif/",
+   "https://www.cpwr.com/wp-content/uploads/publications/elevator_escalator_BLSapproved_2.pdf"
+  ],
+  "caveats": "In dieser Sitzung NICHT live überprüft: Das WebSearch-Kontingent war aufgebraucht (200/200), und WebFetch zu cpwr.com, cpsc.gov und bls.gov wurde vom Egress-Proxy blockiert. Die Werte stammen aus Fachwissen, und der genaue URL-Pfad des PDFs ist nicht bestätigt. Häufig werden auch andere Werte zitiert: etwa 27 Todesfälle pro Jahr und etwa 10.200 Aufzugsverletzungen pro Jahr, die in einem Krankenhaus behandelt wurden. Deshalb im Video nur 'rund 30 Todesfälle pro Jahr, Aufzüge und Fahrtreppen zusammen' sagen. Die Daten sind älter als 15 Jahre. Vor der Veröffentlichung gegen das PDF prüfen. | KEINE LIVE-PRÜFUNG MÖGLICH: WebSearch-Kontingent erschöpft (200/200). WebFetch blockiert für cpwr.com, wikipedia, pubmed, crossref, europepmc, semanticscholar, nhtsa.gov, destatis.de, gesetze-im-internet.de, guinnessworldrecords.com und duckduckgo; archive.org nicht erreichbar. Die URL wurde nicht abgerufen. Bewertung aus Fachwissen: Die Kernaussage des CPWR-Berichts (McCann) lautet nach meiner Erinnerung 'about 30 deaths and about 17,000 serious injuries each year', davon etwa 90 % der Todesfälle und etwa 60 % der schweren Verletzungen durch Aufzüge. Das passt zum Claim. Abgewertet auf PARTIAL, weil das Präsens ('sterben pro Jahr') eine aktuelle Zahl suggeriert, die Daten aber über 20 Jahre alt sind. Außerdem ist 'schwer verletzt' eine Übersetzung von 'serious injuries', deren Definition je nach Datenquelle (BLS/NEISS) abweicht. Ob die Revision von 2013 andere Zahlen nennt, ist nicht geprüft. Vor Veröffentlichung am PDF bestätigen."
+ },
+ {
+  "id": "safety_reality_workers_half",
+  "claim_de": "Laut derselben älteren CPWR-Auswertung betraf etwa die Hälfte der Todesfälle an Aufzügen in den USA keine Fahrgäste, sondern Menschen, die an oder in der Nähe von Aufzügen arbeiteten, etwa Monteure, Wartungstechniker und Bauarbeiter.",
+  "detail": "Der CPWR-Bericht (McCann 2006) nennt Aufzugsmonteure und -reparateure sowie Bauarbeiter in Schachtnähe als etwa die Hälfte der aufzugsbezogenen Todesopfer. Die wichtigste Todesursache bei Beschäftigten war laut Bericht der Sturz in den Schacht, gefolgt von Einklemmen oder Getroffenwerden durch die Kabine bzw. bewegliche Teile.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.cpwr.com/wp-content/uploads/publications/elevator_escalator_BLSapproved_2.pdf",
+   "https://www.bls.gov/iif/",
+   "https://www.cpwr.com/wp-content/uploads/publications/elevator_escalator_BLSapproved_2.pdf"
+  ],
+  "caveats": "Nicht live überprüft (Suchkontingent erschöpft, Domains blockiert). 'Etwa die Hälfte' ist eine gerundete Erinnerung an den Bericht, keine abgelesene Zahl. Genaue Prozentanteile pro Ursache wurden absichtlich nicht angegeben. Es gibt nur US-Daten, für Deutschland wurde keine vergleichbare Auswertung gefunden. | Nicht live überprüft (siehe Sperren oben). Aus Fachwissen: Der CPWR-Bericht nennt 'almost half' der aufzugsbezogenen Todesfälle bei Personen, die an oder nahe Aufzügen arbeiten (Monteure/Reparateure, Bauarbeiter). Hauptursachen bei Beschäftigten: Sturz in den Schacht, danach Einklemmen/Getroffenwerden. Die Aussage ist plausibel, aber nicht abgelesen. Die Quelle und den alten Datenzeitraum im Satz nennen. Die andere Hälfte sind nicht nur 'Fahrgäste' im engeren Sinn, sondern alle Nicht-Beschäftigten, z. B. auch Personen, die in Schächte stürzen."
+ },
+ {
+  "id": "safety_reality_causes_not_ropes",
+  "claim_de": "In den ausgewerteten US-Daten dominieren andere Unfallarten: Stürze in offene Schächte, Einklemmen durch Kabine, Türen oder bewegliche Teile sowie Stürze und Stolpern von Fahrgästen, etwa an nicht bündig haltenden Kabinen. Ein Absturz der Kabine durch Seilriss taucht dort nicht als eigene Ursachengruppe auf.",
+  "detail": "Bei Beschäftigten stehen Schachtstürze und Einklemmen im Vordergrund (CPWR/BLS). Bei Fahrgästen stammen die Verletzungen laut CPSC-Notaufnahmedaten (die CPWR auswertet) überwiegend aus Stürzen und Stolpern, z. B. wenn die Kabine nicht bündig mit dem Stockwerk hält, und aus sich schließenden Türen. Ein freier Fall nach Versagen aller Tragmittel ist bei modernen Personenaufzügen keine relevante Ursache. Grund: EN 81-20 verlangt mindestens zwei Tragmittel mit hohem Sicherheitsfaktor und zusätzlich Geschwindigkeitsbegrenzer und Fangvorrichtung.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.cpwr.com/wp-content/uploads/publications/elevator_escalator_BLSapproved_2.pdf",
+   "https://www.dinmedia.de/",
+   "https://www.cpwr.com/wp-content/uploads/publications/elevator_escalator_BLSapproved_2.pdf"
+  ],
+  "caveats": "Nicht live überprüft. Die Ursachenkategorien sind qualitativ aus dem Bericht wiedergegeben, ohne Prozentwerte. 'Keine nennenswerte Rolle' beruht darauf, dass Seilriss nicht als eigene Hauptkategorie auftaucht. Es ist keine explizite Nullaussage der Quelle. Formulierungsvorschlag: 'Seilrisse sind praktisch nie die Ursache'. | Nicht live überprüft. Die Ursachenkategorien bei Beschäftigten (Schachtsturz, Einklemmen, Getroffenwerden) decken sich mit meiner Kenntnis des CPWR-Berichts. Dass 'nicht bündig haltende Kabinen' im Bericht ausdrücklich genannt werden, kann ich nicht bestätigen. Als Ursache ist es in der Branche bekannt, deshalb nur mit 'etwa' formulieren. 'Spielt keine nennenswerte Rolle' ist eine Schlussfolgerung, keine Aussage der Quelle. Deshalb vorsichtiger formuliert: 'taucht nicht als eigene Ursachengruppe auf'. Das Normdetail (EN 81-20: mindestens zwei unabhängige Tragmittel, Geschwindigkeitsbegrenzer, Fangvorrichtung) entspricht meinem Fachwissen, ist aber nicht am Normtext geprüft."
+ },
+ {
+  "id": "safety_reality_ucm",
+  "claim_de": "Zu den gefährlichsten realen Fehlerfällen gehört nicht der Seilriss, sondern das unbeabsichtigte Wegfahren der Kabine bei offener Tür. Seit der Änderung EN 81-1+A3 (2009), heute in EN 81-20 übernommen, verlangt die europäische Aufzugsnorm für neue Aufzüge einen Schutz gegen unbeabsichtigte Bewegung des Fahrkorbs.",
+  "detail": "Bekannte Fälle: Am 3. Juni 2006 wurde in Tokio (Bezirk Minato) ein 16-jähriger Schüler getötet, als ein Aufzug von Schindler mit offener Tür aufwärts fuhr. Dies löste in Japan strengere Anforderungen aus, u. a. eine doppelte Bremse. Am 14. Dezember 2011 wurde in New York (285 Madison Avenue) eine Frau getötet, als sich die Kabine nach Wartungsarbeiten mit offenen Türen bewegte. Die Europäische Norm führte mit EN 81-1+A3:2009 den UCMP-Schutz ein, EN 81-20 hat ihn übernommen.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.dinmedia.de/",
+   "https://en.wikipedia.org/wiki/Schindler_Group",
+   "https://www.dinmedia.de/",
+   "https://en.wikipedia.org/wiki/Schindler_Group"
+  ],
+  "caveats": "Nicht live überprüft. Die Unfalldaten (Tokio 3.6.2006, New York 14.12.2011) stammen aus Fachwissen, und die Ursachenzuordnung stammt aus der Presse. Wikipedia dient nur als Hinweis. Im Video keine Opfernamen nennen. Die genaue Klausel (EN 81-20, 5.6.7) nicht zitieren, ohne die Norm eingesehen zu haben. | Nicht live überprüft. Die Unfalldaten decken sich mit meinem Fachwissen: Tokio (Bezirk Minato) am 3.6.2006, 16-jähriger Schüler, Schindler-Aufzug fuhr mit offener Tür an, danach verlangte Japan ab 2009 eine Schutzeinrichtung gegen Fahren bei offener Tür (doppelte Bremse). New York, 285 Madison Ave, am 14.12.2011, Kabine bewegte sich nach Wartungsarbeiten mit offenen Türen. Einschränkungen: (1) 'müssen' gilt rechtlich über die Aufzugsrichtlinie; die harmonisierte Norm begründet die Konformitätsvermutung. In der EU gilt UCMP für neue Aufzüge praktisch seit Ende der A3-Übergangsfrist (ca. 2012). (2) Ein direkter Kausalzusammenhang zwischen den genannten Einzelunfällen und A3 ist nicht belegt. (3) Im Fall Tokio wurde die Schuldfrage vor Gericht zwischen Hersteller und Wartungsfirma verhandelt. Im Video den Herstellernamen nicht als Schuldzuweisung verwenden. Keine Opfernamen nennen."
+ },
+ {
+  "id": "safety_reality_stairs",
+  "claim_de": "In US-Notaufnahmen wurden von 1990 bis 2012 im Schnitt rund 1,08 Millionen treppenbedingte Verletzungen pro Jahr behandelt, rechnerisch etwa eine alle 30 Sekunden.",
+  "detail": "Blazewick DH et al., 'Stair-related injuries treated in United States emergency departments', American Journal of Emergency Medicine 2018;36(4):608–614 (online 2017), Nationwide Children's Hospital, Auswertung von NEISS-Daten. Rund 24,8 Mio. Fälle in 23 Jahren, Mittelwert ca. 1.076.558 pro Jahr (ca. 38,6 pro 10.000 Einwohner). Zum Vergleich nennt CPWR für Aufzüge und Fahrtreppen zusammen etwa 17.000 schwere Verletzungen pro Jahr.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://doi.org/10.1016/j.ajem.2017.09.034",
+   "https://www.nationwidechildrens.org/",
+   "https://doi.org/10.1016/j.ajem.2017.09.034"
+  ],
+  "caveats": "Nicht live überprüft, auch den DOI nicht. Die Zahlen sind NICHT direkt vergleichbar: Es gibt keine Normierung pro Fahrt oder Treppengang, die Definitionen unterscheiden sich (Notaufnahme vs. 'schwer verletzt') und die Zeiträume auch. Im Video nur als Größenordnung zeigen ('Treppen: über 1 Mio. Notaufnahmefälle pro Jahr, Aufzüge und Fahrtreppen: einige Zehntausend'), nicht als exaktes Risikoverhältnis. Häufig zitierte Zahlen zu Treppentoten (z. B. '12.000 pro Jahr') sind schlecht belegt und sollten nicht verwendet werden. | FEHLER IM CLAIM: 'etwa eine alle sechs Sekunden' ist rechnerisch falsch. 31.536.000 Sekunden pro Jahr geteilt durch 1.076.558 Fälle ergibt etwa eine Verletzung alle 29 Sekunden (ca. 2.950 pro Tag, ca. 2 pro Minute). 'Alle sechs Sekunden' wäre um den Faktor 5 zu hoch. Möglicherweise wurde es mit der älteren Kinderstudie verwechselt ('alle 6 Minuten ein Kleinkind'). Die übrigen Studienangaben passen zu meinem Fachwissen, sind aber nicht live geprüft: Blazewick et al., Am J Emerg Med 2018;36(4):608–614, ca. 24,76 Mio. Fälle, Mittelwert ca. 1.076.558 pro Jahr, 38,6 pro 10.000 Einwohner. Der Vergleich mit den CPWR-Zahlen zu Aufzügen ist wegen anderer Definition, Zeiträume und fehlender Normierung auf die Exposition nur als Größenordnung zulässig."
+ },
+ {
+  "id": "safety_reality_trips_per_death",
+  "claim_de": "Nach älteren Angaben des US-Branchenverbands NEII machen die rund 900.000 Aufzüge in den USA etwa 18 Milliarden Fahrgastfahrten pro Jahr. Gemessen an den rund 30 Todesfällen pro Jahr aus der CPWR-Auswertung, davon etwa die Hälfte Beschäftigte, liegt das Risiko für Nicht-Beschäftigte grob in der Größenordnung von einem Todesfall pro einer Milliarde Fahrten. Das ist eine Überschlagsrechnung aus Daten verschiedener Jahre.",
+  "detail": "Eigene Überschlagsrechnung: Etwa 27 Aufzugstote pro Jahr (90 % von ~30) geteilt durch 18 Mrd. Fahrten ergibt ~1 pro 670 Mio. Fahrten, einschließlich Beschäftigter. Nur Fahrgäste (etwa die Hälfte): ~1 pro 1,3 Mrd. Fahrten. NEII = National Elevator Industry, Inc., US-Branchenverband.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.neii.org/",
+   "https://www.cpwr.com/wp-content/uploads/publications/elevator_escalator_BLSapproved_2.pdf",
+   "https://www.neii.org/",
+   "https://www.cpwr.com/wp-content/uploads/publications/elevator_escalator_BLSapproved_2.pdf"
+  ],
+  "caveats": "Nicht live überprüft. Die NEII-Werte (900.000 Aufzüge, 18 Mrd. Fahrten) sind ältere, viel zitierte Branchenangaben. Manche Quellen nennen etwa 1 Mio. Aufzüge in den USA. Die Pro-Fahrt-Rate ist eine EIGENE Rechnung aus Daten verschiedener Jahre und Quellen und nur als Größenordnung verwendbar ('Milliarden Fahrten, eine Handvoll Tote'). Keine exakte Quote nennen. | Nicht live überprüft. Die Angabe '900.000 Aufzüge, 18 Mrd. Fahrgastfahrten pro Jahr' ist mir als oft zitierte NEII-Angabe bekannt; andere Quellen nennen etwa 1 Mio. Aufzüge. Arithmetik nachgerechnet: 27 geteilt durch 18 Mrd. ergibt ca. 1 pro 670 Mio. Fahrten; 13,5 geteilt durch 18 Mrd. ergibt ca. 0,75 pro 1 Mrd., also ca. 1 pro 1,3 Mrd. Die Rechnung stimmt. Aber: (1) Zähler und Nenner stammen aus verschiedenen Jahren und Quellen. (2) Die nicht beschäftigten Todesopfer sind nicht alle Fahrgäste. (3) Es ist eine eigene Rechnung, keine Quellenangabe. Deshalb nur als Größenordnung formulieren und 'weniger als 1' nicht als exakte Quote darstellen."
+ },
+ {
+  "id": "safety_reality_road_compare",
+  "claim_de": "Zum Vergleich: Im Straßenverkehr starben 2023 in den USA rund 41.000 Menschen (NHTSA, endgültige Zahl 40.901) und 2024 in Deutschland 2.770 Menschen (Destatis).",
+  "detail": "NHTSA/FARS 2023: 40.990 Verkehrstote, ca. 1,26 Tote pro 100 Mio. Fahrzeugmeilen. Destatis: 2.770 Verkehrstote 2024 in Deutschland (2023: 2.839). Zur Einordnung: Aufzüge und Fahrtreppen in den USA etwa 30 Todesfälle pro Jahr (CPWR).",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.nhtsa.gov/",
+   "https://www.destatis.de/",
+   "https://www.nhtsa.gov/",
+   "https://www.destatis.de/"
+  ],
+  "caveats": "Nicht live überprüft. Werte aus Fachwissen, nur Domain-URLs angegeben. Ein Vergleich der absoluten Todeszahlen sagt nichts über das Risiko pro Fahrt oder Kilometer aus, weil Exposition und Fahrtlänge völlig verschieden sind. Im Video als Größenordnung formulieren, nicht als 'X-mal sicherer'. | Nicht live überprüft (nhtsa.gov und destatis.de blockiert). Aus Fachwissen: 40.990 war die FRÜHE Schätzung der NHTSA für 2023 (Frühjahr 2024). Die endgültigen FARS-Daten für 2023 weisen nach meiner Erinnerung 40.901 Tote aus, bei ca. 1,26 Toten pro 100 Mio. Fahrzeugmeilen. Deshalb 'rund 41.000' verwenden oder die endgültige Zahl vor Veröffentlichung prüfen. Destatis 2024: 2.770 Verkehrstote (2023: 2.839, minus 69 bzw. ca. 2 %). Das deckt sich mit meinem Fachwissen. Stand September 2026 gibt es wahrscheinlich neuere Zahlen (US 2024 endgültig, DE 2025 vorläufig); aktuellste Werte prüfen. Der Vergleich absoluter Todeszahlen sagt nichts über das Risiko pro Fahrt aus."
+ },
+ {
+  "id": "safety_reality_de_pruefung",
+  "claim_de": "In Deutschland müssen Personenaufzüge als überwachungsbedürftige Anlagen nach der Betriebssicherheitsverordnung spätestens alle zwei Jahre eine Hauptprüfung und dazwischen eine Zwischenprüfung durch eine zugelassene Überwachungsstelle (ZÜS, z. B. TÜV oder DEKRA) durchlaufen. Faktisch kommt damit etwa einmal im Jahr ein unabhängiger Prüfer.",
+  "detail": "BetrSichV 2015, Anhang 2 Abschnitt 2 (Aufzugsanlagen): Prüfung vor Inbetriebnahme und nach prüfpflichtigen Änderungen durch eine ZÜS. Wiederkehrende Hauptprüfung höchstens alle 2 Jahre, Zwischenprüfung in der Mitte zwischen zwei Hauptprüfungen. Der Betreiber legt die Fristen per Gefährdungsbeurteilung fest, darf die Höchstfrist aber nicht überschreiten. Bei der Hauptprüfung werden u. a. Tragmittel, Bremse, Geschwindigkeitsbegrenzer und Fangvorrichtung geprüft. Unabhängig davon wartet eine Fachfirma die Anlage regelmäßig. Konkretisierung in TRBS 3121 'Betrieb von Aufzugsanlagen'.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.gesetze-im-internet.de/betrsichv_2015/anhang_2.html",
+   "https://www.baua.de/",
+   "https://www.gesetze-im-internet.de/betrsichv_2015/anhang_2.html"
+  ],
+  "caveats": "Der Seitenabruf von gesetze-im-internet.de wurde vom Egress-Proxy blockiert, der Wortlaut ist also nicht live bestätigt. Die 2-Jahres-Höchstfrist und die Zwischenprüfung in der Mitte sind gut etabliert. Die Wartungsintervalle der Fachfirma sind gesetzlich nicht fest vorgegeben (Herstellervorgaben, EN 13015), deshalb keine Zahl nennen. Die Nummerierung innerhalb von Anhang 2 vor Zitat prüfen, da sie seit 2015 durch Novellen geändert worden sein kann. | Nicht live überprüft (gesetze-im-internet.de blockiert). Die Höchstfrist von 2 Jahren für die Hauptprüfung, die Zwischenprüfung in der Mitte und die Prüfung durch eine ZÜS (BetrSichV Anhang 2 Abschnitt 2) entsprechen meinem Fachwissen. Abgewertet, weil 'jeder Aufzug' zu weit greift: Die Regel gilt für überwachungsbedürftige Aufzugsanlagen im Sinne der Verordnung bzw. des ÜAnlG. Bestimmte Hebeeinrichtungen (z. B. manche Treppen- oder Plattformlifte nach Maschinenrichtlinie mit geringer Geschwindigkeit, Kleingüteraufzüge) fallen nicht oder anders darunter. Seit 2021 (ÜAnlG) können sich Nummerierung und Rechtsgrundlage verschoben haben. Den Wortlaut vor dem Zitat prüfen."
+ },
+ {
+  "id": "safety_reality_de_plakette_notruf",
+  "claim_de": "Seit der Neufassung der Betriebssicherheitsverordnung 2015 muss in Aufzugskabinen eine Prüfplakette angebracht sein, die Monat und Jahr der nächsten Prüfung zeigt. Außerdem müssen Aufzüge, in denen Personen befördert werden, ein Zweiwege-Kommunikationssystem haben, über das ein Notdienst ständig erreichbar ist. Ältere Anlagen mussten bis Ende 2020 nachgerüstet werden.",
+  "detail": "Die Prüfplakette zeigt Monat und Jahr der nächsten wiederkehrenden Prüfung. Das Notrufsystem ermöglicht eine Sprechverbindung zu einem Notdienst, sodass eingeschlossene Personen innerhalb angemessener Zeit befreit werden können. Übergangsfrist für bestehende Anlagen ohne wirksames Notrufsystem: 31.12.2020.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.gesetze-im-internet.de/betrsichv_2015/",
+   "https://www.baua.de/",
+   "https://www.gesetze-im-internet.de/betrsichv_2015/",
+   "https://www.baua.de/"
+  ],
+  "caveats": "Nicht live überprüft (Domain blockiert). Das Nachrüstdatum 31.12.2020 und die Plakettenpflicht stammen aus Fachwissen. Vor der Veröffentlichung am Verordnungstext bestätigen. Wegen der Risiko-Flag im Projekt keine Verhaltensanweisungen für Notfälle ableiten. | Nicht live überprüft. Aus Fachwissen: Die Pflicht zum Zweiwege-Kommunikationssystem (BetrSichV Anhang 1) und die Nachrüstfrist 31.12.2020 für Bestandsanlagen (Übergangsvorschrift § 24) sind in der Branche breit dokumentiert. Die Prüfplakette mit Monat/Jahr der nächsten Prüfung und der prüfenden Stelle gehört nach meinem Kenntnisstand ebenfalls zur BetrSichV 2015. Die genaue Fundstelle ist nicht geprüft. 'Jeder' auf die erfassten (überwachungsbedürftigen) Aufzugsanlagen begrenzt. 'Novelle' durch 'Neufassung' ersetzt, da die BetrSichV 2015 neu erlassen wurde. Keine Verhaltensanweisungen für Notfälle ableiten."
+ },
+ {
+  "id": "safety_reality_rope_inspection",
+  "claim_de": "Tragseile werden bei Wartung und Prüfung auf 'Ablegereife' kontrolliert, etwa auf Drahtbrüche, abnehmenden Durchmesser, Verschleiß und Korrosion. Sie werden ausgetauscht, bevor ihre Tragfähigkeit kritisch sinkt. Für beschichtete Stahlgurte, etwa bei Otis Gen2, gibt es zusätzlich Systeme, die die Stahlcorde elektrisch überwachen.",
+  "detail": "Seile verschleißen allmählich, einzelne Drähte brechen lange vor einem Gesamtversagen. Deshalb setzt die Inspektion auf das Zählen von Drahtbrüchen pro Referenzlänge und auf Durchmessermessung. Anforderungen an Aufzugsseile regeln u. a. ISO 4344 und EN 12385-5 sowie Herstellervorgaben. Otis führte 2000 das Gen2-System mit polyurethanbeschichteten Flachgurten ein. Das zugehörige PULSE-System überwacht die Stahlcorde elektrisch und dauerhaft.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.gesetze-im-internet.de/betrsichv_2015/anhang_2.html",
+   "https://www.otis.com/",
+   "https://www.otis.com/"
+  ],
+  "caveats": "Nicht live überprüft. Die genauen Ablegekriterien (Anzahl Drahtbrüche, zulässige Durchmesserabnahme) sind nicht belegt und sollten im Video nicht genannt werden. Die Normzuordnung ISO 4344 / EN 12385-5 und die Details zu Otis PULSE stammen aus Fachwissen, Herstellerangaben vor Verwendung prüfen. Die Sicherheitsfaktoren der Seile (EN 81-20: ≥12 bei 3+ Seilen mit Treibscheibe, ≥16 bei 2 Seilen) gehören in das Engineering-Kapitel und sind hier nur Kontext. | Nicht live überprüft. Das Konzept der Ablegereife (Drahtbrüche pro Bezugslänge, Durchmesserabnahme, Korrosion, Verschleiß) ist Fachstandard. 'Lange bevor sie ihre Tragfähigkeit verlieren' ist eine Verallgemeinerung; sie ist wegen hoher Sicherheitsfaktoren plausibel, aber nicht belegt. Deshalb auf 'bevor ... kritisch sinkt' abgeschwächt. Otis Gen2 (Einführung ca. 2000, polyurethanbeschichtete Flachgurte) und das PULSE-System zur elektrischen Dauerüberwachung der Stahlcorde entsprechen meinem Fachwissen, Herstellerangaben aber nicht geprüft. Die in 'detail' genannte Zuordnung von ISO 4344 und EN 12385-5 zu Ablegekriterien ist unsicher: Diese Normen regeln vor allem Anforderungen an die Seile. Nicht zitieren, ohne die Normen eingesehen zu haben."
+ },
+ {
+  "id": "safety_reality_us_inspection",
+  "claim_de": "In den USA definiert der Sicherheitscode ASME A17.1/CSA B44 wiederkehrende Prüfungen. Empfohlen und vielerorts von den Behörden vorgeschrieben sind Tests der Kategorie 1 jährlich und Tests der Kategorie 5 alle fünf Jahre. Zu Letzteren gehört bei Seilaufzügen der Test der Fangvorrichtung mit Nennlast.",
+  "detail": "ASME A17.1 Abschnitt 8.11 (Periodic Inspections and Tests) definiert die Testkategorien. Das nicht verbindliche Appendix N empfiehlt Intervalle: Category 1: 12 Monate, Category 5: 60 Monate. Verbindlich werden sie erst durch die jeweilige Behörde (Bundesstaat bzw. Stadt, z. B. New York City).",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.asme.org/codes-standards/find-codes-standards/a17-1-csa-b44-safety-code-elevators-escalators",
+   "https://www.asme.org/codes-standards/find-codes-standards/a17-1-csa-b44-safety-code-elevators-escalators"
+  ],
+  "caveats": "Nicht live überprüft, die URL ist nach bekanntem ASME-Muster angegeben. Die Intervalle sind in A17.1 nur empfohlen (Appendix N). Die tatsächliche Pflicht und die Häufigkeit unterscheiden sich je Bundesstaat und Stadt. Für das deutsche Video eher als Randnotiz verwenden. | Nicht live überprüft. Aus Fachwissen: A17.1 Abschnitt 8.11 legt die Testkategorien fest. Der nicht verbindliche Appendix N empfiehlt 12 Monate für Kategorie 1 und 60 Monate für Kategorie 5. Kategorie 5 umfasst bei Seilaufzügen den Fangvorrichtungstest mit Nennlast bei Nenngeschwindigkeit. Die Pflicht entsteht erst durch die zuständige Behörde (AHJ) und variiert je Bundesstaat bzw. Stadt. Der Claim sagt das mit 'typischerweise' im Kern richtig. Abgewertet nur, weil die Intervalle nicht durch A17.1 selbst verbindlich sind; das sollte der Satz erkennbar machen. Die URL ist nicht bestätigt."
+ },
+ {
+  "id": "safety_reality_multi_ropeless",
+  "claim_de": "thyssenkrupp (heute TK Elevator) hat mit MULTI einen seillosen Aufzug entwickelt: Linearmotoren, nach Herstellerangaben abgeleitet von der Transrapid-Technik, bewegen mehrere Kabinen im selben Schacht, vertikal und horizontal. Ein Prototyp wurde ab 2017 im 246 Meter hohen Testturm in Rottweil erprobt. Ein Einsatz im regulären Gebäudebetrieb ist nicht bestätigt.",
+  "detail": "MULTI wurde 2014 vorgestellt, der erste funktionsfähige Prototyp lief 2017 im Testturm Rottweil (246 m, Einweihung Oktober 2017, mehrere Testschächte, Aussichtsplattform auf 232 m). Die Kabinen haben keine Tragseile und wechseln über drehbare Schienensegmente ('Exchanger') den Schacht. Laut Hersteller sollen Transportkapazität und Flächenersparnis im Gebäude um bis zu 50 % steigen. Als Sicherheitskonzept kommen statt Seil plus Fangvorrichtung mehrstufige Bremsen an der Kabine zum Einsatz. Das Szenario 'Seilriss' entfällt damit.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://www.tkelevator.com/",
+   "https://en.wikipedia.org/wiki/TK_Elevator",
+   "https://www.tkelevator.com/",
+   "https://en.wikipedia.org/wiki/TK_Elevator"
+  ],
+  "caveats": "Nicht live überprüft, WebFetch zu tkelevator.com war blockiert. Die Angabe 'bis zu 50 %' ist eine Herstellerangabe. Der kommerzielle Status ist unklar: 2017 war der East Side Tower in Berlin (OVG) als erster Kunde angekündigt, ob MULTI dort bzw. irgendwo im Regelbetrieb läuft, ist in dieser Sitzung NICHT bestätigt. Im Video als 'Prototyp/Zukunftstechnik' framen. Nicht verwechseln mit Seilinnovationen wie KONE UltraRope (Carbonfaser-Tragmittel für bis zu ca. 1 km Förderhöhe, Herstellerangabe), die weiterhin Tragmittel nutzen. | Nicht live überprüft. Aus Fachwissen: Vorstellung 2014, Prototyp 2017 in Rottweil. Der Turm ist 246 m hoch, die Einweihung war im Oktober 2017, die Besucherplattform liegt auf 232 m. Linearantrieb mit Transrapid-Bezug laut thyssenkrupp. Horizontale Schachtwechsel über 'Exchanger'. Die Aussage 'bis zu 50 %' ist eine Herstellerangabe. Das Präsens 'wird seit 2017 erprobt' ist für September 2026 nicht bestätigt: Der Projektstatus ist unklar, und ob der 2017 angekündigte Einsatz im East Side Tower in Berlin umgesetzt wurde, ist unbestätigt. Deshalb Vergangenheitsform und Hinweis auf Prototyp. Die Kabinen laufen an Führungsschienen; MULTI ist keine Magnetschwebebahn. Nicht als 'Maglev-Aufzug' bezeichnen."
+ },
+ {
+  "id": "safety_reality_empire_state_1945",
+  "claim_de": "Der wohl bekannteste Fall, in dem die Tragseile eines Personenaufzugs tatsächlich rissen, hat nichts mit Materialermüdung zu tun: Am 28. Juli 1945 prallte ein B-25-Bomber in das Empire State Building und beschädigte dabei Aufzugsseile. Als die verletzte Liftführerin Betty Lou Oliver in einer Kabine nach unten gebracht werden sollte, rissen die Seile. Die Kabine stürzte rund 75 Stockwerke tief, und Oliver überlebte.",
+  "detail": "Der B-25 prallte im Nebel in die Höhe des 79. Stockwerks. Oliver wurde verletzt in einen Aufzug gesetzt, dessen Seile durch den Einschlag beschädigt waren und rissen. Die Kabine fiel rund 75 Stockwerke (über 300 m). Als Gründe für ihr Überleben gelten u. a. das sich in der Grube aufwickelnde Seil, das wie eine Feder wirkte, und die im engen Schacht komprimierte Luft. Guinness World Records führt dies als längsten überlebten Sturz in einem Aufzug.",
+  "verdict": "PARTIAL",
+  "sources": [
+   "https://en.wikipedia.org/wiki/1945_Empire_State_Building_B-25_crash",
+   "https://www.guinnessworldrecords.com/",
+   "https://en.wikipedia.org/wiki/1945_Empire_State_Building_B-25_crash",
+   "https://www.guinnessworldrecords.com/"
+  ],
+  "caveats": "Nicht live überprüft, Wikipedia dient nur als Hinweis. Die Überlebensgründe (Seilspirale, Luftpolster) sind rekonstruierte Erklärungen, keine gesicherte Analyse. Wichtig für die Botschaft: Die Ursache war ein Flugzeugeinschlag, der auch das Sicherheitssystem überforderte. Es ist kein Beleg dafür, dass moderne Aufzüge bei Seilriss abstürzen. | Nicht live überprüft (Wikipedia und Guinness blockiert). Die Kernfakten entsprechen gut dokumentiertem Fachwissen: 28.7.1945, B-25 im Nebel, Einschlag etwa im 79. Stock, Oliver in eine andere Kabine gesetzt, deren Seile beschädigt waren, Sturz von ca. 75 Stockwerken, Guinness-Rekord 'longest fall survived in an elevator'. Anpassungen: 'durchtrennte die Seile' auf 'beschädigte' abgeschwächt, weil die Seile nach gängiger Darstellung erst beim späteren Abtransport rissen. 'alle Tragseile' und 'bekanntester' vorsichtiger formuliert. Die Überlebensgründe (Seilspirale in der Grube, Luftkompression im Schacht) sind rekonstruierte Erklärungen und nicht als gesichert darstellen. Der Fall belegt nicht, dass moderne Aufzüge bei Seilriss abstürzen."
+ }
+]

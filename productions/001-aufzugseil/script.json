@@ -1,0 +1,530 @@
+{
+ "title_candidates": [
+  "Was passiert, wenn das Aufzugseil reißt?",
+  "Alle Seile reißen: Der Aufzug-Absturz in Zeitlupe",
+  "75 Stockwerke Absturz – und sie überlebte: Warum Aufzüge heute so gut wie nie fallen",
+  "Aufzug im Röntgenblick: 6 Schutzschichten",
+  "Warum Aufzüge so gut wie nie abstürzen – Millisekunde für Millisekunde"
+ ],
+ "angle": "Das Video steigt mit einer Geschichte ein. Der Kaltstart zeigt den überlebten Absturz von Betty Lou Oliver 1945 und lässt die Frage offen. Danach folgt kurz Otis 1854. Als Legende gelten dabei nur der heldenhafte Ausruf und die Gründungserzählung, nicht die Vorführung selbst. Früh folgt ein Gedankenexperiment mit Stoppuhr: In einem Wohnhausaufzug mit 1 m/s und Bremsfang reißen alle Seile. Wir begleiten die Kabine Millisekunde für Millisekunde durch sechs nummerierte Schutzschichten: Tragseile, Geschwindigkeitsbegrenzer, Schalter und Bremse, Fangvorrichtung, Puffer, Prüfungen. Die Schichten sind ausdrücklich keine Staffel, in der jede die vorige ersetzt. Jede deckt einen anderen Fehler ab. Begrenzer und Fang arbeiten nur zusammen. Die Bremse hilft beim Seilriss nicht, und der Puffer fängt keinen Absturz ab. Jede neue Schicht leuchtet in einer layers_overview-Einblendung auf, immer in derselben Reihenfolge. Für Tempowechsel sorgen Mythen-Checks: Legende, Kino, Sprung, Puffer, Absturz nach oben. Danach geht es um die realere Gefahr, eine Kabine, die bei offener Tür anfährt. Ein Zusammenhang zwischen Tokio 2006 und der Normergänzung 2009 wird dabei nicht behauptet. Ältere US-Zahlen werden ausdrücklich nur als Vergleich der Größenordnung eingeordnet. Der letzte Höhepunkt führt zurück in den Schacht von 1945. Die Rekonstruktionen sind vorsichtig formuliert, und die Logik stimmt: Für einen Absturz müssten alle Tragseile reißen und zusätzlich Begrenzer, Begrenzerseil oder Fangvorrichtung versagen. Eigene Rechnungen heißen im Text durchgehend rechnerisch. Nicht verifizierte Zuschreibungen an Firmen oder Sendungen kommen im Sprechertext nicht vor. Verhaltenstipps für Notfälle gibt es keine.",
+ "segments": [
+  {
+   "id": "s01",
+   "chapter": "Der Absturz von 1945",
+   "narration_tts": "Neunzehnhundertfünfundvierzig. Im Empire State Building stürzt eine Aufzugskabine rund fünfundsiebzig Stockwerke in die Tiefe. Darin sitzt eine schwer verletzte junge Frau. Sie überlebt. Wie ist das möglich?",
+   "caption_text": "1945. Im Empire State Building stürzt eine Aufzugskabine rund 75 Stockwerke in die Tiefe. Darin sitzt eine schwer verletzte junge Frau. Sie überlebt. Wie ist das möglich?",
+   "visual_beat": "historic_scene scene=empire_state_1945_schematic: Hochhaus-Querschnitt in Cyan-Linien, Jahreszahl '1945'. Harter Schnitt auf shaft_xray focus=full, state=all_ropes_snap, Seilzahl ohne Beschriftung, labels=['rund 75 Stockwerke']: Kabine rast nach unten, Bild friert kurz vor der Grube ein, großes Fragezeichen über der Kabine.",
+   "claim_ids": [
+    "history_11",
+    "history_13",
+    "physics_buffers_betty_lou_oliver"
+   ],
+   "kind": "HOOK",
+   "section_title": "Kaltstart 1945"
+  },
+  {
+   "id": "s02",
+   "chapter": "Der Absturz von 1945",
+   "narration_tts": "Die Frau heißt Betty Lou Oliver. Ihr Sturz steht als längster überlebter Aufzugsabsturz im Buch der Rekorde. Doch warum stürzen Aufzüge sonst so gut wie nie ab, obwohl sie an dünnen Stahlseilen hängen? Wir kappen gleich in Gedanken alle Seile und schauen Millisekunde für Millisekunde zu. Am Ende suchen wir den Grund, warum damals keine Sicherung griff, soweit er sich noch rekonstruieren lässt.",
+   "caption_text": "Die Frau heißt Betty Lou Oliver. Ihr Sturz steht als längster überlebter Aufzugsabsturz im Buch der Rekorde. Doch warum stürzen Aufzüge sonst so gut wie nie ab, obwohl sie an dünnen Stahlseilen hängen? Wir kappen gleich in Gedanken alle Seile und schauen Millisekunde für Millisekunde zu. Am Ende suchen wir den Grund, warum damals keine Sicherung griff, soweit er sich noch rekonstruieren lässt.",
+   "visual_beat": "stat_counter zählt auf 75, Label 'Stockwerke: längster überlebter Aufzugsabsturz laut Guinness World Records'. Dann title_card: Titel 'Was passiert, wenn das Aufzugseil reißt?', Untertitel 'Millisekunde für Millisekunde im Röntgenblick', daneben eine Stoppuhr auf '0 ms'.",
+   "claim_ids": [
+    "history_13",
+    "physics_buffers_why_no_freefall",
+    "history_14"
+   ],
+   "kind": "SETUP",
+   "section_title": "Die eigentliche Frage"
+  },
+  {
+   "id": "s03",
+   "chapter": "1854: Das gekappte Seil",
+   "narration_tts": "Die Idee dahinter ist alt: New York, achtzehnhundertvierundfünfzig, eine Ausstellung im Kristallpalast. Der Mechaniker Elisha Otis steht auf einer hochgezogenen Plattform, dann wird vor Publikum das Tragseil gekappt. Laut der Firmenchronik sackt die Plattform nur ein paar Zoll ab. Das Prinzip: Solange das Seil zieht, bleibt eine Federsperre gelöst. Reißt es, greift sie sofort in Zahnstangen an beiden Seiten.",
+   "caption_text": "Die Idee dahinter ist alt: New York, 1854, eine Ausstellung im Kristallpalast. Der Mechaniker Elisha Otis steht auf einer hochgezogenen Plattform, dann wird vor Publikum das Tragseil gekappt. Laut der Firmenchronik sackt die Plattform nur ein paar Zoll ab. Das Prinzip: Solange das Seil zieht, bleibt eine Federsperre gelöst. Reißt es, greift sie sofort in Zahnstangen an beiden Seiten.",
+   "visual_beat": "historic_scene scene=otis_1854_demo: Kupferstich-Linienoptik, Silhouette auf offener Plattform, Publikum als Silhouetten, Jahresmarke '1854', Beschriftung 'Elisha Otis, Crystal Palace New York'. Seil wird gekappt, Plattform ruckt minimal nach unten. Übergang zu historic_scene scene=early_hoist: eine Federsperre schnappt amber leuchtend in die Zahnstangen an beiden Seiten, Label 'Seilzug weg = Sperre greift'.",
+   "claim_ids": [
+    "history_01",
+    "history_03"
+   ],
+   "kind": "STORY",
+   "section_title": "1854: Das gekappte Seil"
+  },
+  {
+   "id": "s04",
+   "chapter": "1854: Das gekappte Seil",
+   "narration_tts": "Oft wird erzählt, Otis habe danach gerufen, es sei alles sicher. In den wenigen Berichten von damals fehlt dieser Ausruf. Eine New Yorker Zeitung notierte nur, der Erfinder schneide gelegentlich selbst das Seil durch.",
+   "caption_text": "Oft wird erzählt, Otis habe danach gerufen, es sei alles sicher. In den wenigen Berichten von damals fehlt dieser Ausruf. Eine New Yorker Zeitung notierte nur, der Erfinder schneide gelegentlich selbst das Seil durch.",
+   "visual_beat": "myth_card: Aussage 'Otis rief: Alles sicher, meine Herren!', Stempel 'LEGENDE'. Daneben stilisierte Zeitungsspalte als Linienzeichnung, einzige Beschriftung '1854', hervorgehobene Randnotiz 'schneidet gelegentlich das Seil durch'. Die Vorführung selbst bleibt als Silhouette stehen, nur der Ausruf wird gestempelt.",
+   "claim_ids": [
+    "history_02",
+    "history_01"
+   ],
+   "kind": "PATTERN_INTERRUPT",
+   "section_title": "Mythos: Alles sicher"
+  },
+  {
+   "id": "s05",
+   "chapter": "Schicht 1: Die Seile",
+   "narration_tts": "Heute ist aus dieser Sperre eine ganze Kette von Schutzschichten geworden. Jede deckt einen anderen Fehler ab, und manche arbeiten nur zusammen. Erste Schicht: die Seile, meist etwa drei bis acht unabhängige. Die europäische Aufzugsnorm verlangt dann, dass jedes mindestens zwölfmal so viel aushält, wie bei voll beladener Kabine an ihm zieht.",
+   "caption_text": "Heute ist aus dieser Sperre eine ganze Kette von Schutzschichten geworden. Jede deckt einen anderen Fehler ab, und manche arbeiten nur zusammen. Erste Schicht: die Seile, meist etwa 3 bis 8 unabhängige. Die europäische Aufzugsnorm verlangt dann, dass jedes mindestens 12-mal so viel aushält, wie bei voll beladener Kabine an ihm zieht.",
+   "visual_beat": "layers_overview: sechs leere Umrisse erscheinen von unten nach oben: Tragseile, Geschwindigkeitsbegrenzer, Schalter und Bremse, Fangvorrichtung, Puffer, Prüfungen; Begrenzer und Fangvorrichtung sind mit einer feinen Klammer 'arbeiten zusammen' verbunden. Die unterste Ebene 'Tragseile' leuchtet cyan. Dann shaft_xray focus=ropes, state=idle, rope_count=6, highlight=['ropes'], labels=['meist 3 bis 8 Seile'] und stat_counter '12x', Label 'Sicherheitsfaktor pro Seil, europäische Norm', darunter kleiner '16x bei nur 2 Seilen'.",
+   "claim_ids": [
+    "physics_buffers_why_no_freefall",
+    "safety_chain_suspension_ropes",
+    "suspension_typical_count",
+    "suspension_en_safety_factor",
+    "suspension_en_min_number_diameter",
+    "safety_chain_machine_brake",
+    "physics_buffers_overload_at_freefall"
+   ],
+   "kind": "SETUP",
+   "section_title": "Erste Schicht: die Seile"
+  },
+  {
+   "id": "s06",
+   "chapter": "Schicht 1: Die Seile",
+   "narration_tts": "Bei sechs Seilen könnte rein statisch gerechnet schon ein einziges etwa das Doppelte der voll beladenen Kabine halten. Dabei ist so ein Seil nach der europäischen Aufzugsnorm mindestens acht Millimeter dick, kaum dicker als ein Bleistift. Je nach Bauart reißt es erst bei rund drei bis gut vier Tonnen Zugkraft.",
+   "caption_text": "Bei 6 Seilen könnte rein statisch gerechnet schon ein einziges etwa das Doppelte der voll beladenen Kabine halten. Dabei ist so ein Seil nach der europäischen Aufzugsnorm mindestens 8 Millimeter dick, kaum dicker als ein Bleistift. Je nach Bauart reißt es erst bei rund 3 bis gut 4 Tonnen Zugkraft.",
+   "visual_beat": "shaft_xray focus=ropes, state=idle, rope_count=6, broken_ropes=5, labels=['rechnerisch, rein statisch']: fünf Seile werden grau, eines glüht cyan weiter; stat_counter '2x'. Dann map_or_scale: Querschnitt eines 8-mm-Seils neben Bleistift und Fingerumriss; stat_counter '3 bis gut 4 t', Label 'Mindestbruchkraft eines 8-mm-Seils, je nach Bauart'.",
+   "claim_ids": [
+    "suspension_typical_count",
+    "safety_chain_suspension_ropes",
+    "suspension_en_min_number_diameter",
+    "suspension_rope_diameter_strength"
+   ],
+   "kind": "PATTERN_INTERRUPT",
+   "section_title": "Ein Seil trägt doppelt"
+  },
+  {
+   "id": "s07",
+   "chapter": "Schicht 1: Die Seile",
+   "narration_tts": "An der Maschine oben ist die Kabine gar nicht festgeschraubt. Die Seile liegen nur in den Rillen der Treibscheibe, wie ein Handtuch über einer Stange, und halten allein durch Reibung. Am anderen Ende hängt das Gegengewicht, so schwer wie die leere Kabine plus etwa vierzig bis fünfzig Prozent der Nutzlast. Merk dir das Gegengewicht, es sorgt später für eine Überraschung.",
+   "caption_text": "An der Maschine oben ist die Kabine gar nicht festgeschraubt. Die Seile liegen nur in den Rillen der Treibscheibe, wie ein Handtuch über einer Stange, und halten allein durch Reibung. Am anderen Ende hängt das Gegengewicht, so schwer wie die leere Kabine plus etwa 40 bis 50 Prozent der Nutzlast. Merk dir das Gegengewicht, es sorgt später für eine Überraschung.",
+   "visual_beat": "traction_sheave show_balance=false: Zoom auf die Treibscheibe, Seile liegen lose in den Rillen, amber Reibungspfeile; kleines Inset: Handtuch über einer Stange mit Gewicht an beiden Enden. Dann traction_sheave show_balance=true, load_percent=0 bis 50: Waage pendelt sich bei halber Beladung waagerecht ein, Label 'Gegengewicht = leere Kabine + 40 bis 50 % Nutzlast'. Zum Schluss blinkt das Gegengewicht amber.",
+   "claim_ids": [
+    "suspension_traction_principle",
+    "suspension_counterweight"
+   ],
+   "kind": "EXPLANATION",
+   "section_title": "Die Treibscheibe"
+  },
+  {
+   "id": "s08",
+   "chapter": "Schicht 2 und 3: Begrenzer und Bremse",
+   "narration_tts": "Jetzt das Experiment: Ein Wohnhausaufzug mit Bremsfang fährt mit einem Meter pro Sekunde abwärts. Wir durchtrennen alle Seile, die Stoppuhr läuft. Nach fünfzehn Millisekunden ist die Kabine rechnerisch schon fünfzehn Prozent schneller als normal, nach gut eineinhalb Zentimetern Fall.",
+   "caption_text": "Jetzt das Experiment: Ein Wohnhausaufzug mit Bremsfang fährt mit 1 Meter pro Sekunde abwärts. Wir durchtrennen alle Seile, die Stoppuhr läuft. Nach 15 Millisekunden ist die Kabine rechnerisch schon 15 Prozent schneller als normal, nach gut 1,5 Zentimetern Fall.",
+   "visual_beat": "shaft_xray focus=car, state=moving_down, rope_count=6, labels=['Wohnhaus, 1 m/s, Bremsfang']; dann state=all_ropes_snap, broken_ropes=6: alle Seile peitschen amber weg. Große Stoppuhr läuft in Zeitlupe von 0 auf 15 ms, Mini-Tacho von 1,00 auf 1,15 m/s, Lineal an der Führungsschiene zeigt 1,6 cm.",
+   "claim_ids": [
+    "physics_buffers_time_to_trip",
+    "safety_chain_tripping_speed_en81",
+    "safety_chain_gear_types"
+   ],
+   "kind": "PATTERN_INTERRUPT",
+   "section_title": "Die Stoppuhr läuft"
+  },
+  {
+   "id": "s09",
+   "chapter": "Schicht 2 und 3: Begrenzer und Bremse",
+   "narration_tts": "Frühestens ab dieser Grenze darf der Wächter eingreifen. Spätestens muss er es tun, bevor die Kabine eineinhalb Meter pro Sekunde erreicht, nach etwa fünfzig Millisekunden.",
+   "caption_text": "Frühestens ab dieser Grenze darf der Wächter eingreifen. Spätestens muss er es tun, bevor die Kabine 1,5 Meter pro Sekunde erreicht, nach etwa 50 Millisekunden.",
+   "visual_beat": "graph title='Geschwindigkeit nach dem Seilriss, idealer freier Fall', x_label='Zeit in ms', y_label='m/s', series 'Start aus Fahrt mit 1 m/s': (0|1,00), (15|1,15), (51|1,50); series 'Start aus dem Stillstand': (0|0), (117|1,15), (153|1,50); annotations=['frühestens: 1,15 m/s', 'spätestens: unter 1,5 m/s']. Das Band zwischen 1,15 und 1,5 m/s leuchtet amber als Auslösefenster.",
+   "claim_ids": [
+    "safety_chain_tripping_speed_en81",
+    "physics_buffers_time_to_trip"
+   ],
+   "kind": "EXPLANATION",
+   "section_title": "Das Zeitfenster"
+  },
+  {
+   "id": "s10",
+   "chapter": "Schicht 2 und 3: Begrenzer und Bremse",
+   "narration_tts": "Dieser Wächter ist die zweite Schicht: der Geschwindigkeitsbegrenzer. Klassisch hat er oben eine eigene Seilscheibe und ein eigenes, dünnes Seil. Es läuft als Schleife bis zu einer Spannrolle in der Grube und hängt an einem Hebel auf der Kabine. So zieht die Kabine das Seil bei jeder Fahrt mit.",
+   "caption_text": "Dieser Wächter ist die zweite Schicht: der Geschwindigkeitsbegrenzer. Klassisch hat er oben eine eigene Seilscheibe und ein eigenes, dünnes Seil. Es läuft als Schleife bis zu einer Spannrolle in der Grube und hängt an einem Hebel auf der Kabine. So zieht die Kabine das Seil bei jeder Fahrt mit.",
+   "visual_beat": "shaft_xray focus=full, state=moving_down, highlight=['governor','governor_rope','tension_pulley','safety_lever'], labels=['Begrenzer','Begrenzerseil','Spannrolle','Auslösehebel']: dünne amber Schleife läuft synchron mit der Kabine. Eckeinblendung layers_overview: Ebene 'Geschwindigkeitsbegrenzer' leuchtet auf.",
+   "claim_ids": [
+    "safety_chain_governor_principle"
+   ],
+   "kind": "EXPLANATION",
+   "section_title": "Zweite Schicht: der Begrenzer"
+  },
+  {
+   "id": "s11",
+   "chapter": "Schicht 2 und 3: Begrenzer und Bremse",
+   "narration_tts": "Dreht sich die Scheibe zu schnell, schwenken Fliehgewichte nach außen, wie die Sitze eines Kettenkarussells. Sie lösen eine Sperre aus, und der Begrenzer hält sein Seil fest. Das ist reine Mechanik, sie funktioniert auch ohne Strom.",
+   "caption_text": "Dreht sich die Scheibe zu schnell, schwenken Fliehgewichte nach außen, wie die Sitze eines Kettenkarussells. Sie lösen eine Sperre aus, und der Begrenzer hält sein Seil fest. Das ist reine Mechanik, sie funktioniert auch ohne Strom.",
+   "visual_beat": "governor speed_percent=100 bis 120, tripped=true: Fliehgewichte schwenken nach außen, Sperre klemmt das Begrenzerseil. Inset: Kettenkarussell als Linienzeichnung, Sitze schwenken synchron aus. Durchgestrichenes Blitzsymbol, Label 'kein Strom nötig'.",
+   "claim_ids": [
+    "safety_chain_governor_principle",
+    "physics_buffers_why_no_freefall"
+   ],
+   "kind": "EXPLANATION",
+   "section_title": "Das Kettenkarussell"
+  },
+  {
+   "id": "s12",
+   "chapter": "Schicht 2 und 3: Begrenzer und Bremse",
+   "narration_tts": "Dritte Schicht: Schalter und Bremse. Spätestens jetzt öffnet ein Schalter am Begrenzer den Sicherheitskreis: Motor aus, Bremse zu. Diese Bremse ist ohne Strom immer zu, Federn pressen die Beläge an. Hier aber hilft sie nicht, denn an der Treibscheibe hängt unsere Kabine nicht mehr.",
+   "caption_text": "Dritte Schicht: Schalter und Bremse. Spätestens jetzt öffnet ein Schalter am Begrenzer den Sicherheitskreis: Motor aus, Bremse zu. Diese Bremse ist ohne Strom immer zu, Federn pressen die Beläge an. Hier aber hilft sie nicht, denn an der Treibscheibe hängt unsere Kabine nicht mehr.",
+   "visual_beat": "governor speed_percent=115, tripped=true: Schaltkontakt öffnet, Blitzsymbol erlischt. brake power=on, dann power=off: Magnet erlischt, Federn drücken die amber Beläge an, Label 'ohne Strom zu'. Schnitt auf shaft_xray focus=machine_room, state=all_ropes_snap: Treibscheibe steht, lose Seilenden, Label 'keine Verbindung zur Kabine'. Eckeinblendung layers_overview: 'Schalter und Bremse' leuchtet auf.",
+   "claim_ids": [
+    "safety_chain_electric_switch",
+    "safety_chain_machine_brake"
+   ],
+   "kind": "PATTERN_INTERRUPT",
+   "section_title": "Die Bremse hilft hier nicht"
+  },
+  {
+   "id": "s13",
+   "chapter": "Schicht 2 und 3: Begrenzer und Bremse",
+   "narration_tts": "Das Begrenzerseil steht still, doch die Kabine fällt weiter. Das stehende Seil zieht den Hebel, und Keile klemmen die Kabine an den Schienen fest. Das dünne Seil trägt also nichts, es löst nur aus.",
+   "caption_text": "Das Begrenzerseil steht still, doch die Kabine fällt weiter. Das stehende Seil zieht den Hebel, und Keile klemmen die Kabine an den Schienen fest. Das dünne Seil trägt also nichts, es löst nur aus.",
+   "visual_beat": "shaft_xray focus=car, state=safety_engage, highlight=['governor_rope','safety_lever'], labels=['Begrenzerseil steht','Hebel','Keile']: Begrenzerseil eingefroren, Kabine gleitet weiter nach unten, Auslösehebel klappt hoch, Keile fahren an die Führungsschienen. Label 'Begrenzerseil: löst nur aus, bricht erst beim 8-Fachen der Auslösezugkraft'.",
+   "claim_ids": [
+    "safety_chain_governor_principle",
+    "safety_chain_governor_rope"
+   ],
+   "kind": "EXPLANATION",
+   "section_title": "Der eigentliche Trick"
+  },
+  {
+   "id": "s14",
+   "chapter": "Schicht 4: Die Fangvorrichtung",
+   "narration_tts": "Vierte Schicht: die Fangvorrichtung. Sie erbt die Aufgabe der Sperre von Otis, reagiert aber auf zu hohe Geschwindigkeit statt bloß auf ein schlaffes Seil. Der harte Sperrfang blockiert schlagartig und ist am Fahrkorb nur bei Aufzügen bis zu dreiundsechzig Zentimetern pro Sekunde erlaubt. Unser Bremsfang presst federbelastete Keile an die Schiene und verwandelt die Bewegungsenergie beim Gleiten in Wärme.",
+   "caption_text": "Vierte Schicht: die Fangvorrichtung. Sie erbt die Aufgabe der Sperre von Otis, reagiert aber auf zu hohe Geschwindigkeit statt bloß auf ein schlaffes Seil. Der harte Sperrfang blockiert schlagartig und ist am Fahrkorb nur bei Aufzügen bis zu 63 Zentimetern pro Sekunde erlaubt. Unser Bremsfang presst federbelastete Keile an die Schiene und verwandelt die Bewegungsenergie beim Gleiten in Wärme.",
+   "visual_beat": "comparison_split: links 'Sperrfang, am Fahrkorb bis 0,63 m/s' mit safety_gear type=instantaneous, engaging=true, sparks=false, abrupter Stopp; rechts 'Bremsfang' mit safety_gear type=progressive, engaging=true, sparks=false, Keile gleiten eine Strecke und glühen amber vor Reibungswärme. Eckeinblendung layers_overview: 'Fangvorrichtung' leuchtet auf.",
+   "claim_ids": [
+    "safety_chain_gear_types",
+    "safety_chain_gear_mechanism",
+    "history_03"
+   ],
+   "kind": "EXPLANATION",
+   "section_title": "Vierte Schicht: der Fang"
+  },
+  {
+   "id": "s15",
+   "chapter": "Schicht 4: Die Fangvorrichtung",
+   "narration_tts": "Wie fühlt sich so ein Fang an? Bei voller Kabine verlangt die europäische Aufzugsnorm im Mittel eine Verzögerung zwischen einem Fünftel und der vollen Erdbeschleunigung. Man fühlt sich also etwa ein Fünftel schwerer bis doppelt so schwer. Kurze Spitzen können darüber liegen, und eine leere Kabine wird härter gebremst.",
+   "caption_text": "Wie fühlt sich so ein Fang an? Bei voller Kabine verlangt die europäische Aufzugsnorm im Mittel eine Verzögerung zwischen einem Fünftel und der vollen Erdbeschleunigung. Man fühlt sich also etwa ein Fünftel schwerer bis doppelt so schwer. Kurze Spitzen können darüber liegen, und eine leere Kabine wird härter gebremst.",
+   "visual_beat": "stat_counter '1,2x bis 2x', Label 'gefühltes Körpergewicht beim Fang, im Mittel'. Silhouette auf einer Waage in der Kabine, Zeiger steigt. Randnotiz 'mittlere Verzögerung 0,2 bis 1 g bei voller Kabine, Spitzen höher'.",
+   "claim_ids": [
+    "safety_chain_progressive_retardation",
+    "physics_buffers_safety_gear_deceleration"
+   ],
+   "kind": "PATTERN_INTERRUPT",
+   "section_title": "Wie sich der Fang anfühlt"
+  },
+  {
+   "id": "s16",
+   "chapter": "Schicht 4: Die Fangvorrichtung",
+   "narration_tts": "Und wie weit rutscht die Kabine? Ein Rechenbeispiel mit voller Kabine: Aus eineinhalb Metern pro Sekunde steht sie nach gut elf Zentimetern, wenn sie im Mittel mit der vollen Erdbeschleunigung bremst. Bei einem Fünftel davon sind es knapp sechzig. Mit Reaktionszeit und dem Einrücken der Keile sind es real eher einige Dezimeter.",
+   "caption_text": "Und wie weit rutscht die Kabine? Ein Rechenbeispiel mit voller Kabine: Aus 1,5 Metern pro Sekunde steht sie nach gut 11 Zentimetern, wenn sie im Mittel mit der vollen Erdbeschleunigung bremst. Bei einem Fünftel davon sind es knapp 60. Mit Reaktionszeit und dem Einrücken der Keile sind es real eher einige Dezimeter.",
+   "visual_beat": "graph title='Fang-Bremsweg, Rechenbeispiel volle Kabine', x_label='mittlere Verzögerung in g', y_label='Bremsweg in m', series 'Auslösung bei 1,5 m/s': (0,2|0,57), (0,6|0,19), (1,0|0,115); annotations=['1 g = Obergrenze bei voller Kabine', 'ohne Ansprech- und Einrückweg']. Danach Lineal neben der stehenden Kabine: 'real: einige Dezimeter'.",
+   "claim_ids": [
+    "safety_chain_stopping_distance",
+    "safety_chain_progressive_retardation",
+    "physics_buffers_time_to_trip"
+   ],
+   "kind": "EXPLANATION",
+   "section_title": "Der Bremsweg"
+  },
+  {
+   "id": "s17",
+   "chapter": "Schicht 4: Die Fangvorrichtung",
+   "narration_tts": "Spulen wir die Zeitlupe zurück. Seile weg bei null. Nach wenigen Hundertstelsekunden löst der Begrenzer aus: Motor aus, Bremse zu, Keile an die Schienen. Aus dem Absturz in den Keller wird ein kräftiger Ruck.",
+   "caption_text": "Spulen wir die Zeitlupe zurück. Seile weg bei 0. Nach wenigen Hundertstelsekunden löst der Begrenzer aus: Motor aus, Bremse zu, Keile an die Schienen. Aus dem Absturz in den Keller wird ein kräftiger Ruck.",
+   "visual_beat": "timeline: '0 ms: Seile reißen', '15 bis 50 ms: Begrenzer löst aus', 'Motor aus, Bremse zu', 'Keile greifen', 'Stillstand nach einigen Dezimetern'. Daneben shaft_xray focus=car, state=stopped mit grünem Rahmen. Eckeinblendung layers_overview: Begrenzer, Schalter und Bremse, Fangvorrichtung leuchten.",
+   "claim_ids": [
+    "physics_buffers_time_to_trip",
+    "safety_chain_stopping_distance",
+    "physics_buffers_why_no_freefall"
+   ],
+   "kind": "PAYOFF",
+   "section_title": "Aus Absturz wird Ruck"
+  },
+  {
+   "id": "s18",
+   "chapter": "Schicht 4: Die Fangvorrichtung",
+   "narration_tts": "Und dann? Die Keile lösen sich nur, wenn man die Kabine anhebt. Das darf nur eine sachkundige Person, und erst nach ihrer Prüfung fährt der Aufzug wieder.",
+   "caption_text": "Und dann? Die Keile lösen sich nur, wenn man die Kabine anhebt. Das darf nur eine sachkundige Person, und erst nach ihrer Prüfung fährt der Aufzug wieder.",
+   "visual_beat": "safety_gear type=progressive, engaging=true: Kabine steht auf den Keilen. Pfeil nach oben, Kabine wird leicht angehoben, Keile fallen zurück. Label 'Lösen und Freigabe nur durch sachkundige Person'.",
+   "claim_ids": [
+    "safety_chain_release_reset"
+   ],
+   "kind": "EXPLANATION",
+   "section_title": "Und dann?"
+  },
+  {
+   "id": "s19",
+   "chapter": "Kino und Mythen",
+   "narration_tts": "Und die Szenen aus dem Kino? Funken sprühende Schienen, eine ungebremst rasende Kabine? Mit echten Aufzügen hat das wenig zu tun. Ohne die Schutzkette aber wäre eine frei fallende Kabine rechnerisch nach zehn Metern schon rund fünfzig Kilometer pro Stunde schnell. Nach hundert Metern wären es etwa hundertsechzig.",
+   "caption_text": "Und die Szenen aus dem Kino? Funken sprühende Schienen, eine ungebremst rasende Kabine? Mit echten Aufzügen hat das wenig zu tun. Ohne die Schutzkette aber wäre eine frei fallende Kabine rechnerisch nach 10 Metern schon rund 50 Kilometer pro Stunde schnell. Nach 100 Metern wären es etwa 160.",
+   "visual_beat": "myth_card: Aussage 'Funkenregen an den Schienen, Kabine rast ungebremst', Stempel 'KINO'; dahinter safety_gear sparks=true, durchgestrichen. Dann physics_fall height_m=100: Formel v = √(2gh) groß oben, Marker bei 10 m '≈ 50 km/h' und bei 100 m '≈ 160 km/h', Hinweis 'rechnerisch, ohne Luftwiderstand'.",
+   "claim_ids": [
+    "physics_buffers_why_no_freefall",
+    "physics_buffers_freefall_speeds"
+   ],
+   "kind": "PATTERN_INTERRUPT",
+   "section_title": "Kino gegen Wirklichkeit"
+  },
+  {
+   "id": "s20",
+   "chapter": "Kino und Mythen",
+   "narration_tts": "Und der berühmte Sprung kurz vor dem Aufprall? Eine amerikanische Fernsehsendung testete ihn zweitausendvier und erklärte ihn für widerlegt. Im echten freien Fall schwebt man nahezu schwerelos, weil Körper und Kabine gleich schnell fallen. Ein kräftiger Sprung zieht nur etwa zwei bis drei Meter pro Sekunde ab. Aus einem Sturz von zehn Metern würde so rechnerisch immer noch einer aus rund sechs bis sieben Metern.",
+   "caption_text": "Und der berühmte Sprung kurz vor dem Aufprall? Eine amerikanische Fernsehsendung testete ihn 2004 und erklärte ihn für widerlegt. Im echten freien Fall schwebt man nahezu schwerelos, weil Körper und Kabine gleich schnell fallen. Ein kräftiger Sprung zieht nur etwa 2 bis 3 Meter pro Sekunde ab. Aus einem Sturz von 10 Metern würde so rechnerisch immer noch einer aus rund 6 bis 7 Metern.",
+   "visual_beat": "shaft_xray focus=car, state=all_ropes_snap mit schwebender Silhouette in der Kabine, Label 'nahezu schwerelos'. Dann comparison_split 'ohne Sprung: 10 m' gegen 'mit Sprung: rund 6 bis 7 m, rechnerisch' als zwei Höhenbalken. myth_card 'Der Sprung in letzter Sekunde', Stempel 'WIDERLEGT', Fußzeile 'MythBusters, 2004'.",
+   "claim_ids": [
+    "physics_buffers_mythbusters",
+    "physics_buffers_passenger_posture",
+    "physics_buffers_jump_myth_physics"
+   ],
+   "kind": "PATTERN_INTERRUPT",
+   "section_title": "Der Sprung-Mythos"
+  },
+  {
+   "id": "s21",
+   "chapter": "Schicht 5: Die Puffer",
+   "narration_tts": "Fünfte Schicht, ganz unten in der Grube: die Puffer. Sie sind für langsame Überfahrten gedacht, etwa wenn die Steuerung versagt. Federpuffer und Polyurethanpuffer sind nur bis zu einem Meter pro Sekunde erlaubt, Ölpuffer bei jeder Geschwindigkeit.",
+   "caption_text": "Fünfte Schicht, ganz unten in der Grube: die Puffer. Sie sind für langsame Überfahrten gedacht, etwa wenn die Steuerung versagt. Federpuffer und Polyurethanpuffer sind nur bis zu 1 Meter pro Sekunde erlaubt, Ölpuffer bei jeder Geschwindigkeit.",
+   "visual_beat": "shaft_xray focus=pit, state=on_buffer, highlight=['buffers'], labels=['langsame Überfahrt']. Dann buffer type=spring, polyurethane und hydraulic nacheinander, compress=true; Label 'Feder und PU: bis 1 m/s, Öl: jede Geschwindigkeit'. Eckeinblendung layers_overview: 'Puffer' leuchtet auf.",
+   "claim_ids": [
+    "physics_buffers_overload_at_freefall",
+    "physics_buffers_buffer_types_speed_limits"
+   ],
+   "kind": "EXPLANATION",
+   "section_title": "Fünfte Schicht: die Puffer"
+  },
+  {
+   "id": "s22",
+   "chapter": "Schicht 5: Die Puffer",
+   "narration_tts": "Bei unserem Aufzug braucht ein Ölpuffer rechnerisch etwa sieben Zentimeter Hub, eine Stahlfeder rund dreizehneinhalb. Doch der Hub wächst mit dem Quadrat der Geschwindigkeit. Bei zehn Metern pro Sekunde wären es ohne Zusatzüberwachung fast sieben Meter.",
+   "caption_text": "Bei unserem Aufzug braucht ein Ölpuffer rechnerisch etwa 7 Zentimeter Hub, eine Stahlfeder rund 13,5. Doch der Hub wächst mit dem Quadrat der Geschwindigkeit. Bei 10 Metern pro Sekunde wären es ohne Zusatzüberwachung fast 7 Meter.",
+   "visual_beat": "buffer type=hydraulic und type=spring nebeneinander, compress=true; Maße bei 1 m/s: 'Öl 7 cm', 'Feder 13,5 cm'. Dann graph title='Mindesthub Ölpuffer, rechnerisch', x_label='Nenngeschwindigkeit in m/s', y_label='Hub in m', series 'ohne Endhaltestellen-Überwachung': (1|0,07), (1,6|0,17), (2,5|0,42), (4|1,08), (5|1,69), (10|6,74); annotations=['mit Verzögerungsüberwachung an den Endhaltestellen kürzer erlaubt']. map_or_scale: gestrichelte 6,74-m-Säule neben zwei Stockwerken.",
+   "claim_ids": [
+    "physics_buffers_stroke_formula"
+   ],
+   "kind": "EXPLANATION",
+   "section_title": "Quadratisch wachsend"
+  },
+  {
+   "id": "s23",
+   "chapter": "Schicht 5: Die Puffer",
+   "narration_tts": "Naheliegend, aber falsch: Der Puffer fängt einen Absturz ab. Er ist für einen Aufprall mit etwa hundertfünfzehn Prozent der Nenngeschwindigkeit ausgelegt. Nach zehn Metern freiem Fall brächte unsere Kabine rechnerisch rund hundertfünfzigmal so viel Energie mit, wie ihr Puffer aufnehmen soll. Die eigentliche Rettung sitzt weiter oben, an den Schienen.",
+   "caption_text": "Naheliegend, aber falsch: Der Puffer fängt einen Absturz ab. Er ist für einen Aufprall mit etwa 115 Prozent der Nenngeschwindigkeit ausgelegt. Nach 10 Metern freiem Fall brächte unsere Kabine rechnerisch rund 150-mal so viel Energie mit, wie ihr Puffer aufnehmen soll. Die eigentliche Rettung sitzt weiter oben, an den Schienen.",
+   "visual_beat": "myth_card: Aussage 'Der Puffer fängt einen Absturz ab', Stempel 'FALSCH'. Dann stat_counter '150x', Label 'Energie nach 10 m freiem Fall gegenüber der Auslegung, rechnerisch'. Kamerafahrt im shaft_xray focus=full von der Grube hoch zur Fangvorrichtung an den Schienen, die amber aufleuchtet.",
+   "claim_ids": [
+    "physics_buffers_overload_at_freefall",
+    "physics_buffers_deceleration_limits"
+   ],
+   "kind": "PATTERN_INTERRUPT",
+   "section_title": "Kein Rettungskissen"
+  },
+  {
+   "id": "s24",
+   "chapter": "Schicht 6: Die Prüfungen",
+   "narration_tts": "Sechste Schicht: die Prüfungen, denn ein Seil reißt nicht plötzlich, zuerst brechen einzelne Drähte. Prüfer zählen diese Drahtbrüche, und ab einer festgelegten Zahl muss das Seil ausgetauscht werden.",
+   "caption_text": "Sechste Schicht: die Prüfungen, denn ein Seil reißt nicht plötzlich, zuerst brechen einzelne Drähte. Prüfer zählen diese Drahtbrüche, und ab einer festgelegten Zahl muss das Seil ausgetauscht werden.",
+   "visual_beat": "Eckeinblendung layers_overview: 'Prüfungen' leuchtet auf. Kurz rope_cross_section strands=8, wires_per_strand=19, labels=['8 Litzen','19 Drähte je Litze','Fasereinlage']. Dann rope_macro broken_wires=0 bis 33, tension_glow=true, label='eine Schlaglänge': eine Litze wird amber nachgezeichnet, bis sie einmal ganz um das Seil gelaufen ist; Drahtenden springen amber auf, Zähler mit Grenzlinie 'mehr als etwa 32: austauschen, USA-Regel, 8 Litzen, normale Bedingungen'; der Stempel 'AUSTAUSCHEN' erscheint erst bei 33. Zum Schluss Fußzeile 'Europa: eigene Normen und Herstellervorgaben'.",
+   "claim_ids": [
+    "suspension_rope_construction",
+    "suspension_asme_crown_breaks",
+    "suspension_discard_criteria",
+    "safety_reality_rope_inspection"
+   ],
+   "kind": "EXPLANATION",
+   "section_title": "Sechste Schicht: Prüfungen"
+  },
+  {
+   "id": "s25",
+   "chapter": "Schicht 6: Die Prüfungen",
+   "narration_tts": "In Deutschland kommt ein unabhängiger Prüfer dazu, etwa vom Tüff oder von der Dekra. Spätestens alle zwei Jahre ist eine Hauptprüfung fällig, dazwischen eine Zwischenprüfung. Den nächsten Termin zeigt die Prüfplakette in der Kabine.",
+   "caption_text": "In Deutschland kommt ein unabhängiger Prüfer dazu, etwa vom TÜV oder von der DEKRA. Spätestens alle 2 Jahre ist eine Hauptprüfung fällig, dazwischen eine Zwischenprüfung. Den nächsten Termin zeigt die Prüfplakette in der Kabine.",
+   "visual_beat": "timeline über 2 Jahre: Marker 'Hauptprüfung' bei 0 und 24 Monaten, 'Zwischenprüfung' bei 12 Monaten. Dann Zoom auf eine stilisierte Prüfplakette als Linienzeichnung ohne Firmenlogo, Label 'Monat und Jahr der nächsten Prüfung'. Eckeinblendung layers_overview: alle sechs Ebenen leuchten.",
+   "claim_ids": [
+    "safety_reality_de_pruefung",
+    "safety_reality_de_plakette_notruf"
+   ],
+   "kind": "EXPLANATION",
+   "section_title": "Die Prüfplakette"
+  },
+  {
+   "id": "s26",
+   "chapter": "Überraschungen und echte Risiken",
+   "narration_tts": "Jetzt die versprochene Überraschung: Aufzüge können nach oben abstürzen. Weil das Gegengewicht in der Regel schwerer ist als die leere Kabine, zieht es sie bei versagender Bremse hoch. Deshalb verlangt die europäische Aufzugsnorm auch dagegen einen Schutz, etwa eine Fangvorrichtung, die auch nach oben greift.",
+   "caption_text": "Jetzt die versprochene Überraschung: Aufzüge können nach oben abstürzen. Weil das Gegengewicht in der Regel schwerer ist als die leere Kabine, zieht es sie bei versagender Bremse hoch. Deshalb verlangt die europäische Aufzugsnorm auch dagegen einen Schutz, etwa eine Fangvorrichtung, die auch nach oben greift.",
+   "visual_beat": "shaft_xray focus=full, state=overspeed, labels=['leere Kabine','Bremse versagt','Richtung: AUFWÄRTS']: großer amber Pfeil nach oben an der Kabine, Pfeil nach unten am Gegengewicht, rote Warnlinie an der Schachtdecke. Dann safety_gear type=progressive, engaging=true mit Doppelpfeil nach oben und unten, Label 'Schutz auch gegen Übergeschwindigkeit aufwärts'.",
+   "claim_ids": [
+    "safety_chain_ascending_overspeed",
+    "physics_buffers_ascending_overspeed",
+    "suspension_counterweight"
+   ],
+   "kind": "PATTERN_INTERRUPT",
+   "section_title": "Absturz nach oben"
+  },
+  {
+   "id": "s27",
+   "chapter": "Überraschungen und echte Risiken",
+   "narration_tts": "Einer der gefährlichsten realen Fehler ist ein anderer: eine Kabine, die bei offener Tür losfährt. Solche tödlichen Unfälle gab es, etwa zweitausendsechs in Tokio. Seit einer Ergänzung von zweitausendneun verlangt die europäische Aufzugsnorm einen eigenen Schutz dagegen. Für neue Aufzüge ist er seit zweitausendzwölf praktisch Pflicht. Er stoppt die Kabine spätestens einen Meter zwanzig nach dem Verlassen der Haltestelle.",
+   "caption_text": "Einer der gefährlichsten realen Fehler ist ein anderer: eine Kabine, die bei offener Tür losfährt. Solche tödlichen Unfälle gab es, etwa 2006 in Tokio. Seit einer Ergänzung von 2009 verlangt die europäische Aufzugsnorm einen eigenen Schutz dagegen. Für neue Aufzüge ist er seit 2012 praktisch Pflicht. Er stoppt die Kabine spätestens 1,20 Meter nach dem Verlassen der Haltestelle.",
+   "visual_beat": "ucmp: Türen offen, Kabine setzt sich ungewollt in Bewegung, amber Warnrahmen, Erkennung beim Verlassen der Türzone, Stoppelement greift, Lineal 'höchstens 1,20 m'. Getrennte Einblendungen ohne Verbindungspfeil: links kleine Ortsmarke 'Beispiel: Tokio 2006', rechts eigene timeline nur zur Norm mit '2009: Ergänzung veröffentlicht' und '2012: für neue Aufzüge praktisch Pflicht'.",
+   "claim_ids": [
+    "safety_reality_ucm",
+    "safety_chain_ucmp"
+   ],
+   "kind": "EXPLANATION",
+   "section_title": "Die realere Gefahr"
+  },
+  {
+   "id": "s28",
+   "chapter": "Überraschungen und echte Risiken",
+   "narration_tts": "Und in Zahlen? Eine ältere amerikanische Auswertung kam auf rund dreißig Tote pro Jahr, Aufzüge und Fahrtreppen zusammen, Beschäftigte eingerechnet. Etwa die Hälfte der Toten an Aufzügen waren Menschen, die dort arbeiteten. Im Vordergrund standen Stürze in offene Schächte, Einklemmen und Stolpern, nicht der Seilriss aus dem Kino.",
+   "caption_text": "Und in Zahlen? Eine ältere amerikanische Auswertung kam auf rund 30 Tote pro Jahr, Aufzüge und Fahrtreppen zusammen, Beschäftigte eingerechnet. Etwa die Hälfte der Toten an Aufzügen waren Menschen, die dort arbeiteten. Im Vordergrund standen Stürze in offene Schächte, Einklemmen und Stolpern, nicht der Seilriss aus dem Kino.",
+   "visual_beat": "stat_counter '≈ 30', Label 'Tote pro Jahr, USA, Aufzüge und Fahrtreppen, ältere Daten'. Reihe von Silhouetten, die Hälfte als Techniker markiert, Label 'etwa die Hälfte: Beschäftigte'. Dann drei Symbolkacheln 'Sturz in offenen Schacht', 'Einklemmen', 'Stolpern'; daneben eine blasse Kachel 'Seilriss wie im Kino' mit Label 'nicht unter den Hauptursachen'.",
+   "claim_ids": [
+    "safety_reality_us_deaths_total",
+    "safety_reality_workers_half",
+    "safety_reality_causes_not_ropes"
+   ],
+   "kind": "EXPLANATION",
+   "section_title": "Sicherheit in Zahlen"
+  },
+  {
+   "id": "s29",
+   "chapter": "Überraschungen und echte Risiken",
+   "narration_tts": "Dem stehen nach älteren Branchenangaben aus anderen Jahren rund achtzehn Milliarden Aufzugsfahrten pro Jahr gegenüber. Grob überschlagen ergibt das für alle, die nicht am Aufzug arbeiten, in der Größenordnung einen Todesfall pro Milliarde Fahrten.",
+   "caption_text": "Dem stehen nach älteren Branchenangaben aus anderen Jahren rund 18 Milliarden Aufzugsfahrten pro Jahr gegenüber. Grob überschlagen ergibt das für alle, die nicht am Aufzug arbeiten, in der Größenordnung einen Todesfall pro Milliarde Fahrten.",
+   "visual_beat": "stat_counter zählt auf 18 Milliarden, Label 'Aufzugsfahrten pro Jahr, USA, ältere Branchenangabe'. Dann Ergebnis-Kachel '≈ 1 Todesfall pro 1 Milliarde Fahrten', Fußnote 'nur Größenordnung, Überschlag aus verschiedenen Quellen und Jahren'.",
+   "claim_ids": [
+    "safety_reality_trips_per_death"
+   ],
+   "kind": "EXPLANATION",
+   "section_title": "Eine Milliarde Fahrten"
+  },
+  {
+   "id": "s30",
+   "chapter": "Überraschungen und echte Risiken",
+   "narration_tts": "Und die Treppe? Eine Studie hat amerikanische Notaufnahmen von neunzehnhundertneunzig bis zweitausendzwölf ausgewertet. Im Schnitt kam dort etwa alle dreißig Sekunden jemand nach einem Treppenunfall an. Das sind über eine Million Fälle pro Jahr, gegenüber rund siebzehntausend ernsthaften Verletzungen an Aufzügen und Fahrtreppen. Quellen und Definitionen unterscheiden sich, aber die Größenordnung ist deutlich.",
+   "caption_text": "Und die Treppe? Eine Studie hat amerikanische Notaufnahmen von 1990 bis 2012 ausgewertet. Im Schnitt kam dort etwa alle 30 Sekunden jemand nach einem Treppenunfall an. Das sind über 1 Million Fälle pro Jahr, gegenüber rund 17.000 ernsthaften Verletzungen an Aufzügen und Fahrtreppen. Quellen und Definitionen unterscheiden sich, aber die Größenordnung ist deutlich.",
+   "visual_beat": "stat_counter 'alle 30 Sekunden', Uhr tickt, bei jedem Umlauf leuchtet ein Treppen-Icon auf, Label 'Treppenunfälle in US-Notaufnahmen, 1990 bis 2012'. Dann comparison_split: 'Treppe: über 1 Mio. Notaufnahmefälle pro Jahr' gegen 'Aufzüge und Fahrtreppen: rund 17.000 ernsthafte Verletzungen pro Jahr', Fußnote 'verschiedene Quellen und Definitionen, nur Größenordnung'.",
+   "claim_ids": [
+    "safety_reality_stairs",
+    "safety_reality_us_deaths_total"
+   ],
+   "kind": "PATTERN_INTERRUPT",
+   "section_title": "Und die Treppe?"
+  },
+  {
+   "id": "s31",
+   "chapter": "Die Auflösung: 1945",
+   "narration_tts": "Zurück zum achtundzwanzigsten Juli neunzehnhundertfünfundvierzig. Im dichten Nebel prallt ein amerikanischer Bomber gegen den Wolkenkratzer, auf Höhe des neunundsiebzigsten Stockwerks. Vierzehn Menschen sterben. Ein Triebwerk durchschlägt das ganze Haus, das andere stürzt in einen Aufzugsschacht und beschädigt dort Seile.",
+   "caption_text": "Zurück zum 28. Juli 1945. Im dichten Nebel prallt ein amerikanischer Bomber gegen den Wolkenkratzer, auf Höhe des 79. Stockwerks. 14 Menschen sterben. Ein Triebwerk durchschlägt das ganze Haus, das andere stürzt in einen Aufzugsschacht und beschädigt dort Seile.",
+   "visual_beat": "historic_scene scene=empire_state_1945_schematic: Gebäudequerschnitt im Nebel, Flugzeugsilhouette trifft das 79. Stockwerk, Datum '28.07.1945'. Zwei amber Flugbahnen: eine quer durch das Gebäude hinaus, die andere nach unten in einen Schacht, dort flackern die Seile.",
+   "claim_ids": [
+    "history_11",
+    "history_12",
+    "safety_reality_empire_state_1945"
+   ],
+   "kind": "STORY",
+   "section_title": "Zurück ins Jahr 1945"
+  },
+  {
+   "id": "s32",
+   "chapter": "Die Auflösung: 1945",
+   "narration_tts": "Oliver, die junge Frau vom Anfang, ist dort Liftführerin und erleidet im achtzigsten Stock schwere Verbrennungen. Helfer setzen sie in eine andere Kabine, um sie nach unten zu bringen. Doch deren beschädigte Seile reißen, und die Kabine stürzt bis ins Untergeschoss.",
+   "caption_text": "Oliver, die junge Frau vom Anfang, ist dort Liftführerin und erleidet im 80. Stock schwere Verbrennungen. Helfer setzen sie in eine andere Kabine, um sie nach unten zu bringen. Doch deren beschädigte Seile reißen, und die Kabine stürzt bis ins Untergeschoss.",
+   "visual_beat": "shaft_xray focus=full, state=all_ropes_snap, Seilzahl ohne Beschriftung: Silhouetten tragen eine Figur in die Kabine, Kabine fährt an, Seile reißen, Kabine fällt. stat_counter als Overlay zählt die Stockwerke von 75 herunter bis 'Untergeschoss'. Es ist die eingefrorene Szene aus dem Kaltstart, die jetzt weiterläuft.",
+   "claim_ids": [
+    "history_13",
+    "safety_reality_empire_state_1945"
+   ],
+   "kind": "STORY",
+   "section_title": "Der zweite Absturz"
+  },
+  {
+   "id": "s33",
+   "chapter": "Die Auflösung: 1945",
+   "narration_tts": "Warum griff keine Fangvorrichtung? Sicher belegt ist das nicht. Ein Fachbeitrag nennt ein ebenfalls beschädigtes Begrenzerseil. Dann hätte ein einziges Ereignis Tragseile und Auslöser zugleich getroffen, genau der Fall, gegen den getrennte Schichten sonst schützen.",
+   "caption_text": "Warum griff keine Fangvorrichtung? Sicher belegt ist das nicht. Ein Fachbeitrag nennt ein ebenfalls beschädigtes Begrenzerseil. Dann hätte ein einziges Ereignis Tragseile und Auslöser zugleich getroffen, genau der Fall, gegen den getrennte Schichten sonst schützen.",
+   "visual_beat": "shaft_xray focus=full, state=all_ropes_snap, highlight=['governor_rope','ropes'], labels=['Begrenzerseil beschädigt?','Tragseile gerissen']: beide leuchten rot, Fragezeichen am Begrenzerseil. Dann layers_overview: 'Tragseile' und 'Geschwindigkeitsbegrenzer' erlöschen gleichzeitig, Label 'gemeinsame Ursache? nicht sicher belegt'.",
+   "claim_ids": [
+    "history_14",
+    "history_12"
+   ],
+   "kind": "PAYOFF",
+   "section_title": "Warum nichts griff"
+  },
+  {
+   "id": "s34",
+   "chapter": "Die Auflösung: 1945",
+   "narration_tts": "Und warum überlebte sie? Auch das ist nur rekonstruiert. Vermutlich wirkte die Kabine im engen Schacht wie ein Kolben und staute ein Luftpolster unter sich. Dazu hatte sich wohl Seil in der Grube aufgehäuft und federte den Aufprall ab. Luftdicht ist aber kein Aufzugsschacht, und meist ist der Kolbeneffekt deutlich schwächer.",
+   "caption_text": "Und warum überlebte sie? Auch das ist nur rekonstruiert. Vermutlich wirkte die Kabine im engen Schacht wie ein Kolben und staute ein Luftpolster unter sich. Dazu hatte sich wohl Seil in der Grube aufgehäuft und federte den Aufprall ab. Luftdicht ist aber kein Aufzugsschacht, und meist ist der Kolbeneffekt deutlich schwächer.",
+   "visual_beat": "comparison_split: links 'Kolben in einer Spritze' mit verdichteter Luft; rechts shaft_xray focus=pit, state=moving_down mit der Kabine als Kolben und cyan Druckschraffur darunter, amber Seilspirale in der Grube wie eine Sprungfeder, Label 'vermutlich, rekonstruiert'. Zum Satzende entweicht Luft durch Türspalte, die Druckschraffur verblasst, Label 'kein Schacht ist luftdicht'.",
+   "claim_ids": [
+    "history_14",
+    "physics_buffers_piston_air_cushion",
+    "physics_buffers_betty_lou_oliver"
+   ],
+   "kind": "PAYOFF",
+   "section_title": "Kolben und Feder"
+  },
+  {
+   "id": "s35",
+   "chapter": "Die Auflösung: 1945",
+   "narration_tts": "Ungebremst hätte der Fall über rund fünfundsiebzig Stockwerke rechnerisch mehr als zweihundertfünfzig Kilometer pro Stunde ergeben. Oliver brach sich Becken, Rücken und Hals, aber sie überlebte. Nach allem, was sich rekonstruieren lässt, retteten sie eher Glück und Physik als Sicherheitstechnik. Heute müssten dafür alle Seile reißen und zugleich die Fangvorrichtung versagen.",
+   "caption_text": "Ungebremst hätte der Fall über rund 75 Stockwerke rechnerisch mehr als 250 Kilometer pro Stunde ergeben. Oliver brach sich Becken, Rücken und Hals, aber sie überlebte. Nach allem, was sich rekonstruieren lässt, retteten sie eher Glück und Physik als Sicherheitstechnik. Heute müssten dafür alle Seile reißen und zugleich die Fangvorrichtung versagen.",
+   "visual_beat": "physics_fall height_m=270: Geschwindigkeitszähler läuft über 250 km/h, Hinweis 'rechnerisch, ohne Luftwiderstand, rund 75 Stockwerke'. Dann layers_overview: alle sechs Ebenen leuchten; 'Tragseile' mit Label 'alle müssten reißen', dazu eine Klammer um 'Geschwindigkeitsbegrenzer' und 'Fangvorrichtung' mit Label 'UND: Begrenzer ODER Begrenzerseil ODER Fang versagt'.",
+   "claim_ids": [
+    "physics_buffers_freefall_speeds",
+    "physics_buffers_betty_lou_oliver",
+    "history_13",
+    "history_14",
+    "safety_chain_suspension_ropes",
+    "safety_chain_governor_principle",
+    "physics_buffers_why_no_freefall",
+    "safety_reality_empire_state_1945"
+   ],
+   "kind": "PAYOFF",
+   "section_title": "Glück und Physik"
+  },
+  {
+   "id": "s36",
+   "chapter": "Zusammenfassung",
+   "narration_tts": "Zusammengefasst: Die Kabine hängt an mehreren Seilen, in Europa jedes mit mindestens zwölffacher Sicherheit. Wird sie zu schnell, lässt ein Schalter die Bremse einfallen, spätestens wenn der Begrenzer sein Seil festhält. Dann klemmen Keile die Kabine an den Schienen fest. Puffer sind für langsame Überfahrten da, und Prüfer kontrollieren regelmäßig die ganze Kette.",
+   "caption_text": "Zusammengefasst: Die Kabine hängt an mehreren Seilen, in Europa jedes mit mindestens 12-facher Sicherheit. Wird sie zu schnell, lässt ein Schalter die Bremse einfallen, spätestens wenn der Begrenzer sein Seil festhält. Dann klemmen Keile die Kabine an den Schienen fest. Puffer sind für langsame Überfahrten da, und Prüfer kontrollieren regelmäßig die ganze Kette.",
+   "visual_beat": "layers_overview: Ebenen bauen sich im Takt der Sätze in derselben Reihenfolge wie im Video auf: Tragseile 12x, Geschwindigkeitsbegrenzer, Schalter und Bremse, Fangvorrichtung, Puffer, Prüfungen. Am Ende leuchtet der ganze Stapel cyan.",
+   "claim_ids": [
+    "safety_chain_suspension_ropes",
+    "suspension_en_safety_factor",
+    "safety_chain_governor_principle",
+    "safety_chain_electric_switch",
+    "safety_chain_machine_brake",
+    "safety_chain_gear_mechanism",
+    "physics_buffers_overload_at_freefall",
+    "safety_reality_de_pruefung"
+   ],
+   "kind": "RECAP",
+   "section_title": "Zusammenfassung"
+  },
+  {
+   "id": "s37",
+   "chapter": "Zusammenfassung",
+   "narration_tts": "Das war die Sicherheitskette im Röntgenblick. Wenn du ab jetzt mit anderen Augen in den Aufzug steigst, dann abonniere Visual Science.",
+   "caption_text": "Das war die Sicherheitskette im Röntgenblick. Wenn du ab jetzt mit anderen Augen in den Aufzug steigst, dann abonniere Visual Science.",
+   "visual_beat": "title_card: Kanal-Logo 'Visual Science' mit Abonnieren-Symbol; im Hintergrund shaft_xray focus=full, state=moving_up, alle Seile intakt, Kabine fährt ruhig nach oben.",
+   "claim_ids": [],
+   "kind": "CTA",
+   "section_title": "Abonnieren"
+  },
+  {
+   "id": "s38",
+   "chapter": "Zusammenfassung",
+   "narration_tts": "Nächstes Mal wird es richtig schnell. Was passiert im Motor bei achttausend Umdrehungen pro Minute? Bis dahin: gute Fahrt, egal in welche Richtung.",
+   "caption_text": "Nächstes Mal wird es richtig schnell. Was passiert im Motor bei 8.000 Umdrehungen pro Minute? Bis dahin: gute Fahrt, egal in welche Richtung.",
+   "visual_beat": "end_card: Teaser 'Was passiert im Motor bei 8.000 Umdrehungen pro Minute?' mit rotierender Kurbelwelle als Cyan-Linienzeichnung, Drehzahlmesser bei 8.000/min, Endscreen-Felder für nächstes Video und Abo.",
+   "claim_ids": [],
+   "kind": "OUTRO",
+   "section_title": "Nächstes Video"
+  }
+ ],
+ "word_count": 1645,
+ "editor_notes": "Redaktion: 7 Kürzungen/Korrekturen (s04,s09,s13,s16,s20,s24,s35), 11 YouTube-Kapitel statt 38 Abschnittstitel."
+}

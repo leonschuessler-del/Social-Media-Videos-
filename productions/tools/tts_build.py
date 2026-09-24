@@ -32,9 +32,8 @@ try:
 except Exception:
     pass
 
-SENT_SPLIT = re.compile(r"(?<=[.!?])\s+")
-def sentences(text: str):
-    return [s.strip() for s in SENT_SPLIT.split(text.strip()) if s.strip()]
+import sys as _sys; _sys.path.insert(0, str(Path(__file__).parent))
+from sentences import split_sentences as sentences  # trennt nicht bei "28. Juli"
 
 def apply_lexicon(s: str) -> str:
     for k, v in lexicon.items():
@@ -47,9 +46,9 @@ def trim(wav: np.ndarray, thr=0.012, pad=0.03):
     a0 = max(0, idx[0] - int(pad * SR)); a1 = min(len(wav), idx[-1] + int(pad * SR))
     return wav[a0:a1]
 
-PAUSE_SENT = 0.42
-PAUSE_SEG = 0.75
-PAUSE_CHAPTER = 1.15
+PAUSE_SENT = 0.34
+PAUSE_SEG = 0.62
+PAUSE_CHAPTER = 1.05
 
 audio = []; cursor = 0.0; timings = []; t0 = time.time()
 prev_chapter = None

@@ -25,8 +25,9 @@ interface Script { title_candidates: string[]; segments: Segment[] }
 interface SbScene { id: string; segment_id: string; template: string; params_json: string; on_screen_text: string; weight: number; camera: string; sfx: string; description: string }
 interface Timings { duration: number; segments: { id: string; chapter: string; kind: string; start: number; end: number; sentences: { text: string; caption: string | null; start: number; end: number; words: { w: string; s: number; e: number }[] }[] }[] }
 
+async function exists(p: string) { try { await access(p); return true; } catch { return false; } }
 const script = JSON.parse(await readFile(join(dir, "script.json"), "utf8")) as Script;
-const storyboard = JSON.parse(await readFile(join(dir, "storyboard.json"), "utf8")) as { scenes: SbScene[] };
+const storyboard = JSON.parse(await readFile(join(dir, (await exists(join(dir, "storyboard_final.json"))) ? "storyboard_final.json" : "storyboard.json"), "utf8")) as { scenes: SbScene[] };
 const timings = JSON.parse(await readFile(join(out, "voice/timings.json"), "utf8")) as Timings;
 
 const MOOD: Record<string, string> = { HOOK: "tension", SETUP: "wonder", EXPLANATION: "drive", STORY: "wonder", PATTERN_INTERRUPT: "tension", PAYOFF: "resolve", RECAP: "resolve", CTA: "calm", OUTRO: "calm" };
@@ -86,7 +87,6 @@ function captionWords(): { word: string; startSec: number; endSec: number }[] {
   return words;
 }
 
-async function exists(p: string) { try { await access(p); return true; } catch { return false; } }
 
 const { timeline, sfxCues } = buildTimeline();
 if (stage === "all" || stage === "timeline") {

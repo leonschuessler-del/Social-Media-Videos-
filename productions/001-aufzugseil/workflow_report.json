@@ -1,0 +1,549 @@
+{
+ "dropped": [
+  {
+   "id": "history_04",
+   "verdict": "UNVERIFIABLE",
+   "notes": "Für den 3-Zoll-Zahnabstand und das Zitat „reducing to 3 in. the distance…“ fand ich keinen Beleg. Elevator World war gesperrt. Das Patent von 1861 habe ich gelesen: Es nennt keinen Zahnabstand und keine Fallstrecke. Der Wortlaut des Zitats klingt nach einer späteren Katalog- oder Patentbeschreibung, nicht nach der Messeplattform von 1854. Die Zahl nicht verwenden, nur „wenige Zentimeter“ oder „ein paar Zoll“."
+  },
+  {
+   "id": "safety_reality_installed_base",
+   "verdict": "UNVERIFIABLE",
+   "notes": "Nicht live überprüft; alle Quellen unzugänglich. Die globale Größenordnung '~20 Mio. Einheiten' kenne ich aus KONE- und Otis-Unterlagen, je nach Jahr teils als 'über 20 Mio.' angegeben. Für Deutschland kursieren Werte zwischen etwa 600.000 und 800.000. Sie hängen davon ab, ob alle Anlagen oder nur ZÜS-geprüfte Aufzugsanlagen gezählt werden. Ich kann keinen konkreten Wert bestätigen. Der Claim selbst hat eine niedrige Konfidenz (0,35). Empfehlung: Die Deutschland-Zahl nicht verwenden. Die Weltzahl nur mit einem Herstellerbericht mit Jahresangabe verwenden."
+  }
+ ],
+ "gold": [
+  "Der Fahrkorb ist an der Treibscheibe nicht angeschraubt. Die Seile liegen nur in Rillen, wie ein Handtuch über einer Stange mit Gewichten an beiden Enden; alles hält allein durch Reibung (TK Elevator, Euler-Eytelwein).",
+  "Absichtlich eingebaute Schwäche: Setzt das Gegengewicht unten auf dem Puffer auf, müssen die Seile laut EN 81-50 auf der Treibscheibe durchrutschen. Die Maschine kann den Fahrkorb dann nicht weiter in die Schachtdecke ziehen.",
+  "Sicherheitsfaktor 12 pro Seil: Bei 6 Tragseilen könnte ein einziges Seil allein die voll beladene Kabine statisch noch etwa doppelt halten (eigene Rechnung nach der EN-81-20-Definition, ohne Dynamik).",
+  "Europa erlaubt zwei Seile, verlangt dann aber 16-fache statt 12-fache Sicherheit und einen Schalter, der den Aufzug stoppt, sobald sich ein Seil ungleich längt. Die USA verlangen bei Treibscheibenaufzügen mindestens drei Seile.",
+  "Aufzugseile haben mit Absicht weichere Außendrähte (1370 N/mm²) über festeren Innendrähten (1770 N/mm²). Das Seil opfert gewissermaßen seine Haut, um die teure Treibscheibe zu schonen.",
+  "Im Herzen vieler Hightech-Stahlseile steckt eine Naturfaser: Die Sisal-Einlage wird in Schmierstoff getränkt und gibt ihn über Jahre nach außen an die Litzen ab.",
+  "Seile reißen nicht aus heiterem Himmel. Techniker zählen gebrochene Einzeldrähte pro Schlaglänge (etwa 6 × Seildurchmesser, also bei einem 10-mm-Seil rund 6 cm). Ein 8-litziges Seil muss in den USA erst bei mehr als 32 verteilten Außendrahtbrüchen pro Schlaglänge ersetzt werden.",
+  "Warnsignal 'Rouge': Feines rotes Eisenoxidpulver zwischen den Litzen zeigt, dass das Seil innen trocken läuft und sich die Drähte gegenseitig abreiben. Dann werden die zulässigen Drahtbruchzahlen etwa halbiert.",
+  "Das Gegengewicht wiegt so viel wie die leere Kabine plus etwa die halbe Nutzlast. Ein halb volles Auto ist für den Motor deshalb fast schwerelos (TK Elevator: 40 bis 50 % der Nennlast).",
+  "Beim klassischen Seil muss die Treibscheibe mindestens den 40-fachen Seildurchmesser haben (bei 8 mm also mindestens 32 cm). Otis' 3 mm dünne Flachgurte laufen dagegen über eine Scheibe von etwa 8 cm, ungefähr so groß wie ein Kaffeebecher.",
+  "Die Stahlcorde in beschichteten Gurten sieht niemand. Otis überwacht sie deshalb elektrisch rund um die Uhr (PULSE), statt nach gebrochenen Drähten zu suchen.",
+  "KONE UltraRope aus Kohlefaser wiegt nur etwa ein Fünftel eines Stahlseils. In einem 500-m-Turm schrumpfen die bewegten Massen von etwa 27 t (laut KONE 'wie 10 Geländewagen') auf etwa 13 t, und Fahrten über 1 km in einem Stück werden möglich.",
+  "Ein nur 8 mm dickes Aufzugseil, etwa so dick wie ein Bleistift, hält je nach Bauart rund 3 bis 4,7 Tonnen, bevor es bricht (PFEIFER DRAKO 250T: 43 bis 47 kN).",
+  "1854 ließ Elisha Otis auf der Weltausstellung im New Yorker Crystal Palace auf einer offenen Plattform das Hubseil mit einer Axt kappen. Die Plattform sackte nur ein paar Zentimeter ab, dann hielt seine Sperrklinken-Fangvorrichtung sie fest. Die heutige Fangvorrichtung ist der direkte Nachfahre davon (Otis, National Inventors Hall of Fame).",
+  "Das dünne Begrenzerseil 'hält die Kabine an ihrer eigenen Leine fest': Der Begrenzer blockiert das Seil, die Kabine fährt noch ein Stück weiter, und genau diese Relativbewegung zieht die Keile an die Schienen. Gut als Animation: Kabine bewegt sich, das Seil steht still, der Hebel klappt hoch.",
+  "Aufzüge können 'nach oben abstürzen': Das Gegengewicht wiegt etwa so viel wie die Kabine plus 40-50 % der Nutzlast. Fällt bei leerer Kabine die Bremse aus, zieht das Gegengewicht die Kabine nach oben gegen die Schachtdecke. Die US-Bergbaubehörde MSHA zählte bei Bergwerksaufzügen in fünf Jahren mindestens 18 solcher Aufpralle an der Schachtdecke.",
+  "Im freien Fall (Beschleunigung g) erreicht eine stehende Kabine die Grenze von 1,5 m/s nach etwa 0,15 Sekunden und rund 11 cm Fallweg (eigene Rechnung). Der Fall ist also vorbei, bevor man ihn richtig bemerkt.",
+  "Der Bremsweg einer Bremsfangvorrichtung liegt bei normalen Wohnhausaufzügen etwa zwischen einer Handbreite und gut einem Meter. Die Norm erlaubt eine mittlere Verzögerung von 0,2 bis 1 g. Bei 1 g fühlen sich die Fahrgäste für einen Moment doppelt so schwer an (eigene Rechnung).",
+  "Die Maschinenbremse bremst immer, solange nichts passiert: Federn pressen die Bremsbeläge an, und nur Strom hält sie offen. Bei Stromausfall bleibt der Aufzug deshalb stehen und fällt nicht. EN 81-20 verlangt die mechanischen Bremsteile doppelt, und jede Hälfte muss den voll beladenen Fahrkorb allein anhalten können.",
+  "Die Sicherheitskette ist gestaffelt: zuerst ein elektrischer Schalter (Motor aus, Bremse zu), erst danach die mechanische Fangvorrichtung und ganz unten die Puffer in der Grube, die Otis mit 'riesigen Stoßdämpfern' vergleicht.",
+  "Tragseile sind nach EN 81-20 mindestens 12-fach überdimensioniert (bei nur zwei Seilen 16-fach), und es gibt immer mehrere unabhängige Seile. Dass alle gleichzeitig reißen, ist ein extremer Ausnahmefall.",
+  "Rekord-Ausnahme: Am 28. Juli 1945 prallte ein B-25-Bomber ins Empire State Building. Die Aufzugsführerin Betty Lou Oliver stürzte danach in einer Kabine mit durchtrennten Seilen rund 75 Stockwerke (ca. 300 m) tief und überlebte schwer verletzt. Laut Guinness ist das bis heute der längste überlebte Aufzugsabsturz. Das war ein Kriegs-/Katastrophenszenario, in dem die Sicherheitskette zerstört war, kein normales Versagen.",
+  "Nach einem Fang lässt sich der Aufzug nicht einfach nach unten weiterfahren: Die Keile lösen sich nur, wenn man die Kabine anhebt, und danach muss eine Fachkraft die Anlage freigeben.",
+  "Stoppuhr-Moment: Ein Fahrkorb im freien Fall ist nach 1,4 s und 10 m schon so schnell wie ein Auto in der Stadt (≈50 km/h), nach 100 m (4,5 s) wäre er so schnell wie ein ICE auf Landstrecke (≈160 km/h). Eigene Rechnung.",
+  "Der Wächter reagiert in Millisekunden: Bei einem 1-m/s-Aufzug ist die Auslösegeschwindigkeit von 1,15 m/s nach einem Seilriss schon nach ≈15 ms und 1,6 cm erreicht. Der mechanische Geschwindigkeitsbegrenzer braucht dafür weder Strom noch Elektronik. Eigene Rechnung auf Basis von EN 81-20.",
+  "TK Elevator: Sobald die Fangbacken die Führungsschienen packen, steht die Kabine nach etwa 6,5 inch (≈16,5 cm), also ungefähr eine Handspanne.",
+  "KONE: Funken sprühende Führungsschienen und ungebremst rasende Kabinen sind „pure cinema“.",
+  "Die Puffer in der Grube sind erstaunlich klein: Für einen 1-m/s-Aufzug reichen rechnerisch ≈7 cm Ölpufferhub oder 13,5 cm Federhub. Ein 10-m/s-Aufzug bräuchte dagegen 6,74 m Hub, etwa zwei Stockwerke. Deshalb gibt es vierstufige Teleskop-Ölpuffer (Oleo HSL 115) für Aufzüge bis 20 m/s.",
+  "Der Puffer ist kein Airbag für den Absturz: Nach 10 m freiem Fall trifft die Kabine mit rund 150-mal so viel Energie auf, wie ein 1-m/s-Puffer schlucken soll. Die eigentliche Rettung ist die Fangvorrichtung oben an den Schienen. Eigene Rechnung.",
+  "Schwerelos in der Kabine: Im echten freien Fall schwebt man. Man kann sich weder hinlegen noch abspringen, weil einen nichts auf den Boden drückt.",
+  "Der Sprung-Mythos in einer Zahl: Selbst perfekt getimt macht ein Sprung aus einem 10-m-Sturz ungefähr einen 6-m-Sturz. Baird: aus ≈50 m Fallhöhe 65 statt 72 mph.",
+  "MythBusters (6.10.2004): Um überhaupt einen Absturz filmen zu können, mussten sie die Fangbremse eines alten Aufzugs ausbauen. Adam Savage legte sie mit einem einzigen Stift lahm. Urteil: busted.",
+  "Kolbeneffekt: In einem perfekt luftdichten Schacht würde die verdichtete Luft den Fahrkorb laut einer Abschätzung des Physikers Luke Barnes schon nach ≈50 cm tragen, wie eine Fahrradpumpe mit zugehaltenem Ventil.",
+  "Betty Lou Oliver stürzte 1945 im Empire State Building 75 Stockwerke tief und überlebte: laut Guinness dank eines Polsters aus aufgerollten Stahlseilen in der Grube und komprimierter Luft im Schacht. Es ist bis heute der längste überlebte Aufzugsabsturz.",
+  "Paradox fürs Video: Beim Treibscheibenaufzug ist das Gegengewicht schwerer als die leere Kabine. Versagt die Bremse, schießt eine leere Kabine eher nach oben als nach unten. Deshalb schreibt EN 81-20 auch einen Schutz gegen Übergeschwindigkeit nach oben vor.",
+  "Die Lebensversicherung des Wolkenkratzers war anfangs eine gebrauchte Blattfeder vom Pferdewagen. Solange das Seil zieht, bleibt sie gespannt. Reißt es, schnappt sie auf und verhakt sich in Zahnstangen an beiden Schachtseiten. Fail-safe von 1854, ganz ohne Strom (ASME/TIME, Suchausschnitte).",
+  "Otis stand bei der Vorführung selbst auf der Plattform und ließ das Seil vor Publikum kappen. Die Plattform sackte laut Otis-Chronik nur 'ein paar Zoll' ab. Die Show hatte er mit dem Zirkus-Impresario P. T. Barnum eingefädelt.",
+  "Das berühmte 'All safe, gentlemen, all safe!' ist wahrscheinlich eine spätere Werbelegende. Die einzige Tageszeitungsnotiz von 1854 (New York Daily Tribune, 30. Mai) meldet nur, der Erfinder schneide 'gelegentlich' beim Fahren das Seil durch. Kulturhistoriker Andreas Bernard nennt die Gründungsgeschichte eine Konstruktion der Otis Company von etwa 1911.",
+  "Für den ersten verkauften Aufzug (20. Sept. 1853, 300 Dollar) nahm Otis als Teilzahlung eine Kanone samt Lafette an, Wert 58,65 Dollar (Otis/Elevator World).",
+  "Der erste Personenaufzug mit Fangvorrichtung (Haughwout-Kaufhaus, 23. März 1857, 488 Broadway) kroch mit rund 0,2 m/s nach oben, also langsamer als gemütliches Gehen. Angetrieben wurde er von einer Dampfmaschine im Keller. Das gusseiserne Gebäude steht noch heute in SoHo.",
+  "Selbst Mary Todd Lincoln, die Frau des späteren Präsidenten, gehörte laut Otis zur Kundschaft des Kaufhauses mit dem ersten sicheren Personenaufzug.",
+  "Empire State Building, 28. Juli 1945: Ein Bomber-Triebwerk durchschlug das ganze Gebäude und landete einen Block weiter auf einem Dach. Das zweite stürzte in einen Aufzugsschacht und durchtrennte dort die Seile.",
+  "Betty Lou Oliver überlebte an einem einzigen Tag zweimal. Erst traf der Flugzeugeinschlag sie im 80. Stock und verbrannte sie schwer. Dann stürzte die Kabine, in der Helfer sie nach unten bringen wollten, rund 75 Stockwerke tief in den Keller. Bis heute ist das der Guinness-Rekord für den längsten überlebten Aufzugsabsturz.",
+  "Was Oliver rettete, war nicht die Bremse, sondern Physik: Die Kabine wirkte im engen Schacht wie ein Kolben und schob ein Luftpolster vor sich her. Unten lag Hunderte Meter abgerissenes Seil in Schlingen wie eine Sprungfeder. Visual-Idee: Kolben in Spritze plus Seilspirale in der Grube.",
+  "Warum 1945 die Fangvorrichtung nicht griff: Das Triebwerk kappte laut Elevator World zuerst das Seil des Geschwindigkeitsbegrenzers und dann die Tragseile. Beide Sicherheitsebenen fielen gleichzeitig aus, ein Lehrbuchfall für einen Fehler gemeinsamer Ursache. Normalerweise hält ein intakter Treibscheibenaufzug mit mehreren Tragseilen plus Fangvorrichtung so etwas ab.",
+  "Eigene Rechnung zur Größenordnung, nicht aus Quellen: Ein ungebremster freier Fall aus etwa 280 m ohne Luftwiderstand ergäbe rund 74 m/s (ca. 265 km/h), v = Wurzel aus 2·g·h. Das zeigt, wie stark Luftpolster und Seilhaufen gebremst haben müssen.",
+  "Deutschland-Bezug: Laut Bernard wurde der Aufzug erst durch das Drahtseil von 1834 möglich. Dieses gilt allgemein als Erfindung des Oberbergrats Wilhelm Albert in Clausthal im Harz. Der Name Albert/Clausthal ist in dieser Recherche nicht quellengeprüft und muss vor Verwendung verifiziert werden.",
+  "Der gefährlichste Ort am Aufzug ist nicht die Kabine, sondern der offene Schacht. In den USA sind rund die Hälfte der Aufzugstoten die Menschen, die Aufzüge bauen und warten, nicht die Fahrgäste (CPWR; vor Verwendung verifizieren).",
+  "Treppe vs. Aufzug: In US-Notaufnahmen landet im Schnitt etwa alle 6 Sekunden jemand wegen eines Treppenunfalls (~1,08 Mio. pro Jahr, 1990–2012). Aufzüge und Fahrtreppen zusammen kommen auf einige Zehntausend Verletzte (Größenordnung, nicht direkt vergleichbar).",
+  "Milliarden Fahrten, eine Handvoll Tote: Rund 18 Mrd. Aufzugsfahrten pro Jahr allein in den USA (NEII) stehen etwa 30 Todesfällen gegenüber, Fahrtreppen und Arbeitsunfälle eingerechnet. Grob überschlagen ist das weniger als ein Fahrgast pro Milliarde Fahrten (eigene Überschlagsrechnung).",
+  "Achte mal drauf: In jedem deutschen Aufzug klebt eine Prüfplakette. Sie verrät, wann der unabhängige Prüfer (ZÜS, z. B. TÜV/DEKRA) das nächste Mal kommt, spätestens alle 2 Jahre Hauptprüfung, dazwischen Zwischenprüfung.",
+  "Ein Seil reißt nicht plötzlich wie im Film. Erst brechen einzelne Drähte, und genau die zählen Prüfer und Techniker. Das Seil fliegt raus, lange bevor es gefährlich wird.",
+  "Die echte Gefahr heißt 'Kabine fährt bei offener Tür los'. Nach tödlichen Unfällen wie Tokio 2006 verlangen die Normen seit 2009 (EN 81-1/A3, heute EN 81-20) einen eigenen Schutz gegen unbeabsichtigte Kabinenbewegung.",
+  "1945 stürzte die Liftführerin Betty Lou Oliver im Empire State Building rund 75 Stockwerke in die Tiefe, nachdem ein Bomber die Seile durchtrennt hatte, und überlebte. Das ist bis heute ein Guinness-Rekord und einer der ganz wenigen Fälle, in denen wirklich alle Seile rissen.",
+  "Aufzug ohne Seil: thyssenkrupps MULTI fährt mit Transrapid-Linearmotoren, mehrere Kabinen teilen sich einen Schacht und können sogar seitwärts fahren. Erprobt wird er im 246 m hohen Testturm Rottweil (Prototyp, kommerzieller Status unklar).",
+  "Hinweis für die Produktion: In dieser Recherchesitzung waren keine Live-Abrufe möglich (Websuche-Kontingent erschöpft, Zielseiten per Proxy blockiert). Alle Zahlen sind vor der Veröffentlichung gegen die genannten Primärquellen zu prüfen."
+ ],
+ "drafts": [
+  {
+   "key": "A",
+   "word_count": 1741,
+   "title_candidates": [
+    "Was passiert, wenn das Aufzugseil reißt?",
+    "75 Stockwerke Absturz – und sie überlebte: Warum Aufzüge heute nicht fallen",
+    "Aufzug im Röntgenblick: 6 Schutzschichten gegen den Absturz",
+    "Das Seil reißt – und dann? Die unsichtbare Sicherheitskette im Aufzug",
+    "Warum Aufzüge so gut wie nie abstürzen"
+   ]
+  },
+  {
+   "key": "B",
+   "word_count": 1729,
+   "title_candidates": [
+    "Was passiert, wenn ALLE Aufzugseile reißen? Ein Absturz in Zeitlupe",
+    "Aufzugseile gekappt: Was in den ersten 50 Millisekunden passiert",
+    "Warum Aufzüge (fast) nie abstürzen – Millisekunde für Millisekunde",
+    "Alle Seile reißen: Die Sicherheitskette im Aufzug in Zeitlupe",
+    "Freier Fall im Aufzug? Was wirklich passiert, wenn die Seile reißen"
+   ]
+  }
+ ],
+ "judges": [
+  {
+   "scores": [
+    {
+     "draft": "A",
+     "hook": 8.5,
+     "retention": 7.5,
+     "clarity": 8.5,
+     "accuracy": 8.5,
+     "visualizability": 8.5,
+     "tts_suitability": 8.5,
+     "total": 8.25
+    },
+    {
+     "draft": "B",
+     "hook": 9,
+     "retention": 8.5,
+     "clarity": 8,
+     "accuracy": 8,
+     "visualizability": 9,
+     "tts_suitability": 8,
+     "total": 8.43
+    }
+   ],
+   "winner": "B",
+   "graft_from_runner_up": [
+    "A s31: add \"Ein Absturz durch Seilriss taucht in diesen Daten nicht einmal als eigene Ursachengruppe auf.\" to B s35, plus the myth_card stamp 'NICHT IN DEN DATEN'. This ties the statistics back to the video's topic.",
+    "A s29 (release/reset): after B's s23 payoff, add that the wedges only come free when the car is lifted, that a qualified person has to do this, and that the lift only runs again after that person checks it. It answers 'and then what?' for the passengers.",
+    "A s12 (German inspection): add the main inspection at least every 2 years, the intermediate inspection in between, TÜV/DEKRA, and the Prüfplakette as its own short scene after B s11 (discard criteria), with the 2-year timeline visual. The recap should not be the first place these appear.",
+    "A s37 closing lines: \"Gerettet hat sie keine Sicherheitstechnik, sondern Glück und Physik. Heute müssten für so einen Sturz mehrere Seile mit mindestens 12-facher Reserve reißen – und zugleich Begrenzer und Fangvorrichtung ausfallen.\" This makes a stronger ending for B's 1945 payoff than 'weit über 200 km/h'.",
+    "A s37's precise '>250 km/h over ~75 floors' (physics_fall height_m=270) in place of B's vaguer 'weit über 200'.",
+    "A s27 myth_card 'Der Puffer fängt einen Absturz ab – FALSCH', then a camera move up the shaft_xray from the pit to the safety gear. It makes B s28's reversal a clear, visual myth-bust.",
+    "A s36 visual: air escaping through the door gaps and the pressure hatching fading. It shows the 'Schächte sind nicht luftdicht' caveat instead of only saying it.",
+    "A's numbered layer framing ('Erste/Zweite/... Schicht') as a progress device: light up the matching layer in a small layers_overview corner inset each time B's slow-motion experiment passes one (governor, brake, safety gear, buffer).",
+    "A writes 'Prozent' in full in the voiceover. Use the same in B so TTS is reliable.",
+    "A s26: the linear spring buffer needs about 13.5 cm, twice the 7 cm of an oil buffer. This adds to B s26's buffer-type split."
+   ],
+   "problems": [
+    "s16 'Sie wird an ihrer eigenen Leine festgehalten' and the recap s37 'Ein Begrenzer, der die Kabine an ihrer eigenen Leine hält' suggest that the thin governor rope carries the car. The rope only pulls the lever, and the wedges on the guide rails hold the car. Rephrase to: 'Das stehende Begrenzerseil zieht den Hebel – die Keile an den Schienen halten die Kabine.'",
+    "Pacing: s02 promises 'Millisekunde für Millisekunde', but the experiment only starts at s12, after about 9 setup scenes (physics, traction, rope strength, rope construction, Atlantic comparison, discard criteria). Cut or move s08 (rope construction) and s10 (EU vs US) so the stopwatch starts by about s07–s08.",
+    "Structure: the 1945 climax (s29–s32) comes before s33–s36 (upward fall, UCM, stats, stairs), so the video sags after its peak. Move the counterweight surprise, UCM and stats in front of the 1945 story, so Betty Lou Oliver is the last payoff before the recap.",
+    "s27 states Oleo's 4-stage telescopic buffers 'reichen für Aufzüge bis 20 m/s' as fact. The fact base marks the HSL-115 data as unverified manufacturer data. Hedge it ('laut Hersteller') or cut it. Also, 'fast 7 Meter' needs 'rechnerisch' and the note that terminal-landing monitoring legally allows a reduced stroke. The whole scene is a tangent that slows the pace.",
+    "s26 'Und wenn auch der Fang versagt? ... warten die Puffer' presents buffers as the backup for failed safety gear, and the script never says what they are really for: low-speed overtravel, e.g. from a control fault. Add one sentence.",
+    "s34 'Seit 2009 verlangt die europäische Aufzugsnorm...' is imprecise. EN 81-1+A3 was published in 2009 and has in practice been mandatory for lifts placed on the market since 1 Jan 2012. The '2006 Tokio → 2009' timeline also implies a cause-and-effect link the fact base says is not proven.",
+    "The recap s37 brings in new material (German inspector, Plakette) that appears nowhere else. 'etwa jährlich' should be explained as a main inspection at least every 2 years plus an intermediate one.",
+    "The s19 visual prints 'New York Daily Tribune, 30. Mai 1854'. The fact base marks the Tribune date as unverified. Show only '1854'.",
+    "s24 says the MythBusters had to switch off several safety systems. This comes from a Wikipedia/Wikiquote detail the fact base flags as a hint only. Check it against the original clip or soften it.",
+    "TTS: the voiceover uses '%' symbols (s05 '40 bis 50 %', s12 '115 %'). Also, '115 % so schnell wie normal' is awkward German; use '15 Prozent schneller als normal' or '115 Prozent der Nenngeschwindigkeit'.",
+    "Consistency: the hook says 'irgendwo in einem Hochhaus', but the experiment car runs at 1 m/s, which is typical for low- or mid-rise buildings. Say 'Wohnhaus' or similar. The 1.5 m/s upper trip limit only applies because the car has progressive safety gear, which is first mentioned in s20. Say 'Unser Aufzug hat einen Bremsfang' when s12–s13 set up the experiment.",
+    "s15 'Diese Bremse bremst eigentlich immer' is imprecise because the brake is open while the car travels. Say instead 'im Ruhezustand ist sie immer zu'.",
+    "s07 visual stat_counter '3–5 t' does not match the voiceover 'knapp 5 Tonnen'. Use '3 bis knapp 5 t'.",
+    "s11 uses 'Schlaglänge' without explaining it in the voiceover. Add the short explanation 'etwa sechsmal der Seildurchmesser'.",
+    "s32 sentence order is muddled: 'Normale Schächte sind allerdings nicht luftdicht' interrupts the explanation before the speed figure. Make clear that the piston effect is usually weak, the Empire State shaft was not airtight either, and all of it is a later reconstruction."
+   ]
+  },
+  {
+   "scores": [
+    {
+     "draft": "A",
+     "hook": 8,
+     "retention": 8,
+     "clarity": 8,
+     "accuracy": 8.5,
+     "visualizability": 8,
+     "tts_suitability": 8.5,
+     "total": 8.2
+    },
+    {
+     "draft": "B",
+     "hook": 8.5,
+     "retention": 7.5,
+     "clarity": 7.5,
+     "accuracy": 8,
+     "visualizability": 8.5,
+     "tts_suitability": 7.5,
+     "total": 7.9
+    }
+   ],
+   "winner": "A",
+   "graft_from_runner_up": [
+    "B s12/s13: show the tripping window for a car already moving at 1 m/s. It reaches 1,15 m/s after about 15 ms and 1,6 cm, and the upper limit of 1,5 m/s after about 50 ms. Use B's graph (0|1,00), (15|1,15), (51|1,50) with the annotations 'frühestens' and 'spätestens'. In A s19/s23, add the upper limit ('spätestens unterhalb 1,5 m/s') next to the standstill case (0,12 s, 7 cm).",
+    "B s22: add the calculated braking distance to A s24 so that 'einige Dezimeter' is backed up. From 1,5 m/s it is about 11 cm at 1 g and just under 60 cm at 0,2 g. Show it as a graph annotated 'ohne Ansprech- und Einrückweg'.",
+    "B s15: add the sentence 'Hier aber hilft sie nicht, denn an der Treibscheibe hängt unsere Kabine nicht mehr'. It explains more clearly than A s17 why the machine brake is useless when all ropes break.",
+    "B s23: add the payoff line 'Aus dem Absturz in den Keller wird ein kräftiger Ruck' to close the rope-snap stopwatch sequence (A s23-s24).",
+    "B s21: add its caveat 'bei voll beladener Kabine ... Kurze Spitzen können darüber liegen' and the range '1,2- bis 2-fach' to fix A s22's 'härtesten erlaubten Fall'.",
+    "B s18: add 'Heutige Fangvorrichtungen reagieren auf zu hohe Geschwindigkeit, nicht bloß auf ein schlaffes Seil' to make A s21's vague 'arbeitet aber anders' concrete.",
+    "B s26/s27: add the buffer-type limits (Feder- und PU-Puffer nur bis 1 m/s, Ölpuffer bei jeder Geschwindigkeit). Add the quadratic stroke graph with points (1|0,07) ... (10|6,74), plus the note that monitoring at the end stops allows a shorter stroke. Leave out the unhedged Oleo '20 m/s' claim.",
+    "B s10: optionally add the EU vs US comparison. Europe allows 2 ropes (16-fach plus switch), while US traction lifts need at least 3. It is a cheap, accurate pattern interrupt.",
+    "B s16: add the governor-rope fact 'mindestens 8-fache Bruchkraft der Auslösekraft'. It makes clear that the thin rope only triggers the safety gear and does not carry the car.",
+    "B's analogies: the chain-swing ride (Kettenkarussell) for the flyweights (A s19), and the rope 'rotes Rostpulver' visual for the rouge criterion (A s11).",
+    "B s05: add a planted loop ('Merk dir das Gegengewicht, es sorgt später noch für eine Überraschung') before A's counterweight paradox, or before the ascending-overspeed payoff if that moves later.",
+    "B s39 outro callback: 'gute Fahrt, egal in welche Richtung'."
+   ],
+   "problems": [
+    "The layer numbering does not match the visuals. The voiceover calls traction 'Zweite Schicht' (s13) and the brake 'Dritte Schicht' (s17). But layers_overview in s06/s38 has no traction layer, and its order is different: Seile, Bremse, Begrenzer, Fangvorrichtung, Puffer, Sicherheitskreis, Prüfungen. Align them, or drop the 'Schicht' label for traction.",
+    "s11: 'Gezählt wird auf wenigen Zentimetern Seillänge' is imprecise. ASME counts per lay length (Schlaglänge), about 6-7 × d, roughly 8-10 cm for typical US ropes. Say 'auf einer Schlaglänge, etwa dem Sechsfachen des Seildurchmessers'. The replacement stamp should appear above 32, not at 32 ('mehr als etwa 32').",
+    "s22: 'Im härtesten erlaubten Fall fühlt man sich etwa doppelt so schwer' overclaims. 0,2-1 g is a mean deceleration with rated load; short peaks and an empty car can be harder. Also, 'dem Einfachen der Erdbeschleunigung' is awkward for TTS. Use 'der vollen Erdbeschleunigung'.",
+    "s37: 'Gerettet hat sie keine Sicherheitstechnik, sondern Glück und Physik' is stated as fact. The survival causes are only later reconstructions, and one source mentions an (unconfirmed) emergency brake. Soften it to 'nach allem, was man rekonstruieren kann'.",
+    "s36: 'In der Grube hatte sich gerissenes Seil aufgerollt' is stated without a hedge in its own sentence. Sources disagree on whether these were suspension or compensating ropes. Add 'vermutlich/wohl'.",
+    "s02: 'dort versagte genau das, was dich heute schützt' implies it is documented that the safety gear failed. The fact base says the governor-rope damage is not reliably documented. Soften it.",
+    "s30: 'Seit 2009 verlangt die europäische Aufzugsnorm' is imprecise. A3 was published in 2009 and became binding for new lifts from 2012. Also, the 2006→2009 timeline visual implies a causal link between the Tokyo accident and A3 that is not documented. Separate the markers or label them.",
+    "s31/s32: this sets 18 billion NEII trips against about 30 CPWR deaths (which include escalators), from different sources and years, and does not say so in the voiceover. Also, 'Direkt vergleichbar ist das nicht, aber die Größenordnung spricht für sich' half-contradicts itself. Rephrase it as an explicit order-of-magnitude comparison from different sources.",
+    "s26: 'Bei 10 m/s bräuchte ein Ölpuffer fast 7 Meter' leaves out that the stroke may be reduced when the end stops are monitored. Viewers may think 7 m buffers are standard.",
+    "s19: 'Das passiert frühestens bei 115 Prozent' conflates the flyweights swinging out with tripping. The 115 % is the lower bound of the trip speed. State the upper bound too (below 1,5 m/s for a 1 m/s lift).",
+    "s38 recap: 'jedes mindestens 12-fach überdimensioniert' is universalized, but it is the EN rule (16 with 2 ropes; US factors are lower and calculated differently). Say 'nach europäischer Norm' and use 'Sicherheitsfaktor' rather than 'überdimensioniert'.",
+    "s09: 'mindestens 8 Millimeter' should be attributed explicitly to the European norm.",
+    "s24: 'einige Dezimeter' is asserted without the supporting calculation. Add B's braking-distance example.",
+    "s12: the inspection scene (TÜV/DEKRA, Prüfplakette) interrupts the rope-layer sequence. Move it to a final 'Prüfungen' layer or to the recap.",
+    "s03-s05: the Otis history block right after the hook delays the core question. Tighten it by about one scene.",
+    "s16: MSHA's 18 ceiling impacts come from US mine hoists. They are scoped correctly, but the fact base advises against transferring them to building lifts. Keep the scope label prominent, or drop the number.",
+    "Visual conflicts: s15 uses state=moving_up while the car must stay still (use stopped with the sheave rotating). s16 uses state=overspeed but the template has no direction parameter, so upward direction needs explicit arrows or labels. s01/s34 set rope_count=6 for the 1945 car, which is unknown, so leave the count unlabelled. 'Stockwerkszähler' is not a template parameter."
+   ]
+  }
+ ],
+ "winnerKey": "A",
+ "issues": [
+  {
+   "segment_id": "s35",
+   "excerpt": "Heute müssten dafür mehrere Seile reißen, in Europa jedes mit mindestens zwölffacher Sicherheit. Und zugleich müssten Begrenzer und Fangvorrichtung versagen.",
+   "problem": "Das 'Heute' ist irreführend. Es legt nahe, dass die Anlage von 1945 diese Schutzschichten nicht hatte. Nach der Hypothese des Skripts selbst (s33) ist aber genau das passiert: Tragseile und Begrenzerseil fielen gemeinsam aus, also ein Fehler gemeinsamer Ursache. Otis-Personenaufzüge von 1931 hatten bereits Begrenzer und Fangvorrichtung. Laut Fact Base (safety_reality_empire_state_1945) belegt der Fall weder, dass moderne Aufzüge abstürzen, noch, dass sie gegen einen solchen Einschlag immun wären. Die Rechnung davor stimmt: rund 75 Stockwerke ≈ 265–270 m → rechnerisch 260–262 km/h, also 'mehr als 250 km/h'.",
+   "severity": "minor",
+   "fix_de": "Auch heute bräuchte es für so einen Absturz ein seltenes Zusammentreffen wie 1945: Mehrere Seile müssten reißen, in Europa jedes mit mindestens zwölffacher Sicherheit, und zugleich müssten Begrenzer und Fangvorrichtung ausfallen.",
+   "evidence_urls": [
+    "https://elevatorworld.com/article/75-years-75-floors/",
+    "https://en.wikipedia.org/wiki/1945_Empire_State_Building_B-25_crash"
+   ]
+  },
+  {
+   "segment_id": "s05",
+   "excerpt": "Fällt eine aus, übernimmt die nächste.",
+   "problem": "Das ist zu stark vereinfacht, und das Skript widerlegt es später selbst. Die Maschinenbremse hilft bei Seilriss nicht (s12). Der Puffer fängt keinen freien Fall ab (s23). Prüfungen sind keine Rückfallebene, die ausfallende Technik ersetzt. Die Schichten sind unabhängige Barrieren und keine lückenlose Staffel, in der jede Stufe die vorige übernimmt.",
+   "severity": "minor",
+   "fix_de": "Heute ist aus dieser Klinke eine ganze Kette von Schutzschichten geworden, die weitgehend unabhängig voneinander arbeiten. So reicht ein einzelner Fehler nicht für einen Absturz.",
+   "evidence_urls": [
+    "https://www.otis.com/en/us/tools-resources/high-rise-safety-systems",
+    "https://www.oleoinc.com/elevator-safety"
+   ]
+  },
+  {
+   "segment_id": "s28",
+   "excerpt": "Ein Absturz durch Seilriss taucht in diesen Daten nicht einmal als eigene Ursachengruppe auf.",
+   "problem": "Das ist nicht belegt. Die Fact Base (safety_reality_causes_not_ropes, PARTIAL) nennt es ausdrücklich eine eigene Schlussfolgerung und keine Aussage der Quelle, und das CPWR-PDF wurde nie eingesehen. Die CPWR-Daten zu Beschäftigten (BLS/CFOI) enthalten möglicherweise Kategorien wie Einsturz oder Absturz von Aufzug bzw. Plattform (z. B. Bauaufzüge), unter die auch ein Tragmittelversagen fallen könnte. Unabhängig prüfen konnte ich das nicht, weil das Suchbudget erschöpft und cpwr.com gesperrt war. 'Nicht einmal' verstärkt die unbelegte Aussage noch.",
+   "severity": "minor",
+   "fix_de": "Die häufigsten Ursachen waren dort Stürze in offene Schächte und Einklemmen an beweglichen Teilen, nicht der Seilriss, den man aus dem Kino kennt.",
+   "evidence_urls": [
+    "https://www.cpwr.com/wp-content/uploads/publications/elevator_escalator_BLSapproved_2.pdf"
+   ]
+  },
+  {
+   "segment_id": "s20",
+   "excerpt": "Selbst ein perfekter Sprung zieht nur zwei bis drei Meter pro Sekunde ab. Aus zehn Metern Sturz werden so bestenfalls gut sechs.",
+   "problem": "'Perfekter Sprung' und 'bestenfalls' sind überzogen. 2–3 m/s entsprechen 0,2–0,46 m Sprunghöhe; schon 0,5 m ergeben 3,13 m/s. Trainierte Springer mit 0,6–0,8 m schaffen 3,4–4 m/s, dann würden aus 10 m rechnerisch etwa 5 m. Nachgerechnet: √(2·9,81·10) = 14,0 m/s; minus 3 m/s ergibt 11,0 m/s ≈ 6,2 m Äquivalenzhöhe (korrekt); minus 2 m/s ergibt 7,3 m. Die Fact Base sagt ausdrücklich 'Trainierte Springer schaffen mehr'.",
+   "severity": "minor",
+   "fix_de": "Ein kräftiger Sprung zieht nur etwa zwei bis drei Meter pro Sekunde ab. Aus zehn Metern Sturz würden so rechnerisch immer noch rund sechs bis sieben.",
+   "evidence_urls": [
+    "https://www.wtamu.edu/~cbaird/sq/2012/12/05/if-im-on-an-elevator-that-breaks-loose-and-plummets-down-the-shaft-can-i-avoid-harm-by-jumping-at-the-last-second/",
+    "https://www.thenakedscientists.com/articles/questions/could-i-survive-falling-elevator-jumping-last-second"
+   ]
+  },
+  {
+   "segment_id": "s16",
+   "excerpt": "Aus eineinhalb Metern pro Sekunde steht sie bei der härtesten erlaubten Bremsung nach gut elf Zentimetern.",
+   "problem": "Die Zahlen stimmen: 1,5²/(2·9,81) = 0,115 m bei 1 g, 0,573 m bei 0,2 g, 0,191 m bei 0,6 g. 'Härteste erlaubte Bremsung' ist aber ungenau. Die Grenze von 1 g gilt als mittlere Verzögerung im freien Fall mit Nennlast. Eine leere Kabine wird bei gleicher Klemmkraft stärker als 1 g verzögert, das ist zulässig und steht im Skript selbst in s15. Außerdem ist die Einrückgeschwindigkeit real höher als 1,5 m/s.",
+   "severity": "minor",
+   "fix_de": "Ein Rechenbeispiel: Aus eineinhalb Metern pro Sekunde steht sie bei einer mittleren Verzögerung von einem g, der Obergrenze bei voller Kabine, nach gut elf Zentimetern. Bei einem Fünftel g sind es knapp sechzig.",
+   "evidence_urls": [
+    "https://elevatorworld.com/article/engineering-for-safety/",
+    "https://nobelcert.com/DataFiles/FreeUpload/EN%2081-50-2014.pdf"
+   ]
+  },
+  {
+   "segment_id": "s06",
+   "excerpt": "Je nach Bauart hält es rund drei bis knapp fünf Tonnen.",
+   "problem": "Gemeint ist die Mindestbruchkraft, nicht die zulässige Last. 'Hält es' klingt nach Tragfähigkeit im Betrieb. Die Obergrenze beruht auf DRAKO 250T mit 46,6 kN (= 4,75 t). Laut Fact Base (suspension_rope_diameter_strength, PARTIAL) sind die DRAKO-Werte in sich unstimmig, die K-Faktoren passen nicht zusammen, und sie sollten am Datenblatt geprüft werden. Die Untergrenze von 30,5 kN (= 3,1 t) ist plausibel. Die Rechnung für 6 Seile stimmt: 12/6 = 2-fach.",
+   "severity": "minor",
+   "fix_de": "Je nach Bauart reißt es erst bei rund drei bis knapp fünf Tonnen Zugkraft. (Obergrenze vor Veröffentlichung am Herstellerdatenblatt prüfen.)",
+   "evidence_urls": [
+    "https://www.pfeifer.info/en/products-services/products/ropes-and-rope-accessories/unassembled-ropes/unassembled-round-strand-ropes/round-strand-rope-non-rotation-resistant/drako-250t.html",
+    "https://www.pfeifer.info/en/products-services/products/ropes-and-rope-accessories/unassembled-ropes/unassembled-round-strand-ropes/round-strand-rope-non-rotation-resistant/8x19s-nfc.html"
+   ]
+  },
+  {
+   "segment_id": "s03",
+   "excerpt": "Laut Otis sackt sie nur ein paar Zoll ab, denn solange das Seil zog, blieben federbelastete Sperrklinken eingezogen. Riss es, drückten Federn sie in Zahnstangen an beiden Seiten.",
+   "problem": "Der Mechanismus mit federbelasteten Sperrklinken und Zahnstangen ist durch das Patent US 31.128 von 1861 belegt. Für die Vorführungsversion von 1853/54 nennen Sekundärquellen eine Wagenfeder, die selbst in die Zahnstangen greift (Fact Base history_03, PARTIAL). Das Skript überträgt also die Patentbeschreibung von 1861 auf 1854. Außerdem ist die Kausalkette schief: Dass sie nur wenig absackt, liegt am schnellen Einrasten und nicht daran, dass die Klinken eingezogen blieben, solange das Seil zog.",
+   "severity": "minor",
+   "fix_de": "Laut Otis sackt sie nur ein paar Zoll ab. Das Prinzip, das Otis später auch patentieren ließ: Solange das Seil zieht, bleiben federbelastete Sperrklinken eingezogen. Reißt es, drücken Federn sie sofort in Zahnstangen an beiden Seiten.",
+   "evidence_urls": [
+    "https://patentimages.storage.googleapis.com/f4/ef/a4/33a4e29a3b9ce5/US31128.pdf",
+    "https://www.asme.org/topics-resources/content/elisha-graves-otis"
+   ]
+  },
+  {
+   "segment_id": "s04",
+   "excerpt": "Der Kulturhistoriker Andreas Bernard hält die Szene für eine spätere Konstruktion der Firma.",
+   "problem": "Das lässt sich so verstehen, als sei die Vorführung selbst erfunden. Das widerspricht s03 und der Tribune-Notiz von 1854, die das Seilkappen belegt. Bernard bezeichnet laut Fact Base (history_02) die Gründungsgeschichte, also die dramatisierte Urszene als Firmenmythos, als nachträgliche Konstruktion der Otis Elevator Company, rund 57 Jahre später.",
+   "severity": "minor",
+   "fix_de": "Der Kulturhistoriker Andreas Bernard hält die berühmte Gründungserzählung rund um diese Szene für eine spätere Konstruktion der Firma.",
+   "evidence_urls": [
+    "https://networks.h-net.org/node/20317/reviews/185017/cardon-bernard-lifted-cultural-history-elevator",
+    "https://elevatorworld.com/article/elisha-otis-improved-elevator/"
+   ]
+  },
+  {
+   "segment_id": "s02",
+   "excerpt": "Am Ende klären wir, warum in diesem Schacht nichts die Kabine aufhielt.",
+   "problem": "Das Skript verspricht mehr, als es hält. s33 sagt selbst 'Sicher belegt ist das nicht', und die Ursache beruht nur auf einem ungeprüften Fachbeitrags-Snippet (history_12/history_14, PARTIAL). 'Klären' verspricht eine gesicherte Antwort.",
+   "severity": "minor",
+   "fix_de": "Am Ende gehen wir der Frage nach, warum in diesem Schacht nichts die Kabine aufhielt, soweit sich das heute noch rekonstruieren lässt.",
+   "evidence_urls": [
+    "https://elevatorworld.com/article/75-years-75-floors/"
+   ]
+  },
+  {
+   "segment_id": "s13",
+   "excerpt": "Trotzdem muss es mindestens das Achtfache der Auslösekraft aushalten.",
+   "problem": "'Auslösekraft' ist mehrdeutig, man kann darunter auch die Kraft verstehen, die zum Einrücken der Fangvorrichtung nötig ist. Die Norm meint die Zugkraft, die der Begrenzer beim Auslösen im Seil erzeugt (mindestens 300 N bzw. das Doppelte der Einrückkraft). Die Mindestbruchkraft muss mindestens das 8-Fache davon betragen (safety_chain_governor_rope).",
+   "severity": "minor",
+   "fix_de": "Trotzdem muss es mindestens das Achtfache der Zugkraft aushalten, die beim Auslösen im Seil entsteht.",
+   "evidence_urls": [
+    "https://bode-components.com/en/knowledge-governor-rope-requirements/"
+   ]
+  },
+  {
+   "segment_id": "s19",
+   "excerpt": "Der Hersteller Kone nennt das schlicht Kino.",
+   "problem": "Das direkte Zitat von KONE ('pure cinema') konnte ich nicht verifizieren. Die Fact Base stützt sich nur auf ein Suchsnippet, kone.com war in allen Prüfläufen gesperrt, das Suchbudget war erschöpft. Ein Zitat, das einem namentlich genannten Unternehmen zugeschrieben wird, sollte im Original geprüft sein. Die Physik stimmt: √(2·9,81·10) = 14,0 m/s = 50,4 km/h; 100 m → 44,3 m/s = 159,5 km/h.",
+   "severity": "minor",
+   "fix_de": "Mit der Wirklichkeit hat das wenig zu tun, auch Hersteller wie KONE halten solche Szenen für reines Kino. (Wortlaut vor Veröffentlichung auf der KONE-Seite prüfen, sonst Zuschreibung streichen.)",
+   "evidence_urls": [
+    "https://www.kone.com/global/en/newsroom/stories/top-6-elevator-myths-debunked.html"
+   ]
+  },
+  {
+   "segment_id": "s26",
+   "excerpt": "In fünf Jahren zählte die Behörde dort mindestens achtzehn Aufpralle an der Schachtdecke.",
+   "problem": "Die MSHA-Zahl ist nur über ein Snippet belegt. Das Papier war nicht abrufbar, eine unabhängige Prüfung war nicht möglich. Es fehlt, welcher Fünfjahreszeitraum gemeint ist; das Papier ist alt. Die Einordnung als Bergwerksaufzüge ist korrekt und bleibt sinnvoll. Laut Fact Base geht es dabei um leere Kabinen nach Versagen der mechanischen Bremse, das sollte man erwähnen, weil es genau das erklärte Szenario belegt.",
+   "severity": "minor",
+   "fix_de": "Eine Zahl dazu stammt aus amerikanischen Bergwerken, nicht aus Gebäuden: Die Bergbaubehörde dokumentierte dort in fünf Jahren mindestens achtzehn Fälle, in denen leere Kabinen nach Bremsversagen gegen die Schachtdecke prallten. (Zeitraum aus dem MSHA-Papier ergänzen oder Zahl weglassen.)",
+   "evidence_urls": [
+    "https://arlweb.msha.gov/s&hinfo/paper5.htm",
+    "https://elevatorworld.com/article/elevators-tend-to-fall-upward-too/"
+   ]
+  },
+  {
+   "segment_id": "s27",
+   "excerpt": "Solche tödlichen Unfälle gab es, etwa zweitausendsechs in Tokio. Die europäische Aufzugsnorm bekam dafür zweitausendneun eine Ergänzung",
+   "problem": "Direkt nach dem Tokio-Unfall legt 'dafür' einen Kausalzusammenhang zwischen dem Unfall von 2006 und EN 81-1+A3:2009 nahe. Laut Fact Base (safety_reality_ucm) ist dieser Zusammenhang nicht belegt. Die Grafik trennt beides bewusst, der Sprechertext aber nicht. Die übrigen Fakten stimmen: 2009, faktisch Pflicht ab 2012, 1,20 m.",
+   "severity": "minor",
+   "fix_de": "Solche tödlichen Unfälle gab es, etwa zweitausendsechs in Tokio. In Europa verlangt die Aufzugsnorm seit einer Ergänzung von zweitausendneun einen eigenen Schutz gegen genau diesen Fehler, für neue Aufzüge seit zweitausendzwölf praktisch Pflicht.",
+   "evidence_urls": [
+    "https://aufzugsberatung.com/normen-und-gesetze/schutz-gegen-unbeabsichtigte-bewegung-des-fahrkorbes-ucm-unintended-car-movement/",
+    "https://en.wikipedia.org/wiki/Schindler_Group"
+   ]
+  },
+  {
+   "segment_id": "s24",
+   "excerpt": "Nach amerikanischen Regeln zählt man sie auf einer Schlaglänge, etwa dem Sechsfachen des Seildurchmessers.",
+   "problem": "Die Bezugslänge 6·d stammt laut Fact Base (suspension_discard_criteria) aus ISO 4309 für Kranseile. ASME zählt pro Schlaglänge, ohne sie als 6·d zu definieren. Bei 8-litzigen Aufzugseilen liegt die Schlaglänge typischerweise grob beim 6- bis 7-Fachen des Durchmessers. Die Gleichsetzung ist also nur ungefähr richtig und vermischt zwei Regelwerke. Der Wert 32 verteilte Außendrahtbrüche bei 8 Litzen passt zur Fact Base (PARTIAL, Originaltabelle nicht eingesehen).",
+   "severity": "minor",
+   "fix_de": "Nach amerikanischen Regeln zählt man sie auf einer Schlaglänge, also dem Stück, auf dem sich eine Litze einmal ganz um das Seil windet, grob das Sechs- bis Siebenfache des Seildurchmessers.",
+   "evidence_urls": [
+    "https://www.prysmian.com/sites/default/files/atoms/files/Tech-Tip-2.pdf",
+    "https://drakaehc.com/wp-content/uploads/2022/09/Draka-EHC-Tech-Tip-2-Rope-Replacement-Criteria-230822.pdf"
+   ]
+  },
+  {
+   "segment_id": "s34",
+   "excerpt": "Luftdicht war aber auch dieser Schacht nicht, und meist ist der Kolbeneffekt deutlich schwächer.",
+   "problem": "Das ist eine konkrete Tatsachenbehauptung über den Schacht von 1945, die keine Quelle der Fact Base stützt. Allgemein stimmt, dass Aufzugsschächte nicht luftdicht sind (physics_buffers_piston_air_cushion). Über diesen einen Schacht ist nichts dokumentiert.",
+   "severity": "minor",
+   "fix_de": "Luftdicht ist aber kein Aufzugsschacht, und meist ist der Kolbeneffekt deutlich schwächer.",
+   "evidence_urls": [
+    "https://theconversation.com/ive-always-wondered-if-youre-in-a-falling-elevator-can-you-really-save-yourself-by-jumping-99597",
+    "https://en.wikipedia.org/wiki/Piston_effect"
+   ]
+  },
+  {
+   "segment_id": "s14",
+   "excerpt": "Der harte Sperrfang blockiert schlagartig und ist nur bei Aufzügen bis dreiundsechzig Zentimeter pro Sekunde erlaubt.",
+   "problem": "Die Grenze von 0,63 m/s gilt für die Fangvorrichtung am Fahrkorb. Am Gegengewicht ist ein Sperrfang nach EN 81-20 bis 1 m/s zulässig (safety_chain_gear_types). 'Nur bei Aufzügen bis …' verallgemeinert das leicht.",
+   "severity": "minor",
+   "fix_de": "Der harte Sperrfang blockiert schlagartig und ist am Fahrkorb nur bei Aufzügen bis dreiundsechzig Zentimeter pro Sekunde erlaubt.",
+   "evidence_urls": [
+    "https://elevatorworld.com/article/history-of-the-safety-gear/",
+    "https://www.gervall.co.uk/32-instantaneous-safety-gear"
+   ]
+  },
+  {
+   "segment_id": "title_candidates",
+   "excerpt": "75 Stockwerke Absturz – und sie überlebte: Warum Aufzüge heute nicht fallen / Aufzug im Röntgenblick: 6 Schutzschichten gegen den Absturz",
+   "problem": "'Warum Aufzüge heute nicht fallen' ist absolut. Die Fact Base (physics_buffers_why_no_freefall) hat bewusst auf 'so gut wie nie' abgeschwächt. '6 Schutzschichten gegen den Absturz' widerspricht s23: Puffer sind ausdrücklich kein Schutz gegen einen Absturz, und Prüfungen sind keine technische Barriere.",
+   "severity": "minor",
+   "fix_de": "„75 Stockwerke Absturz – und sie überlebte: Warum Aufzüge heute so gut wie nie fallen“ bzw. „Aufzug im Röntgenblick: 6 Schutzschichten“",
+   "evidence_urls": [
+    "https://www.kone.com/global/en/newsroom/stories/top-6-elevator-myths-debunked.html",
+    "https://www.oleoinc.com/elevator-safety"
+   ]
+  },
+  {
+   "segment_id": "s35",
+   "excerpt": "Heute müssten dafür mehrere Seile reißen, in Europa jedes mit mindestens zwölffacher Sicherheit. Und zugleich müssten Begrenzer und Fangvorrichtung versagen.",
+   "problem": "The logic is wrong. The overspeed governor and the safety gear work in series: the governor only triggers the safety gear. It is enough for ONE of them to fail (governor, governor rope or safety gear), not both 'at the same time'. The script contradicts itself here: s33 says a single damaged governor rope (the trigger only) would already have been enough. The line overstates redundancy. The visual ('drei davon ... müssten zugleich versagen') repeats the error. Also, 'mehrere Seile' is not enough for a free fall, ALL ropes must fail.",
+   "severity": "major",
+   "fix_de": "Heute müssten dafür alle Seile reißen, in Europa jedes mit mindestens zwölffacher Sicherheit. Und zusätzlich dürfte der Fang nicht greifen, weil Begrenzer, Begrenzerseil oder Fangvorrichtung versagen. (Visual: Label 'Tragseile: alle' plus 'Begrenzer ODER Fang', not 'müssten zugleich versagen'.)",
+   "evidence_urls": [
+    "https://elevatorworld.com/article/75-years-75-floors/",
+    "https://www.otis.com/en/us/tools-resources/high-rise-safety-systems",
+    "https://de.wikipedia.org/wiki/Geschwindigkeitsbegrenzer_(Aufzug)"
+   ]
+  },
+  {
+   "segment_id": "s05",
+   "excerpt": "Heute ist aus dieser Klinke eine ganze Kette von Schutzschichten geworden. Fällt eine aus, übernimmt die nächste.",
+   "problem": "Misleading core framing that the script itself later contradicts. (1) The machine brake (layer 3) is useless when the ropes break (s12: 'Hier aber hilft sie nicht'). (2) The buffer (layer 5) cannot catch a free fall (s23: 'Kein Rettungskissen', about 150 times too much energy). (3) Governor and safety gear are not redundant: if the governor fails, the safety gear does not trigger. (4) 'Prüfungen' is not a fallback layer that 'takes over' in an emergency. The layers cover different faults. They are not a cascade in which each one catches the previous one.",
+   "severity": "major",
+   "fix_de": "Heute ist aus dieser Klinke eine ganze Kette von Schutzschichten geworden. Jede deckt einen anderen Fehler ab, und manche arbeiten nur zusammen.",
+   "evidence_urls": [
+    "https://elevatorworld.com/article/braking-capacity-requirements-of-elevators/",
+    "https://www.oleoinc.com/elevator-safety",
+    "https://www.kone.com/global/en/newsroom/stories/top-6-elevator-myths-debunked.html"
+   ]
+  },
+  {
+   "segment_id": "s06",
+   "excerpt": "Je nach Bauart hält es rund drei bis knapp fünf Tonnen.",
+   "problem": "This confuses breaking force with load capacity. The 30 to 47 kN are the MINIMUM BREAKING FORCE, the point at which the rope tears. They are not a load the rope 'holds' in service. Right after the explanation of safety factor 12, 'hält es 3 bis 5 t' suggests the rope may carry that load in operation. Also, the upper value 'knapp 5 t' comes from the DRAKO-250T data, which the fact check flagged as internally inconsistent (two different K values). It should be checked against the datasheet.",
+   "severity": "major",
+   "fix_de": "Je nach Bauart reißt es erst bei rund drei bis gut vier Tonnen Zugkraft. (Caption: 'Je nach Bauart reißt es erst bei rund 3 bis gut 4 Tonnen Zugkraft.')",
+   "evidence_urls": [
+    "https://www.pfeifer.info/en/products-services/products/ropes-and-rope-accessories/unassembled-ropes/unassembled-round-strand-ropes/round-strand-rope-non-rotation-resistant/drako-250t.html",
+    "https://www.elevator.tr/en/glossary/rope"
+   ]
+  },
+  {
+   "segment_id": "s02",
+   "excerpt": "Am Ende klären wir, warum in diesem Schacht nichts die Kabine aufhielt.",
+   "problem": "The script promises something it does not deliver, and contradicts itself. s33 says outright 'Sicher belegt ist das nicht', so nothing gets 'geklärt'. 'Nichts hielt die Kabine auf' also contradicts s34, where an air cushion and piled-up rope are said to have slowed or damped the fall.",
+   "severity": "minor",
+   "fix_de": "Am Ende gehen wir der Frage nach, warum in diesem Schacht keine Fangvorrichtung griff.",
+   "evidence_urls": [
+    "https://www.guinnessworldrecords.com/world-records/73541-longest-fall-survived-in-a-lift-elevator",
+    "https://elevatorworld.com/article/75-years-75-floors/"
+   ]
+  },
+  {
+   "segment_id": "s03",
+   "excerpt": "Laut Otis sackt sie nur ein paar Zoll ab, denn solange das Seil zog, blieben federbelastete Sperrklinken eingezogen. Riss es, drückten Federn sie in Zahnstangen an beiden Seiten.",
+   "problem": "(1) 'Laut Otis' sounds like Elisha Otis said it himself. The 'few inches' come from the company chronicle of the Otis company. (2) The mechanism described (spring-loaded pawls, knee levers, springs e/g) is the one in patent US 31,128 from 1861. For the 1854 demonstration, sources describe a wagon spring that engaged the ratchet bars directly. Presenting the patent mechanism as the one used in 1854 is an anachronism (fact check history_03: PARTIAL).",
+   "severity": "minor",
+   "fix_de": "Laut der Firmenchronik sackt sie nur ein paar Zoll ab. Das Prinzip: Solange das Seil zog, blieb eine Federsperre gelöst. Riss es, griff sie in Zahnstangen an beiden Seiten.",
+   "evidence_urls": [
+    "https://patentimages.storage.googleapis.com/f4/ef/a4/33a4e29a3b9ce5/US31128.pdf",
+    "https://www.asme.org/topics-resources/content/elisha-graves-otis",
+    "https://www.otis.com/en/us/our-company/history"
+   ]
+  },
+  {
+   "segment_id": "s04",
+   "excerpt": "Der Kulturhistoriker Andreas Bernard hält die Szene für eine spätere Konstruktion der Firma.",
+   "problem": "Overstated. The Tribune note from 1854 quoted in the same segment shows the demonstrations did take place. Bernard criticizes the founding myth that was constructed afterwards (the heroic scene, the quote, the demonstration as the 'breakthrough'). He does not claim the demonstration was invented. As worded, viewers may think the whole scene is fiction.",
+   "severity": "minor",
+   "fix_de": "Der Kulturhistoriker Andreas Bernard hält die heldenhafte Gründungsszene für eine spätere Erzählung der Firma.",
+   "evidence_urls": [
+    "https://www.jstor.org/stable/j.ctt9qfdf1",
+    "https://networks.h-net.org/node/20317/reviews/185017/cardon-bernard-lifted-cultural-history-elevator",
+    "https://elevatorworld.com/article/elisha-otis-improved-elevator/"
+   ]
+  },
+  {
+   "segment_id": "s16",
+   "excerpt": "Aus eineinhalb Metern pro Sekunde steht sie bei der härtesten erlaubten Bremsung nach gut elf Zentimetern.",
+   "problem": "1 g is not the 'härteste erlaubte Bremsung'. It is the upper limit of the MEAN deceleration for a car with rated load in free fall. As s15 says itself, an empty car is braked harder, and short peaks may be higher. The stopping distance can therefore be shorter than 11 cm. This is a simplification that misleads.",
+   "severity": "minor",
+   "fix_de": "Aus eineinhalb Metern pro Sekunde steht die volle Kabine bei der stärksten zulässigen mittleren Verzögerung nach gut elf Zentimetern.",
+   "evidence_urls": [
+    "https://elevatorworld.com/article/engineering-for-safety/",
+    "https://elevatorworld.com/article/progressive-safety-gears-and-engineering/"
+   ]
+  },
+  {
+   "segment_id": "s20",
+   "excerpt": "Selbst ein perfekter Sprung zieht nur zwei bis drei Meter pro Sekunde ab. Aus zehn Metern Sturz werden so bestenfalls gut sechs.",
+   "problem": "'Perfekter Sprung' and a range of 2 to 3 m/s do not fit together. According to the fact base, 3 m/s corresponds to a 0.5 m jump height, and trained jumpers manage more. 'Bestenfalls gut sechs' is only true for exactly 3 m/s. At 2 m/s it would be about 7.3 m, and with an athletic jump of about 4 m/s only about 5 m. The 'bestenfalls' limit is therefore not strict.",
+   "severity": "minor",
+   "fix_de": "Selbst ein kräftiger Sprung zieht nur etwa zwei bis drei Meter pro Sekunde ab. Aus zehn Metern Sturz werden so immer noch etwa sechs bis sieben.",
+   "evidence_urls": [
+    "https://www.wtamu.edu/~cbaird/sq/2012/12/05/if-im-on-an-elevator-that-breaks-loose-and-plummets-down-the-shaft-can-i-avoid-harm-by-jumping-at-the-last-second/",
+    "https://van.physics.illinois.edu/ask/listing/139"
+   ]
+  },
+  {
+   "segment_id": "s27",
+   "excerpt": "Solche tödlichen Unfälle gab es, etwa zweitausendsechs in Tokio. Die europäische Aufzugsnorm bekam dafür zweitausendneun eine Ergänzung",
+   "problem": "Placing 'dafür' right after the Tokyo accident suggests a causal link between that accident and EN 81-1/2+A3. According to the fact base, this link is not established (the visual deliberately avoids a connecting arrow, but the narration creates one). Tokyo also led to Japanese rules (double brake from 2009), not directly to the EN amendment.",
+   "severity": "minor",
+   "fix_de": "Solche tödlichen Unfälle gab es weltweit, etwa zweitausendsechs in Tokio. Gegen dieses Risiko bekam die europäische Aufzugsnorm zweitausendneun eine eigene Ergänzung, für neue Aufzüge seit zweitausendzwölf praktisch Pflicht.",
+   "evidence_urls": [
+    "https://aufzugsberatung.com/normen-und-gesetze/schutz-gegen-unbeabsichtigte-bewegung-des-fahrkorbes-ucm-unintended-car-movement/",
+    "https://en.wikipedia.org/wiki/Schindler_Group"
+   ]
+  },
+  {
+   "segment_id": "s36",
+   "excerpt": "Wird sie zu schnell, hält der Begrenzer sein Seil fest, ein Schalter lässt die Bremse einfallen.",
+   "problem": "The order is reversed compared with the standard and with s12. Under EN 81-20, the electrical switch must stop the machine BEFORE the tripping speed is reached (above 1 m/s) or at the latest when it is reached (up to 1 m/s). It does not act after the rope is clamped. The summary suggests the wrong sequence.",
+   "severity": "minor",
+   "fix_de": "Wird sie zu schnell, öffnet ein Schalter den Sicherheitskreis und die Bremse fällt ein, spätestens wenn der Begrenzer sein Seil festhält.",
+   "evidence_urls": [
+    "https://bode-components.com/en/knowledge-overspeed-governor/",
+    "https://www.otis.com/en/us/tools-resources/high-rise-safety-systems"
+   ]
+  },
+  {
+   "segment_id": "s24",
+   "excerpt": "Nach amerikanischen Regeln zählt man sie auf einer Schlaglänge, etwa dem Sechsfachen des Seildurchmessers. Sind es bei einem achtlitzigen Seil mehr als etwa zweiunddreißig verteilte Außendrahtbrüche, muss es raus.",
+   "problem": "Sources are mixed. The reference length '6 × d' comes from ISO 4309 (crane ropes), not from ASME. The limit of 32 applies only 'unter normalen Bedingungen'. Draka reports higher tolerances with monthly inspection, and the table varies by ASME edition, so 'muss es raus' is too absolute. The segment is also the 'Prüfungen' layer of a German video but gives only US criteria (in Europe: ISO 4344 and manufacturer specifications).",
+   "severity": "minor",
+   "fix_de": "Nach amerikanischen Regeln zählt man sie auf einer Schlaglänge, also dem Stück, auf dem sich eine Litze einmal ganz um das Seil windet. Sind es dort unter normalen Bedingungen mehr als etwa zweiunddreißig verteilte Außendrahtbrüche, wird das Seil ausgetauscht. In Europa gelten eigene Normen und Herstellervorgaben.",
+   "evidence_urls": [
+    "https://www.prysmian.com/sites/default/files/atoms/files/Tech-Tip-2.pdf",
+    "https://drakaehc.com/wp-content/uploads/2022/09/Draka-EHC-Tech-Tip-2-Rope-Replacement-Criteria-230822.pdf",
+    "https://www.gustav-wolf.de/Seile/Aufzugseile/Ablegereife/"
+   ]
+  }
+ ],
+ "ttsProblems": [
+  "s20: 'MythBusters' ist ein englischer Markenname. Deutsche TTS spricht ihn oft falsch aus ('Müt-Buster'); Lexikon-Eintrag oder Lautschrift ('Mis-Basters') verwenden.",
+  "s02: 'Guinness' wird von deutscher TTS leicht als 'Gu-iness' gelesen; Aussprache-Eintrag ('Ginnis') setzen.",
+  "s03: 'Elisha Otis' und 'Crystal Palace' sind englische Eigennamen. Aussprache prüfen ('Iläischa', 'Kristel Päläs').",
+  "s02/s32: 'Betty Lou Oliver' ist ein englischer Name, deutsche TTS spricht 'Oliver' und 'Lou' womöglich deutsch aus. Anhören und gegebenenfalls Lexikon-Eintrag setzen.",
+  "s04: Das Zitat 'Alles sicher, meine Herren!' steht im narration_tts ohne Anführungszeichen oder Pause und klingt dann wie eine Aussage des Sprechers. Anführungszeichen oder SSML-Pause bzw. Stimmwechsel einfügen.",
+  "s19: 'Kone' ist finnisch ('KO-ne'). Prüfen, ob TTS es als deutsches Wort ('Kohne') liest.",
+  "s31: 'Bomber vom Typ B fünfundzwanzig': TTS setzt nach 'B' womöglich eine Pause ('Be. Fünfundzwanzig'). Besser 'B-fünfundzwanzig' oder 'Be-Fünfundzwanzig'.",
+  "s25: 'Tüv' und 'Dekra' als Wörter: Prüfen, ob 'Tüv' wie üblich als 'Tüff' und nicht buchstabiert oder als 'Tüw' gesprochen wird.",
+  "s37: Kanalname 'Visual Science' ist englisch; Aussprache-Eintrag setzen, damit er nicht deutsch gelesen wird.",
+  "Allgemein: Ich habe alle Rechenwerte im Sprechertext nachgerechnet (15 ms/1,6 cm; 51 ms; 117 ms/6,7 cm; 11,5/19/57 cm; 50/160 km/h; 6,2 m; 6,7/13,5 cm Hub; 6,74 m bei 10 m/s; Faktor 148; 29,3 s; 0,75 pro Mrd.; 260–262 km/h). Sie stimmen. Unabhängige Websuche war nicht möglich (Suchbudget 200/200 erschöpft, WebFetch für msha.gov, cpwr.com und kone.com gesperrt).",
+  "s01/s31: 'Empire State Building' is English; German TTS often mispronounces it. Check with SSML/phoneme or a pronunciation lexicon.",
+  "s02/s32: 'Betty Lou Oliver' and 'Guinness' are English names. 'Guinness' tends to come out as 'Gu-in-ness'; set a pronunciation lexicon entry ('Ginnis').",
+  "s03: 'Crystal Palace' is English; 'Elisha' may come out as 'E-li-scha'. Put both in the pronunciation lexicon.",
+  "s04: The quote 'Alles sicher, meine Herren!' has no quotation marks in narration_tts, so TTS cannot mark it as a quote. Add 'den Satz' or 'sinngemäß' before it.",
+  "s09: 'zwölf Hundertstelsekunden' is clumsy to listen to. Better: 'gut einer Zehntelsekunde' (caption: 'gut 0,1 Sekunden').",
+  "s19: 'Kone' in narration vs. 'KONE' in the caption. TTS may read it as the German word ending ('Kohne'). Check the pronunciation.",
+  "s20: 'MythBusters' is an English title; TTS pronunciation is uncertain ('Müt-bus-ters'). Use a lexicon entry.",
+  "s21: 'bis einen Meter pro Sekunde' is ungrammatical. Better 'bis zu einem Meter pro Sekunde'.",
+  "s25: 'Tüv' and 'Dekra' are written as words. 'Tüv' may be read as 'Tüw'; the usual pronunciation is 'Tüff'. Use a phonetic spelling or lexicon entry.",
+  "s26: 'Aufpralle' is an unusual plural and sounds odd. Better: 'mindestens achtzehn Fälle, in denen Kabinen an die Schachtdecke prallten'.",
+  "s27: 'eins Komma zwei Meter' sounds stiff. More natural: 'einen Meter zwanzig' (caption '1,20 Meter').",
+  "s29: The appended clause 'aus einer anderen Quelle und anderen Jahren' and the dangling 'als Größenordnung' at the end of the sentence are hard to follow by ear. Split into two sentences.",
+  "s30: The first sentence is overloaded (two year numbers, 'im Schnitt', 'etwa alle dreißig Sekunden', about 22 words). The closing 'Andere Quellen und Definitionen, also nur ein Größenvergleich, aber ein deutlicher.' has no verb. Split it up and add a verb.",
+  "s31: 'B fünfundzwanzig' works better with a hyphen or phoneme hint ('Be-fünfundzwanzig') so the B is not swallowed.",
+  "s37: The channel name 'Visual Science' is English. Set the pronunciation explicitly."
+ ]
+}
