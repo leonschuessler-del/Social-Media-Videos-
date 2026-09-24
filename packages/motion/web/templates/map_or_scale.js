@@ -38,8 +38,10 @@
    TIMING (Narrations-Sync): params.beats = [Sekunden ab Szenenstart] für die Hauptschritte; einzelne Einträge dürfen
    null sein (→ Standard). Listen-Einträge akzeptieren "at" (Sekunden). Alle Zeiten werden auf [0,3; d − 0,3] geklemmt.
    Ohne beats/at skaliert der Standard-Zeitplan mit p.d. Einmal Sichtbares bleibt bis Szenenende stehen.
-     rope_vs_finger   BEATS: [0] = Lineal zeichnet sich ein (0), [1] = Kennwert-Kachel mit Last erscheint,
-                             [2] = Kennwert-Zahl erscheint/zählt hoch (spät möglich).
+     rope_vs_finger   BEATS: [0] = Lineal zeichnet sich ein (0), [1] = Kennwert-Kachel mit Last erscheint (bis dahin steht
+                             die Objektgruppe mittig im Bild und gleitet ab beats[1] − 0,3 s mit der Kachel nach links),
+                             [2] = Kennwert-Zahl erscheint/zählt hoch (spät möglich; das „t“ auf dem Gewicht kommt mit
+                             dem Einheitenwort des Werts).
                       "at": items[].at = Objekt wird eingescannt; items[].dim_at = Bemaßung („Ø 8 mm“) klappt auf;
                             then_readout.at = Kachel (wie beats[1]), then_readout.value_at = Zahl (wie beats[2]).
      speed_comparison / bar_scale
@@ -538,7 +540,7 @@
       if (Rmm * s <= areaR - areaL + 0.5) break;
       s = (areaR - areaL) / Rmm;
     }
-    const x0 = areaL + (areaR - areaL - Rmm * s) / 2; const X = (mm) => x0 + mm * s;
+    const x0L = areaL + (areaR - areaL - Rmm * s) / 2;
 
     // ---- Zeitplan: BEATS [0] Lineal; items[].at Einscannen, items[].dim_at Bemaßung
     const tR0 = beatOf(p, 0, 0), tR1 = Math.max(0.5, Math.min(0.16 * d, 1.6));
@@ -553,11 +555,25 @@
     const appear = (i) => seg(t, items[i].t0, items[i].dur);
     const dimsK = (i) => seg(t, items[i].tDim, items[i].dimDur);
     const tAll = Math.max(...items.map((it) => Math.max(it.t0 + it.dur, it.showDim ? it.tDim + it.dimDur : 0))) + Math.min(0.1 * d, 0.6);
+    // Kennwert-Zeitplan (BEATS [1] Kachel, [2] Wert)
+    const tileDur = clamp(0.14 * d, 0.4, 0.8), valDur = clamp(0.22 * d, 0.6, 1.3);
+    let tTile = 0, tVal = 0;
+    if (ro) {
+      tTile = atOf(ro.raw, d, beatOf(p, 1, Math.min(Math.max(tAll - 0.05 * d, 0.5 * d), d - 0.3 - tileDur)));
+      tVal = atOf(ro.raw, d, beatOf(p, 2, Math.min(Math.max(tTile + 0.35, tAll, 0.52 * d), d - 0.3 - valDur * 0.6)), ["value_at", "count_at", "number_at"]);
+    }
+    // Horizontale Lage: Maßstab s bleibt für die Kachel reserviert; solange die Kachel noch nicht da ist, steht die Gruppe
+    // (Lineal inkl. Rand + „cm“) mittig im Bild und gleitet erst mit der Kachel in die linke Position (die Kachel fährt mit,
+    // der Abstand Gruppe↔Kachel bleibt dabei konstant → keine Überlappung während des Übergangs).
+    const x0C = (p.W || 1920) / 2 - (Rmm * s) / 2 - 8;
+    const gStart = tTile - 0.3;
+    const glide = !ro ? 1 : gStart <= 0.25 ? 1 : eio(seg(t, gStart, 0.8));
+    const x0 = lerp(x0C, x0L, glide), shiftX = x0 - x0L; const X = (mm) => x0 + mm * s;
 
     // ---- Rahmen & Kennzeile
     const aHead = seg(t, 0, 0.5);
     brackets(ctx, 100, 222, 1720, 676, aHead);
-    const kick = str(pick(P, ["kicker", "kennzeile"], "GLEICHER MASSSTAB · ANGABEN IN MM"));
+    const kick = str(pick(P, ["kicker", "kennzeile"], "GLEICHER MASSSTAB"));
     header(ctx, p, P.kicker === "" || P.kicker === false ? "" : kick, str(pick(P, ["title", "titel", "heading"], "")), aHead);
     dust(ctx, p, 26);
 
@@ -639,7 +655,7 @@
     const centers = items.map((it, i) => X(pos[i]) + (it.wmm * s) / 2);
     for (const { it, cx, top, na } of names) {
       const i = items.indexOf(it);
-      const leftB = i === 0 ? x0 - 40 : (centers[i - 1] + cx) / 2, rightB = i === n - 1 ? (ro ? 1335 : 1800) : (cx + centers[i + 1]) / 2;
+      const leftB = i === 0 ? x0 - 40 : (centers[i - 1] + cx) / 2, rightB = i === n - 1 ? (ro ? Math.min(1800, 1335 + shiftX) : 1800) : (cx + centers[i + 1]) / 2;
       const maxW = clamp(2 * Math.min(cx - leftB, rightB - cx) - 18, 120, 420);
       const maxLines = it.hmm >= maxH * 0.9 ? 2 : 3;
       const o = { font: F_BODY, weight: 600, size: 28 };
@@ -668,10 +684,7 @@
     if (ro) {
       const nl = ro.label ? Math.min(3, wrap(ctx, ro.label, 360, { font: F_BODY, weight: 400, size: 25 }).length) : 0;
       const ph = 290 + nl * 32; const py = clamp(yc - ph / 2, 290, 740 - ph);
-      const tileDur = clamp(0.14 * d, 0.4, 0.8), valDur = clamp(0.22 * d, 0.6, 1.3);
-      const tTile = atOf(ro.raw, d, beatOf(p, 1, Math.min(Math.max(tAll - 0.05 * d, 0.5 * d), d - 0.3 - tileDur)));
-      const tVal = atOf(ro.raw, d, beatOf(p, 2, Math.min(Math.max(tTile + 0.35, tAll, 0.52 * d), d - 0.3 - valDur * 0.6)), ["value_at", "count_at", "number_at"]);
-      const k = seg(t, tTile, tileDur); if (k > 0) drawReadout(ctx, L, p, ro, 1350, py, 420, ph, k, seg(t, tVal, valDur));
+      const k = seg(t, tTile, tileDur); if (k > 0) drawReadout(ctx, L, p, ro, Math.min(1350 + shiftX, 1390), py, 420, ph, k, seg(t, tVal, valDur));
     }
   }
 
@@ -701,7 +714,16 @@
     ctx.fillStyle = "rgba(255,179,71,0.14)"; ctx.fill(); ctx.strokeStyle = COL.amber; ctx.lineWidth = 2.4; ctx.stroke();
     ctx.restore();
     ctx.save(); ctx.translate(ax, ay); ctx.rotate(ang);
-    text(ctx, ro.unitTon ? "t" : "F", 0, ropeLen + 16 + 45, { font: F_HEAD, weight: 700, size: 32, color: COL.amber, align: "center", alpha: a });
+    // Einheit auf dem Gewicht: „t“ erst mit dem gesprochenen Wert (bei Wort-für-Wort-Aufdeckung mit dem Einheitenwort)
+    let ua = 1;
+    if (ro.unitTon) {
+      const nums = ro.value.match(/\d+(?:[.,]\d+)?/g) || [];
+      if (nums.length > 1) {
+        const ws = ro.value.split(/\s+/).filter(Boolean); let ui = ws.findIndex((w) => /^t\.?$|^tonne/i.test(w)); if (ui < 0) ui = ws.length - 1;
+        ua = seg(cnt, ui / ws.length, 0.8 / ws.length);
+      } else ua = seg(cnt, 0, 0.25);
+    }
+    if (ua > 0) text(ctx, ro.unitTon ? "t" : "F", 0, ropeLen + 16 + 45 + (1 - eo(ua)) * 8, { font: F_HEAD, weight: 700, size: 32, color: COL.amber, align: "center", alpha: a * ua, glow: ua < 1 ? 14 * ua : 0 });
     ctx.restore();
     // Wert – erst zum Beat; vorher gestrichelter Platzhalter mit blinkendem Cursor
     const vo = { font: F_MONO, weight: 700, size: fitSize(ctx, ro.value, w - 60, { font: F_MONO, weight: 700, size: 56 }, 26) };

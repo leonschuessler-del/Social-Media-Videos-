@@ -16,14 +16,23 @@
      footnote.at | footnote_at    Fußnote (Standard: mit Zeichenbeginn)
      inset.at (+ value_at)        Maßstabs-Inset (Standard: 45 % von d); value_at = Maßzahl erscheint
    Ohne beats/at skaliert alles mit d. Einmal Erschienenes bleibt bis Szenenende sichtbar (Puls, Lichtimpulse).
+   CARRY_IN (params.carry_in, Fortsetzung derselben Grafik aus der Vorszene): Panel, Achsen, Ticks, Titel, Legende und
+     jede Serie/Grenzlinie/y-Band/Zone/Annotation/Fußnote/Inset OHNE eigenes at (oder mit at <= 0,3 s) stehen ab t = 0
+     fertig da – kein Einzeichnen, kein Aufziehen, kein Blitz, kein Pop-Ring; Blinken läuft weiter. Nur Elemente mit
+     at > 0,3 s sowie sub_at/value_at animieren. Annotationen ohne at gelten nur als übernommen, wenn ihre Serie es ist.
+     carry_in: true | <Dauer der Vorszene in s> (dann laufen Staub, Strichfluss und Pulse phasengleich weiter).
+     Negatives at (bzw. series.end) = so viele Sekunden VOR Szenenbeginn erschienen/fertig gezeichnet (Phase von
+     Blinken, Ringen, Lichtstreifen wie in der Vorszene: at_neu = at_alt − Dauer_Vorszene).
 
    params (alle optional – ohne gültige Serie wird das Standardbeispiel „Seilriss → Fangvorrichtung“ gezeigt):
      title                  Diagrammtitel (Aliase: titel, heading)
      x_label / y_label      Achsenbeschriftungen (Aliase: xLabel, x_achse, …)
      y_unit / x_unit        Einheiten (x_unit wird sonst aus „… in s“, „(s)“, „[s]“ im x_label gelesen)
      series                 [{ name, points: [[x,y],…] | [{x,y},…] | [y0,y1,…], color?, at?, end?, dur? }]
-     annotations            [{ x, y?, label, color?, sub?, at?, sub_at?, blink?, series? }] – sub = zweite Zeile
-                            (Standard: x-Wert mit Einheit, "" = keine); blink: true = Marke blinkt deutlich.
+     annotations            [{ x, y?, label, color?, sub?, at?, sub_at?, blink?, series?, place? }] – sub = zweite Zeile
+                            (Standard: x-Wert mit Einheit, "" = keine); blink: true = Marke blinkt deutlich;
+                            place: "near" = Label-Box so nah wie möglich am Punkt (knapp darüber, sonst weiter oben,
+                            dann darunter) statt oben im Plot gestapelt.
      x_min/x_max/y_min/y_max  Achsenbereich (sonst automatisch; y mit „schönem“ Rundungswert)
      ref_lines              horizontale Grenzlinien [{ y, label, color, at? }]
      zones                  x-Bereiche [{ from|x0, to|x1, label, color, at? }]
@@ -388,7 +397,7 @@
     const out = [];
     for (const a of raw) {
       if (out.length >= MAX_ANN) break;
-      let x, y = null, label = "", color = COL.amber, sub, ser, at = NaN, subAt = NaN, blink = false;
+      let x, y = null, label = "", color = COL.amber, sub, ser, at = NaN, subAt = NaN, blink = false, near = false;
       if (Array.isArray(a)) { x = num(a[0], NaN); label = str(a[1], ""); if (a.length > 2) y = num(a[2], null); }
       else if (isObj(a)) {
         x = num(pick(a, ["x", "t", "time", "zeit", "bei", "pos", "x_value"]), NaN);
@@ -403,10 +412,12 @@
         else if (sv !== undefined) sub = typeof sv === "number" ? fmt(sv, decFor(sv)) : str(sv, undefined);
         subAt = timeOf(a, ["sub_at", "value_at", "detail_at"]);
         blink = truthy(pick(a, ["blink", "blinks", "blinken", "pulse", "emphasis", "highlight"]));
+        const pl = str(pick(a, ["place", "placement", "label_place", "label_pos", "platzierung"]), "").trim().toLowerCase();
+        near = /^(near|nah|nahe|close|point|punkt|am_punkt|at_point|local)/.test(pl);
       } else continue;
       if (!Number.isFinite(x)) continue;
       if (sub === undefined) sub = `${fmt(x, Math.min(3, Math.max(decFor(x), xDecHint)))}${xUnit ? " " + xUnit : ""}`;
-      out.push({ x, y: Number.isFinite(y) ? y : null, label: label.trim(), color, sub: String(sub).trim(), ser, at, subAt, blink });
+      out.push({ x, y: Number.isFinite(y) ? y : null, label: label.trim(), color, sub: String(sub).trim(), ser, at, subAt, blink, near });
     }
     out.sort((p, q) => p.x - q.x);
     return out;
@@ -537,6 +548,18 @@
     M.beats = Array.isArray(br) ? br.map((b) => num(b, NaN)) : br !== undefined ? [num(br, NaN)] : [];
     M.footnote = normFootnote(params);
     M.inset = normInset(params);
+    // carry_in: Fortsetzung einer vorherigen graph-Szene – alles ohne eigenes at (bzw. at <= 0,3 s) steht ab t = 0 fertig da.
+    // true | Zahl (= Dauer der Vorszene: Umgebungsbewegung wie Staub, Strichfluss, Pulse läuft nahtlos weiter) | { prev_d }
+    {
+      const cr = pick(params, ["carry_in", "carryIn", "carry", "carry_over", "continue", "continued", "fortsetzung", "weiter"]);
+      let on = false, t0 = 0;
+      if (typeof cr === "number") { on = Number.isFinite(cr) && cr > 0; t0 = on ? cr : 0; }
+      else if (isObj(cr)) { on = true; t0 = num(pick(cr, ["prev_d", "prev_duration", "t0", "offset", "from", "since"]), 0); }
+      else if (cr !== undefined) on = truthy(cr);
+      const t0b = num(pick(params, ["carry_t0", "carry_prev_d", "prev_d"]), NaN);
+      if (Number.isFinite(t0b)) t0 = t0b;
+      M.carry = on ? { t0: clamp(Number.isFinite(t0) ? t0 : 0, 0, 600) } : null;
+    }
     M.xTickOpt = tickOpt(params, "x");
     M.yTickOpt = tickOpt(params, "y");
     M.xReverse = truthy(pick(params, ["x_reverse", "reverse_x", "x_reversed", "invert_x", "x_invert", "x_umgekehrt"]));
@@ -720,8 +743,11 @@
       const y0 = clamp(b.y0, M.yMin, M.yMax), y1 = clamp(b.y1, M.yMin, M.yMax);
       const pyTop = sy(y1), pyBot = sy(y0);
       if (pyBot - pyTop < 2) continue;
-      const edgeTop = b.edges && !M.refs.some((r) => Math.abs(r.y - y1) < 1e-9 * Math.max(1, Math.abs(y1))) && y1 < M.yMax;
-      const edgeBot = b.edges && !M.refs.some((r) => Math.abs(r.y - y0) < 1e-9 * Math.max(1, Math.abs(y0))) && y0 > M.yMin;
+      // Kante, die mit einer Grenzlinie zusammenfällt: nur sichtbar, solange diese Linie noch nicht eingefahren ist
+      const sameY = (r, v) => Math.abs(r.y - v) < 1e-9 * Math.max(1, Math.abs(v));
+      const edgeTopRef = G.refs.findIndex((r) => sameY(r, y1)), edgeBotRef = G.refs.findIndex((r) => sameY(r, y0));
+      const edgeTop = b.edges && y1 < M.yMax && (edgeTopRef >= 0 || !M.refs.some((r) => sameY(r, y1)));
+      const edgeBot = b.edges && y0 > M.yMin && (edgeBotRef >= 0 || !M.refs.some((r) => sameY(r, y0)));
       let cap = null;
       if (b.label) {
         const size = 19;
@@ -748,7 +774,7 @@
         cap = { label: lab, size, box: best, inside: best.y >= pyTop && best.y + best.h <= pyBot };
         obst.push(best);
       }
-      G.ybands.push({ ...b, pyTop, pyBot, edgeTop, edgeBot, cap });
+      G.ybands.push({ ...b, pyTop, pyBot, edgeTop, edgeBot, edgeTopRef, edgeBotRef, cap });
     }
 
     // Inset mit fester Ecke vor den Annotationen platzieren (Labels weichen aus)
@@ -789,22 +815,48 @@
       const RMAX = G.PR + 34; // Labels dürfen bis in den rechten Innenrand des Panels ragen
       if (a.px + GAP + a.w > RMAX) prefRight = false;
       // level 0: frei von Kurve, Labels und fremden Markierungen; 1: Markierungen erlaubt; 2: Kurve erlaubt
+      const boxOk = (box, level) => {
+        if (obst.some((o) => rectsHit(o, box, o.ref ? 18 : 10))) return false;
+        if (level < 2 && curveHits({ x: box.x - 6, y: box.y - 12, w: box.w + 12, h: box.h + 24 })) return false;
+        if (level < 1 && markerXs.some((mx, j) => j !== i && mx > box.x - 8 && mx < box.x + box.w + 8)) return false;
+        // Kurvenpunkt der eigenen Markierung nicht verdecken
+        if (a.px > box.x - 10 && a.px < box.x + box.w + 10 && a.py > box.y - 10 && a.py < box.y + box.h + 10) return false;
+        return true;
+      };
       const tryPlace = (side, level) => {
         const bx = side > 0 ? a.px + GAP : a.px - GAP - a.w;
         if (bx < G.PL + 4 || bx + a.w > RMAX) return null;
         for (let by = G.PT + 6; by <= G.PB - a.h - 8; by += 6) {
           const box = { x: bx, y: by, w: a.w, h: a.h };
-          if (obst.some((o) => rectsHit(o, box, o.ref ? 18 : 10))) continue;
-          if (level < 2 && curveHits({ x: box.x - 6, y: box.y - 12, w: box.w + 12, h: box.h + 24 })) continue;
-          if (level < 1 && markerXs.some((mx, j) => j !== i && mx > box.x - 8 && mx < box.x + box.w + 8)) continue;
-          // Kurvenpunkt der eigenen Markierung nicht verdecken
-          if (a.px > box.x - 10 && a.px < box.x + box.w + 10 && a.py > box.y - 10 && a.py < box.y + box.h + 10) continue;
-          return box;
+          if (boxOk(box, level)) return box;
         }
         return null;
       };
+      // place: "near" – Box so nah wie möglich am Markierungspunkt (zuerst knapp darüber, dann weiter oben, dann darunter)
+      const nearCost = (box) => {
+        const above = a.py - (box.y + box.h), below = box.y - a.py;
+        return above >= 0 ? Math.max(0, above - 16) : below >= 0 ? below - 16 + 24 : 1e6;
+      };
+      const tryNear = (side, level) => {
+        const bx = side > 0 ? a.px + GAP : a.px - GAP - a.w;
+        if (bx < G.PL + 4 || bx + a.w > RMAX) return null;
+        let best = null, bc = Infinity;
+        for (let by = G.PT + 6; by <= G.PB - a.h - 8; by += 3) {
+          const box = { x: bx, y: by, w: a.w, h: a.h };
+          const c = nearCost(box);
+          if (c >= bc) continue;
+          if (boxOk(box, level)) { best = box; bc = c; }
+        }
+        return best ? { box: best, c: bc } : null;
+      };
       let chosen = null, side = 1;
       for (const level of [0, 1, 2]) {
+        if (a.near) {
+          const r = tryNear(1, level), l = tryNear(-1, level);
+          const sr = r ? r.c + (prefRight ? 0 : 30) : Infinity, sl = l ? l.c + (prefRight ? 30 : 0) : Infinity;
+          if (r || l) { if (sr <= sl) { chosen = r.box; side = 1; } else { chosen = l.box; side = -1; } break; }
+          continue;
+        }
         const r = tryPlace(1, level), l = tryPlace(-1, level);
         const sr = r ? r.y + (prefRight ? 0 : 70) : Infinity, sl = l ? l.y + (prefRight ? 70 : 0) : Infinity;
         if (r || l) { if (sr <= sl) { chosen = r; side = 1; } else { chosen = l; side = -1; } break; }
@@ -1221,6 +1273,14 @@
     const { PL, PT: pT, PB: pB } = G; const pR = G.PR;
     const cT = (v) => clamp(v, 0.3, Math.max(0.3, d - 0.3));
     const fin = Number.isFinite;
+    // carry_in: Elemente ohne eigenes at (oder at <= 0,3 s) stehen ab t = 0 fertig da; negatives at = so viele Sekunden
+    // vor Szenenbeginn erschienen (nur für die Phase von Blinken/Ringen/Lichtstreifen). tA = Umgebungszeit (Staub,
+    // Strichfluss, Pulse), mit Zahl in carry_in um die Dauer der Vorszene versetzt -> nahtlos über die Überblendung.
+    const CI = !!M.carry;
+    const tA = t + (CI ? M.carry.t0 : 0);
+    const CARRY_AGE = 3;
+    const carriedAt = (at) => CI && (!fin(at) || at <= 0.3);
+    const lifeStart = (at) => (fin(at) && at < 0 ? at : -CARRY_AGE);
 
     // ---- Phasen (BEATS bzw. relativ zu d) ----
     const B = M.beats || [];
@@ -1233,6 +1293,11 @@
     const annDur = clamp(0.08 * d, 0.35, 0.75);
     const segT = G.series.map((s) => {
       const own = fin(s.at);
+      if (carriedAt(s.at)) {
+        const t1c = fin(s.end) && s.end < 0 ? s.end : -CARRY_AGE;
+        const xa = own ? s.x0 : G.dx0, xb = own ? s.x1 : G.dx1;
+        return { t0: t1c - 0.5, t1: t1c, xs: G.ddir > 0 ? xa : xb, xe: G.ddir > 0 ? xb : xa, carried: true };
+      }
       const t0 = own ? cT(s.at) : drawStart;
       let t1 = fin(s.end) ? cT(s.end) : fin(s.dur) ? t0 + Math.max(0.2, s.dur) : own ? t0 + (drawEnd - drawStart) : drawEnd;
       if (!fin(s.end) && own && t1 > d - 0.3) t1 = Math.max(t0 + 0.3, d - 0.3);
@@ -1257,18 +1322,25 @@
     const tAllDone = segT.reduce((m, T) => Math.max(m, T.t1), 0);
 
     // ---- Panel + Staub ----
-    const panelA = eo(seg(t, 0, Math.min(0.35, introDur * 0.6)));
+    const panelA = CI ? 1 : eo(seg(t, 0, Math.min(0.35, introDur * 0.6)));
     drawBackdrop(ctx, p, panelA);
-    drawPanel(ctx, t, panelA);
-    drawDust(ctx, t, panelA);
+    drawPanel(ctx, tA, panelA);
+    drawDust(ctx, tA, panelA);
+
+    // Einfahr-Fortschritt der Grenzlinien (auch für zusammenfallende Band-Kanten)
+    const refCar = G.refs.map((r) => carriedAt(r.at));
+    const refTr = G.refs.map((r, i) => (refCar[i] ? -CARRY_AGE : fin(r.at) ? cT(r.at) : introDur * 0.6 + i * 0.12));
+    const refK = refTr.map((tr) => eo(seg(t, tr, 0.7)));
 
     // ---- y-Bänder (hinter Raster und Kurve) ----
+    const bandCar = G.ybands.map((b) => carriedAt(b.at));
+    const bandTb = G.ybands.map((b, bi) => (bandCar[bi] ? lifeStart(b.at) : fin(b.at) ? cT(b.at) : introDur * 0.6 + 0.1 + bi * 0.15));
     G.ybands.forEach((b, bi) => {
-      const tb = fin(b.at) ? cT(b.at) : introDur * 0.6 + 0.1 + bi * 0.15;
-      const k = eo(seg(t, tb, 0.75)); if (k <= 0) return;
+      const tb = bandTb[bi];
+      const k = bandCar[bi] ? 1 : eo(seg(t, tb, 0.75)); if (k <= 0) return;
       const wv = (pR - PL) * k, xa = G.sdir > 0 ? PL : pR - wv;
       const hB = b.pyBot - b.pyTop;
-      const breathe = 0.85 + 0.15 * Math.sin(t * 1.7 + bi * 1.3);
+      const breathe = 0.85 + 0.15 * Math.sin(tA * 1.7 + bi * 1.3);
       ctx.save();
       ctx.fillStyle = rgba(b.color, 0.07 * breathe); ctx.fillRect(xa, b.pyTop, wv, hB);
       // weiche Innenkanten
@@ -1280,7 +1352,7 @@
       // Schraffur (langsam wandernd)
       ctx.beginPath(); ctx.rect(xa, b.pyTop, wv, hB); ctx.clip();
       ctx.globalAlpha = 0.06; ctx.strokeStyle = b.color; ctx.lineWidth = 1; ctx.beginPath();
-      const off = (t * 9) % 26;
+      const off = (tA * 9) % 26;
       for (let xx = xa - hB + off; xx < xa + wv; xx += 26) { ctx.moveTo(xx, b.pyBot); ctx.lineTo(xx + hB, b.pyTop); }
       ctx.stroke();
       // Lichtstreifen, der regelmäßig durch das Band wandert
@@ -1294,8 +1366,16 @@
         }
       }
       ctx.restore();
-      if (b.edgeTop) line(ctx, xa, b.pyTop, xa + wv, b.pyTop, b.color, 1.5, 0.5, 0.6);
-      if (b.edgeBot) line(ctx, xa, b.pyBot, xa + wv, b.pyBot, b.color, 1.5, 0.5, 0.6);
+      const edge = (py, ri) => {
+        let e0 = xa, e1 = xa + wv;
+        if (ri >= 0) { // von der gleichliegenden Grenzlinie bereits überdeckten Teil auslassen
+          const wr = (pR - PL) * refK[ri];
+          if (G.sdir > 0) e0 = Math.max(e0, PL + wr); else e1 = Math.min(e1, pR - wr);
+        }
+        if (e1 > e0 + 0.5) line(ctx, e0, py, e1, py, b.color, 1.5, 0.5, 0.6);
+      };
+      if (b.edgeTop) edge(b.pyTop, b.edgeTopRef);
+      if (b.edgeBot) edge(b.pyBot, b.edgeBotRef);
     });
 
     // ---- x-Bereiche (hinter dem Raster) ----
@@ -1307,7 +1387,8 @@
     const rev0 = revealOf();
     for (const z of G.zones) {
       let va, vb, fa, ca;
-      if (fin(z.at)) {
+      if (carriedAt(z.at)) { va = z.zx0; vb = z.zx1; fa = 1; ca = 1; }
+      else if (fin(z.at)) {
         const tz = cT(z.at); const k = eo(seg(t, tz, 0.6)); if (k <= 0) continue;
         const wz = (z.zx1 - z.zx0) * k;
         if (G.sdir > 0) { va = z.zx0; vb = z.zx0 + wz; } else { va = z.zx1 - wz; vb = z.zx1; }
@@ -1331,12 +1412,12 @@
     }
 
     // ---- Raster, Achsen, Ticks ----
-    const ax = eo(seg(t, 0.05, introDur));
-    const ay = eo(seg(t, 0.12, introDur));
+    const ax = CI ? 1 : eo(seg(t, 0.05, introDur));
+    const ay = CI ? 1 : eo(seg(t, 0.12, introDur));
     ctx.save();
     ctx.lineWidth = 1;
     G.yGrid.forEach((v, i) => {
-      const py = Math.round(G.sy(v)) + 0.5; const k = sm(seg(t, 0.15 + i * 0.05, 0.4));
+      const py = Math.round(G.sy(v)) + 0.5; const k = CI ? 1 : sm(seg(t, 0.15 + i * 0.05, 0.4));
       if (k <= 0) return;
       ctx.globalAlpha = k;
       ctx.strokeStyle = Math.abs(v - M.yMin) < 1e-12 ? "rgba(143,179,217,0)" : "rgba(143,179,217,0.15)";
@@ -1347,7 +1428,7 @@
       }
     });
     G.xGrid.forEach((v, i) => {
-      const px = Math.round(G.sx(v)) + 0.5; const k = sm(seg(t, 0.2 + i * 0.04, 0.4));
+      const px = Math.round(G.sx(v)) + 0.5; const k = CI ? 1 : sm(seg(t, 0.2 + i * 0.04, 0.4));
       if (k <= 0 || px < PL + 2) return;
       ctx.globalAlpha = k; ctx.strokeStyle = "rgba(143,179,217,0.075)";
       ctx.beginPath(); ctx.moveTo(px, pB); ctx.lineTo(px, pB - (pB - pT) * k); ctx.stroke();
@@ -1362,7 +1443,7 @@
     // Ticks + Beschriftung
     ctx.save(); ctx.strokeStyle = axisCol; ctx.lineWidth = 1.5;
     if (G.YO.marks || G.YO.labels) G.yTicks.forEach((v, i) => {
-      const k = sm(seg(t, 0.25 + i * 0.05, 0.35)); if (k <= 0) return;
+      const k = CI ? 1 : sm(seg(t, 0.25 + i * 0.05, 0.35)); if (k <= 0) return;
       const py = G.sy(v); ctx.globalAlpha = k;
       if (G.YO.marks) { ctx.beginPath(); ctx.moveTo(PL - 8, py); ctx.lineTo(PL, py); ctx.stroke(); }
       if (G.YO.labels) txt(ctx, G.yLabels[i], PL - 16, py + 8, { size: 22, weight: 400, font: F_MONO, color: COL.muted, align: "right", alpha: k });
@@ -1370,7 +1451,7 @@
     // x: Haupt- und Nebenteilung
     const minorN = G.xCustom ? 0 : [1, 2, 5].includes(Math.round(G.xStep / Math.pow(10, Math.floor(Math.log10(G.xStep))))) ? 5 : 4;
     if (G.XO.marks || G.XO.labels) G.xTicks.forEach((v, i) => {
-      const k = sm(seg(t, 0.3 + i * 0.04, 0.35)); if (k <= 0) return;
+      const k = CI ? 1 : sm(seg(t, 0.3 + i * 0.04, 0.35)); if (k <= 0) return;
       const px = G.sx(v); ctx.globalAlpha = k;
       if (G.XO.marks) { ctx.beginPath(); ctx.moveTo(px, pB); ctx.lineTo(px, pB + 9); ctx.stroke(); }
       if (G.XO.labels) txt(ctx, G.xLabels[i], px, XTICK_Y, { size: 22, weight: 400, font: F_MONO, color: COL.muted, align: "center", alpha: k });
@@ -1383,7 +1464,7 @@
     ctx.restore();
 
     // ---- Achsenbeschriftungen, Titel, Legende ----
-    const labA = sm(seg(t, introDur * 0.5, 0.5));
+    const labA = CI ? 1 : sm(seg(t, introDur * 0.5, 0.5));
     if (M.yLabel) txt(ctx, M.yLabel, G.ylabX, YLAB_Y, { size: 23, weight: 600, color: COL.muted, alpha: labA, ls: 0.3 });
     if (M.xLabel) {
       txt(ctx, M.xLabel, pR + 24, XLAB_Y, { size: 23, weight: 600, color: COL.muted, alpha: labA, align: "right", ls: 0.3 });
@@ -1396,11 +1477,11 @@
     }
     const HD = G.header;
     if (HD.title.lines.length) {
-      const ta = sm(seg(t, 0.1, 0.55)); const slide = (1 - eo(seg(t, 0.1, 0.7))) * -18;
+      const ta = CI ? 1 : sm(seg(t, 0.1, 0.55)); const slide = CI ? 0 : (1 - eo(seg(t, 0.1, 0.7))) * -18;
       const nl = HD.title.lines.length, sz = HD.title.size, lh = Math.round(sz * 1.14);
       const lastY = nl > 1 ? TITLE_Y + 12 : TITLE_Y;
       HD.title.lines.forEach((l, i) => txt(ctx, l, IN_L + slide, lastY - (nl - 1 - i) * lh, { size: sz, weight: 700, font: F_HEAD, color: COL.white, alpha: ta, ls: 2, glow: 12, glowColor: rgba(COL.cyan, 0.7) }));
-      const ul = eo(seg(t, 0.35, 0.8)); const uy = lastY + 14;
+      const ul = CI ? 1 : eo(seg(t, 0.35, 0.8)); const uy = lastY + 14;
       ctx.save(); ctx.globalAlpha = ta; ctx.fillStyle = COL.amber; ctx.fillRect(IN_L, uy, 64 * ul, 3); ctx.fillStyle = rgba(COL.cyan, 0.35); ctx.fillRect(IN_L + 70 * ul, uy + 1, Math.max(0, (Math.min(HD.title.w, 520) - 70) * ul), 1); ctx.restore();
     }
     HD.rows.forEach((row, ri) => {
@@ -1408,9 +1489,9 @@
       let x = pR + 24; const y = ri === 0 ? TITLE_Y - 9 : YLAB_Y - 8;
       for (let j = row.length - 1; j >= 0; j--) {
         const it = row[j];
-        const k = fin(it.at) ? sm(seg(t, cT(it.at) - 0.1, 0.5)) : sm(seg(t, 0.35 + (ri * 3 + j) * 0.08, 0.5));
+        const k = carriedAt(it.at) ? 1 : fin(it.at) ? sm(seg(t, cT(it.at) - 0.1, 0.5)) : sm(seg(t, 0.35 + (ri * 3 + j) * 0.08, 0.5));
         x -= it.w;
-        const pulse = 0.75 + 0.25 * Math.sin(t * 2.4 + j + ri);
+        const pulse = 0.75 + 0.25 * Math.sin(tA * 2.4 + j + ri);
         line(ctx, x, y, x + 30, y, it.color, 3.5, 0.8, k);
         dot(ctx, x + 30, y, 12, it.color, k * pulse);
         disc(ctx, x + 30, y, 3.5, "#ffffff", k);
@@ -1421,12 +1502,12 @@
 
     // ---- Referenzlinien ----
     G.refs.forEach((r, i) => {
-      const tr = fin(r.at) ? cT(r.at) : introDur * 0.6 + i * 0.12;
-      const k = eo(seg(t, tr, 0.7)); if (k <= 0) return;
+      const tr = refTr[i];
+      const k = refK[i]; if (k <= 0) return;
       const wr = (pR - PL) * k;
-      if (G.sdir > 0) line(ctx, PL, r.py, PL + wr, r.py, r.color, 1.6, 0, 0.6, [10, 9], -t * 10);
-      else line(ctx, pR - wr, r.py, pR, r.py, r.color, 1.6, 0, 0.6, [10, 9], t * 10);
-      if (fin(r.at)) { const fl = 1 - seg(t, tr, 0.9); if (fl > 0) line(ctx, PL, r.py, pR, r.py, r.color, 2.4, 1, 0.35 * fl * k); }
+      if (G.sdir > 0) line(ctx, PL, r.py, PL + wr, r.py, r.color, 1.6, 0, 0.6, [10, 9], -tA * 10);
+      else line(ctx, pR - wr, r.py, pR, r.py, r.color, 1.6, 0, 0.6, [10, 9], tA * 10);
+      if (fin(r.at) && !refCar[i]) { const fl = 1 - seg(t, tr, 0.9); if (fl > 0) line(ctx, PL, r.py, pR, r.py, r.color, 2.4, 1, 0.35 * fl * k); }
       const b = r.box;
       txt(ctx, r.label, r.align === "right" ? b.x + b.w - 4 : b.x + 4, b.y + 18, { size: 19, weight: 600, color: mix(r.color, "#ffffff", 0.15), alpha: sm(seg(k, 0.6, 0.4)) * 0.9, align: r.align, ls: 0.5, stroke: 5 });
     });
@@ -1434,8 +1515,7 @@
     // ---- y-Band-Beschriftungen ----
     G.ybands.forEach((b, bi) => {
       if (!b.cap) return;
-      const tb = fin(b.at) ? cT(b.at) : introDur * 0.6 + 0.1 + bi * 0.15;
-      const ka = sm(seg(t, tb + 0.35, 0.45)); if (ka <= 0) return;
+      const ka = bandCar[bi] ? 1 : sm(seg(t, bandTb[bi] + 0.35, 0.45)); if (ka <= 0) return;
       const c = b.cap;
       txt(ctx, c.label, c.box.x + 4, c.box.y + c.box.h - 7, { size: c.size, weight: 700, color: mix(b.color, "#ffffff", 0.3), alpha: ka * 0.92, ls: 2, stroke: 4 });
     });
@@ -1443,17 +1523,18 @@
     // ---- Markierungslinien der Annotationen (hinter der Kurve) ----
     const annState = G.anns.map((a) => {
       const own = fin(a.at);
-      const tp = own ? cT(a.at) : passTime(a.si, a.x);
-      const lt = t - tp;
       const T = segT[a.si] || T0;
-      return { a, tp, lt, on: lt >= 0 && (own || t >= T.t0) };
+      const car = CI && (own ? a.at <= 0.3 : !!T.carried);
+      const tp = car ? lifeStart(a.at) : own ? cT(a.at) : passTime(a.si, a.x);
+      const lt = t - tp;
+      return { a, tp, lt, on: lt >= 0 && (car || own || t >= T.t0) };
     });
     for (const s of annState) {
       if (!s.on) continue;
       const a = s.a; const k = eo(seg(s.lt, 0, annDur * 0.7));
       const up = lerp(a.py, pT - 4, k), dn = lerp(a.py, pB, k);
       const bl = a.blink && s.lt > 0.5 ? 0.55 + 0.45 * (0.5 + 0.5 * Math.cos((s.lt - 0.5) * Math.PI * 2.6)) : 1;
-      line(ctx, a.px, up, a.px, dn, a.color, 1.8, 0, 0.8 * bl, [7, 7], -t * 12);
+      line(ctx, a.px, up, a.px, dn, a.color, 1.8, 0, 0.8 * bl, [7, 7], -tA * 12);
     }
 
     // ---- Kurven ----
@@ -1518,7 +1599,7 @@
       if (!s.on) continue;
       const a = s.a; const lt = s.lt;
       const pop = eob(seg(lt, 0, 0.35));
-      const breathe = a.blink ? 0.45 + 0.55 * (0.5 + 0.5 * Math.cos(lt * Math.PI * 2.6)) : 0.8 + 0.2 * Math.sin(t * 2.2 + a.x * 7);
+      const breathe = a.blink ? 0.45 + 0.55 * (0.5 + 0.5 * Math.cos(lt * Math.PI * 2.6)) : 0.8 + 0.2 * Math.sin(tA * 2.2 + a.x * 7);
       dot(ctx, a.px, a.py, (a.blink ? 30 : 22) * pop, a.color, (a.blink ? 0.75 : 0.55) * breathe);
       const fl = 1 - seg(lt, 0, 0.45);
       if (fl > 0) { dot(ctx, a.px, a.py, 60 * (0.6 + 0.4 * fl), a.color, fl * 0.75); }
@@ -1534,8 +1615,8 @@
     // ---- Kurvenköpfe ----
     heads.forEach((h, si) => {
       if (!h) return;
-      const pul = 0.8 + 0.2 * Math.sin(t * 6 + si);
-      const endK = h.done ? 0.75 + 0.25 * Math.sin(t * 2.6 + si) : 1;
+      const pul = 0.8 + 0.2 * Math.sin(tA * 6 + si);
+      const endK = h.done ? 0.75 + 0.25 * Math.sin(tA * 2.6 + si) : 1;
       if (!h.done) dot(ctx, h.x, h.y, 78 * pul, h.color, 0.22);
       dot(ctx, h.x, h.y, (h.done ? 26 : 34) * pul, h.color, 0.9 * endK);
       disc(ctx, h.x, h.y, 7, h.color, 1);
@@ -1613,9 +1694,10 @@
     // ---- Maßstabs-Inset ----
     if (G.inset) {
       const S = M.inset;
-      const tI = fin(S.at) ? cT(S.at) : cT(Math.max(drawStart + 0.5, 0.45 * d));
-      const fI = clamp((d - 0.1 - tI) / 1.5, 0.25, 1);
-      const tV = fin(S.valueAt) ? cT(S.valueAt) : Math.min(tI + 1.2 * fI, Math.max(tI, d - 0.3));
+      const carI = carriedAt(S.at);
+      const tI = carI ? lifeStart(S.at) - 2 : fin(S.at) ? cT(S.at) : cT(Math.max(drawStart + 0.5, 0.45 * d));
+      const fI = carI ? 1 : clamp((d - 0.1 - tI) / 1.5, 0.25, 1);
+      const tV = carI ? (fin(S.valueAt) && S.valueAt > 0.3 ? cT(S.valueAt) : tI) : fin(S.valueAt) ? cT(S.valueAt) : Math.min(tI + 1.2 * fI, Math.max(tI, d - 0.3));
       drawInset(ctx, G, t, tI, tV, fI);
     }
 
@@ -1631,7 +1713,7 @@
     // ---- Fußnote ----
     if (G.foot) {
       const F = G.foot;
-      const fa = sm(seg(t, fin(M.footnote.at) ? cT(M.footnote.at) : Math.max(introDur, drawStart) + 0.15, 0.5));
+      const fa = carriedAt(M.footnote.at) ? 1 : sm(seg(t, fin(M.footnote.at) ? cT(M.footnote.at) : Math.max(introDur, drawStart) + 0.15, 0.5));
       if (fa > 0) {
         ctx.save(); ctx.globalAlpha = fa; ctx.fillStyle = COL.amber;
         ctx.fillRect(F.x - 14, F.y0 - F.size * 0.78, 3, F.size * 0.95 + (F.lines.length - 1) * F.lh); ctx.restore();

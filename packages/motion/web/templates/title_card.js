@@ -30,6 +30,9 @@
      carSpeed  Faktor für die Fahrgeschwindigkeit (Standard 1)
      blueprintAlpha  Deckkraft des Blueprints (Standard left 0,95 / center 0,5); carAlpha = eigene Deckkraft für Fahrkorb+Tragseile
      blueprintX / blueprintScale  Position (px oder Anteil von W) / Skalierung des Blueprints
+     fitTitle  true (Standard, nur layout "left"): Titel, Untertitel und Zusatzzeilen enden ≥ 40 px links vom Blueprint
+               (Triebwerksraum/Begrenzer/Geschossdecken, über die ganze Drehung gerechnet) – die Titelschrift wird
+               dafür schmaler gesetzt, statt dass Blueprint-Linien die letzten Buchstaben schneiden. false = alte Breite.
      stopwatch true | Zahl (eingefrorener Wert) | { at, value:0, run:false, runAt, rate:1, label, decimals:3, unit:"s" }
                HUD-Stoppuhr unter dem Untertitel, Standard eingefroren auf „0,000 s“.
      subscribe true | "Text" | { at, label:"ABONNIEREN", bell:true, color:"amber" } – Abonnieren-Button mit Glocke + Puls.
@@ -439,13 +442,36 @@
     const carA = num(pick(P, ["carAlpha", "car_alpha"]));
     const carMul = carA !== undefined ? clamp(carA, 0, 1.6) : bpMul;
 
+    // ---------- Blueprint-Grundlage (vor dem Text-Layout: der Titel weicht dem Blueprint aus) ----------
+    const yawRate = Math.min(3, 22 / d) * DEG;
+    const yaw0 = (center ? 22 : 24) * DEG;
+    const bxRaw = num(pick(P, ["blueprintX", "blueprint_x", "bpX"]));
+    const zoomK = clamp((SA.s - 1) / 0.1, 0, 1);
+    const bpX0 = bxRaw !== undefined ? (Math.abs(bxRaw) <= 1.5 ? bxRaw * W : bxRaw) : center ? W / 2 : 1385 - 70 * zoomK;
+    const bpScale = clamp(num(pick(P, ["blueprintScale", "blueprint_scale", "bpScale"])) ?? 1, 0.4, 1.8);
+    const bpSc0 = (center ? 1.0 : 0.94 - 0.04 * zoomK) * bpScale;
+    const bpOy0 = center ? 540 : 528;
+    /** Linke Kante des statischen Blueprints im Höhenband [y0, y1] – über die ganze Szene (Drehung, Drift, Wachstum) konservativ, gecacht. */
+    const bpLeftIn = (y0, y1) => cached(`BL|${d}|${bpX0}|${bpSc0}|${bpOy0}|${yaw0}|${Math.round(y0)}|${Math.round(y1)}`, () => {
+      if (!STATIC) STATIC = buildStatic();
+      let m = 1e9;
+      for (let i = 0; i <= 6; i++) {
+        const ti = (d * i) / 6, ui = sm(ti / d);
+        const Vi = makeView({ yaw: yaw0 + yawRate * ti, pitch: 8 * DEG, D: 2400, ox: bpX0 - 6, oy: bpOy0 + Math.sin(ti * 0.31 + 1) * 8 - 10 * ui, sc: bpSc0 * (1 + 0.03 * ui), camY: -620 });
+        for (const g of STATIC) {
+          const a = proj(Vi, g[1], g[2], g[3]), b = proj(Vi, g[4], g[5], g[6]);
+          if (Math.max(a[1], b[1]) < y0 - 8 || Math.min(a[1], b[1]) > y1 + 8) continue;
+          if (a[0] < m) m = a[0];
+          if (b[0] < m) m = b[0];
+        }
+      }
+      return m;
+    });
+
     // ---------- Text-Layout ----------
     const x0 = center ? W / 2 : Math.max(140, Math.ceil(SA.x0 + 12));
-    const maxW = center ? Math.min(1480, SA.x1 - SA.x0 - 80) : Math.min(1060, SA.x1 - x0 - 480);
+    const maxW0 = center ? Math.min(1480, SA.x1 - SA.x0 - 80) : Math.min(1060, SA.x1 - x0 - 480);
     const kSize = 24;
-    const sub = subtitle ? layoutSub(ctx, L, subtitle, center ? Math.min(1300, maxW) : Math.min(1000, maxW), center ? 40 : 38) : null;
-    const subLH = sub ? sub.size * 1.34 : 0;
-    const hSub = sub ? 40 + sub.size * 0.78 + (sub.lines.length - 1) * subLH + sub.size * 0.25 : 10;
     // Zusatzzeilen (Stoppuhr, Abonnieren) – Breiten für Zentrierung/Ausweichbox
     const exGap = 38;
     if (sw) {
@@ -458,29 +484,50 @@
     const hExtras = (sw ? exGap + 2 * SW_R + 22 : 0) + (sb ? exGap + SB_H : 0);
     const minTop = Math.max(118, SA.y0 + 28, overlay ? 236 : 0);
     const maxBot = Math.min(900, SA.y1 - 8);
-    const titleMaxH = clamp(maxBot - minTop - (kicker ? 74 : 0) - 44 - hSub - hExtras, 110, center ? 330 : 360);
-    const TL = layoutTitle(ctx, title, Math.floor(maxW), Math.floor(titleMaxH), center ? 116 : 104, 40);
-    const nLines = TL ? TL.lines.length : 0;
-    const S = TL ? TL.S : 80;
-    const capH = 0.72 * S;
-    const hKick = kicker ? kSize + 0.34 * S + 14 : 0;
-    const hTitle = TL ? capH + (nLines - 1) * TL.lh : 0;
-    const gapRuler = Math.max(26, 0.4 * S);
-    const total = hKick + hTitle + gapRuler + hSub + hExtras;
     const yc = center ? 470 : 480;
-    const top = Math.max(minTop, Math.min(yc - total / 2, maxBot - total));
-    const kBase = top + kSize * 0.78;
-    const tBase0 = top + hKick + capH;
-    const tBottom = tBase0 + (nLines - 1) * (TL ? TL.lh : 0);
-    const rulerY = tBottom + gapRuler;
-    const subBase0 = rulerY + 40 + (sub ? sub.size * 0.78 : 0);
-    let yCur = sub ? subBase0 + (sub.lines.length - 1) * subLH + sub.size * 0.3 : rulerY + 10;
-    let swY = 0, sbY = 0;
-    if (sw) { swY = yCur + exGap + 14 + SW_R; yCur += exGap + 2 * SW_R + 22; }
-    if (sb) { sbY = yCur + exGap + SB_H / 2; yCur += exGap + SB_H; }
-    const blockBottom = yCur;
-    const subW = sub ? Math.max(0, ...sub.lines.map((ln) => L.measure(ctx, ln, { size: sub.size, weight: 400, font: "Inter" }))) : 0;
-    const exW = Math.max(sw ? sw.w : 0, sb ? sb.w + 30 : 0, subW);
+    const layText = (maxW) => {
+      const sub = subtitle ? layoutSub(ctx, L, subtitle, center ? Math.min(1300, maxW) : Math.min(1000, maxW), center ? 40 : 38) : null;
+      const subLH = sub ? sub.size * 1.34 : 0;
+      const hSub = sub ? 40 + sub.size * 0.78 + (sub.lines.length - 1) * subLH + sub.size * 0.25 : 10;
+      const titleMaxH = clamp(maxBot - minTop - (kicker ? 74 : 0) - 44 - hSub - hExtras, 110, center ? 330 : 360);
+      const TL = layoutTitle(ctx, title, Math.floor(maxW), Math.floor(titleMaxH), center ? 116 : 104, 40);
+      const nLines = TL ? TL.lines.length : 0;
+      const S = TL ? TL.S : 80;
+      const capH = 0.72 * S;
+      const hKick = kicker ? kSize + 0.34 * S + 14 : 0;
+      const hTitle = TL ? capH + (nLines - 1) * TL.lh : 0;
+      const gapRuler = Math.max(26, 0.4 * S);
+      const total = hKick + hTitle + gapRuler + hSub + hExtras;
+      const top = Math.max(minTop, Math.min(yc - total / 2, maxBot - total));
+      const kBase = top + kSize * 0.78;
+      const tBase0 = top + hKick + capH;
+      const tBottom = tBase0 + (nLines - 1) * (TL ? TL.lh : 0);
+      const rulerY = tBottom + gapRuler;
+      const subBase0 = rulerY + 40 + (sub ? sub.size * 0.78 : 0);
+      let yCur = sub ? subBase0 + (sub.lines.length - 1) * subLH + sub.size * 0.3 : rulerY + 10;
+      let swY = 0, sbY = 0;
+      if (sw) { swY = yCur + exGap + 14 + SW_R; yCur += exGap + 2 * SW_R + 22; }
+      if (sb) { sbY = yCur + exGap + SB_H / 2; yCur += exGap + SB_H; }
+      const subW = sub ? Math.max(0, ...sub.lines.map((ln) => L.measure(ctx, ln, { size: sub.size, weight: 400, font: "Inter" }))) : 0;
+      const exW = Math.max(sw ? sw.w : 0, sb ? sb.w + 30 : 0, subW);
+      return { maxW, sub, subLH, TL, nLines, S, top, kBase, tBase0, rulerY, subBase0, swY, sbY, blockBottom: yCur, exW };
+    };
+    let LY = layText(maxW0);
+    // Layout "left": Titel/Untertitel enden ≥ 40 px vor dem Blueprint (Triebwerksraum, Begrenzer, Geschossdecken) –
+    // sonst schneiden dessen Linien die letzten Buchstaben. Die Schrift wird dafür schmaler gesetzt, der Blueprint bleibt, wo er ist.
+    const fitOn = !center && toBool(pick(P, ["fitTitle", "titleFit", "avoidBlueprint"]), true) && Math.max(bpMul, carMul) > 0.05;
+    if (fitOn) {
+      const kickW = kicker ? 24 + L.measure(ctx, kicker, { size: kSize, weight: 700, font: "JetBrains Mono", letterSpacing: 7 }) + 10 + 150 + 24 : 0;
+      for (let pass = 0; pass < 3; pass++) {
+        const lim = bpLeftIn(LY.top - 40, LY.blockBottom + 30) - 40;
+        const right = x0 + Math.max(LY.TL ? LY.TL.maxLine : 0, LY.exW, kickW);
+        if (right <= lim) break;
+        const mw = Math.max(560, Math.floor(Math.min(LY.maxW - (right - lim), lim - x0)));
+        if (mw >= LY.maxW) break;
+        LY = layText(mw);
+      }
+    }
+    const { sub, subLH, TL, nLines, S, top, kBase, tBase0, rulerY, subBase0, swY, sbY, blockBottom, exW } = LY;
     const halfW = Math.max(TL ? TL.maxLine / 2 : 400, exW / 2);
     const blockRight = center ? W / 2 + halfW : x0 + Math.max(TL ? TL.maxLine : 400, 700, exW);
     const avoid = { x0: center ? W / 2 - halfW - 40 : 90, x1: blockRight + 40, y0: top - 36, y1: blockBottom + 30 };
@@ -517,15 +564,10 @@
     if (overlay) overlay.at = overlay.atRaw !== undefined ? clampT(overlay.atRaw) : 0.5;
 
     // ---------- Blueprint ----------
-    const yawRate = Math.min(3, 22 / d) * DEG;
-    const yaw = (center ? 22 : 24) * DEG + yawRate * t;
-    const bxRaw = num(pick(P, ["blueprintX", "blueprint_x", "bpX"]));
-    const zoomK = clamp((SA.s - 1) / 0.1, 0, 1);
-    const bpX0 = bxRaw !== undefined ? (Math.abs(bxRaw) <= 1.5 ? bxRaw * W : bxRaw) : center ? W / 2 : 1385 - 70 * zoomK;
-    const bpScale = clamp(num(pick(P, ["blueprintScale", "blueprint_scale", "bpScale"])) ?? 1, 0.4, 1.8);
+    const yaw = yaw0 + yawRate * t;
     const bpOx = bpX0 + Math.sin(t * 0.23) * 6;
-    const bpSc = (center ? 1.0 : 0.94 - 0.04 * zoomK) * bpScale * (1 + 0.03 * sm(t / d));
-    const bpOy = (center ? 540 : 528) + Math.sin(t * 0.31 + 1) * 8 - 10 * sm(t / d);
+    const bpSc = bpSc0 * (1 + 0.03 * sm(t / d));
+    const bpOy = bpOy0 + Math.sin(t * 0.31 + 1) * 8 - 10 * sm(t / d);
     const V = makeView({ yaw, pitch: 8 * DEG, D: 2400, ox: bpOx, oy: bpOy, sc: bpSc, camY: -620 });
 
     // Mechanik: Fahrkorb fährt (Standard aufwärts), Gegengewicht gegenläufig, Treibscheibe + Umlenkrolle drehen mit

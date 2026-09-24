@@ -18,6 +18,12 @@
      label         Text oder {text, at, head} – Hinweis-Karte unten rechts; labelAt (s); labelHead (Kopfzeile)
      panel2        "topview" | "energy" | "label" | "none" (Default: label wenn gesetzt, sonst topview); energy:true = "energy"
      panel         bool (true) – Messwerte-Panel (bzw. Checkliste); panelAt (s), panel2At (s)
+     panel2Y       "center" | "top" | "bottom" | px – Lage des unteren Panels. Default: bei panel:false mittig zum
+                   Fanggehäuse (y = CY - h/2), sonst unter dem Messwerte-Panel. Zahl (px) gilt immer.
+     shiftX        px | "auto" – Mechanik-Gruppe (Schiene, Seil, Gehäuse, Hebel, Beschriftungen) horizontal verschieben.
+                   "auto" (Default) nur bei panel:false: ohne rechtes Panel mittig (+280); mit einem rechten Panel
+                   zuerst mittig (+280), gleitet beim Einblenden des Panels auf +150 (Panel-Zeitpunkt < 1 s: sofort +150);
+                   sichtbare rechte Beschriftungen (gap/jaw) -> 0. Bei panel:true Default 0 (unverändert).
      tape          bool (true) – Maßband + Bremsweg am Steg (nur beim Abwärts-Fangen)
      arrowsAt      s – Einblendung Doppelpfeil (bidirectional)
      callouts      Array [{id, at, text, sub}] (NUR diese, in dieser Reihenfolge) | Objekt {id: at | false | {at,text,sub}}
@@ -29,7 +35,8 @@
                     [2] = Stillstand (Bremsdauer [1]->[2] bestimmt die Zeitlupe), [3] = Ergebnis (Ø-Verzögerung + Haken)
      lift_release:  [0] = Pfeil + Anheben beginnt, [1] = Keile lösen sich und fallen zurück, [2] = Prüfung + Hinweis-Karte,
                     [3] = Freigabe (Checkliste komplett)
-   "at" (s) akzeptieren: callouts[i].at, steps[i].at, label.at / labelAt, panelAt, panel2At, arrowsAt.
+   "at" (s) akzeptieren: callouts[i].at, steps[i].at, label.at / labelAt, panelAt, panel2At, arrowsAt
+     (panel2At bzw. labelAt steuern bei shiftX "auto" auch das Gleiten der Mechanik).
    Ohne beats/at: Default-Timing proportional zu d (Auslösung 0,12·d, Fangbeginn 0,22·d, Bremsen 0,3·d; Beschriftungen gestaffelt ab 0,3 s).
    Physik (Beispielwerte, Zeitlupe): progressiv v = 1,30 m/s bei Fangbeginn, ca. 0,6 g, Bremsweg ca. 15 cm;
      sofort wirkend v = 0,80 m/s, Spitze ca. 2,3 g, Bremsweg ca. 3 cm. */
@@ -272,6 +279,17 @@
     if (!panel2) panel2 = lab ? "label" : bool(pick(P, ["energy", "energie", "show_energy"])) === true ? "energy" : "topview";
     if (panel2 === "energy" && mode !== "fall") panel2 = lab ? "label" : "topview";
     if (panel2 === "label" && !lab) panel2 = "topview";
+    const p2yRaw = pick(P, ["panel2Y", "panel2_y", "panel2y", "panelY"]);
+    let panel2Y = null;
+    if (p2yRaw != null && typeof p2yRaw !== "boolean") {
+      const n = num(p2yRaw, NaN);
+      if (Number.isFinite(n)) panel2Y = n;
+      else { const q = String(p2yRaw).toLowerCase(); panel2Y = /cent|mitt|mid/.test(q) ? "center" : /top|oben/.test(q) ? "top" : /bot|unten|low/.test(q) ? "bottom" : null; }
+    }
+    const sxRaw = pick(P, ["shiftX", "shift_x", "shiftx", "mechX", "offsetX"]);
+    let shiftX = "auto";
+    if (typeof sxRaw === "boolean") shiftX = sxRaw ? "auto" : 0;
+    else if (sxRaw != null) { const n = num(sxRaw, NaN); if (Number.isFinite(n)) shiftX = clamp(n, -120, 400); }
     const stRaw = pick(P, ["steps", "checklist", "schritte"]);
     const steps = Array.isArray(stRaw) ? stRaw.map((it) => (typeof it === "string" ? { text: it } : it && typeof it === "object" ? { text: it.text ?? it.title ?? it.label, sub: it.sub ?? it.note, at: tNum(it.at ?? it.t) } : {})).filter((q) => q.text) : [];
     return {
@@ -280,7 +298,7 @@
       panel: bool(pick(P, ["panel", "readouts", "messwerte", "show_panel"])) !== false,
       panelAt: tNum(pick(P, ["panelAt", "panel_at", "readoutsAt"])), panel2At: tNum(pick(P, ["panel2At", "panel2_at"])),
       tape: bool(pick(P, ["tape", "ruler", "massband", "maßband"])) !== false, arrowsAt: tNum(pick(P, ["arrowsAt", "arrows_at", "arrowAt"])),
-      callouts: parseCallouts(pick(P, ["callouts", "labels", "parts", "beschriftungen"]), tNum), steps,
+      callouts: parseCallouts(pick(P, ["callouts", "labels", "parts", "beschriftungen"]), tNum), steps, panel2Y, shiftX,
     };
   }
   const CFGC = new WeakMap(), EMPTY = {};
@@ -357,8 +375,30 @@
     let mech = Infinity;
     if (cfg.mode === "fall") mech = Math.max(tm.tStop + 1.0, tm.tCon + 0.3 * tm.k + 0.1, tm.tRes + 0.7);
     else if (cfg.mode === "lift") mech = Math.max(tm.lift[1] + 1.4, tm.lift[3] + 0.7);
-    const ready = Math.max(mech, rc, panelAt + 0.9, p2At + 0.9, labelAt + 0.9, arrowsAt + 0.9, steps ? steps[steps.length - 1].done + 0.7 : 0, 1.1);
-    return { tm, panelAt, p2At, labelAt, arrowsAt, steps, ready };
+    // Horizontale Lage der Mechanik (shiftX): A = Start, B = Ziel, sxT = Zeitpunkt des Gleitens (Panel erscheint)
+    let sxA = 0, sxB = 0, sxT = null;
+    if (typeof cfg.shiftX === "number") sxA = sxB = cfg.shiftX;
+    else if (!cfg.panel) {
+      const cc = cfg.callouts, vis = (id) => !(cc.only && !cc.map[id]) && !(cc.map[id] && cc.map[id].hide);
+      const rightCo = (cfg.mode === "normal" && vis("gap")) || (cfg.type === "instantaneous" && vis("jaw"));
+      const pT = cfg.panel2 === "label" ? labelAt : cfg.panel2 === "none" ? null : p2At;
+      if (cfg.panel2 === "none") sxA = sxB = rightCo ? 180 : 280;
+      else if (!rightCo) { sxB = 150; if (pT != null && pT >= 1.0) { sxA = 280; sxT = pT; } else sxA = 150; }
+    }
+    const ready = Math.max(mech, rc, panelAt + 0.9, p2At + 0.9, labelAt + 0.9, arrowsAt + 0.9, sxT != null ? sxT + 0.7 : 0, steps ? steps[steps.length - 1].done + 0.7 : 0, 1.1);
+    return { tm, panelAt, p2At, labelAt, arrowsAt, steps, ready, sxA, sxB, sxT };
+  }
+
+  // Mechanik-Versatz zur Zeit t (gleitet mit dem Einblenden des rechten Panels)
+  function shiftAt(pl, t) { if (pl.sxT == null || pl.sxA === pl.sxB) return pl.sxB; return lerp(pl.sxA, pl.sxB, smooth(inv(pl.sxT - 0.35, pl.sxT + 0.5, t))); }
+  // y des rechten unteren Panels (null = klassische Lage unter dem Messwerte-Panel)
+  function p2Y(s, h) {
+    const m = s.cfg.panel2Y;
+    if (typeof m === "number") return Math.round(clamp(m, 90, 910 - h));
+    if (s.cfg.panel) return null;
+    if (m === "top") return P1Y;
+    if (m === "bottom") return P2Y;
+    return Math.round(CY - h / 2);
   }
 
   // ---------- Zustand pro Frame ----------
@@ -454,8 +494,8 @@
     ctx.restore();
   }
   // Röntgen-Scan: weiches Band, das langsam über die Baugruppe läuft
-  function drawScan(ctx, t) {
-    const ys = 250 + ((t * 95) % 660), xa = RX - HW - 60, xb = RX + HW + 360;
+  function drawScan(ctx, t, xMax) {
+    const ys = 250 + ((t * 95) % 660), xa = RX - HW - 60, xb = Math.min(RX + HW + 360, xMax == null ? 1e9 : xMax);
     const g = ctx.createLinearGradient(xa, 0, xb, 0);
     g.addColorStop(0, "rgba(63,210,255,0)"); g.addColorStop(0.2, "rgba(63,210,255,1)"); g.addColorStop(0.75, "rgba(63,210,255,1)"); g.addColorStop(1, "rgba(63,210,255,0)");
     stk(ctx, (c) => { c.moveTo(xa, ys); c.lineTo(xb, ys); }, g, 1.2, 0, 0.13, { cap: "butt" });
@@ -1154,9 +1194,9 @@
   function drawLabelCard(ctx, L, s, ST, LV) {
     const t = s.t, at = s.cfg.plan.labelAt, ap = smooth(inv(at, at + 0.6, t)); if (ap <= 0.01) return;
     const sG = GA; GA = sG * ap;
-    const x0 = PX + (1 - easeOut(ap)) * 40, y0 = s.cfg.panel ? P1Y + p1Height(s) + 18 : P2Y, w = PW;
-    const kind = s.mode === "lift" ? "person" : s.bi ? "updown" : "info", col = kind === "info" ? COL.cyan : COL.amber;
     const lay = labelLayout(L, ctx, s.cfg), h = lay.h;
+    const x0 = PX + (1 - easeOut(ap)) * 40, y0 = p2Y(s, h) ?? (P1Y + p1Height(s) + 18), w = PW;
+    const kind = s.mode === "lift" ? "person" : s.bi ? "updown" : "info", col = kind === "info" ? COL.cyan : COL.amber;
     const head = s.cfg.labelHead || (kind === "person" ? "WICHTIG" : kind === "updown" ? "EN 81-20" : "HINWEIS");
     if (ST) layer(ctx, "lab|" + s.cfg.sig, x0 - 14, y0 - 14, w + 28, h + 28, 1, (g) => {
       fil(g, (c) => rr(c, x0, y0, w, h, 14), "rgba(6,16,34,0.92)", 1);
@@ -1189,7 +1229,7 @@
     if (!ST) return;
     const t = s.t, pa = s.cfg.plan.p2At, ap = smooth(inv(pa, pa + Math.min(0.7, 0.09 * s.d), t)); if (ap <= 0.01) return;
     const sG = GA; GA = sG * ap;
-    const x0 = PX + (1 - easeOut(ap)) * 40, y0 = P2Y, w = PW, h = P2H, pr = s.pr, bx = x0 + 24, bw = w - 48, y1 = y0 + 94, y2 = y0 + 192, bh = 20;
+    const x0 = PX + (1 - easeOut(ap)) * 40, y0 = p2Y(s, P2H) ?? P2Y, w = PW, h = P2H, pr = s.pr, bx = x0 + 24, bw = w - 48, y1 = y0 + 94, y2 = y0 + 192, bh = 20;
     layer(ctx, "en|" + s.cfg.sig, x0 - 14, y0 - 14, w + 28, h + 28, 1, (g) => {
       fil(g, (c) => rr(c, x0, y0, w, h, 14), "rgba(6,16,34,0.9)", 1);
       stk(g, (c) => rr(c, x0, y0, w, h, 14), COL.cyan, 1.4, 0.5, 0.55);
@@ -1224,7 +1264,7 @@
   function drawTopview(ctx, L, s, ST, LV) {
     const t = s.t, pa = s.cfg.plan.p2At, ap = smooth(inv(pa, pa + Math.min(0.7, 0.09 * s.d), t)); if (ap <= 0.01) return;
     const sG = GA; GA = sG * ap;
-    const x0 = PX + (1 - easeOut(ap)) * 40, y0 = P2Y, w = PW, h = P2H;
+    const x0 = PX + (1 - easeOut(ap)) * 40, y0 = p2Y(s, P2H) ?? P2Y, w = PW, h = P2H;
     const m = 1.5, yc = y0 + 140;
     const fx0 = x0 + 44, fx1 = fx0 + 10 * m, bx1 = fx0 + 62 * m, bh = 8 * m, fh = 44.5 * m; // Fuß, Steg
     const hx0 = fx0 + 50, hx1 = bx1 + 26, hy = 44;
@@ -1310,8 +1350,9 @@
     return "hold|" + s.cfg.sig;
   }
   function renderScene(ctx, P, L, s, ST, LV) {
-    const t = s.t;
+    const t = s.t, MX = s.mx, hasR = s.cfg.panel || s.cfg.panel2 !== "none";
     GA = smooth(inv(0, Math.min(0.55, 0.1 * s.d), t));
+    ctx.save(); ctx.translate(MX, 0);
     drawFX(ctx, s, t, ST, false);
     ctx.save(); ctx.translate(s.shx, s.shy);
     if (ST) {
@@ -1325,12 +1366,15 @@
     }
     ctx.restore();
     GA = 1;
-    if (ST) { drawCallouts(ctx, L, s); drawPanel1(ctx, L, s); }
+    if (ST) drawCallouts(ctx, L, s);
+    ctx.restore();
+    if (ST) drawPanel1(ctx, L, s);
     drawPanel2(ctx, L, s, ST, false);
     if (LV) {
       GA = smooth(inv(0, Math.min(0.55, 0.1 * s.d), t));
-      drawScan(ctx, t);
-      ctx.save(); ctx.translate(s.shx, s.shy);
+      ctx.save(); ctx.translate(MX, 0);
+      drawScan(ctx, t, hasR ? PX - 20 - MX : null);
+      ctx.translate(s.shx, s.shy);
       drawTraceHeat(ctx, s);
       drawHeat(ctx, s);
       drawSparks(ctx, s);
@@ -1343,12 +1387,13 @@
     const L = p.L || CE.lib; if (!L) return;
     const d = Math.max(1, num(p.d, 8)), t = clamp(num(p.t, 0), 0, d);
     const cfg = getCfg(p.params, d), s = computeState(t, d, cfg), hk = holdKey(s);
+    s.mx = shiftAt(cfg.plan, t);
     if (hk) {
       const HX = 80, HY = 16;
       const cv = sprite(hk, 1780, 1048, (g) => { g.translate(-HX, -HY); renderScene(g, pats(g), L, s, true, false); });
       if (cv) {
         // nur Bereiche mit Inhalt kopieren (spart Füllrate)
-        const R = [[80, 176, 940, 740], [640, 16, 80, 160], [952, 16, 56, 160], [640, 916, 80, 148], [952, 916, 56, 148], [1020, 180, 840, 740]];
+        const mx = Math.round(s.mx), R = [[80, 176, 1780, 740], [640 + mx, 16, 80, 160], [952 + mx, 16, 56, 160], [640 + mx, 916, 80, 148], [952 + mx, 916, 56, 148]];
         ctx.save(); ctx.globalAlpha = 1;
         for (const r of R) ctx.drawImage(cv, r[0] - HX, r[1] - HY, r[2], r[3], r[0], r[1], r[2], r[3]);
         ctx.restore();

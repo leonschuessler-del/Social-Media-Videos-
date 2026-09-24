@@ -72,7 +72,7 @@
   };
   const list = (v) => (Array.isArray(v) ? v : typeof v === "number" ? [v] : typeof v === "string" ? v.split(/[;\s|]+/).filter(Boolean) : []);
 
-  function parseParams(pr) {
+  function parseParams(pr, depth = 0) {
     const bArr = [pr.breaks, pr.break_times, pr.breakTimes, pr.breaks_at].find((v) => Array.isArray(v)) || [];
     const breakTimes = bArr.map(tNum).filter((x) => x !== null);
     const nbRaw = pick(pr, ["broken_wires", "brokenWires", "broken", "wire_breaks", "drahtbrueche", "drahtbrüche"], Array.isArray(pr.breaks) ? undefined : pr.breaks);
@@ -134,13 +134,48 @@
     const scanStart = tNum(pick(pr, ["scan_start", "scanStart", "lens_at", "inspection_at"], null));
     const scanEnd = tNum(pick(pr, ["scan_end", "scanEnd", "count_end"], null));
     const breaksStart = tNum(pick(pr, ["breaks_start", "breaksStart"], null)), breaksEnd = tNum(pick(pr, ["breaks_end", "breaksEnd"], null));
+    // Anschluss an die Vorszene (carry = Parameter + Dauer + Kamera der vorherigen rope_macro-Szene)
+    let carry = null;
+    const cRaw = depth ? undefined : pick(pr, ["carry", "continue_from", "from_prev", "prev_scene"], undefined);
+    if (isObj(cRaw)) {
+      const cp = isObj(cRaw.params) ? cRaw.params : cRaw;
+      const cd = num(pick(cRaw, ["d", "duration", "dur"], NaN), NaN);
+      if (Number.isFinite(cd) && cd >= 0.5) carry = { params: cp, d: Math.min(60, cd), camera: str(pick(cRaw, ["camera", "cam"], "")) || "static", focus: Array.isArray(cRaw.focus) ? cRaw.focus : Array.isArray(cp.focus) ? cp.focus : null };
+    }
+    const tri = (keys) => { const v = pick(pr, keys, undefined); return v === undefined ? null : bool(v, null); };
+    const initialCounted = tri(["initial_counted", "initialCounted", "precounted", "initial_breaks_counted"]);
+    const lensOpenStart = tri(["lens_open_at_start", "lensOpenAtStart", "lens_open_start", "lens_open"]);
+    const lsx = num(pick(pr, ["lens_start_x", "lensStartX", "lens_x"], NaN), NaN);
+    const lensStartX = Number.isFinite(lsx) ? Math.max(200, Math.min(1720, lsx)) : null;
+    const sd = String(pick(pr, ["scan_dir", "scanDir", "scan_direction"], "")).toLowerCase().trim();
+    const scanDir = /^(l|left|links|-1|back|rück|rueck)/.test(sd) ? -1 : /^(r|right|rechts|1|\+1|fwd|forward|vor)/.test(sd) ? 1 : 0;
     return { nb, tg, label, labelAt, insp, angle, speed, diameter, spec, showDim, countLabel, breakTimes, initBreaks, beats,
-      stamp, stampSub, stampCol, stampAt, stampCount, thr, disp, scanStart, scanEnd, breaksStart, breaksEnd };
+      stamp, stampSub, stampCol, stampAt, stampCount, thr, disp, scanStart, scanEnd, breaksStart, breaksEnd,
+      carry, initialCounted, lensOpenStart, lensStartX, scanDir };
   }
 
   // Seil-Koordinaten (u entlang der Achse, y quer) -> Bildschirm
   const toScreen = (S, u, y) => [S.CX + u * S.ca - y * S.sa, S.CY + u * S.sa + y * S.ca];
   const ropeTransform = (ctx, S) => { ctx.translate(S.CX, S.CY); ctx.rotate(S.ang); };
+  // Kamera (Spiegel von cameraTransform in engine.js): Welt -> Bild = o + s·(p − c)
+  function camOf(name, u, focus, L) {
+    const e = L.easeInOut(L.clamp(num(u, 0)));
+    const fx = num(focus && focus[0] != null ? focus[0] : 0.5, 0.5), fy = num(focus && focus[1] != null ? focus[1] : 0.5, 0.5);
+    const cx = fx * 1920, cy = fy * 1080;
+    let s = 1, dx = 0, dy = 0;
+    switch (name) {
+      case "slow_push_in": s = L.lerp(1.0, 1.1, e); break;
+      case "slow_pull_out": s = L.lerp(1.1, 1.0, e); break;
+      case "pan_left": s = 1.08; dx = L.lerp(60, -60, e); break;
+      case "pan_right": s = 1.08; dx = L.lerp(-60, 60, e); break;
+      case "tilt_down": s = 1.08; dy = L.lerp(45, -45, e); break;
+      case "tilt_up": s = 1.08; dy = L.lerp(-45, 45, e); break;
+      default: break;
+    }
+    return { s, cx, cy, ox: cx + dx, oy: cy + dy };
+  }
+  const camFwd = (c, x, y) => [c.ox + c.s * (x - c.cx), c.oy + c.s * (y - c.cy)];
+  const camInv = (c, X, Y) => [c.cx + (X - c.ox) / c.s, c.cy + (Y - c.oy) / c.s];
 
   // ---------- Drahtbrüche: Positionen auf Litzenkronen ----------
   const TYPE_TH = { top: -HALF, bottom: HALF, face: 0, up45: -Math.PI / 4, lo45: Math.PI / 4, up22: -Math.PI / 8, lo22: Math.PI / 8 };
@@ -166,10 +201,12 @@
     const scanSet = B[2] != null || S.scanStart != null;
     T.openS = scanSet ? Math.max(0.1, T.tS - 0.45) : Math.min(0.12 * d, Math.max(0.1, T.tS - 0.3));
     T.openD = scanSet ? Math.max(0.25, Math.min(0.45, T.tS - T.openS + 0.1)) : Math.max(0.3, Math.min(0.5, 0.08 * d));
+    if (S.lensOpenStart) { T.openS = -1; T.openD = 0.3; } // Anschluss: Lupe ist schon offen
     return T;
   }
 
   function buildBreaks(S) {
+    if (S.carryI && S.carryI.breaks.length) return buildCarryBreaks(S);
     const n = S.nb; const d = S.d;
     const out = { list: [], sFirst: 0, sLast: 0 };
     if (!n) return out;
@@ -204,8 +241,84 @@
       else times.push(m2 > 1 ? L_lerp(T.bS, T.bE, k / (m2 - 1)) : T.bS);
     }
     times.sort((a, b) => a - b);
-    out.list.forEach((b, j) => { b.ta = j < n0 ? -10 : times[j - n0]; b.pre = j < n0; });
+    out.list.forEach((b, j) => { b.ta = j < n0 ? -10 : times[j - n0]; b.pre = j < n0; b.counted = b.pre && !!S.initialCounted; });
     out.sFirst = out.list[0].s; out.sLast = out.list[m - 1].s;
+    return out;
+  }
+
+  // Anschluss: vorhandene Brüche exakt aus der Vorszene (Lage, Typ, Aussehen), neue Brüche in freie Litzenkronen
+  // in Scanrichtung der Lupe (weit gestreut, nicht unter dem Lupenrand, Achse beim Stempel frei)
+  function buildCarryBreaks(S) {
+    const CI = S.carryI, T = S.tim, d = S.d, L = S.L;
+    const out = { list: [], sFirst: 0, sLast: 0, dir: 1 };
+    const old = CI.breaks.slice(0, 24).map((b) => Object.assign({}, b, { s: b.s - S.scroll0, ta: -10, pre: true, counted: S.initialCounted == null ? !!b.counted : !!S.initialCounted }));
+    const need = Math.max(0, Math.min(24, S.nb) - old.length);
+    // sichtbarer Bereich (Material-Koordinaten) bei Szenenstart und -ende, Kamera beachtet
+    const range = (tt) => { const c = camOf(S.cam, tt / d, S.focus, L); const a = camInv(c, 330, S.CY), b = camInv(c, 1600, S.CY); return [(a[0] - S.CX) / S.ca - S.v * tt - S.scroll0, (b[0] - S.CX) / S.ca - S.v * tt - S.scroll0]; };
+    const r0 = range(0), r1 = range(d);
+    const sLo = Math.max(r0[0], r1[0]), sHi = Math.min(r0[1], r1[1]);
+    const lu = S.lensStartU, ly = S.lensStartY || 0;
+    let dir = S.scanDir;
+    if (!dir) dir = lu == null ? 1 : lu - sLo > sHi - lu ? -1 : 1;
+    out.dir = dir;
+    const os = old.map((b) => b.s), oMin = Math.min(...os), oMax = Math.max(...os);
+    // Spalten (halbe Kronenteilung) in Scanrichtung; je Spalte die zulässigen Bruchlagen
+    const mk = (k, type) => {
+      const i = 40 + Math.round(k * 2 + 200) * 7 + ["top", "bottom", "face", "up45", "lo45", "up22", "lo22"].indexOf(type);
+      const jit = (H(i * 7.3 + 1.1) - 0.5) * 44, edge = type === "top" || type === "bottom";
+      const th = TYPE_TH[type] + TH1 * jit;
+      return { s: k * LAT + jit, y0: RR * Math.sin(th) * (edge ? 0.985 : 1), dir: Math.sin(TYPE_TH[type]) > 0 ? 1 : -1, edge, face: !edge, type,
+        lenA: 26 + 10 * H(i * 3.7 + 2), lenB: 20 + 10 * H(i * 5.1 + 3), seed: 11 + i * 17, pre: false, counted: false };
+    };
+    const gap = (c, arr) => { let md = Infinity; for (const o of arr) md = Math.min(md, Math.hypot(c.s - o.s, 0.7 * (c.y0 - o.y0))); return md; };
+    const cols = [];
+    for (let k = Math.ceil((2 * sLo) / LAT) / 2; k * LAT <= sHi + 1e-6; k += 0.5) {
+      const half = Math.abs(k - Math.round(k)) > 0.25, opts = [];
+      for (const type of half ? ["up22", "lo22"] : ["top", "bottom", "face", "up45", "lo45"]) {
+        const c = mk(k, type);
+        if (c.s < sLo || c.s > sHi) continue;
+        if (lu != null && (classify(c, lu, ly) === 0 || (c.s - lu) * dir < -150)) continue; // nicht unter dem Lupenrand, nicht hinter der Lupe
+        if (gap(c, old) < 95) continue;
+        c.axisOk = edge(c) || !S.stamp || (dir < 0 ? c.s < oMin - 40 : c.s > oMax + 40); // Achse beim Stempel frei halten
+        opts.push(c);
+      }
+      if (opts.length) cols.push({ k, half, opts });
+    }
+    function edge(c) { return c.edge; }
+    cols.sort((p, q) => (p.k - q.k) * dir);
+    // gewünschte Folge: Seiten wechseln, Tiefe variiert (Kante, Flanke, Mitte)
+    const nearOld = old.slice().sort((p, q) => Math.abs(p.s - (cols.length ? cols[0].k * LAT : 0)) - Math.abs(q.s - (cols.length ? cols[0].k * LAT : 0)))[0];
+    const seqW = nearOld && nearOld.y0 < 0 ? ["bottom", "up", "top", "lo", "face"] : ["top", "lo", "bottom", "up", "face"];
+    const Y = { top: -RR, bottom: RR, face: 0, up: -0.7 * RR, lo: 0.7 * RR };
+    const picked = [];
+    const take = (col, w, relax) => {
+      const cand = col.opts.filter((c) => !c.used && (relax || c.axisOk) && gap(c, picked) >= (relax ? 70 : 95));
+      if (!cand.length) return false;
+      cand.sort((p, q) => Math.abs(p.y0 - Y[w]) - Math.abs(q.y0 - Y[w]));
+      cand[0].used = true; picked.push(cand[0]); col.n = (col.n || 0) + 1;
+      return true;
+    };
+    // 1) je Spalte höchstens ein Bruch, gleichmäßig über den Scanweg verteilt; 2) weitere Lagen je Spalte; 3) gelockert
+    const rest = need;
+    if (cols.length > rest) { for (let j = 0; j < rest; j++) take(cols[Math.round((rest > 1 ? j / (rest - 1) : 0) * (cols.length - 1))], seqW[picked.length % 5], false); }
+    for (let pass = 0; pass < 3 && picked.length < need; pass++) {
+      for (const col of cols) {
+        if (picked.length >= need) break;
+        if (pass === 0 && col.n) continue;
+        take(col, seqW[picked.length % 5], pass === 2);
+      }
+    }
+    // Zeitpunkte in Scanrichtung (der Lupe voraus)
+    const seq = picked.sort((a, b) => (a.s - b.s) * dir), m2 = seq.length;
+    const times = [];
+    for (let k = 0; k < m2; k++) {
+      const ex = S.breakTimes[k];
+      times.push(ex != null ? T.cl(ex) : m2 > 1 ? L_lerp(T.bS, T.bE, k / (m2 - 1)) : T.bExplicit ? T.bS : T.cl(0.14 * d));
+    }
+    times.sort((a, b) => a - b);
+    seq.forEach((b, j) => { b.ta = times[j]; });
+    out.list = old.concat(seq).sort((a, b) => a.s - b.s);
+    out.sFirst = out.list[0].s; out.sLast = out.list[out.list.length - 1].s;
     return out;
   }
 
@@ -219,33 +332,59 @@
     return 0;
   }
   function planLens(S, B) {
-    const d = S.d, tS = S.tim.tS, tE = S.tim.tE, RH = S.readH || 62;
-    const plan = { tS, tE, mS: 0, mE: 0, yE: 0 };
-    if (!B.list.length) { plan.mS = -520 - S.v * tS; plan.mE = 220 - S.v * tE; return plan; }
-    plan.mS = Math.max(B.sFirst - 300, -600 - S.v * tS);
-    const last = B.list[B.list.length - 1];
+    const d = S.d, tS = S.tim.tS, tE = S.tim.tE, RH = S.readH || 62, L = S.L;
+    const plan = { tS, tE, mS: 0, mE: 0, yE: 0, yS: 0, dir: 1 };
+    let hasStart = S.lensStartU != null;
+    if (hasStart) { plan.mS = S.lensStartU; plan.yS = S.lensStartY || 0; }
+    if (!B.list.length) {
+      if (hasStart) plan.mE = plan.mS + 60; else { plan.mS = -520 - S.v * tS; plan.mE = 220 - S.v * tE; }
+      return plan;
+    }
+    const pre = B.list.filter((b) => b.pre);
+    if (!hasStart && S.lensOpenStart && pre.length) { hasStart = true; plan.mS = pre[pre.length - 1].s; } // offen am letzten vorhandenen Bruch
+    if (!hasStart) plan.mS = Math.max(B.sFirst - 300, -600 - S.v * tS);
+    const todo = B.list.filter((b) => !b.counted), pool = todo.length ? todo : B.list;
+    let dir = 1;
+    if (hasStart) dir = B.dir || S.scanDir || (pool.reduce((a, b) => a + b.s, 0) / pool.length < plan.mS ? -1 : 1);
+    plan.dir = dir;
+    const last = dir > 0 ? pool[pool.length - 1] : pool[0];
     // Lupe zur Kante des letzten Bruchs versetzen (unten: bis 45 % der Kantenhöhe, oben weniger – Platz für die Anzeige darüber)
     const yOpts = (last.y0 > 0 ? [0.45, 0.32, 0.18, 0] : [0.24, 0.16, 0.08, 0]).map((k) => k * last.y0);
     let best = null, bestScore = Infinity;
     for (const yE of yOpts) {
-      for (let m = B.sLast - 150; m <= B.sLast + 40; m += 4) {
+      const mA = dir > 0 ? last.s - 150 : last.s - 40, mB = dir > 0 ? last.s + 40 : last.s + 150;
+      for (let m = mA; m <= mB; m += 4) {
         let score = Math.abs(m - last.s) + Math.abs(yE - yOpts[0]) * 0.6;
         for (const b of B.list) if (!classify(b, m, yE)) score += 10000;
         if (classify(last, m, yE) !== 1) score += 4000;
-        // Anzeige über der Lupe muss passen, Lupe darf nicht in den Untertitelbereich
+        // Anzeige über der Lupe muss passen; Lupe samt Skalenring (RL+29) nach Kamera weder im Untertitelbereich noch am Rand
         for (const tt of [tE, d]) {
-          const ly = toScreen(S, m + S.v * tt, yE)[1];
+          const [lx, ly] = toScreen(S, m + S.v * tt + S.scroll0, yE);
           if (ly - RL - 30 - RH < 208) score += 3000;
-          if (ly + RL + 16 > 905) score += 3000;
+          const c = camOf(S.cam, tt / d, S.focus, L), [X, Y] = camFwd(c, lx, ly), rr = (RL + 29) * c.s;
+          if (Y + rr > 908) score += 3000;
+          if (X - rr < 95 || X + rr > 1825) score += 3000;
         }
         if (score < bestScore) { bestScore = score; best = [m, yE]; }
       }
     }
-    plan.mE = Math.max(best[0], plan.mS + 60); plan.yE = best[1];
+    plan.mE = dir > 0 ? Math.max(best[0], plan.mS + 60) : Math.min(best[0], plan.mS - 60); plan.yE = best[1];
     return plan;
   }
   const lensM = (L, plan, t) => L.lerp(plan.mS, plan.mE, L.easeInOut((t - plan.tS) / (plan.tE - plan.tS)));
+  // Querlage der Lupe: vom Start-Versatz (Anschluss) zur Achse, spät zur Kante des Zielbruchs
+  function lensY(S, L, t) {
+    const P = S.plan, late = P.yE * L.smooth(L.inv(P.tS + 0.55 * (P.tE - P.tS), P.tE, t));
+    return P.yS ? late + P.yS * (1 - L.smooth(L.inv(P.tS, P.tS + 0.4 * (P.tE - P.tS), t))) : late;
+  }
   function crossTime(L, plan, target) {
+    if (plan.dir < 0) { // Lupe fährt nach links
+      if (plan.mS <= target) return plan.tS;
+      if (plan.mE > target) return Infinity;
+      let a = 0, b = 1;
+      for (let i = 0; i < 20; i++) { const q = (a + b) / 2; if (L.lerp(plan.mS, plan.mE, L.easeInOut(q)) > target) a = q; else b = q; }
+      return plan.tS + b * (plan.tE - plan.tS);
+    }
     if (plan.mS >= target) return plan.tS;
     if (plan.mE < target) return Infinity;
     let a = 0, b = 1;
@@ -445,8 +584,8 @@
 
   function getLayers(S) {
     const tgQ = Math.round(S.tg * 20) / 20;
-    const sh = S.v * S.d * S.ca;
-    const XA = Math.floor(-40 - Math.max(0, sh)), XB = Math.ceil(1960 - Math.min(0, sh));
+    const sh = S.v * S.d * S.ca, s0 = S.scroll0 * S.ca; // Anschluss: Musterphase verschoben -> Kacheln entsprechend breiter
+    const XA = Math.floor(-40 - Math.max(0, sh) - Math.max(0, s0)), XB = Math.ceil(1960 - Math.min(0, sh) - Math.min(0, s0));
     const key = [S.angle.toFixed(3), S.CY, tgQ, XA, XB].join("|");
     const hit = cacheGet(key); if (hit) return hit;
     const tn = S.sa / S.ca, hb = HH / S.ca + 2;
@@ -665,7 +804,7 @@
     // Prüfmarkierungen der gezählten Brüche
     const mr = S.B.list.length > 8 ? 27 : 36;
     const rs = ringSprite(L, mr);
-    const rot = S.t * 0.6;
+    const rot = (S.t + S.phase) * 0.6;
     ctx.save(); ctx.strokeStyle = RED; ctx.lineWidth = 2; ctx.globalAlpha = 0.9; ctx.beginPath();
     let anyTick = false;
     for (const b of S.B.list) {
@@ -747,7 +886,7 @@
     const ring = lensRing(Z, S), RO = ring.RO;
     if (r >= RL - 0.5) ctx.drawImage(ring.cv, Math.round(lx - RO), Math.round(ly - RO));
     else { const gs = r / RL; ctx.save(); ctx.globalAlpha = Lz.a; ctx.drawImage(ring.cv, lx - RO * gs, ly - RO * gs, 2 * RO * gs, 2 * RO * gs); ctx.restore(); }
-    const rot = S.t * 0.9;
+    const rot = (S.t + S.phase) * 0.9;
     ctx.save(); ctx.globalAlpha = 0.85 * Lz.a; ctx.strokeStyle = C.cyan; ctx.lineWidth = 3; ctx.lineCap = "round"; ctx.beginPath();
     for (let i = 0; i < 3; i++) { const a0 = rot + (i * TAU) / 3; ctx.moveTo(lx + Math.cos(a0) * (r + 13), ly + Math.sin(a0) * (r + 13)); ctx.arc(lx, ly, r + 13, a0, a0 + 0.22); }
     ctx.stroke(); ctx.restore();
@@ -792,17 +931,63 @@
     return [Math.round(Math.max(116, Math.min(1800 - G.w, x))), Math.round(Math.max(208, y))];
   }
 
+  // Inhalt der Anzeige je Modus (Ziffer bzw. Zähl-Blinklicht); Balken zeichnet drawBar
+  function drawReadContent(ctx, S, mode, G, x, row1, a, pop) {
+    const L = S.L, C = S.C, cnt = S.count, tp = S.t + S.phase;
+    if (a <= 0.01) return;
+    if (mode === "number") {
+      const done = S.t > S.plan.tE + 0.1;
+      const col = cnt > 0 ? RED : (done ? C.green : C.cyan);
+      const ns = 38 * (1 + 0.28 * pop);
+      L.text(ctx, String(cnt), x + 24 + G.wl + 14 + G.wn / 2, row1 + 2 + (ns - 38) * 0.3, { size: ns, weight: 700, font: L.FONT.mono, color: col, align: "center", alpha: a, glow: pop > 0.02 ? 10 * pop : 0, glowColor: col });
+    } else if (mode === "none") {
+      // Zähl-Blinklicht: atmet ruhig (cyan), blitzt bei jedem gezählten Bruch rot auf
+      const bx = x + 24 + G.wl + 24, by = row1 - 11;
+      const breath = 0.45 + 0.3 * L.pulse(tp, 1.1);
+      ctx.save(); ctx.globalAlpha = a;
+      ctx.strokeStyle = cnt > 0 ? RED : C.cyan; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(bx, by, 8, 0, TAU); ctx.stroke();
+      ctx.fillStyle = cnt > 0 ? RED : C.cyan; ctx.globalAlpha = a * (cnt > 0 ? Math.max(0.55 + 0.25 * L.pulse(tp, 1.4), pop) : breath * 0.6);
+      ctx.beginPath(); ctx.arc(bx, by, 4.5 + 1.5 * pop, 0, TAU); ctx.fill();
+      ctx.restore();
+      if (pop > 0.02) { const gs = glowSprite(); ctx.save(); ctx.globalAlpha = a * pop * 0.9; ctx.drawImage(gs.cv, bx - gs.r, by - gs.r); ctx.restore(); }
+    }
+  }
+
   function drawReadout(ctx, S) {
     const L = S.L, C = S.C, Lz = S.lens;
     const a = Lz.a; if (a <= 0.01) return;
     const G = readoutGeom(S);
-    const cnt = S.count, t = S.t;
+    const t = S.t;
     const pop = L.clamp(1 - (t - S.lastCountT) / 0.35);
-    const { w, h } = G;
-    const [x, y] = readoutPos(G, Lz.x, Lz.y, Lz.r);
-    S.readoutRect = { x, y, w, h };
+    // Anschluss: Anzeige beginnt exakt wie am Ende der Vorszene und wird dann umgebaut (Größe, Lage, Inhalt)
+    const R0 = S.carryI && S.carryI.read;
+    let G1 = null, k = 1;
+    if (R0 && Number.isFinite(S.morphT)) {
+      G1 = readoutGeom({ L, C, disp: R0.disp, countLabel: R0.countLabel, readH: R0.readH, thrTag: R0.thrTag });
+      k = L.easeInOut(L.clamp((t - S.morphT) / 0.5));
+    }
+    const w = k < 1 ? L.lerp(G1.w, G.w, k) : G.w, h = k < 1 ? L.lerp(G1.h, G.h, k) : G.h;
+    let [x, y] = readoutPos({ w: Math.round(w), h: Math.round(h) }, Lz.x, Lz.y, Lz.r);
+    if (k < 1) { // Kamerasprung zwischen den Szenen ausgleichen, klingt mit dem Umbau aus
+      const [x0, y0] = readoutPos(G1, R0.lx, R0.ly, RL);
+      x = Math.round(x + (R0.x - x0) * (1 - k)); y = Math.round(y + (R0.y - y0) * (1 - k));
+    }
+    S.readoutRect = { x, y, w: Math.max(w, G.w), h: Math.max(h, G.h) };
     const reachK = Number.isFinite(S.reachT) ? L.clamp((t - S.reachT - 0.12) / 0.25) : 0;
-    ctx.save(); ctx.globalAlpha = a; ctx.drawImage(G.cv, x - G.pad, y - G.pad);
+    const row1 = y + (k < 1 ? L.lerp(G1.row1, G.row1, k) : G.row1);
+    ctx.save(); ctx.globalAlpha = a;
+    if (k >= 1) ctx.drawImage(G.cv, x - G.pad, y - G.pad);
+    else if (k <= 0) ctx.drawImage(G1.cv, x - G1.pad, y - G1.pad);
+    else {
+      L.panel(ctx, x, y, w, h, { fill: "rgba(4,12,26,0.88)", stroke: C.cyanSoft, r: 6, alpha: a });
+      ctx.globalAlpha = a; ctx.fillStyle = C.cyan; ctx.fillRect(x, y + 10, 5, h - 20);
+      if (G1.lab === G.lab) L.text(ctx, G.lab, x + 24, row1, { size: 32, weight: 600, color: C.white, alpha: a });
+      else { L.text(ctx, G1.lab, x + 24, row1, { size: 32, weight: 600, color: C.white, alpha: a * (1 - k) }); L.text(ctx, G.lab, x + 24, row1, { size: 32, weight: 600, color: C.white, alpha: a * k }); }
+      if (G.bar) { // Balkenbett wächst ein
+        ctx.globalAlpha = a * k; ctx.fillStyle = "rgba(63,210,255,0.07)"; ctx.beginPath(); L.roundRectPath(ctx, x + G.bx, y + h - 32, w - 48, G.bh, 4); ctx.fill();
+        ctx.strokeStyle = "rgba(63,210,255,0.28)"; ctx.lineWidth = 1; ctx.stroke();
+      }
+    }
     // Zählschritt: Akzent blitzt rot
     if (pop > 0.02 || reachK > 0) { ctx.globalAlpha = a * Math.max(pop, reachK); ctx.fillStyle = RED; ctx.fillRect(x, y + 10, 5, h - 20); }
     // Führungslinie zur Lupe
@@ -810,24 +995,9 @@
     ctx.globalAlpha = a * 0.6; ctx.strokeStyle = C.cyan; ctx.lineWidth = 1.4;
     ctx.beginPath(); ctx.moveTo(tx, y + h); ctx.lineTo(tx, Math.max(y + h, Lz.y - Lz.r - 16)); ctx.stroke();
     ctx.restore();
-    const row1 = y + G.row1;
-    if (S.disp === "number") {
-      const done = t > S.plan.tE + 0.1;
-      const col = cnt > 0 ? RED : (done ? C.green : C.cyan);
-      const ns = 38 * (1 + 0.28 * pop);
-      L.text(ctx, String(cnt), x + 24 + G.wl + 14 + G.wn / 2, row1 + 2 + (ns - 38) * 0.3, { size: ns, weight: 700, font: L.FONT.mono, color: col, align: "center", alpha: a, glow: pop > 0.02 ? 10 * pop : 0, glowColor: col });
-    } else if (S.disp === "none") {
-      // Zähl-Blinklicht: atmet ruhig (cyan), blitzt bei jedem gezählten Bruch rot auf
-      const bx = x + 24 + G.wl + 24, by = row1 - 11;
-      const breath = 0.45 + 0.3 * L.pulse(t, 1.1);
-      ctx.save(); ctx.globalAlpha = a;
-      ctx.strokeStyle = cnt > 0 ? RED : C.cyan; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(bx, by, 8, 0, TAU); ctx.stroke();
-      ctx.fillStyle = cnt > 0 ? RED : C.cyan; ctx.globalAlpha = a * (cnt > 0 ? Math.max(0.55 + 0.25 * L.pulse(t, 1.4), pop) : breath * 0.6);
-      ctx.beginPath(); ctx.arc(bx, by, 4.5 + 1.5 * pop, 0, TAU); ctx.fill();
-      ctx.restore();
-      if (pop > 0.02) { const gs = glowSprite(); ctx.save(); ctx.globalAlpha = a * pop * 0.9; ctx.drawImage(gs.cv, bx - gs.r, by - gs.r); ctx.restore(); }
-    }
-    if (G.bar) drawBar(ctx, S, G, x, y, a, pop, reachK);
+    if (k < 1) drawReadContent(ctx, S, R0.disp, G1, x, row1, a * (1 - L.clamp(k * 2)), pop);
+    if (k > 0) drawReadContent(ctx, S, S.disp, G, x, row1, a * (G1 ? L.clamp(k * 2 - 1) : 1), pop);
+    if (G.bar && k > 0) drawBar(ctx, S, k < 1 ? Object.assign({}, G, { w, h, bw: w - 48, by: h - 32, row1: row1 - y }) : G, x, y, a * k, pop, reachK);
   }
 
   function drawBar(ctx, S, G, x, y, a, pop, reachK) {
@@ -874,7 +1044,7 @@
       ctx.save(); ctx.globalAlpha = a * ka; ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(mxr - 7, y0 - 9); ctx.lineTo(mxr + 7, y0 - 9); ctx.lineTo(mxr, y0 - 1); ctx.closePath(); ctx.fill(); ctx.restore();
       const minX = x + 24 + G.wl + (G.wn ? 14 + G.wn : 0) + 20, maxX = x + G.w - 16 - G.tagW;
       const tagX = Math.max(minX, Math.min(maxX, mx - G.tagW / 2));
-      L.text(ctx, S.thrTag, tagX, y + G.row1 - 4, { size: 19, weight: 700, font: L.FONT.mono, letterSpacing: 1.5, color: col, alpha: a * L.clamp((ka - 0.3) / 0.7) });
+      L.text(ctx, S.thrTag, tagX, y + G.row1 - 10, { size: 19, weight: 700, font: L.FONT.mono, letterSpacing: 1.5, color: col, alpha: a * L.clamp((ka - 0.3) / 0.7) });
     }
   }
 
@@ -923,7 +1093,7 @@
 
   // Stempelposition: auf der Seilachse, weit weg von Lupe/Anzeige, ohne Drahtbrüche zu verdecken (einmal je Szene)
   function stampLayout(S) {
-    const key = [S.stamp, S.stampSub, S.stampCol, S.stampT, S.d, S.angle, S.CY, S.nb, S.v, S.insp ? S.plan.mS + "|" + S.plan.mE + "|" + S.plan.yE + "|" + S.plan.tE : "", S.readH, S.showDim].join("|");
+    const key = [S.stamp, S.stampSub, S.stampCol, S.stampT, S.d, S.angle, S.CY, S.nb, S.v, S.insp ? [S.plan.mS, S.plan.mE, S.plan.yE, S.plan.yS, S.plan.tS, S.plan.tE].join("|") : "", S.readH, S.showDim, S.B.list.map((b) => b.s.toFixed(1)).join(",")].join("|");
     if (S.cacheSL && S.cacheSL.key === key) return S.cacheSL.val;
     const ts = Math.min(S.stampT, S.d), tn = S.sa / S.ca;
     // Lupe + Anzeige ab dem Aufprall bis Szenenende (Lupe kann noch fahren)
@@ -933,8 +1103,7 @@
       const tt = ts < S.plan.tE ? [ts, (ts + S.plan.tE) / 2, S.plan.tE, S.d] : [ts, S.d];
       for (const q of tt) {
         const m = q < S.plan.tS ? S.plan.mS : lensM(S.L, S.plan, q);
-        const yl = S.plan.yE * S.L.smooth(S.L.inv(S.plan.tS + 0.55 * (S.plan.tE - S.plan.tS), S.plan.tE, q));
-        const [lx, ly] = toScreen(S, m + S.v * q, yl);
+        const [lx, ly] = toScreen(S, m + S.v * q + S.scroll0, lensY(S, S.L, q));
         lenses.push([lx, ly]);
         const [rx, ry] = readoutPos(G, lx, ly, RL);
         rects.push({ x: rx, y: ry, w: G.w, h: G.h });
@@ -956,7 +1125,7 @@
         }
         for (const R of rects) if (cx - hw < R.x + R.w + 16 && cx + hw > R.x - 16 && cy - hh < R.y + R.h + 16 && cy + hh > R.y - 16) sc += 6000;
         for (const b of S.B.list) {
-          const [bx, by] = toScreen(S, b.s + S.v * ts, b.y0);
+          const [bx, by] = toScreen(S, b.s + S.v * ts + S.scroll0, b.y0);
           if (Math.abs(bx - cx) < hw + 26 && Math.abs(by - cy) < hh + 26) sc += 500;
         }
         if (dimX !== null && Math.abs(dimX - cx) < hw + 40) sc += 250;
@@ -1095,31 +1264,42 @@
     ctx.save(); ctx.globalAlpha = a; ctx.drawImage(sp.cv, sp.X0, sp.Y0); ctx.restore();
   }
 
-  // ---------- Hauptfunktion ----------
-  function render(ctx, p) {
-    const L = p.L;
-    const t = Math.max(0, num(p.t, 0)), d = Math.max(1, num(p.d, 8));
-    const cfg = parseParams(p.params || {});
+  // ---------- Szenenzustand (auch für die Vorszene beim Anschluss) ----------
+  function prepare(L, t, d, prm, cam, focus, depth) {
+    const cfg = parseParams(prm || {}, depth);
     const ang = (cfg.angle * Math.PI) / 180;
-    const S = Object.assign({ L, C: L.C, t, d, ang, ca: Math.cos(ang), sa: Math.sin(ang), CX: 960, CY: cfg.angle === 0 ? 575 : cfg.angle > 0 ? 600 : 590 }, cfg);
+    const S = Object.assign({ L, C: L.C, t, d, ang, ca: Math.cos(ang), sa: Math.sin(ang), CX: 960, CY: cfg.angle === 0 ? 575 : cfg.angle > 0 ? 600 : 590,
+      cam: typeof cam === "string" ? cam : "static", focus: Array.isArray(focus) ? focus : null, phase: 0, lensStartU: null, lensStartY: 0, scroll0: 0 }, cfg);
     S.v = Math.sign(cfg.speed) * Math.min(Math.abs(cfg.speed), 200 / d);
     S.scroll = S.v * t;
+    // Anschluss an die Vorszene: Brüche, Lupe und Anzeige übernehmen
+    const CI = (S.carryI = depth || !S.carry ? null : carryState(L, S));
+    if (CI) {
+      S.phase = CI.phase;
+      S.scroll0 = CI.tex; S.scroll = S.v * t + S.scroll0; // Litzenmuster phasengleich zur Vorszene
+      if (CI.breaks.length) { S.initBreaks = Math.min(24, CI.breaks.length); S.nb = Math.min(24, Math.max(S.nb, S.initBreaks)); }
+      if (CI.lens && S.insp) { S.lensStartU = CI.lens.u - S.scroll0; S.lensStartY = CI.lens.y; }
+    }
+    if (S.lensStartX != null) {
+      const [wx, wy] = camInv(camOf(S.cam, 0, S.focus, L), S.lensStartX, S.CY);
+      S.lensStartU = (wx - S.CX) * S.ca + (wy - S.CY) * S.sa - S.scroll0; S.lensStartY = 0;
+    }
+    if (S.lensOpenStart == null) S.lensOpenStart = !!(CI && CI.lens && S.insp);
     S.tim = timing(S);
     const cl = S.tim.cl;
+    S.readH = S.insp && (S.disp === "gauge" || S.disp === "ticks" || S.thr) ? 90 : 62;
+    S.B = buildBreaks(S);
+    S.nb = S.B.list.length;
     S.thrV = S.thr ? (S.thr.value != null ? S.thr.value : Math.max(1, S.nb)) : null;
     S.thrTag = S.thr && S.insp ? (S.thr.label.toUpperCase() + (S.thr.showValue ? " " + S.thrV : "")) : "";
-    S.readH = S.insp && (S.disp === "gauge" || S.disp === "ticks" || S.thrV != null) ? 90 : 62;
-    S.B = buildBreaks(S);
     S.dimU = 745;
-    const ext = 1000 / Math.max(0.5, S.ca) + 260;
-    const uMin = -ext, uMax = ext;
 
     // Zeitplan der Prüf-Lupe
     S.plan = planLens(S, S.B);
     S.count = 0; S.lastCountT = -99; S.countSm = 0;
     const tcs = [];
     for (const b of S.B.list) {
-      b.tc = S.insp ? Math.max(crossTime(L, S.plan, b.s - 150), b.ta + 0.2) : Infinity;
+      b.tc = b.pre && b.counted && S.insp ? -10 : S.insp ? Math.max(crossTime(L, S.plan, S.plan.dir < 0 ? b.s + 150 : b.s - 150), b.ta + 0.2) : Infinity;
       if (Number.isFinite(b.tc)) tcs.push(b.tc);
       if (t >= b.tc) { S.count++; S.lastCountT = Math.max(S.lastCountT, b.tc); S.countSm += L.easeOut((t - b.tc) / 0.3); }
     }
@@ -1129,6 +1309,12 @@
     S.gMax = S.thrV != null ? Math.max(S.thrV / 0.8, S.nb * 1.06) : Math.max(1, S.nb) / 0.8;
     S.slots = S.thrV != null ? Math.max(S.nb, S.thrV) + Math.max(2, Math.round(S.thrV * 0.25)) : Math.max(1, S.nb);
     S.thrAt = S.thr && S.thr.at != null ? cl(S.thr.at) : S.tim.openS + S.tim.openD * 0.6;
+    // Anschluss: Anzeige wird kurz vor dem ersten neuen Zählschritt bzw. der Grenzmarke zur eigenen Form umgebaut
+    S.morphT = Infinity;
+    if (CI && CI.read && S.insp) {
+      const firstNew = tcs.find((x) => x > 0.05);
+      S.morphT = Math.max(0.35, Math.min(firstNew != null ? firstNew : d, S.thr && S.thrAt > 0.5 ? S.thrAt : d, d - 0.9) - 0.55);
+    }
     // Stempel-Zeitpunkt
     S.stampT = Infinity;
     if (S.stamp) {
@@ -1147,12 +1333,57 @@
       const open = L.easeOut(L.seg(t, S.tim.openS, S.tim.openD));
       const m = t < S.plan.tS ? S.plan.mS : lensM(L, S.plan, t);
       const u = m + S.scroll;
-      const yl = S.plan.yE * L.smooth(L.inv(S.plan.tS + 0.55 * (S.plan.tE - S.plan.tS), S.plan.tE, t));
+      const yl = lensY(S, L, t);
       const [x, y] = toScreen(S, u, yl);
       S.lens = { u, yl, x, y, r: RL * Math.max(0, open), a: L.clamp(open) };
       S.lensULo = Math.min(S.plan.mS, S.plan.mE) + Math.min(0, S.v * d);
       S.lensUHi = Math.max(S.plan.mS, S.plan.mE) + Math.max(0, S.v * d);
     }
+    return S;
+  }
+
+  // Endzustand der Vorszene (gleiche Rechnung wie dort) -> Lage im Bild -> Welt der aktuellen Szene bei t = 0
+  let CARRY = null;
+  function carryState(L, S) {
+    const c = S.carry;
+    let key = "";
+    try { key = JSON.stringify([c, S.angle, S.CY, S.cam, S.focus, S.v]); } catch (e) { return null; }
+    if (CARRY && CARRY.key === key) return CARRY.val;
+    const dP = c.d, P = prepare(L, dP, dP, c.params, c.camera, c.focus, 1);
+    const cP = camOf(c.camera, 1, c.focus, L), cC = camOf(S.cam, 0, S.focus, L);
+    const toCur = (x, y) => { const [X, Y] = camFwd(cP, x, y); return camInv(cC, X, Y); };
+    const toRope = (x, y) => [(x - S.CX) * S.ca + (y - S.CY) * S.sa, -(x - S.CX) * S.sa + (y - S.CY) * S.ca];
+    const breaks = P.B.list.filter((b) => b.ta <= dP).map((b) => {
+      const [wx, wy] = toScreen(P, b.s + P.scroll, 0);
+      const u = toRope(...toCur(wx, wy))[0];
+      return { s: u, y0: b.y0, dir: b.dir, edge: b.edge, face: b.face, type: b.type, lenA: b.lenA, lenB: b.lenB, seed: b.seed, counted: !!P.insp && b.tc <= dP };
+    });
+    let lens = null, read = null;
+    if (P.lens && P.lens.a > 0.5) {
+      const [x, y] = toCur(P.lens.x, P.lens.y), [u, yy] = toRope(x, y);
+      lens = { u, y: yy };
+      const G = readoutGeom(P), [rx, ry] = readoutPos(G, P.lens.x, P.lens.y, P.lens.r), [qx, qy] = toCur(rx, ry);
+      read = { disp: P.disp, countLabel: P.countLabel, readH: P.readH, thrTag: P.thrTag, x: qx, y: qy, lx: x, ly: y };
+    }
+    // Musterphase: am Anker (Lupe, sonst Bildmitte) liegt dieselbe Litzenstelle wie in der Vorszene
+    const A = lens ? toCur(P.lens.x, P.lens.y) : camInv(cC, 960, S.CY);
+    const [ax, ay] = camInv(cP, ...camFwd(cC, A[0], A[1]));
+    const mP = (ax - P.CX) * P.ca + (ay - P.CY) * P.sa - P.scroll, uC = toRope(A[0], A[1])[0];
+    let tex = (uC - mP) % LAT; if (tex >= LAT / 2) tex -= LAT; if (tex < -LAT / 2) tex += LAT;
+    const val = { breaks, lens, read, phase: dP, tex: Number.isFinite(tex) ? tex : 0 };
+    CARRY = { key, val };
+    return val;
+  }
+
+  // ---------- Hauptfunktion ----------
+  function render(ctx, p) {
+    const L = p.L;
+    const t = Math.max(0, num(p.t, 0)), d = Math.max(1, num(p.d, 8));
+    const prm = p.params && typeof p.params === "object" ? p.params : {};
+    const S = prepare(L, t, d, prm, p.scene && p.scene.camera, prm.focus, 0);
+    const cl = S.tim.cl;
+    const ext = 1000 / Math.max(0.5, S.ca) + 260;
+    const uMin = -ext, uMax = ext;
 
     const Ly = getLayers(S);
     ctx.save();
@@ -1214,6 +1445,17 @@
     drawCallout(ctx, S);
     ctx.restore();
   }
+
+  // Prüfhilfe (nur lesend): Zeitplan/Lagen einer Szene, z. B. für die Wort-Synchronisation
+  CE.debugRopeMacro = (params, d, t, camera) => {
+    try {
+      const S = prepare(CE.lib, num(t, 0), Math.max(1, num(d, 8)), params || {}, camera, params && params.focus, 0);
+      const c = camOf(S.cam, S.t / S.d, S.focus, CE.lib), scr = (u, y) => camFwd(c, ...toScreen(S, u, y)).map((v) => Math.round(v));
+      return { nb: S.nb, dir: S.plan.dir, plan: S.plan, tim: { bS: S.tim.bS, bE: S.tim.bE, tS: S.tim.tS, tE: S.tim.tE, openS: S.tim.openS }, reachT: S.reachT, stampT: S.stampT, morphT: S.morphT, count: S.count,
+        lens: S.lens && { x: Math.round(S.lens.x), y: Math.round(S.lens.y), r: S.lens.r, screen: scr(S.lens.u, S.lens.yl) },
+        breaks: S.B.list.map((b) => ({ type: b.type, s: Math.round(b.s), ta: +b.ta.toFixed(2), tc: +(Number.isFinite(b.tc) ? b.tc : -1).toFixed(2), pre: !!b.pre, counted: !!b.counted, screen: scr(b.s + S.scroll, b.y0) })) };
+    } catch (e) { return { error: String(e && e.message) }; }
+  };
 
   CE.register("rope_macro", {
     ownsText: false,
