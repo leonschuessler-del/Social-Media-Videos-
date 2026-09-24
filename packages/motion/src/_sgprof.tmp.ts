@@ -25,7 +25,7 @@ const code = `(() => {
     return (performance.now() - t0) / n;
   }
   run([]);
-  for (const name of Object.keys(sets)) { const a = run(sets[name]), b = run(sets[name]); out[name] = Math.min(a, b); }
+  for (const name of Object.keys(sets)) { const a = run(sets[name]), b = run(sets[name]), c = run(sets[name]); out[name] = Math.min(a, b, c); }
   return out;
 })()`;
 const res = await page.evaluate(code) as Record<string, number>;
