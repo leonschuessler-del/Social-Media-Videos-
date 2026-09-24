@@ -19,16 +19,27 @@ Stand 2026-09-24. Auf Wunsch des Betreibers entsteht das erste Video **ohne weit
 - **Stimme:** gut verständlich, natürliches Tempo; hörbar synthetischer als ein Profi-Sprecher oder Premium-TTS. Einzelne Wörter können falsch betont sein (Fremdwörter, Eigennamen).
 - **Musik:** ruhiges, atmosphärisches Klangbett; kein komponierter Soundtrack.
 
-## Zeitbedarf (gemessen in der Cloud-Sandbox, 4 vCPU)
+## Zeitbedarf (gemessen in der Cloud-Sandbox, 4 vCPU, Video 001, 10:23 min)
 
-| Schritt | Dauer |
-|---|---|
-| Rendering Motion Graphics | ≈ 2 s Rechenzeit pro Sekunde Video (einfache Szenen), 11 min ≈ 25–40 min |
-| Stimme (Coqui, CPU) | ≈ 1–1,5 s pro Sekunde Audio |
-| Musik + SFX | < 2 min |
-| Mischung, Untertitel, Mux | < 5 min |
+Gemessen unter Volllast (parallel liefen bis zu 12 Agenten mit Vorschau-Renderings):
 
-Auf einem MacBook Air (Apple Silicon, 2026) ist mit ähnlichen oder kürzeren Zeiten zu rechnen (höhere Einzelkernleistung, GPU-Canvas); erster echter Messwert folgt.
+| Schritt | gemessen | ohne Parallellast (Schätzung) |
+|---|---|---|
+| Stimme (Coqui Thorsten VITS, 140 Sätze, 1.643 Wörter) | 33 min (2.003 s) für 10:23 min Audio | ≈ 8–12 min |
+| Musik (prozedural) + SFX + Mischung (−14,1 LUFS integriert) | 3:53 min | ≈ 2 min |
+| Rendering Motion Graphics | 4.884 Frames in 260 s ≈ 19 fps (Vorschau-Abschnitt) → ganzes Video ≈ 17–25 min | ≈ 10–15 min |
+| Mux, Untertitel einbrennen | ≈ 3–5 min | ≈ 3 min |
+
+Der große Zeitblock des ersten Videos ist **einmalig**: Bau von 22 Szenen-Vorlagen (je 40–90 min Agentenzeit) und die Szenen-Abnahme (jede der 90 Szenen wird auf die Wortzeiten der Sprachaufnahme getaktet, als Standbild-Bogen geprüft, von einem unabhängigen Prüfer abgenommen, Fehlschläge in einer Fix-Runde nachgebessert).
+
+### Szenen-Timing (seit Video 001)
+
+- `build_video.ts --stage timeline` legt Szenenwechsel auf Satzgrenzen (Fallback Wortgrenzen) statt starr nach Gewicht.
+- Es schreibt `out/scene_narration.json`: pro Szene exakt gesprochener Text + Wortzeiten relativ zum Szenenstart.
+- Alle Vorlagen unterstützen `params.beats` (Sekunden je Hauptschritt) und `at` pro Listeneintrag – Zahlen/Ergebnisse erscheinen erst, wenn sie gesprochen werden.
+- `make_scene_batches.py` erzeugt daraus die Batches für die Szenen-Abnahme; `journal_to_batches.py` + `merge_scene_qa.py` übernehmen die Ergebnisse in `storyboard_final.json`.
+
+Auf einem MacBook Air (Apple Silicon, 2026) ist mit ähnlichen oder kürzeren Zeiten zu rechnen (höhere Einzelkernleistung); erster echter Messwert folgt.
 
 ## Einordnung in das automatisierte System
 
