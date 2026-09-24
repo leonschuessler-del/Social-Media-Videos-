@@ -17,6 +17,8 @@
             [4] = Gegengewicht blinkt amber (nur mit blink_counterweight:true)
             [5] = "Motor bewegt nur die Differenz" (nur wenn difference_label nicht leer/false)
    Überschreibbar: grooves_at, towel_at, friction_at, balance_at, equation_at, blink_at, difference_at (Sekunden).
+   values_at (Sekunden, Default = Öffnen des Panels): ab hier erscheinen die Ausgleichswerte im Panel – Schalen-Unterzeile
+            "Kabine + 40–50 %" (vorher "Kabine + ?") sowie grünes Band, Marke und "Ausgleich …" auf der BELADUNG-Skala.
    "at" (Sekunden) akzeptieren: labels[] (Callouts im Hauptbild).
    Alle Zeiten werden auf [0,3 ; d−0,3] begrenzt. Ohne Beats skaliert das Default-Timing mit d. Einmal Sichtbares bleibt.
 
@@ -186,7 +188,7 @@
       const b3 = Math.max(b2 + 0.2, bt(3, b2 + clamp(0.2 * d, 1.2, 3)));
       const b4 = bt(4, Math.max(b3 + 0.3, 0.66 * d)), b5 = bt(5, Math.max(b4 + 0.3, 0.8 * d));
       c.B = [b0, b1, b2, b3, b4, b5];
-      c.tBal = atOr(P.balance_at, b0); c.tCw = b0; c.tCar = b1; c.tEq1 = atOr(P.equation_at, b1); c.tEq2 = b2;
+      c.tBal = atOr(P.balance_at, b0); c.tVal = atOr(P.values_at, c.tBal); c.tCw = b0; c.tCar = b1; c.tEq1 = atOr(P.equation_at, b1); c.tEq2 = b2;
       c.tLoad0 = b2; c.tLoad1 = b3; c.tBlink = atOr(P.blink_at, b4); c.tDiff = atOr(P.difference_at, b5);
       c.tGroove = atOr(P.grooves_at, b0); c.tTowel = atOr(P.towel_at, b1); c.tFric = atOr(P.friction_at, b1);
       c.tRopes = c.tGroove;
@@ -194,7 +196,7 @@
       const b0 = bt(0, Math.max(0.6, 0.2 * d)), b1 = bt(1, Math.max(b0 + 0.3, 0.45 * d)), b2 = bt(2, Math.max(b1 + 0.3, 0.7 * d));
       c.B = [b0, b1, b2];
       c.tGroove = atOr(P.grooves_at, b0); c.tRopes = b0; c.tTowel = atOr(P.towel_at, b1); c.tFric = atOr(P.friction_at, b2);
-      c.tBal = atOr(P.balance_at, b1); c.tCw = -1; c.tCar = -1; c.tEq1 = c.tBal + 0.3; c.tEq2 = c.tBal + 0.6;
+      c.tBal = atOr(P.balance_at, b1); c.tVal = atOr(P.values_at, c.tBal); c.tCw = -1; c.tCar = -1; c.tEq1 = c.tBal + 0.3; c.tEq2 = c.tBal + 0.6;
       c.tLoad0 = c.tBal; c.tLoad1 = c.tBal; c.tBlink = atOr(P.blink_at, b2); c.tDiff = atOr(P.difference_at, b2);
     }
     // Callouts
@@ -659,7 +661,16 @@
     const loadTxt = L < 0.5 ? "leer" : `+ ${pctTxt(L)} Last`;
     txt(ctx, loadTxt, px - LB, 485, { size: 19, weight: 600, color: COL.white, align: "center" });
     txt(ctx, "Gegengewicht", px + LB, 460, { size: 22, weight: 700, color: COL.amber, align: "center" });
-    txt(ctx, `Kabine + ${rangeTxt}`, px + LB, 485, { size: 19, weight: 600, color: COL.white, align: "center" });
+    // Ausgleichswerte erst ab values_at (Default = Panel öffnet -> unverändert); vorher Platzhalter "Kabine + ?"
+    const vA = c.tVal <= c.tBal + 0.05 ? 1 : easeOut(seg(t, c.tVal, 0.5));
+    if (vA >= 1) txt(ctx, `Kabine + ${rangeTxt}`, px + LB, 485, { size: 19, weight: 600, color: COL.white, align: "center" });
+    else { // "Kabine + " steht fest, nur der Wert wechselt von "?" auf die Zahl
+      const oS = { size: 19, weight: 600, font: FB }, pre = "Kabine + ";
+      const wPre = meas(ctx, pre, oS), wVal = meas(ctx, rangeTxt, oS), x0 = px + LB - (wPre + wVal) / 2, xv = x0 + wPre;
+      txt(ctx, pre, x0, 485, { ...oS, color: vA > 0 ? COL.white : COL.muted });
+      txt(ctx, "?", xv, 485, { ...oS, color: COL.muted, alpha: 1 - vA });
+      if (vA > 0) { dot(ctx, xv + wVal / 2, 479, 30, COL.green, 0.3 * Math.sin(Math.PI * vA)); txt(ctx, rangeTxt, xv, 485, { ...oS, color: COL.white, alpha: vA }); }
+    }
     // Gleichung "Gegengewicht = …" (Teil vor dem "+" ab tEq1, Rest ab tEq2)
     const e1 = seg(t, c.tEq1, 0.45);
     if (e1 > 0 && c.cwLabel) {
@@ -691,12 +702,14 @@
       txt(ctx, "BELADUNG", mx0, my - 14, { size: 15, weight: 700, font: FM, color: COL.muted, ls: 3 });
       txt(ctx, pctTxt(L), mx1, my - 11, { size: 22, weight: 700, font: FM, color: COL.white, align: "right" });
       fil(ctx, (cc) => rrect(cc, mx0, my, mx1 - mx0, 12, 6), "#0e2644", 1);
-      if (c.range) fil(ctx, (cc) => cc.rect(lerp(mx0, mx1, c.range[0] / 100), my - 3, Math.max(3, (mx1 - mx0) * (c.range[1] - c.range[0]) / 100), 18), COL.green, 0.3);
+      if (c.range && vA > 0) fil(ctx, (cc) => cc.rect(lerp(mx0, mx1, c.range[0] / 100), my - 3, Math.max(3, (mx1 - mx0) * (c.range[1] - c.range[0]) / 100) * (0.4 + 0.6 * vA), 18), COL.green, 0.3 * vA);
       if (L > 0.2) fil(ctx, (cc) => rrect(cc, mx0, my, (mx1 - mx0) * L / 100, 12, 6), COL.cyan, 0.85);
       const bxm = lerp(mx0, mx1, c.bal / 100);
-      stk(ctx, (cc) => { cc.moveTo(bxm, my - 8); cc.lineTo(bxm, my + 20); }, COL.green, 2.4, 0.7, 0.95);
-      const lvl = c.range ? `Ausgleich ${Math.round(c.range[0])}–${Math.round(c.range[1])} %` : `Ausgleich ${pctTxt(c.bal)}`;
-      txt(ctx, lvl, clamp(bxm, 110, 450), my + 34, { size: 17, weight: 600, color: COL.green, align: "center" });
+      if (vA > 0) {
+        stk(ctx, (cc) => { cc.moveTo(bxm, my - 8); cc.lineTo(bxm, my + 20); }, COL.green, 2.4, 0.7, 0.95 * vA);
+        const lvl = c.range ? `Ausgleich ${Math.round(c.range[0])}–${Math.round(c.range[1])} %` : `Ausgleich ${pctTxt(c.bal)}`;
+        txt(ctx, lvl, clamp(bxm, 110, 450), my + 34, { size: 17, weight: 600, color: COL.green, align: "center", alpha: vA });
+      }
       GA = sGl;
     }
     // Merksatz Differenz (oben im Panel)

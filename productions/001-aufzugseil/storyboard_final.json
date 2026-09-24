@@ -7,11 +7,11 @@
    "params_json": "{\"scene\":\"empire_state_1945_schematic\",\"variant\":\"fall\",\"year_label\":\"1945\",\"year_at\":0.3,\"highlight\":[\"elevator_shaft\"],\"labels\":[{\"text\":\"Empire State Building\",\"at\":2.0}],\"floor\":75,\"beats\":[2.5,3.0,3.36,4.85],\"distance_sub\":\" \"}",
    "on_screen_text": "",
    "weight": 0.45,
-   "camera": "slow_push_in",
+   "camera": "static",
    "sfx": "rumble",
    "description": "Querschnitt des Hochhauses als Cyan-Linienzeichnung auf Dunkelblau. Die Jahreszahl 1945 baut sich groß auf, ein Aufzugsschacht im Inneren glimmt amber.",
    "qa": {
-    "quality": 8,
+    "quality": 0.86,
     "review_pass": null
    }
   },
@@ -19,7 +19,7 @@
    "id": "s01_b",
    "segment_id": "s01",
    "template": "shaft_xray",
-   "params_json": "{\"focus\":\"full\",\"state\":\"all_ropes_snap\",\"floors\":8,\"people\":1,\"passenger_pose\":\"seated\",\"hud\":false,\"floor_labels\":false,\"fall_to\":\"pit\",\"freeze_before_impact\":true,\"freeze_icon\":false,\"beats\":[0.4,3.0],\"snap_gap\":0.08,\"frame_color\":\"green\",\"frame_at\":3.0,\"labels\":[{\"part\":\"car\",\"text\":\"schwer verletzte junge Frau\",\"at\":1.3,\"side\":\"left\"},{\"part\":\"car\",\"text\":\"überlebt\",\"at\":2.65,\"side\":\"left\",\"color\":\"green\"}],\"overlay\":{\"type\":\"question_mark\",\"part\":\"car\",\"at\":3.8}}",
+   "params_json": "{\"focus\":\"full\",\"state\":\"all_ropes_snap\",\"floors\":8,\"people\":1,\"passenger_pose\":\"seated\",\"hud\":false,\"floor_labels\":false,\"fall_to\":\"pit\",\"freeze_before_impact\":true,\"freeze_icon\":false,\"beats\":[0.4,3.0],\"snap_gap\":0.08,\"frame_color\":\"green\",\"frame_at\":3.0,\"labels\":[{\"part\":\"car\",\"text\":\"schwer verletzte junge Frau\",\"at\":1.3,\"side\":\"right\"},{\"part\":\"car\",\"text\":\"überlebt\",\"at\":2.65,\"side\":\"right\",\"color\":\"green\"}],\"overlay\":{\"type\":\"question_mark\",\"part\":\"car\",\"at\":3.8}}",
    "on_screen_text": "",
    "weight": 0.55,
    "camera": "tilt_down",
@@ -27,7 +27,7 @@
    "description": "Harter Schnitt in den Röntgenschacht. Alle Tragseile peitschen rot weg, die Seilzahl bleibt unbeschriftet. Die Kabine mit einer sitzenden Silhouette rast nach unten, friert kurz vor der Grube ein, darüber ein großes Fragezeichen zu 'Wie ist das möglich?'.",
    "qa": {
     "quality": 8,
-    "review_pass": null
+    "review_pass": false
    }
   },
   {
@@ -57,7 +57,7 @@
    "description": "Nahaufnahme der dünnen Tragseile über der Kabine. Sie glühen cyan, die Kamera fährt an ihnen hoch zur Treibscheibe, passend zu 'obwohl sie an dünnen Stahlseilen hängen'.",
    "qa": {
     "quality": 7.5,
-    "review_pass": null
+    "review_pass": false
    }
   },
   {
@@ -71,8 +71,8 @@
    "sfx": "impact",
    "description": "Titelkarte: Der Titel scannt ein, darunter der Untertitel. Im Blueprint-Schacht dahinter reißt ein Seil rot, daneben steht eine Stoppuhr-Grafik auf Null für das angekündigte Gedankenexperiment.",
    "qa": {
-    "quality": 8,
-    "review_pass": false
+    "quality": 8.5,
+    "review_pass": null
    }
   },
   {
@@ -87,7 +87,7 @@
    "description": "Zeitachse läuft von 'heute' zurück, der Knoten 1854 poppt amber auf: 'New York: Ausstellung im Kristallpalast'.",
    "qa": {
     "quality": 8,
-    "review_pass": null
+    "review_pass": true
    }
   },
   {
@@ -102,7 +102,7 @@
    "description": "Kupferstich-Linienoptik: eine Silhouette auf der hochgezogenen offenen Plattform, Publikum als Silhouetten davor. Beim Wort 'gekappt' trennt ein Schnitt das Tragseil, die Plattform ruckt nur minimal ab und bleibt hängen.",
    "qa": {
     "quality": 8.5,
-    "review_pass": null
+    "review_pass": true
    }
   },
   {
@@ -117,7 +117,7 @@
    "description": "Detail der Plattform: Solange das Seil zieht, bleibt die Federsperre gelöst. Das Seil erschlafft, die Sperre schnappt amber leuchtend in die Zahnstangen an beiden Seiten.",
    "qa": {
     "quality": 8,
-    "review_pass": null
+    "review_pass": true
    }
   },
   {
@@ -139,14 +139,14 @@
    "id": "s04_b",
    "segment_id": "s04",
    "template": "historic_scene",
-   "params_json": "{\"scene\":\"otis_1854_demo\",\"variant\":\"newspaper_overlay\",\"newspaper_label\":\"1854\",\"highlight_note\":\"schneidet gelegentlich das Seil durch\",\"dim_background\":0.6,\"quote\":\"Alles sicher, meine Herren!\",\"quote_by\":\"FEHLT IN DEN BERICHTEN\",\"quote_at\":2.0,\"beats\":[0.8,2.88]}",
+   "params_json": "{\"scene\":\"otis_1854_demo\",\"variant\":\"newspaper_overlay\",\"newspaper_label\":\"1854\",\"highlight_note\":\"schneidet gelegentlich das Seil durch\",\"note\":false,\"dim_background\":0.6,\"quote\":\"Alles sicher, meine Herren!\",\"quote_by\":\"FEHLT IN DEN BERICHTEN\",\"quote_at\":2.0,\"beats\":[0.8,2.88]}",
    "on_screen_text": "Berichte von damals",
    "weight": 0.28,
    "camera": "pan_left",
    "sfx": "whoosh",
    "description": "Eine stilisierte Zeitungsspalte als Linienzeichnung schiebt sich neben die stehende Vorführungs-Silhouette. Einzige Beschriftung ist '1854', die Randnotiz 'schneidet gelegentlich das Seil durch' wird amber unterstrichen.",
    "qa": {
-    "quality": 7,
+    "quality": 0.85,
     "review_pass": null
    }
   },
@@ -192,7 +192,7 @@
    "description": "Röntgenblick auf das Seilbündel zwischen Treibscheibe und Kabine. Die parallelen, unabhängigen Seile leuchten einzeln nacheinander auf.",
    "qa": {
     "quality": 8,
-    "review_pass": null
+    "review_pass": true
    }
   },
   {
@@ -222,14 +222,14 @@
    "description": "Fünf der sechs Seile werden ausgeblendet, eines glüht cyan weiter und hält die voll beladene Kabine. Das Label 'rechnerisch, rein statisch' und die Kennzeichnung 'etwa das Doppelte' erscheinen.",
    "qa": {
     "quality": 8.5,
-    "review_pass": null
+    "review_pass": true
    }
   },
   {
    "id": "s06_b",
    "segment_id": "s06",
    "template": "map_or_scale",
-   "params_json": "{\"mode\":\"rope_vs_finger\",\"focus\":[0.36,0.52],\"beats\":[0.3,6.6,8.55],\"items\":[{\"name\":\"Tragseil\",\"shape\":\"rope_section\",\"size_mm\":8,\"dim_label\":\"Ø mind. 8 mm\",\"at\":0.7,\"dim_at\":3.1},{\"name\":\"Bleistift\",\"shape\":\"pencil_section\",\"show_dimension\":false,\"at\":5.3}],\"then_readout\":{\"value\":\"3 bis gut 4 t\",\"label\":\"Bruchkraft, je nach Bauart\"}}",
+   "params_json": "{\"mode\":\"rope_vs_finger\",\"focus\":[0.36,0.52],\"kicker\":\"Gleicher Maßstab\",\"beats\":[0.3,6.6,8.55],\"items\":[{\"name\":\"Tragseil\",\"shape\":\"rope_section\",\"size_mm\":8,\"dim_label\":\"Ø mind. 8 mm\",\"at\":0.7,\"dim_at\":3.1},{\"name\":\"Bleistift\",\"shape\":\"pencil_section\",\"show_dimension\":false,\"at\":5.3}],\"then_readout\":{\"value\":\"3 bis gut 4 t\",\"label\":\"Bruchkraft, je nach Bauart\"}}",
    "on_screen_text": "Nach europäischer Aufzugsnorm",
    "weight": 0.56,
    "camera": "slow_pull_out",
@@ -244,7 +244,7 @@
    "id": "s07_a",
    "segment_id": "s07",
    "template": "shaft_xray",
-   "params_json": "{\"focus\":\"full\",\"state\":\"idle\",\"floor\":2,\"hud\":false,\"floor_labels\":false,\"people\":2,\"highlight\":[\"sheave\",\"brake\",\"ropes\"],\"highlight_at\":0.3,\"labels\":[{\"part\":\"brake\",\"text\":\"Maschine\",\"at\":0.3,\"side\":\"right\"},{\"part\":\"car\",\"text\":\"Kabine\",\"at\":1.2,\"side\":\"right\"},{\"part\":\"ropes\",\"text\":\"nicht festgeschraubt\",\"at\":1.9,\"side\":\"right\",\"color\":\"red\"}],\"markers\":[{\"part\":\"sheave\",\"symbol\":\"✕\",\"at\":2.0,\"color\":\"red\"}]}",
+   "params_json": "{\"focus\":\"full\",\"state\":\"idle\",\"floor\":2,\"hud\":false,\"floor_labels\":false,\"people\":2,\"highlight\":[\"sheave\",\"brake\",\"ropes\"],\"highlight_at\":0.3,\"labels\":[{\"part\":\"sheave\",\"text\":\"Maschine\",\"at\":0.3,\"side\":\"left\"},{\"part\":\"car\",\"text\":\"Kabine\",\"at\":1.2,\"side\":\"right\"},{\"part\":\"ropes\",\"text\":\"nicht festgeschraubt\",\"at\":1.9,\"side\":\"right\",\"color\":\"red\"}],\"markers\":[{\"part\":\"sheave\",\"symbol\":\"✕\",\"at\":2.0,\"color\":\"red\"}]}",
    "on_screen_text": "Die Maschine oben",
    "weight": 0.2,
    "camera": "static",
@@ -252,30 +252,38 @@
    "description": "Blick in den Maschinenraum oben. Die Seile laufen über die Treibscheibe, es gibt keine Befestigung an der Maschine, das Label 'nicht festgeschraubt' blinkt.",
    "qa": {
     "quality": 7,
-    "review_pass": null
+    "review_pass": false
    }
   },
   {
    "id": "s07_b",
    "segment_id": "s07",
    "template": "traction_sheave",
-   "params_json": "{\"show_balance\": false, \"friction_arrows\": true, \"grooves\": true, \"inset\": \"towel_over_bar\"}",
-   "on_screen_text": "Hält nur durch Reibung",
+   "params_json": "{\"show_balance\":false,\"grooves\":true,\"groove_type\":\"undercut\",\"inset\":\"towel_over_bar\",\"friction_arrows\":true,\"beats\":[0.4,2.85,5.15],\"grooves_at\":1.4,\"labels\":[{\"text\":\"Tragseile\",\"target\":\"ropes\",\"at\":0.4},{\"text\":\"Treibscheibe\",\"target\":\"sheave\",\"at\":1.85},{\"text\":\"Reibung\",\"target\":\"friction\",\"at\":5.15,\"color\":\"amber\"}]}",
+   "on_screen_text": "Seile nur aufgelegt",
    "weight": 0.33,
    "camera": "static",
    "sfx": "metal_creak",
-   "description": "Zoom auf die Treibscheibe: Die Seile liegen lose in den Rillen, amber Reibungspfeile. Im Inset hängt ein Handtuch über einer Stange mit Gewichten an beiden Enden."
+   "description": "Zoom auf die Treibscheibe: Die Seile liegen lose in den Rillen, amber Reibungspfeile. Im Inset hängt ein Handtuch über einer Stange mit Gewichten an beiden Enden.",
+   "qa": {
+    "quality": 8,
+    "review_pass": true
+   }
   },
   {
    "id": "s07_c",
    "segment_id": "s07",
    "template": "traction_sheave",
-   "params_json": "{\"show_balance\": true, \"load_from\": 0, \"load_percent\": 50, \"counterweight_label\": \"leere Kabine + 40 bis 50 % Nutzlast\", \"blink_counterweight\": true}",
-   "on_screen_text": "Leere Kabine + 40 bis 50%",
+   "params_json": "{\"show_balance\":true,\"tags\":false,\"load_from\":0,\"load_percent\":50,\"balance_percent\":50,\"balance_range\":[40,50],\"counterweight_label\":\"leere Kabine + 40 bis 50 % Nutzlast\",\"blink_counterweight\":true,\"difference_label\":false,\"beats\":[1.35,2.95,4.3,5.1,7.0],\"equation_at\":2.95,\"values_at\":4.2}",
+   "on_screen_text": "Gegengewicht am anderen Ende",
    "weight": 0.47,
-   "camera": "slow_pull_out",
+   "camera": "static",
    "sfx": "riser",
-   "description": "Die Waage aus Kabine und Gegengewicht pendelt sich bei halber Beladung waagerecht ein. Label: Gegengewicht = leere Kabine + 40 bis 50 % Nutzlast. Bei 'Merk dir das Gegengewicht' blinkt es amber."
+   "description": "Die Waage aus Kabine und Gegengewicht pendelt sich bei halber Beladung waagerecht ein. Label: Gegengewicht = leere Kabine + 40 bis 50 % Nutzlast. Bei 'Merk dir das Gegengewicht' blinkt es amber.",
+   "qa": {
+    "quality": 8,
+    "review_pass": null
+   }
   },
   {
    "id": "s08_a",
@@ -289,7 +297,7 @@
    "description": "Ein Wohnhausaufzug mit Bremsfang fährt ruhig mit 1 m/s abwärts, die Anzeige zeigt die Geschwindigkeit.",
    "qa": {
     "quality": 8,
-    "review_pass": null
+    "review_pass": true
    }
   },
   {
@@ -319,21 +327,21 @@
    "description": "Die Kurve 'Start aus Fahrt' zeichnet sich. Das Band zwischen 'frühestens' und 1,5 m/s leuchtet amber als Auslösefenster, die Marke bei etwa 50 ms blinkt.",
    "qa": {
     "quality": 8.5,
-    "review_pass": null
+    "review_pass": true
    }
   },
   {
    "id": "s09_b",
    "segment_id": "s09",
    "template": "graph",
-   "params_json": "{\"title\":\"Geschwindigkeit nach dem Seilriss\",\"x_label\":\"Zeit in ms\",\"y_label\":\"Geschwindigkeit\",\"y_unit\":\"m/s\",\"x_min\":0,\"x_max\":60,\"y_min\":0.9,\"y_max\":1.7,\"readout\":false,\"beats\":[0.3,0.8],\"series\":[{\"name\":\"Start bei 1 m/s\",\"points\":[[0,1.0],[10,1.098],[15,1.147],[20,1.196],[30,1.294],[40,1.392],[51,1.5]]}],\"ref_lines\":[{\"y\":1.15,\"label\":\"Grenze: +15 %\",\"color\":\"amber\"},{\"y\":1.5,\"label\":\"Obergrenze: 1,5 m/s\",\"color\":\"red\",\"at\":0.95}],\"annotations\":[{\"x\":15,\"y\":1.15,\"label\":\"frühestens\",\"sub\":\"\",\"color\":\"amber\"},{\"x\":51,\"y\":1.5,\"label\":\"spätestens nach etwa 50 ms\",\"sub\":\"\",\"at\":2.55,\"color\":\"red\",\"blink\":true}],\"y_bands\":[{\"y0\":1.15,\"y1\":1.5,\"label\":\"AUSLÖSEFENSTER\",\"color\":\"amber\"}]}",
+   "params_json": "{\"title\":\"Geschwindigkeit nach dem Seilriss\",\"x_label\":\"Zeit in ms\",\"y_label\":\"Geschwindigkeit\",\"y_unit\":\"m/s\",\"x_min\":0,\"x_max\":60,\"y_min\":0.9,\"y_max\":1.7,\"readout\":false,\"carry_in\":5.487,\"beats\":[0.3,0.8],\"series\":[{\"name\":\"Start bei 1 m/s\",\"points\":[[0,1.0],[10,1.098],[15,1.147],[20,1.196],[30,1.294],[40,1.392],[51,1.5]],\"end\":-2.187}],\"ref_lines\":[{\"y\":1.15,\"label\":\"Grenze: +15 %\",\"color\":\"amber\"},{\"y\":1.5,\"label\":\"Obergrenze für die Auslösung: 1,5 m/s\",\"color\":\"red\",\"at\":0.45}],\"annotations\":[{\"x\":15,\"y\":1.15,\"label\":\"frühestens\",\"sub\":\"\",\"color\":\"amber\",\"at\":-4.137},{\"x\":51,\"y\":1.5,\"label\":\"spätestens\",\"sub\":\"nach etwa 50 ms\",\"sub_at\":2.55,\"color\":\"red\",\"blink\":true,\"at\":-2.187}],\"y_bands\":[{\"y0\":1.15,\"y1\":1.5,\"label\":\"AUSLÖSEFENSTER\",\"color\":\"amber\",\"at\":-1.887}]}",
    "on_screen_text": "",
    "weight": 0.45,
    "camera": "static",
    "sfx": "whoosh",
    "description": "Die Achse zoomt heraus, die zweite Kurve 'Start aus dem Stillstand' kommt dazu und erreicht das Fenster erst nach gut 0,1 s und knapp 7 cm Fall.",
    "qa": {
-    "quality": 8,
+    "quality": 0.9,
     "review_pass": null
    }
   },
@@ -521,14 +529,14 @@
    "id": "s14_c",
    "segment_id": "s14",
    "template": "safety_gear",
-   "params_json": "{\"type\":\"progressive\",\"sparks\":false,\"panel\":false,\"tape\":false,\"energy\":true,\"panel2At\":3.2,\"beats\":[0.95,2.45,6.3,6.5],\"callouts\":[{\"id\":\"spring\",\"at\":1.12},{\"id\":\"wedge\",\"at\":1.86},{\"id\":\"rail\",\"at\":2.56,\"sub\":\"T-Profil\"},{\"id\":\"trace\",\"at\":5.4}]}",
+   "params_json": "{\"type\":\"progressive\",\"sparks\":false,\"panel\":false,\"tape\":false,\"energy\":true,\"panel2Y\":\"center\",\"shiftX\":\"auto\",\"panel2At\":3.2,\"beats\":[0.95,2.45,6.3,6.5],\"callouts\":[{\"id\":\"spring\",\"at\":1.12},{\"id\":\"wedge\",\"at\":1.86},{\"id\":\"rail\",\"at\":2.56,\"sub\":\"T-Profil\"},{\"id\":\"trace\",\"at\":5.4}]}",
    "on_screen_text": "Bremsfang: Keile gleiten",
    "weight": 0.25,
    "camera": "static",
    "sfx": "metal_creak",
    "description": "Nahaufnahme des Bremsfangs an der Schiene: Die Keile gleiten eine Strecke und glühen amber vor Reibungswärme, ohne Funken.",
    "qa": {
-    "quality": 7.5,
+    "quality": 0.9,
     "review_pass": null
    }
   },
@@ -539,11 +547,11 @@
    "params_json": "{\"title\":\"Verzögerung beim Fang\",\"x_label\":\"Zeit (schematisch)\",\"y_label\":\"Verzögerung in g\",\"y_unit\":\"g\",\"x_min\":0,\"x_max\":5.5,\"y_min\":0,\"y_max\":1.4,\"x_ticks\":false,\"readout\":false,\"series\":[{\"name\":\"volle Kabine\",\"points\":[[0,0],[0.25,0.62],[0.6,0.66],[1.2,0.56],[1.9,0.64],[2.6,0.55],[3.3,0.63],[4.0,0.57],[4.6,0.61],[4.85,0]],\"at\":2.0,\"end\":4.7}],\"ref_lines\":[{\"y\":0.57,\"label\":\"Mittelwert\",\"color\":\"amber\",\"at\":4.95},{\"y\":0.2,\"label\":\"1/5 g: ein Fünftel\",\"color\":\"cyan\",\"at\":6.95},{\"y\":1.0,\"label\":\"1 g: volle Erdbeschleunigung\",\"color\":\"cyan\",\"at\":7.65}],\"y_bands\":[{\"y0\":0.2,\"y1\":1.0,\"label\":\"ZULÄSSIGER MITTELWERT\",\"color\":\"cyan\",\"at\":7.55}]}",
    "on_screen_text": "Wie sich ein Fang anfühlt",
    "weight": 0.53,
-   "camera": "slow_pull_out",
+   "camera": "static",
    "sfx": "click",
    "description": "Diagramm mit cyan Band zwischen einem Fünftel und der vollen Erdbeschleunigung als zulässigem Mittelwert, eine schematische Fangkurve läuft innerhalb des Bands.",
    "qa": {
-    "quality": 8,
+    "quality": 0.9,
     "review_pass": null
    }
   },
@@ -566,14 +574,14 @@
    "id": "s16_a",
    "segment_id": "s16",
    "template": "graph",
-   "params_json": "{\"title\":\"Bremsweg beim Fang\",\"x_label\":\"mittlere Verzögerung in g\",\"y_label\":\"Bremsweg in cm\",\"y_unit\":\"cm\",\"x_min\":0,\"x_max\":1.1,\"y_min\":0,\"y_max\":70,\"readout\":false,\"series\":[{\"name\":\"aus 1,5 m/s\",\"points\":[[0.2,57.34],[0.225,50.97],[0.25,45.87],[0.275,41.7],[0.3,38.23],[0.35,32.77],[0.4,28.67],[0.45,25.48],[0.5,22.94],[0.6,19.11],[0.7,16.38],[0.8,14.34],[0.9,12.74],[1.0,11.47]],\"at\":4.0,\"end\":6.3}],\"y_bands\":[{\"y0\":0,\"y1\":11.47,\"color\":\"amber\",\"at\":6.25}],\"annotations\":[{\"x\":1.0,\"y\":11.47,\"label\":\"gut 11 cm\",\"sub\":\"bei voller Erdbeschleunigung\",\"sub_at\":8.5,\"color\":\"amber\",\"at\":6.35}],\"footnote\":{\"text\":\"Rechenbeispiel mit voller Kabine\",\"at\":2.1}}",
+   "params_json": "{\"title\":\"Bremsweg beim Fang\",\"x_label\":\"mittlere Verzögerung in g\",\"y_label\":\"Bremsweg in cm\",\"y_unit\":\"cm\",\"x_min\":0,\"x_max\":1.1,\"y_min\":0,\"y_max\":70,\"readout\":false,\"series\":[{\"name\":\"aus 1,5 m/s\",\"points\":[[0.2,57.34],[0.225,50.97],[0.25,45.87],[0.275,41.7],[0.3,38.23],[0.35,32.77],[0.4,28.67],[0.45,25.48],[0.5,22.94],[0.6,19.11],[0.7,16.38],[0.8,14.34],[0.9,12.74],[1.0,11.47]],\"at\":4.0,\"end\":6.3}],\"y_bands\":[{\"y0\":0,\"y1\":11.47,\"color\":\"amber\",\"at\":6.25}],\"annotations\":[{\"x\":1.0,\"y\":11.47,\"label\":\"gut 11 cm\",\"sub\":\"bei voller Erdbeschleunigung\",\"sub_at\":8.5,\"color\":\"amber\",\"at\":6.35,\"place\":\"near\"}],\"footnote\":{\"text\":\"Rechenbeispiel mit voller Kabine\",\"at\":2.1}}",
    "on_screen_text": "Wie weit rutscht die Kabine?",
    "weight": 0.5,
    "camera": "static",
    "sfx": "click",
    "description": "Die Bremsweg-Kurve zeichnet sich, der Punkt bei voller Erdbeschleunigung mit gut 11 cm leuchtet amber. Fußnote: ohne Ansprech- und Einrückweg.",
    "qa": {
-    "quality": 8,
+    "quality": 0.88,
     "review_pass": null
    }
   },
@@ -589,21 +597,21 @@
    "description": "Senkrechtes Lineal neben der Kabine an der Führungsschiene: Balken für gut 11 cm und knapp 60 cm, darüber ein weiches Band 'real: einige Dezimeter' mit Reaktionszeit und Einrücken der Keile.",
    "qa": {
     "quality": 8,
-    "review_pass": null
+    "review_pass": true
    }
   },
   {
    "id": "s17_a",
    "segment_id": "s17",
    "template": "timeline",
-   "params_json": "{\"events\":[{\"year\":\"0 ms\",\"label\":\"Seile weg\",\"tone\":\"danger\",\"at\":2.4},{\"year\":\"Hundertstel\",\"label\":\"Begrenzer löst aus\",\"tone\":\"amber\",\"at\":4.95},{\"year\":\"sofort\",\"label\":\"Motor aus, Bremse zu\",\"at\":6.65},{\"year\":\"dann\",\"label\":\"Keile an die Schienen\",\"tone\":\"green\",\"at\":7.75}],\"highlight\":1,\"highlightAt\":6.1,\"pop\":0.75}",
+   "params_json": "{\"direction\":\"rtl\",\"counter\":false,\"gaps\":false,\"pulse\":false,\"rewindLabel\":\"Zurückspulen\",\"sweep\":[0.4,2.75],\"events\":[{\"year\":\"0 ms\",\"label\":\"Seile weg\",\"tone\":\"danger\",\"at\":2.4},{\"year\":\"Hundertstel\",\"label\":\"Begrenzer löst aus\",\"tone\":\"amber\",\"at\":4.95},{\"year\":\"sofort\",\"label\":\"Motor aus, Bremse zu\",\"at\":6.65},{\"year\":\"dann\",\"label\":\"Keile an die Schienen\",\"tone\":\"green\",\"at\":7.75}],\"highlight\":1,\"highlightAt\":6.1,\"pop\":0.75}",
    "on_screen_text": "Zeitlupe im Rückblick",
    "weight": 0.62,
    "camera": "pan_left",
    "sfx": "whoosh",
    "description": "Die Zeitlupe spult zurück: Die Zeitachse zeichnet sich von 0 ms an, die Ereignisse poppen im Takt der Sprechertexte auf, das letzte leuchtet grün.",
    "qa": {
-    "quality": 8,
+    "quality": 8.5,
     "review_pass": null
    }
   },
@@ -634,7 +642,7 @@
    "description": "Die Kabine steht auf den Keilen. Ein Pfeil nach oben erscheint, die Kabine wird leicht angehoben, die Keile fallen zurück. Label: Lösen und Freigabe nur durch sachkundige Person.",
    "qa": {
     "quality": 8.5,
-    "review_pass": null
+    "review_pass": true
    }
   },
   {
@@ -656,15 +664,15 @@
    "id": "s19_b",
    "segment_id": "s19",
    "template": "physics_fall",
-   "params_json": "{\"height_m\":100,\"air_label\":\"rechnerisch, ohne Luftwiderstand\",\"title\":\"Freier Fall\",\"beats\":[2.87,8.35,8.45],\"markers\":[{\"h\":10,\"at\":4.6},{\"h\":100,\"at\":8.45}],\"kmh_round\":10}",
+   "params_json": "{\"height_m\":100,\"air_label\":\"rechnerisch, ohne Luftwiderstand\",\"title\":\"Freier Fall\",\"beats\":[3.5,8.6,8.65],\"markers\":[{\"h\":10,\"at\":4.6,\"hold\":1.65},{\"h\":100,\"at\":8.65}],\"kmh_round\":10,\"primary_unit\":\"kmh\"}",
    "on_screen_text": "Ohne Schutzkette",
    "weight": 0.57,
    "camera": "static",
    "sfx": "whoosh",
    "description": "Fall-Diagramm mit Höhenlineal und Formel v = √(2gh) groß oben. Die Kabine fällt, bei 10 m erscheint die Marke '≈ 50 km/h', bei 100 m '≈ 160 km/h'. Hinweis: rechnerisch, ohne Luftwiderstand.",
    "qa": {
-    "quality": 8,
-    "review_pass": false
+    "quality": 0.88,
+    "review_pass": null
    }
   },
   {
@@ -694,7 +702,7 @@
    "description": "Die Kabine fällt, darin schwebt eine Silhouette knapp über dem Boden, weil Körper und Kabine gleich schnell fallen.",
    "qa": {
     "quality": 8,
-    "review_pass": null
+    "review_pass": true
    }
   },
   {
@@ -739,21 +747,21 @@
    "description": "Die Kabine setzt langsam auf, die drei Puffertypen erscheinen nacheinander und werden zusammengedrückt: Federpuffer und PU-Puffer mit 'bis 1 m/s', der Ölpuffer mit 'jede Geschwindigkeit'.",
    "qa": {
     "quality": 8,
-    "review_pass": null
+    "review_pass": true
    }
   },
   {
    "id": "s22_a",
    "segment_id": "s22",
    "template": "buffer",
-   "params_json": "{\"buffers\":[{\"type\":\"hydraulic\",\"mode\":\"HYDRAULIK\",\"hit_at\":1.6,\"stroke\":{\"stroke\":\"≈ 7 cm\",\"at\":2.8,\"note\":\"rechnerischer Hub\",\"caption\":\" \"}},{\"type\":\"spring\",\"title\":\"STAHLFEDERPUFFER\",\"mode\":\"STAHLFEDER\",\"hit_at\":4.3,\"stroke\":{\"stroke\":\"≈ 13,5 cm\",\"at\":5.0,\"note\":\"rechnerischer Hub\",\"caption\":\" \"}}],\"side_by_side\":true,\"speed_label\":\"1 m/s\",\"speed_at\":0.5}",
+   "params_json": "{\"buffers\":[{\"type\":\"hydraulic\",\"hit_at\":1.6,\"stroke\":{\"stroke\":\"≈ 7 cm\",\"at\":2.8,\"note\":\"rechnerisch bei 1 m/s\",\"caption\":\" \"}},{\"type\":\"spring\",\"title\":\"STAHLFEDERPUFFER\",\"hit_at\":4.45,\"stroke\":{\"stroke\":\"≈ 13,5 cm\",\"at\":5.0,\"note\":\"rechnerisch bei 1 m/s\",\"caption\":\" \"}}],\"side_by_side\":true,\"compress_duration\":1.0}",
    "on_screen_text": "Pufferhub unseres Aufzugs",
    "weight": 0.47,
    "camera": "slow_push_in",
    "sfx": "click",
    "description": "Ölpuffer und Stahlfeder nebeneinander, beide werden zusammengedrückt. Maßpfeile zeigen den Hub: Öl 7 cm, Feder 13,5 cm, rechnerisch.",
    "qa": {
-    "quality": 8,
+    "quality": 0.9,
     "review_pass": null
    }
   },
@@ -764,11 +772,11 @@
    "params_json": "{\"title\":\"Mindesthub Ölpuffer, rechnerisch\",\"x_label\":\"Nenngeschwindigkeit in m/s\",\"y_label\":\"Hub in m\",\"y_unit\":\"m\",\"x_min\":0,\"x_max\":10.5,\"y_min\":0,\"y_max\":9,\"readout\":false,\"beats\":[0.4,3.6],\"series\":[{\"name\":\"\",\"points\":[[1,0.067],[1.5,0.152],[2,0.27],[2.5,0.42],[3,0.61],[4,1.08],[5,1.69],[6,2.43],[7,3.3],[8,4.31],[9,5.46],[10,6.74]]}],\"annotations\":[{\"x\":1,\"y\":0.067,\"label\":\"Unser Aufzug: etwa 7 cm\",\"sub\":\"\",\"color\":\"cyan\",\"at\":0.5},{\"x\":10,\"y\":6.74,\"label\":\"bei 10 m/s\",\"sub\":\"ohne Zusatzüberwachung\",\"sub_at\":5.3,\"color\":\"red\",\"at\":3.6}],\"inset\":{\"value\":6.74,\"unit\":\"m\",\"label\":\"fast 7 m\",\"sub\":\"Pufferhub\",\"storeys\":2,\"title\":\"Maßstab\",\"at\":4.7,\"value_at\":6.5,\"color\":\"red\"}}",
    "on_screen_text": "Hub wächst quadratisch",
    "weight": 0.53,
-   "camera": "slow_pull_out",
+   "camera": "static",
    "sfx": "riser",
    "description": "Die Parabel steigt steil an, bei 10 m/s leuchtet 'fast 7 m'. Im Inset ragt eine gestrichelte Puffersäule über zwei Stockwerke.",
    "qa": {
-    "quality": 8.5,
+    "quality": 0.9,
     "review_pass": null
    }
   },
@@ -806,7 +814,7 @@
    "id": "s23_c",
    "segment_id": "s23",
    "template": "shaft_xray",
-   "params_json": "{\"focus\":\"full\",\"state\":\"safety_engage\",\"broken_ropes\":\"all\",\"hud\":false,\"floor_labels\":false,\"highlight\":[\"safety_gear\",\"rails\"],\"highlight_at\":1.55,\"beats\":[2.5,3.3],\"labels\":[{\"part\":\"buffers\",\"text\":\"Puffer\",\"at\":0.3},{\"part\":\"safety_gear\",\"text\":\"Fangvorrichtung\",\"at\":1.4},{\"part\":\"rails\",\"text\":\"Schienen\",\"at\":2.1}]}",
+   "params_json": "{\"focus\":\"full\",\"state\":\"safety_engage\",\"broken_ropes\":\"all\",\"hud\":false,\"floor_labels\":false,\"highlight\":[\"safety_gear\",\"rails\"],\"highlight_at\":1.55,\"beats\":[2.5,3.3],\"labels\":[{\"part\":\"safety_gear\",\"text\":\"Fangvorrichtung\",\"at\":1.4},{\"part\":\"rails\",\"text\":\"Schienen\",\"at\":2.1}]}",
    "on_screen_text": "Die eigentliche Rettung",
    "weight": 0.18,
    "camera": "tilt_up",
@@ -814,7 +822,7 @@
    "description": "Kamerafahrt von den Puffern in der Grube hoch zur Kabine, wo die Fangvorrichtung an den Schienen amber aufleuchtet.",
    "qa": {
     "quality": 8,
-    "review_pass": null
+    "review_pass": false
    }
   },
   {
@@ -851,29 +859,29 @@
    "id": "s24_c",
    "segment_id": "s24",
    "template": "rope_macro",
-   "params_json": "{\"broken_wires\":8,\"initial_breaks\":3,\"beats\":[0.4,1.5,0.5,2.6,null,2.8],\"inspection\":true,\"count_display\":\"gauge\",\"tension_glow\":0.6,\"orientation\":\"horizontal\",\"dimension\":false,\"count_label\":\"Drahtbrüche\",\"threshold\":{\"label\":\"festgelegte Grenze\",\"at\":1.3},\"stamp\":\"AUSTAUSCHEN\"}",
+   "params_json": "{\"broken_wires\":7,\"beats\":[0.4,1.5,0.5,2.6,null,2.8],\"inspection\":true,\"count_display\":\"gauge\",\"tension_glow\":0.6,\"orientation\":\"horizontal\",\"dimension\":false,\"count_label\":\"Drahtbrüche\",\"threshold\":{\"label\":\"festgelegte Grenze\",\"at\":1.3},\"stamp\":\"AUSTAUSCHEN\",\"carry\":{\"d\":3.551,\"camera\":\"pan_right\",\"params\":{\"broken_wires\":3,\"tension_glow\":0.4,\"orientation\":\"horizontal\",\"dimension\":false,\"beats\":[0.9,1.8,2.7,3.25],\"inspection\":true,\"count_display\":\"none\",\"count_label\":\"Drahtbrüche\"}}}",
    "on_screen_text": "Prüfer zählen Drahtbrüche",
    "weight": 0.42,
-   "camera": "slow_push_in",
+   "camera": "slow_pull_out",
    "sfx": "click",
    "description": "Die Prüflupe fährt über die Schlaglänge, Drahtenden springen amber auf und der Zähler steigt bis zur Grenzlinie. Erst danach erscheint der Stempel AUSTAUSCHEN, am Ende die Fußzeile 'Europa: eigene Normen und Herstellervorgaben'.",
    "qa": {
-    "quality": 8,
-    "review_pass": false
+    "quality": 8.5,
+    "review_pass": null
    }
   },
   {
    "id": "s25_a",
    "segment_id": "s25",
    "template": "timeline",
-   "params_json": "{\"events\":[{\"year\":\"Start\",\"label\":\"Hauptprüfung\",\"at\":6.45},{\"year\":\"dazwischen\",\"label\":\"Zwischenprüfung\",\"at\":7.6},{\"year\":\"≤ 2 JAHRE\",\"label\":\"nächste Hauptprüfung\",\"at\":5.3}],\"highlight\":\"last\",\"highlightAt\":6.0,\"beats\":[4.4],\"title\":{\"text\":\"Unabhängiger Prüfer, z. B. TÜV oder DEKRA\",\"at\":2.4},\"pop\":0.8}",
+   "params_json": "{\"events\":[{\"year\":\"Start\",\"label\":\"Hauptprüfung\",\"at\":6.45},{\"year\":\"dazwischen\",\"label\":\"Zwischenprüfung\",\"at\":7.6},{\"year\":\"MAX. 2 JAHRE\",\"label\":\"nächste Hauptprüfung\",\"at\":5.3}],\"highlight\":\"last\",\"highlightAt\":6.0,\"title\":{\"text\":\"Unabhängiger Prüfer\",\"sub\":\"z. B. TÜV oder DEKRA\",\"at\":1.2,\"subAt\":2.6,\"hero\":true,\"heroUntil\":4.5},\"sweep\":[3.4,5.5],\"pop\":0.8}",
    "on_screen_text": "Prüfpflicht in Deutschland",
    "weight": 0.6,
    "camera": "slow_push_in",
    "sfx": "whoosh",
    "description": "Zeitleiste über zwei Jahre: Hauptprüfung am Start, Zwischenprüfung dazwischen, erneute Hauptprüfung spätestens nach 2 Jahren. Prüferorganisationen nur als Text, ohne Logos.",
    "qa": {
-    "quality": 7.5,
+    "quality": 8.5,
     "review_pass": null
    }
   },
@@ -881,7 +889,7 @@
    "id": "s25_b",
    "segment_id": "s25",
    "template": "shaft_xray",
-   "params_json": "{\"focus\":\"plate\",\"state\":\"idle\",\"floor\":4,\"people\":0,\"hud\":false,\"floor_labels\":false,\"inspection_plate\":true,\"labels\":[{\"part\":\"inspection_plate\",\"text\":\"Prüfplakette\\nin der Kabine\",\"at\":1.55}]}",
+   "params_json": "{\"focus\":\"plate\",\"state\":\"idle\",\"floor\":4,\"people\":0,\"hud\":false,\"floor_labels\":false,\"inspection_plate\":true,\"highlight\":[\"inspection_plate\"],\"highlight_at\":1.6,\"highlight_color\":\"cyan\",\"labels\":[{\"part\":\"inspection_plate\",\"text\":\"Prüfplakette\\nin der Kabine\",\"at\":1.55}]}",
    "on_screen_text": "Nächster Prüftermin",
    "weight": 0.4,
    "camera": "slow_push_in",
@@ -889,7 +897,7 @@
    "description": "Zoom in die Kabine auf eine stilisierte Prüfplakette als Linienzeichnung ohne Firmenlogo. Label: Monat und Jahr der nächsten Prüfung.",
    "qa": {
     "quality": 7,
-    "review_pass": null
+    "review_pass": false
    }
   },
   {
@@ -919,21 +927,21 @@
    "description": "Die leere Kabine schießt nach oben, ein großer amber Pfeil zeigt nach oben, am Gegengewicht ein Pfeil nach unten. An der Schachtdecke blinkt eine rote Warnlinie.",
    "qa": {
     "quality": 8,
-    "review_pass": null
+    "review_pass": false
    }
   },
   {
    "id": "s26_c",
    "segment_id": "s26",
    "template": "safety_gear",
-   "params_json": "{\"bidirectional\":true,\"sparks\":false,\"panel\":false,\"label\":\"Schutz auch gegen Übergeschwindigkeit aufwärts\",\"labelHead\":\"EN 81-20\",\"labelAt\":1.95,\"arrowsAt\":5.3,\"beats\":[5.45,6.25,6.9,7.0],\"callouts\":[{\"id\":\"housing\",\"at\":4.24,\"text\":\"Fangvorrichtung\",\"sub\":\"am Fahrkorbrahmen\"},{\"id\":\"wedge\",\"at\":5.3}]}",
+   "params_json": "{\"bidirectional\":true,\"sparks\":false,\"panel\":false,\"panel2Y\":\"center\",\"shiftX\":\"auto\",\"label\":\"Schutz auch gegen Übergeschwindigkeit aufwärts\",\"labelHead\":\"EN 81-20\",\"labelAt\":1.95,\"arrowsAt\":5.3,\"beats\":[5.45,6.25,6.9,7.0],\"callouts\":[{\"id\":\"housing\",\"at\":4.24,\"text\":\"Fangvorrichtung\",\"sub\":\"am Fahrkorbrahmen\"},{\"id\":\"wedge\",\"at\":5.3}]}",
    "on_screen_text": "Auch nach oben absichern",
    "weight": 0.4,
    "camera": "static",
    "sfx": "metal_creak",
    "description": "Fangvorrichtung an der Schiene mit Doppelpfeil nach oben und unten, die Keile greifen. Label: Schutz auch gegen Übergeschwindigkeit aufwärts.",
    "qa": {
-    "quality": 7,
+    "quality": 0.88,
     "review_pass": null
    }
   },
@@ -964,7 +972,7 @@
    "description": "Eigene Zeitleiste nur zur Norm, ohne Bezug zu Tokio und ohne Verbindungspfeil: 2009 Ergänzung, 2012 für neue Aufzüge praktisch Pflicht.",
    "qa": {
     "quality": 8,
-    "review_pass": null
+    "review_pass": true
    }
   },
   {
@@ -1039,7 +1047,7 @@
    "description": "Ein einzelner amber Punkt in einem Punktefeld, die Kamera zoomt weit heraus, bis das Feld eine Milliarde Fahrten darstellt. Ergebnis-Kachel mit der Fußnote 'nur Größenordnung'.",
    "qa": {
     "quality": 8,
-    "review_pass": null
+    "review_pass": true
    }
   },
   {
@@ -1084,7 +1092,7 @@
    "description": "Maßstabsbalken im gleichen Maßstab: Der Treppenbalken ist riesig, der Aufzugsbalken winzig. Fußnote: verschiedene Quellen und Definitionen, nur Größenordnung.",
    "qa": {
     "quality": 8,
-    "review_pass": null
+    "review_pass": true
    }
   },
   {
@@ -1099,7 +1107,7 @@
    "description": "Die Zeitachse spult von 'heute' zurück, der Knoten 1945 leuchtet rot: 28. Juli, Empire State Building.",
    "qa": {
     "quality": 8,
-    "review_pass": null
+    "review_pass": true
    }
   },
   {
@@ -1114,7 +1122,7 @@
    "description": "Gebäudequerschnitt im Nebel, eine Flugzeugsilhouette trifft das 79. Stockwerk. Die Zahl der Toten erscheint schlicht, eine amber Flugbahn führt quer durch das Gebäude hinaus.",
    "qa": {
     "quality": 8,
-    "review_pass": null
+    "review_pass": true
    }
   },
   {
@@ -1129,21 +1137,21 @@
    "description": "Die zweite Flugbahn endet in einem Aufzugsschacht, ein Triebwerk-Umriss stürzt hinein. Die Tragseile flackern rot als beschädigt.",
    "qa": {
     "quality": 7,
-    "review_pass": null
+    "review_pass": false
    }
   },
   {
    "id": "s32_a",
    "segment_id": "s32",
    "template": "historic_scene",
-   "params_json": "{\"scene\":\"empire_state_1945_schematic\",\"variant\":\"rescue\",\"floor\":80,\"labels\":[{\"text\":\"Liftführerin\",\"at\":2.0},{\"text\":\"80. Stock\",\"at\":3.6},{\"text\":\"Helfer\",\"at\":6.1},{\"text\":\"andere Kabine\",\"at\":7.6}],\"beats\":[0.3,1.0,6.32,7.94,8.63]}",
+   "params_json": "{\"scene\":\"empire_state_1945_schematic\",\"variant\":\"rescue\",\"floor\":80,\"labels\":[{\"text\":\"Liftführerin\",\"at\":2.0},{\"text\":\"80. Stock\",\"at\":3.6},{\"text\":\"andere Kabine\",\"at\":7.6}],\"beats\":[0.3,1.0,6.32,7.94,8.63]}",
    "on_screen_text": "Hilfe für Oliver",
    "weight": 0.66,
    "camera": "slow_push_in",
    "sfx": "none",
    "description": "Linienzeichnung im 80. Stock: Silhouetten von Helfern tragen eine verletzte Figur in eine andere Kabine, um sie nach unten zu bringen.",
    "qa": {
-    "quality": 7.5,
+    "quality": 0.87,
     "review_pass": null
    }
   },
@@ -1159,22 +1167,22 @@
    "description": "Die eingefrorene Szene aus dem Kaltstart läuft weiter: Die beschädigten Seile reißen, die Kabine stürzt bis ins Untergeschoss.",
    "qa": {
     "quality": 8,
-    "review_pass": null
+    "review_pass": false
    }
   },
   {
    "id": "s33_a",
    "segment_id": "s33",
    "template": "shaft_xray",
-   "params_json": "{\"focus\":\"full\",\"state\":\"all_ropes_snap\",\"people\":1,\"highlight\":[\"governor_rope\",\"ropes\"],\"labels\":[{\"part\":\"governor_rope\",\"text\":\"Begrenzerseil auch beschädigt?\"},{\"part\":\"ropes\",\"text\":\"Tragseile gerissen\"},{\"part\":\"safety_gear\",\"text\":\"Fangvorrichtung griff nicht\"}],\"hud\":false}",
+   "params_json": "{\"focus\":\"car\",\"state\":\"all_ropes_snap\",\"pre_broken\":true,\"floor\":5,\"people\":1,\"passenger_pose\":\"floating\",\"hud\":false,\"floor_labels\":false,\"markers\":[{\"part\":\"safety_gear\",\"symbol\":\"?\",\"at\":0.6,\"color\":\"red\"}],\"highlight\":[\"governor_rope\"],\"highlight_color\":\"red\",\"highlight_at\":5.9,\"labels\":[{\"part\":\"governor_rope\",\"text\":\"Begrenzerseil beschädigt?\",\"at\":6.3,\"color\":\"red\"}]}",
    "on_screen_text": "Warum griff keine Fangvorrichtung?",
    "weight": 0.6,
    "camera": "slow_push_in",
    "sfx": "rumble",
    "description": "Begrenzerseil und Tragseile leuchten rot, am Begrenzerseil steht ein großes Fragezeichen.",
    "qa": {
-    "quality": 7,
-    "review_pass": true
+    "quality": 7.5,
+    "review_pass": false
    }
   },
   {
@@ -1211,14 +1219,14 @@
    "id": "s34_b",
    "segment_id": "s34",
    "template": "shaft_xray",
-   "params_json": "{\"focus\":\"pit\",\"state\":\"on_buffer\",\"broken_ropes\":\"all\",\"people\":1,\"highlight\":[\"pit\"],\"labels\":[{\"part\":\"buffers\",\"text\":\"Luftpolster unter der Kabine?\"},{\"part\":\"ropes\",\"text\":\"aufgehäuftes Seil federte ab?\"}],\"hud\":false}",
-   "on_screen_text": "Kein Schacht ist luftdicht",
+   "params_json": "{\"focus\":\"pit\",\"state\":\"on_buffer\",\"broken_ropes\":\"all\",\"beats\":[2.95,3.98],\"people\":1,\"hud\":false,\"buffer_glow\":false,\"air_cushion\":{\"at\":0.3},\"rope_coil\":{\"at\":1.2},\"air_escape\":{\"at\":5.1,\"dur\":3.3},\"labels\":[{\"part\":\"air_cushion\",\"text\":\"Luftpolster\",\"at\":0.3},{\"part\":\"rope_coil\",\"text\":\"Seilhaufen federte\\nwohl den Aufprall ab\",\"at\":2.6,\"color\":\"amber\"},{\"part\":\"pit\",\"text\":\"Schacht nicht\\nluftdicht\",\"at\":5.1},{\"part\":\"car\",\"text\":\"Kolbeneffekt meist\\ndeutlich schwächer\",\"at\":7.4}]}",
+   "on_screen_text": "Seil in der Grube",
    "weight": 0.53,
-   "camera": "tilt_down",
+   "camera": "static",
    "sfx": "hydraulic_hiss",
    "description": "In der Grube liegt eine amber Seilspirale wie eine Sprungfeder, über ihr die Druckschraffur. Zum Satzende entweicht Luft durch die Türspalte, die Schraffur verblasst.",
    "qa": {
-    "quality": 5,
+    "quality": 8,
     "review_pass": false
    }
   },
@@ -1226,15 +1234,15 @@
    "id": "s35_a",
    "segment_id": "s35",
    "template": "physics_fall",
-   "params_json": "{\"height_m\":300,\"air_label\":\"rechnerisch, ohne Luftwiderstand\",\"title\":\"Rund 75 Stockwerke\",\"beats\":[1.0,4.35,4.45],\"result_label\":\"über 250 km/h\"}",
+   "params_json": "{\"height_m\":300,\"air_label\":\"rechnerisch, ohne Luftwiderstand\",\"title\":\"Rund 75 Stockwerke\",\"beats\":[1.0,4.45,4.5],\"result_label\":\"über 250 km/h\",\"primary_unit\":\"kmh\"}",
    "on_screen_text": "Ungebremster Fall",
    "weight": 0.34,
    "camera": "static",
    "sfx": "whoosh",
    "description": "Freier Fall über rund 75 Stockwerke: Der Geschwindigkeitszähler läuft über 250 km/h. Hinweis: rechnerisch, ohne Luftwiderstand. Nach dem Aufprall erscheint leise 'sie überlebte'.",
    "qa": {
-    "quality": 7.5,
-    "review_pass": false
+    "quality": 0.88,
+    "review_pass": null
    }
   },
   {
@@ -1271,7 +1279,7 @@
    "id": "s36_a",
    "segment_id": "s36",
    "template": "shaft_xray",
-   "params_json": "{\"focus\":\"ropes\",\"state\":\"idle\",\"floor\":3,\"rope_count\":6,\"people\":0,\"highlight\":[\"ropes\"],\"labels\":[{\"part\":\"ropes\",\"text\":\"mehrere Tragseile\"},{\"part\":\"ropes\",\"text\":\"in Europa: je mindestens 12-fach\"}],\"hud\":false}",
+   "params_json": "{\"focus\":\"ropes\",\"state\":\"idle\",\"floor\":5,\"rope_count\":6,\"people\":2,\"hud\":false,\"highlight\":[\"ropes\"],\"highlight_color\":\"cyan\",\"highlight_at\":1.8,\"rope_sequence\":{\"at\":1.9,\"step\":0.08},\"labels\":[{\"part\":\"car\",\"text\":\"Kabine\",\"at\":0.8},{\"part\":\"ropes\",\"text\":\"mehrere Tragseile\",\"at\":1.7},{\"part\":\"ropes\",\"text\":\"in Europa: je Seil mindestens\\n12-fache Sicherheit\",\"at\":3.75,\"color\":\"amber\"}]}",
    "on_screen_text": "Zusammengefasst",
    "weight": 0.3,
    "camera": "slow_push_in",
@@ -1279,7 +1287,7 @@
    "description": "Zusammenfassung, Schritt 1: Das Seilbündel leuchtet cyan, Label 'je mindestens 12-fach'.",
    "qa": {
     "quality": 8,
-    "review_pass": true
+    "review_pass": false
    }
   },
   {
@@ -1324,19 +1332,23 @@
    "description": "Kanal-Logo 'Visual Science' mit Abonnieren-Symbol. Im Hintergrund fährt die Kabine im Röntgenschacht ruhig nach oben, alle Seile sind intakt.",
    "qa": {
     "quality": 8.5,
-    "review_pass": false
+    "review_pass": null
    }
   },
   {
    "id": "s38_a",
    "segment_id": "s38",
    "template": "end_card",
-   "params_json": "{\"teaser\": \"Was passiert im Motor bei 8.000 Umdrehungen pro Minute?\", \"teaser_visual\": \"crankshaft_rotating\", \"rpm\": 8000, \"slots\": [\"next_video\", \"subscribe\"], \"signoff\": \"Gute Fahrt, egal in welche Richtung\"}",
-   "on_screen_text": "Nächstes Mal: 8.000/min",
+   "params_json": "{\"next_title\":\"Was passiert im Motor bei 8.000 U/min?\",\"teaser_visual\":\"crankshaft\",\"rpm\":{\"value\":8000,\"at\":3.3},\"slots\":[{\"type\":\"next_video\",\"at\":0.3},{\"type\":\"subscribe\",\"at\":0.6}],\"labels\":[{\"part\":\"kurbelwelle\",\"at\":4.1}],\"tagline\":\"\",\"signoff\":\"Gute Fahrt, egal in welche Richtung\",\"beats\":[0.3,2.95,3.3,5.6,6.2],\"headerAt\":0.35,\"titleAt\":2.95,\"channelAt\":5.6,\"signoffAt\":6.2}",
+   "on_screen_text": "Nächstes Mal: richtig schnell",
    "weight": 1,
    "camera": "static",
    "sfx": "riser",
-   "description": "Endscreen: Eine rotierende Kurbelwelle als Cyan-Linienzeichnung, der Drehzahlmesser steht bei 8.000/min. Dazu Endscreen-Felder für das nächste Video und das Abo."
+   "description": "Endscreen: Eine rotierende Kurbelwelle als Cyan-Linienzeichnung, der Drehzahlmesser steht bei 8.000/min. Dazu Endscreen-Felder für das nächste Video und das Abo.",
+   "qa": {
+    "quality": 8.5,
+    "review_pass": null
+   }
   }
  ]
 }

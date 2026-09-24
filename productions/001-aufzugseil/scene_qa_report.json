@@ -1,5 +1,101 @@
 {
  "updated": [
+  "s02_a",
+  "s05_c",
+  "s13_b",
+  "s15_b",
+  "s23_b",
+  "s28_a",
+  "s29_a",
+  "s30_a",
+  "s05_c",
+  "s15_b",
+  "s04_c",
+  "s11_a",
+  "s14_b",
+  "s20_c",
+  "s28_b",
+  "s30_b",
+  "s34_a",
+  "s35_b",
+  "s11_a",
+  "s14_b",
+  "s34_a",
+  "s09_a",
+  "s09_b",
+  "s15_a",
+  "s16_a",
+  "s22_b",
+  "s09_b",
+  "s15_a",
+  "s16_a",
+  "s22_b",
+  "s19_b",
+  "s35_a",
+  "s19_b",
+  "s35_a",
+  "s02_c",
+  "s37_a",
+  "s02_c",
+  "s37_a",
+  "s11_b",
+  "s36_b",
+  "s06_b",
+  "s16_b",
+  "s29_b",
+  "s30_c",
+  "s06_b",
+  "s14_c",
+  "s18_a",
+  "s26_c",
+  "s14_c",
+  "s26_c",
+  "s21_b",
+  "s22_a",
+  "s22_a",
+  "s07_b",
+  "s07_c",
+  "s07_c",
+  "s05_a",
+  "s10_a",
+  "s12_a",
+  "s14_a",
+  "s21_a",
+  "s24_a",
+  "s33_b",
+  "s35_c",
+  "s36_c",
+  "s05_a",
+  "s14_a",
+  "s33_b",
+  "s12_b",
+  "s12_b",
+  "s24_b",
+  "s24_c",
+  "s24_c",
+  "s01_a",
+  "s03_b",
+  "s03_c",
+  "s04_b",
+  "s31_b",
+  "s32_a",
+  "s01_a",
+  "s04_b",
+  "s32_a",
+  "s04_a",
+  "s19_a",
+  "s20_a",
+  "s23_a",
+  "s26_a",
+  "s03_a",
+  "s17_a",
+  "s25_a",
+  "s27_b",
+  "s31_a",
+  "s17_a",
+  "s25_a",
+  "s38_a",
+  "s38_a",
   "s27_a",
   "s27_c",
   "s01_b",
@@ -14,64 +110,83 @@
   "s26_b",
   "s31_c",
   "s32_b",
-  "s27_c",
-  "s05_a",
-  "s10_a",
-  "s12_a",
-  "s14_a",
-  "s21_a",
-  "s24_a",
-  "s33_b",
-  "s35_c",
-  "s36_c",
-  "s12_b",
-  "s24_b",
-  "s24_c",
-  "s05_a",
-  "s14_a",
-  "s33_b",
-  "s12_b",
-  "s04_a",
-  "s19_a",
-  "s20_a",
-  "s23_a",
-  "s26_a",
-  "s01_a",
-  "s03_b",
-  "s03_c",
-  "s04_b",
-  "s31_b",
-  "s32_a",
-  "s03_a",
-  "s17_a",
-  "s25_a",
-  "s27_b",
-  "s31_a",
-  "s19_b",
-  "s35_a",
-  "s02_c",
-  "s37_a",
-  "s11_b",
-  "s36_b",
-  "s09_a",
-  "s09_b",
-  "s15_a",
-  "s16_a",
-  "s22_b",
-  "s06_b",
-  "s16_b",
-  "s29_b",
-  "s30_c",
-  "s14_c",
-  "s18_a",
-  "s26_c",
-  "s21_b",
-  "s22_a"
+  "s33_a",
+  "s34_b",
+  "s36_a",
+  "s27_c"
  ],
  "failed_review": [
   {
-   "scene_id": "s27_c",
-   "problem": "The status chip swap between 1,6 and 1,95 s produces garbled text. chip2 draws 'KABINE FÄHRT LOS' (red) and 'KABINE STEHT' (green) at the same left-aligned position and crossfades them over 0,35 s, so the words overlap as 'KABINE SŦEHT LOS'. The wider red outline also sticks out past the green one, which is visible in sheet frame 3 (u034). The red 'KABINE FÄHRT LOS' chip also does not match this scene's narration ('Er stoppt die Kabine …'): it repeats the status s27_a already showed, and at 0,7 s it says the opposite of what is being said. Fix with params only: set hazard_label to \"\" (chip2 returns early for an empty label). Movement is still shown by the red chevrons, the red gap and the blinking red door chip. The green 'KABINE STEHT' then fades in cleanly between 1,6 and 1,95 s during 'spätestens'. I re-rendered with this change (scene-qa2/s27_c_rev): no overlap, and everything else stays the same. The rest is correct: 1,20 m is not shown before 'Meter zwanzig', 'Türzone' carries no unspoken number, the Stopp mark (0,5 m) is inside the limit, direction is up and matches s27_a, the subtitle band is free, and the rope brake is at y≥94. Optional template improvement, not required: chip2 should fade out the old status first and then fade in the new one, instead of crossfading them in the same place."
+   "scene_id": "s05_c",
+   "problem": "Polish defect across the whole word 'mindestens'. While the count is below 10 (about 3.05 to 3.45 s), the tens slot is blank. The left-positioned '≥' then floats one digit-width away from the number and reads as '≥   3×', '≥   5×', '≥   8×', '≥   9×'. I re-rendered at 3.05, 3.15, 3.25, 3.35 and 3.45 s, and every frame shows the big gap. It lasts about 0.4 s at full opacity, not the 0.2 s the notes claim. '≥ 8×' also briefly echoes the 'acht' of the previous scene. Second point: with landAt 4.1 the display still reads '11' at 'zwölfmal' (3.55 s). Fix with params only: use the spoken word as a word prefix above the number. 'MINDESTENS' over '12×' is exactly what is heard, the prefix fades in on 'mindestens' (countAt 2.95), and nothing sits to the left of the number to open a gap. Single digits sit in the ones slot, like an odometer. Also set landAt 3.8 so the ones digit rolls 1 to 2 on 'zwölf' (about 3.55 s) and reads a clean 12 by about 3.65 s. I verified this by rendering: the final composition is centred inside the dial, the sublabel bottom is at about 850 px, and nothing is clipped."
+  },
+  {
+   "scene_id": "s15_b",
+   "problem": "The misleading range frame the notes say was fixed is still in the render. The tuner's own sheet at 2.10 s (and full-res frame u025) clearly shows '1,2 bis 1×': the upper bound is lower than the lower bound, which is a wrong number on screen. from=1.45 with dec=0 still displays the digit '1' until v exceeds about 1.72. With countAt 2.0 and landAt 3.7 that is about 1.95 to 2.34 s, at up to full opacity. The late landAt 3.7 also puts the ping after the sentence has ended ('schwer.' is at 3.15 s). Everything else is good: the physics is right (a deceleration of 0.2 to 1 g feels like 1.2 to 2 times body weight, peaks can be higher, an empty car decelerates harder), the texts are split across 'Kurze Spitzen' and 'leere Kabine', and with the static camera the footnote bottom is at about 880 px. Fix with params only: from 1.7, countAt 2.15, landAt 3.2. The hi digit is then already about 43% into its roll when it first becomes visible, so '1' is never readable. The range '1,2 bis …' appears on 'schwerer' (about 2.05 s), the hi value reads '2' by about 2.45 s ('bis') and is clean on 'doppelt' (2.62 s), and the ping lands on 'schwer.' (3.2 s). I verified this by rendering at 2.1, 2.2, 2.3, 2.43, 2.62, 3.2, 6.4 and 8.4 s: no legible '1', and the layout is unchanged."
+  },
+  {
+   "scene_id": "s11_a",
+   "problem": "The content and timing are correct now. Nothing from s11_b appears, the Begrenzer is on the left, the flyweights swing on 'schwenken', and 'Sitze' lands on 'Sitze'. The failure is the composition. From 0 to 3.1 s (61 % of the 5.04 s scene) the right half of the frame is completely empty. The ≈ badge and divider appear at about 0.5 s next to nothing, and the Begrenzer panel sits off-centre on the left (frames at 1.30, 1.84 and 3.10 s). This leaves a large dead area for most of the scene. The carousel also enters already at full speed, so the synchronous swing-out ('Beide bewegen sich synchron') is never seen. Params cannot fix this without showing the carousel early. Template change needed in comparison_split.js: (1) In timings(), when one panel's pt.enter is at least 1.0 s later than the other's, set tm.soloUntil to the late panel's pt.enter. (2) In drawPanel, give the early panel an extra ctx.translate x of (m.mid - (P.x + m.pw/2)) * (1 - L.easeInOut(L.seg(t, tm.soloUntil - 0.1, tm.panelD))). That keeps it centred until its partner enters, then slides it to its side as the partner slides in. (3) Set tm.div0 and tm.badge0 to at least tm.soloUntil - 0.2 so the divider and badge arrive with the second panel. With that change the params stay the same. Fallback if the template cannot change, verified by render: set right.at to 0.3. Both panels are then in from the start and spin up together at syncAt 1.0, with no dead half. The overlay already shows 'KETTENKARUSSELL' from 0.5 s, so the early title adds no new information ahead of the narration, and the 'Sitze' point still waits for 3.55 s."
+  },
+  {
+   "scene_id": "s14_b",
+   "problem": "The content, facts and timing are good. The Sperrfang locks between 'blockiert' and 'schlagartig', and the right panel enters on 'am Fahrkorb'. '63 cm/s' counts up from 'dreiundsechzig'. The EN 81-20 limit is correct: instantaneous safety gear on the car only up to 0.63 m/s rated speed. The scene does not pre-empt s14_c's Bremsfang or repeat s14_a's banner. The failure is the same composition defect as s11_a. From 0 to 2.7 s the right half of the frame is empty, with the → badge pointing at nothing from about 0.5 s and the Sperrfang panel off-centre (frames at 1.00 and 1.95 s). Then the right panel shows an empty stat frame: it wipes in at about 3.45 s and sits empty until the number at 4.75 s (frame at 4.30 s). So the right side is empty or half-empty for about 70 % of the scene. Moving the right panel earlier would put 'Am Fahrkorb' ahead of the narration, so params cannot fix it. Template change: (1) Apply the same solo-centring change as in s11_a. The Sperrfang panel stays centred until right.at (2.7 s), then slides left as 'Am Fahrkorb' enters. The divider and badge arrive with the second panel. (2) Optional: for a stat with an explicit 'at', drop the cap of pt.tVis to pt.visDef, i.e. tVis = max(enter + 0.25k, act - iconD - 0.25), so the stat frame wipes in just before its number instead of sitting empty. Limit this to stat, not bar. With that change the params stay the same."
+  },
+  {
+   "scene_id": "s34_a",
+   "problem": "The content is now correct. Nothing from s34_b appears early, the rows pair Kolben↔Kolben and Luft verdichtet↔Luftpolster, and the synced compression, the p–V curves (V down, p up) and the 'Luftpolster' label all land on their words. The failure is polish. From 0 to 3.7 s, 43% of the scene, the frame is almost empty: only the small heading at y≈260 and the overlay, with about 80% of the 1080p frame as bare grid. That reads as a stalled scene, not a designed question card. A second, smaller issue: the default drawing caption 'SCHEMA · KOLBENEFFEKT' is wiped in around 5.3 s, about 1 s before 'Kolben' (6.38 s), and it previews s34_b's term 'Kolbeneffekt'. Fix with params only. Let the Kabine panel slide in on 'rekonstruiert' (left.at 2.7), and rename its caption to 'Schema · Rekonstruktion', so the schematic visibly is 'the reconstruction' being spoken about. Derived from the template's timing code: the title fades in at about 3.3 to 4.0 s, over 'Vermutlich wirkte die Kabine'. The car-in-shaft drawing wipes in at about 3.45 to 4.4 s, and the caption appears after 'rekonstruiert' is spoken. The heading-only question beat drops to 2.7 s, covering 'Und warum überlebte sie? Auch das ist nur …'. Keep beats [3.7] so the ≈ badge still arrives later (about 4.2 s). The syringe panel, syncAt and all row timings stay unchanged."
+  },
+  {
+   "scene_id": "s09_b",
+   "problem": "Two problems. (1) The graph resets and redraws. s09_a ends on the complete graph, but s09_b starts from an empty panel. During the 0.6 s engine crossfade and for about 1 s after it, the viewer watches the same graph dissolve to nearly empty and rebuild: panel fade, axis sweep, curve redraw, band and Grenze sweep, and the 'frühestens' ring popping a second time. Frame u009 at 0.39 s shows only the axes, a stub of the curve and part of the band. Params cannot prevent this: every intro time is fixed and cT() clamps to at least 0.3 s. That is exactly the replay the previous review objected to. TEMPLATE CHANGE: add params.carry_in (true). At t=0 the following are already in their final state: panel, axes, ticks, title, legend, and every series, ref_line, y_band, zone and annotation (including its label box) that has no explicit at, or at <= 0.3. Nothing is drawn in, there is no sweep, flash or pop ring, and the blink continues. Only elements with at > 0.3, and sub_at, animate in. s09_b's first frame then matches s09_a's last frame. (2) The red 'spätestens' label from s09_a disappears for 2.5 s and then comes back on the other side of the marker, as a new, wider box, 'spätestens nach etwa 50 ms', on the left. I rendered a fix (scratchpad/rev_s09b/graph_u095.png). Keep the annotation 'spätestens' unchanged and let it grow the sub 'nach etwa 50 ms' at 2.55 s. It then stays at the same place as in s09_a: top right, x=1552, y=358. Name the red line 'Obergrenze für die Auslösung: 1,5 m/s'. Its label is then placed left of the marker, above the line, so it no longer blocks the right-hand box. Start the red line at 0.45 s so '1,5 m/s' is readable at about 0.8 s, during 'eineinhalb Meter pro Sekunde'. Each number still appears exactly once. The old overlap of the pop ring on 'Obergrenze' is reduced; the blink ring only brushes the last letters of the label, and only faintly. Beats [0.3,0.8] stay as a fallback in case carry_in is ignored."
+  },
+  {
+   "scene_id": "s15_a",
+   "problem": "The content, timing and facts are good. The legend appears with 'voller Kabine', the Mittelwert line with 'Mittel', 1/5 g with 'Fünftel', and the band and 1 g line with 'vollen Erdbeschleunigung'. The mean 0,57 g matches the curve (I checked it by trapezoid integration). The EN 81-20 range of 0,2 to 1,0 g average deceleration with rated load is correct. The camera breaks the layout. The tuner changed it from the storyboard's 'static' to 'slow_pull_out', which starts at scale 1.1 and stays above 1.05 for the first half of the scene (easeInOut). At that scale the graph panel runs from x=3 to x=1917, so its corner brackets touch the frame edges. The panel top is at y≈173, directly against the overlay box bottom at y=170: in frame u014 at 1.3 s the overlay box sits on the panel border. The panel bottom and its tick strip are at y≈933 to 940, inside the subtitle zone (y > 910), for about 4.5 s. The graph PANEL is sized for scale 1.0 (bottom 904), so any zoom camera pushes it into the subtitle zone. FIX: set the scene camera back to 'static'. This is a scene field, not a param. The params stay unchanged. At scale 1.0 the rendered final frame (u090) is clean: no overlaps, and the 19 px reference labels are legible."
+  },
+  {
+   "scene_id": "s16_a",
+   "problem": "The timing and physics are right. s = v²/2a = 11,47 cm at 1 g and 57,3 cm at 0,2 g. The curve head lands on 1 g at 'gut elf', the band and marker appear at 6.3 s, and the sub appears with 'vollen'. The problem is the payoff label. The box 'gut 11 cm / bei voller Erdbeschleunigung' sits at the top of the plot, between the 60 and 70 cm grid lines (y≈358 to 424). Its point is at 11 cm (y≈715), about 300 px lower. The only link is a dashed vertical line. Because this label states a y value, a viewer reading the chart sees 'gut 11 cm' next to the 60 cm tick, which is misleading at the moment of the scene's key number. The cause is tryPlace() in buildGeom: it always scans from PT+6 downward and takes the first free y, so every annotation box sticks to the top edge. No param moves the box: the right-hand box does not fit at the 1 g point (it would end past RMAX), and ref labels and band captions add unwanted content. TEMPLATE CHANGE: add annotations[i].place = 'near'. For such an annotation, try the candidate y positions in order of distance from the marker point (a.py − a.h − 16, then further up, then below), on both sides. Keep the same collision rules for the curve, other labels and markers, and choose by distance to the point instead of by the smallest y. Here the box would sit just above the curve end, left of the 1 g marker, at about x 1285 to 1621 and y 610 to 676, clear of the curve (which is at y ≥ 697 there) and of the amber band. Everything else stays as tuned."
+  },
+  {
+   "scene_id": "s22_b",
+   "problem": "The content is correct and in sync. The Ölpuffer minimum stroke is 0,0674·v²: 6,74 m at 10 m/s, 'fast 7 m', just over two 3 m storeys. 'bei 10 m/s' appears with 'zehn', 'ohne Zusatzüberwachung' with 'ohne', and 'fast 7 m' with 'fast'. The recap '7 cm' was established in s22_a. The final layout (u086) is clean. The camera 'slow_pull_out' breaks the layout in the first half of the scene. It starts at scale 1.1 and stays above 1.05 until about 4 s (easeInOut). In frame u011 at 0.9 s the panel runs from x=3 to x=1917 (corner brackets at the frame edge). The panel top (y≈173) sits directly under the overlay box 'HUB WÄCHST QUADRATISCH' (bottom y=170), so the two visually merge. The panel bottom and its tick strip are at y≈933 to 940, inside the subtitle zone (y > 910). The graph PANEL is laid out for scale 1.0 (bottom 904), so any zoom camera pushes it off-limits. FIX: set the scene camera to 'static'. This is a scene field, not a param. The previous scene s22_a uses another template, so no continuity is lost. The params stay unchanged."
+  },
+  {
+   "scene_id": "s19_b",
+   "problem": "All numbers are correct: 10 m gives 14,0 m/s = 50 km/h, 100 m gives 44,3 m/s = 159 → ≈160 km/h in 4,52 s, and ZEITLUPE ×1,2 matches N = 1,21. The beats land well: the rope snaps on 'rechnerisch', the 10 m flash and chip on 'rund', and ≈160 on 'etwa/hundertsechzig'. The main problem is that the biggest numbers on screen contradict the spoken number for the whole phrase 'rund fünfzig Kilometer pro Stunde schnell' (4,6–6,2 s). The live readouts keep running. At 'fünfzig' (4,84) they show 57 km/h, at 'Kilometer' (5,21) 68, at 'Stunde' (5,87) 87 and at 'schnell' (6,2) 97 km/h, with 16–27 m/s in 140 px digits. Only the small chip (about 26 px) says '≈ 50 km/h'. This is the same kind of clash the last review flagged ('big number while hearing fünfzig'), only milder. Params cannot fix it: with one time factor, 10 m→100 m takes 3,09 s of real fall and the narration leaves about 3,5 s, so N stays around 1,1 and the counter always runs away. I rendered an alternative (beats [3.78, 8.58, 8.68], 10 m marker at 5.3). It only moves the mismatch (35 km/h at 'fünfzig', 80 at 'schnell') and leaves a messy 159/160 crossfade on 'hundertsechzig', so I keep the current params. Secondary problems: (1) The hero number is the unspoken m/s. The spoken km/h value is the smaller secondary figure. (2) The ropes are drawn from y = 110, so while the overlay box slides and fades in (0,5–0,95 s) the rope lines show through it. (3) The impact sparks fall into the subtitle band (y 920–990) for about 1 s after 8,35. NEEDED TEMPLATE CHANGES in physics_fall.js: (a) Add markers[i].hold (seconds). When the car passes marker h, freeze the fall state (car, h/t/v/km/h readouts, strobe, bar) for that many seconds, with a small 'STANDBILD' / pause tag on the badge, then resume. Take the total hold time out of the beats before computing N, so the ZEITLUPE/ZEITRAFFER badge stays honest. (b) Add primary_unit: 'kmh', which makes km/h (and result_label) the 140 px hero number and m/s the secondary one. (c) In drawRopes, start the ropes and the snapped upper rope end below OVR.y1 + 8 when the overlay covers CX (use OVR/overlayClear). (d) Clamp spark and debris particles to y ≤ 905. After the change, use these params: {\"height_m\":100,\"air_label\":\"rechnerisch, ohne Luftwiderstand\",\"title\":\"Freier Fall\",\"beats\":[3.5,8.6,8.65],\"markers\":[{\"h\":10,\"at\":4.6,\"hold\":1.65},{\"h\":100,\"at\":8.65}],\"kmh_round\":10,\"primary_unit\":\"kmh\"}. With these the rope snaps on 'nach' and N is about 0,76 (ZEITRAFFER ×1,3). The car reaches 10 m at 4,59 on 'rund' and the display holds exactly 14,0 m/s / 50 km/h through 'schnell' (6,24). Impact is at 8,60 on 'hundertsechzig'. Until the template changes, better_params_json keeps the current params, which are the best that params alone allow."
+  },
+  {
+   "scene_id": "s35_a",
+   "problem": "FACT: the scene shows 'Fallhöhe h 270,0 m', 'h = 270,0 m' on the ruler and 'v = √(2 · 9,81 m/s² · 270 m) = 72,8 m/s' as the height of the 75-storey fall. The project factbase (physics_buffers_betty_lou_oliver, which follows Guinness) records the fall as 75 storeys, 'über 300 m' (1,000 ft), and its own comparison calculation uses 300 m → 76,7 m/s ≈ 276 km/h. So 270 m understates the documented height by about 10 % and puts an inconsistent unspoken number in the working. POLISH: at 270 m the car starts at y 368, so the snapped upper rope ends at y about 178, and an 8 px red '|||' stub pokes out under the UNGEBREMSTER FALL box from about 1,0 s to the end (visible in the 1,9 / 4,3 / 4,8 s frames). Also, while the overlay fades in (0,55–0,95 s), the red flickering pre-snap ropes run through the half-transparent box and cross the letters 'T/E' of UNGEBREMSTER. That part is template-level: ropes are drawn from y = 110. HIERARCHY: the spoken payoff 'über 250 km/h' is only about 47 px cap height next to the unspoken 140 px m/s value. FIX (params, verified by render): height_m 300 with beats [1.0, 4.35, 4.45]. The badge then reads ZEITRAFFER ×2,3 (N = 0,428). The live counter reads 250 km/h at about 4,03 s, between 'als' (3,93) and 'zweihundertfünfzig' (4,15). Impact comes at 4,35 during 'zweihundertfünfzig' (276 km/h shows for about 0,2 s, which still fits 'mehr als 250'). 'über 250 km/h' fades in from 4,45 through 'Kilometer pro Stunde ergeben', and the working reads √(2 · 9,81 m/s² · 300 m) = 76,7 m/s. The car now starts at the top of the 0–300 m ruler, so the rope stub is hidden under the overlay and no longer shows. Keeping the overlay 'Ungebremster Fall', leaving out end_label and the timing of the title 'Rund 75 Stockwerke' (already set up in s01/s02) are all correct decisions. TEMPLATE CHANGE, shared with s19_b: clip the ropes under the overlay box (start below OVR.y1 + 8 when the overlay covers CX) so the red flicker does not cross the fading-in overlay. Also add primary_unit: 'kmh' so 'über 250 km/h' becomes the hero number and 76,7 m/s the secondary one."
+  },
+  {
+   "scene_id": "s02_c",
+   "problem": "Content and timing are good. The rope strains red during 'kappen gleich in Gedanken' and snaps on 'Seile' (1,97 s). The stopwatch shows 0,000 s at 2,75 s, before 'Millisekunde' (2,85 s), with the caption GEDANKENEXPERIMENT. The subtitle quotes the sentence and fades in just before 'keine'. FANGVORRICHTUNG types in on 'Sicherung' (7,26 s). The HUD is off, all text is German, no number is ahead of the narration, and the bottom 170 px stay free. It fails on one visible overlap that neither the tuner nor the previous review caught. The amber Geschwindigkeitsbegrenzer wheel (the governor, with its bracket box) and the machine-room floor lines sit directly behind the top-right corner of the last title letter, the 'N' of 'EIN'. In u035, u071 and u095 the ring centre is at about x 1215, y 323, while title line 1 ends at about x 1241. The wheel peeks out from behind the glyph from about 2,4 s to the end. At the snap (1,97–2,3 s) the 90 px red flash halo also touches the 'N' (u020: flash ring edge about 20 px from the glyph). Cause: the title is width-limited and always fills maxW 1060, ending at x0+1060 ≈ 1241. The default blueprint position under slow_pull_out (x 1315, scale 0.9) puts the governor at x 1200–1230. Shortening the title does not help, because the template scales the title to fill maxW. I verified the fix by re-rendering (scratchpad rv/s02_fix3, frames at 0,97 / 2,15 / 3,77 / 7,65 / 10,23 s): with blueprintX 1366 and blueprintScale 0.83 the governor ring sits about 45 px right of the title and the snap flash is clear of the text. The label column (x 1586) stays clear of the machine-room box and at least 90 px from the edge under the pull-out, and the car and snap stay clearly readable. Accepted, not blocking: (1) only one of the four ropes snaps although the narration says 'alle Seile'; this matches the description ('reißt ein Seil') as a teaser for 'gleich'; (2) the readout decode shows scrambled digits such as '0,048 s' on single frames between 3,05 and 3,65 s (template decode effect)."
+  },
+  {
+   "scene_id": "s37_a",
+   "problem": "The narration sync is good. 'DIE SICHERHEITSKETTE' starts at 0,55 s ('Sicherheitskette' is spoken at 0,63 s) and 'IM RÖNTGENBLICK' at 1,45 s on 'im'. The kicker 'MIT ANDEREN AUGEN' decodes on 'mit anderen Augen' (3,4 s). The subscribe pill 'ABONNIERE VISUAL SCIENCE' with bell wipes in on 'abonniere' and is fully decoded around 'Visual' (it finishes about 0,25 s before 'Science', which is negligible). The car rises visibly, all ropes are intact, the HUD is off, there are no unnarrated numbers, the scan line stays right of the text, the bottom 170 px are free, and the next scene's overlay is unaffected. It fails on a real overlap that the tuner notes call 'no overlap'. The amber governor wheel (Geschwindigkeitsbegrenzer, with its bracket box) sits on the top-right corner of the final 'E' of 'SICHERHEITSKETTE', and the bracket and machine-room floor lines cross the letter. In u026, u050, u083 and u095 the ring is at about x 1218, y 300–325, and the title ends at about x 1228. This lasts from about 1,9 s to the end, on the most prominent text of the end card. Cause: the title is width-limited and fills maxW 1060, while the default blueprint under slow_pull_out places the governor at x 1200–1230. I tested 'Sicherheitskette | im *Röntgenblick*' (without 'Die'): it does not help, because the title just scales up to fill the same width. I verified the fix by re-rendering (scratchpad rv/s37_fix3, frames at 0,9 / 1,9 / 4,7 / 7,0 s): with blueprintX 1366 and blueprintScale 0.83 the ring sits about 45 px right of the title. The BREMSE and FANGVORRICHTUNG labels stay clear of the machine-room box and at least 90 px from the edge, and the rising car in the x-ray shaft stays clearly visible. All other params stay unchanged."
+  },
+  {
+   "scene_id": "s06_b",
+   "problem": "The facts and timing are correct. EN 81-20 requires suspension ropes of at least 8 mm. At 26 px/mm the rope measures 8.0 mm and the pencil about 7 mm across flats, which fits 'kaum dicker als ein Bleistift'. The rope is an 8-strand rope with a fibre core, which is right. '3 bis gut 4 t' is revealed word by word at 8.55/8.81/9.07/9.33/9.59 s, in step with drei 8.64 / bis 8.9 / gut 9.11 / vier 9.32 / Tonnen 9.58. The scene still fails on polish, for three reasons. (1) DEAD EMPTY AREA: in rope mode with then_readout the template always reserves x 1310-1790 for the tile (areaR = 1310). From 0 to 6.6 s, about 60% of the scene (frames at 1.3, 3.96 and 6.16 s), the right ~45% of the frame (x ~1130-1900) is empty. The only content is the rope/pencil/ruler group left of centre (ruler x 370-1130); at 3.96 s the frame is about two-thirds empty. Params cannot fix this. The tile cannot come earlier without showing 'Bruchkraft, je nach Bauart' before 'Je nach Bauart'/'reißt'. The camera focus only scales around a point and cannot re-centre the group. NEEDED TEMPLATE CHANGE in modeRope: keep s (the scale) computed with the tile-reserved width. While the tile is not visible, centre the group horizontally (x0c = (1920 - Rmm*s)/2 ≈ 635 px here). Glide x0 to the current left layout (≈ 412) with eio(seg(t, tTile - 0.3, 0.8)) as the tile slides in. Everything that uses X()/x0 must move with it: ruler, projections, dimension, pulse ring, and the name-label bounds (rightB currently hard-coded to 1335 when ro is set; use the shifted pencil centre instead). (2) The 't' on the hanging weight shows from 6.6 s, about 3 s before 'Tonnen' (9.58 s). In drawReadout, fade the unit glyph in with the value instead, e.g. alpha * seg(cnt, 0.8, 0.2). (3) Param fix: the default kicker reads 'GLEICHER MASSSTAB · ANGABEN IN MM', but the ruler numbers are in cm (0/1/2 with 'cm'). Set kicker 'Gleicher Maßstab' so the units do not conflict. Keep all other params. focus [0.36,0.52] with slow_pull_out still works with the centred layout (the tile stays more than 120 px from the edge)."
+  },
+  {
+   "scene_id": "s14_c",
+   "problem": "Timing, German text and mechanics are all correct. The governor trips at 'presst'. The wedges reach the rail at 2.45 s, on 'an die Schiene'. The spring, wedge and rail callouts each land just before their word. The energy panel comes in on 'und verwandelt', the Bremsspur sub-text arrives on 'in Wärme', and the car stops at 6.3 s. No numbers are shown: panel:false and tape:false correctly hide 1,30 m/s, the g values and 'zulässig Ø 0,2–1,0 g', which would spoil s15_a. The scene fails on composition. With panel1 off, the whole right half of the frame (x≈1000–1920) is empty from 0 to 3.2 s, as the 1.60, 2.60 and 3.10 s frames show. After that the energy panel sits alone in the lower right (y 645–905), and the upper-right quadrant stays empty for the whole scene, so the frame is heavily left-weighted. Params alone cannot fix this. Turning panel1 back on would show the numbers above, and panel2's position is hard-coded (drawEnergy, drawTopview and drawLabelCard all use y0 = P2Y when panel:false). TEMPLATE CHANGE NEEDED: when cfg.panel is false, centre the single right-column panel vertically on the mechanism, y0 = round(CY - h/2): about 460 for energy/topview (h=260) and about 483 for a 215 px label card. Alternatively, expose a param panel2Y ('center' | px). Optionally also add shiftX, which would translate the rail, rope, mechanism, streaks, direction arrows and callouts right by about 150 px when only one right-hand panel is used. The render() hold-sprite copy rects would need the same offset. That would stop the frame reading as half-empty before the panel appears. Once the template supports it, re-render with the same params plus panel2Y:'center' (or the automatic behaviour). Minor and acceptable: the overlay box crosses the guide rail at x≈680, and the kinetic bar is already about 35% drained when the panel appears, because energy falls with v²."
+  },
+  {
+   "scene_id": "s26_c",
+   "problem": "Content and sync are correct. The EN 81-20 card fades in on 'Aufzugsnorm' and is readable by 'dagegen einen Schutz'; EN 81-20 does require protection against ascending-car overspeed. 'Fangvorrichtung – am Fahrkorbrahmen' lands on 'Fangvorrichtung'. The AUF/AB arrow and the 'Doppelkeil – greift aufwärts und abwärts' callout come with 'auch nach oben'. The governor trips at 5.45 s and the wedges bite at 6.25 s, just before 'greift'. The upward-catch mechanics are right: the rope moves down relative to the car, the double wedges run into the lower narrowing of the V-track, and the trace appears below the housing. panel:false correctly hides speed, g and distance values that are never spoken. The scene fails on the same composition problem as s14_c. From 0 to 1.95 s (the 1.00 s frame) the right half of the frame is completely empty apart from the grid. After that the label card sits alone in the lower right (y≈645–860), and the upper-right quadrant stays empty for the whole scene, so the frame is heavily left-weighted. Params cannot fix it: panel1 would bring in unspoken numbers, and drawLabelCard hard-codes y0 = P2Y when panel:false. TEMPLATE CHANGE NEEDED, the same as for s14_c: when panel:false, centre the single right-column panel vertically on the mechanism, y0 = round(CY - h/2), which puts this 3-line card at about 483–698; or expose panel2Y ('center' | px). Optionally add shiftX to move the mechanism group right about 150 px when only one right panel is used. Then re-render with the same params. Minor and acceptable: the overlay box crosses the guide rail at x≈680, and on screen the catch lasts only about 0.65 s because 'greift' comes 1 s before the scene ends."
+  },
+  {
+   "scene_id": "s22_a",
+   "problem": "Timing, numbers and scale are correct: '≈ 7 cm' appears on 'sieben' and '≈ 13,5 cm' on 'dreizehneinhalb'. Both match EN 81-20 (0,0674·v² and 0,135·v² at 1 m/s), and the brackets are drawn to scale at a ratio of about 1:2. The problem is the speed tag '↓ 1 m/s' (speed_label). In drawSlotSpeed it never fades out after touchdown; it only dims to 0.45 alpha. From about 2.3 s to the end, the oil car is standing still on the compressed buffer but still carries '↓ 1 m/s' (frames u055, u073, u089, u098). Worse, from about 5.0 s the steel-spring car rebounds upward, shown by the up chevrons (^^) next to its column. Right beside them the tag shows a bright, animated downward arrow '↓ 1 m/s' (u089 and u098), and this is the final image under 'dreizehneinhalb'. Physically this is a contradiction. It is also imprecise: EN 81-20 assumes impact at 115 % of rated speed (1.15 m/s), not 1 m/s. Params-only fix: remove speed_label and speed_at, and move the calculation basis into the bracket note as 'rechnerisch bei 1 m/s'. At 16 px it is about 175 px wide, which fits the 240 px value layer. This keeps the 1 m/s premise for s22_b next to the numbers without claiming a speed on a car at rest. Optional template improvement, not required with these params: in drawSlot, multiply the speed-tag alpha by (1 - smooth(inv(it.tH, it.tH + 0.35, t))), and never draw the down arrow while s.v < 0. Minor, not blocking: the tip of the 7 cm bracket arrow touches the lower platform line of the Fahrkorb. The chip 'STAHLFEDER' under 'STAHLFEDERPUFFER' repeats the title. During the fade-in at 0.8 s, the overlay text briefly sticks out of its growing box; this is engine overlay behaviour."
+  },
+  {
+   "scene_id": "s07_c",
+   "problem": "From about 0.3 s (when the s07_b insets fade out in the crossfade) until the panel opens at 3.9 s, the whole right half (x≈1000–1920) is empty. The full-res frame at 3.40 s confirms it. For those roughly 3.6 s the picture is also just the s07_b end pose with its labels and tags removed. The only new things are two glows, so the scene first strips the build back and then rebuilds it: a dead area plus near-repetition of the previous scene. The timing work is otherwise good. The 40–50 % values are not shown early, the equation types on 'vierzig'/'fünfzig', the scale physics are right (counterweight heavier than the empty car, level at 50 % load), and the blink lands on 'Gegengewicht' (7.39). The facts are correct (counterweight = car + 40–50 % of the rated load), and the layout stays inside the margins and above the subtitle band. Params alone cannot fill the gap. In balance mode the only right-column slot is the balance panel, and it draws the counterweight pan sub-label 'Kabine + 40–50 %' and the load-bar band 'Ausgleich 40–50 %' as soon as it opens. Opening it early on 'Gegengewicht' (1.58), where it would illustrate 'so schwer wie die leere Kabine plus …', would therefore show the numbers about 3 s before 'vierzig'. A camera push or pull cannot fill the column either. TEMPLATE CHANGE: add a param 'values_at' (seconds, default = tBal so existing scenes are unchanged). It should fade in (a) the counterweight pan sub-label `Kabine + ${rangeTxt}` (show nothing or 'Kabine + ?' before it) and (b) the green 'Ausgleich' band, the marker and the 'Ausgleich 40–50 %' text on the BELADUNG bar. Then re-tune with beats [1.35,2.95,4.3,5.1,7.0]. Drop balance_at so the panel opens on beat 0 at 1.35, where the scale shows the counterweight side down while 'so schwer wie' is spoken. Use equation_at 2.95 ('Gegengewicht = leere Kabine' types on 'leere Kabine' at 3.15; the rest '+ 40 bis 50 % Nutzlast' follows on beats[2] = 4.3) and values_at 4.2. Keep everything else as it is. Minor, no action needed: the load counter briefly shows intermediate values such as '+ 1 % Last', and the pan label says 'Last' while the equation says 'Nutzlast'."
   },
   {
    "scene_id": "s05_a",
@@ -94,23 +209,859 @@
    "problem": "Content, sync and the editor note are right. No digit is shown anywhere. 'FESTGELEGTE GRENZE' appears at 1.3 s on 'festgelegten'. The gauge reaches the marker and turns red on 'Zahl muss'. The AUSTAUSCHEN stamp lands at 3.0 s on 'ausgetauscht' and covers no breaks. There is no 32, no USA rule and no Europe footer.\n\nIt FAILS on continuity with s24_b. The cut falls mid-sentence ('Prüfer zählen diese | Drahtbrüche') and uses the engine's default 0.6 s crossfade. s24_b ends with the magnifier parked at the right (x≈1295) on the 3rd break, all 3 breaks ringed, and the panel 'Drahtbrüche ●'. s24_c then starts with no lens, and the 3 'carried-over' breaks have no rings and a different layout. s24_b has 3 columns, bottom/top/bottom. s24_c has top+bottom at x≈760 and top at x≈945, because buildBreaks lays out 8 breaks in 4 columns and initial_breaks only takes the first 3 of those slots. A new magnifier pops open at the far left (x≈466), recounts the same 3 breaks from an empty gauge, and the panel is renamed 'Zählstand'. During the crossfade the viewer sees two lenses, two differently named panels and six ghosted break positions. The inspection visibly restarts instead of continuing, which repeats s24_b's counting.\n\nParams cannot fix this. No param pre-rings or pre-counts the initial breaks, skips the lens-open animation, sets the lens start position, or keeps the predecessor's break layout.\n\nNeeded template change in rope_macro.js:\n(1) New param initial_counted (default false). When true, initial breaks get tc=-10, so their red dashed rings show from t=0 and countSm/gauge start at initial_breaks/gMax.\n(2) New params lens_open_at_start / lens_start_x. The lens is fully open at t=0 (no openS/openD grow-in) and starts at the given screen x (≈1295, where s24_b parks it) or at the last initial break. It then scans only the new breaks.\n(3) When initial_breaks > 0, place the initial breaks with the same slot/type pattern and spacing a broken_wires=initial_breaks scene uses (here bottom/top/bottom), and add the new breaks around them.\n(Optional, same pass: make planLens's subtitle check camera-aware and include the tick ring RL+29. In s24_b the ticks reach y≈928.)\n\nParam change that works today: count_label 'Drahtbrüche', so the panel keeps s24_b's name and the gauge is the only new element.\n\nMinor: the amber limit triangle sits about 2 px under the final 'E' of 'FESTGELEGTE'. The tag baseline is at panel y+37 and the triangle top at y+39. Draw the tag about 6 px higher.\n\nFallback if the template cannot change: set transition 'cut' on s24_c to at least remove the double-lens crossfade ghost. The recount remains."
   },
   {
-   "scene_id": "s19_b",
-   "problem": "All numbers are correct: 10 m gives 14,0 m/s = 50 km/h, 100 m gives 44,3 m/s = 159 → ≈160 km/h in 4,52 s, and ZEITLUPE ×1,2 matches N = 1,21. The beats land well: the rope snaps on 'rechnerisch', the 10 m flash and chip on 'rund', and ≈160 on 'etwa/hundertsechzig'. The main problem is that the biggest numbers on screen contradict the spoken number for the whole phrase 'rund fünfzig Kilometer pro Stunde schnell' (4,6–6,2 s). The live readouts keep running. At 'fünfzig' (4,84) they show 57 km/h, at 'Kilometer' (5,21) 68, at 'Stunde' (5,87) 87 and at 'schnell' (6,2) 97 km/h, with 16–27 m/s in 140 px digits. Only the small chip (about 26 px) says '≈ 50 km/h'. This is the same kind of clash the last review flagged ('big number while hearing fünfzig'), only milder. Params cannot fix it: with one time factor, 10 m→100 m takes 3,09 s of real fall and the narration leaves about 3,5 s, so N stays around 1,1 and the counter always runs away. I rendered an alternative (beats [3.78, 8.58, 8.68], 10 m marker at 5.3). It only moves the mismatch (35 km/h at 'fünfzig', 80 at 'schnell') and leaves a messy 159/160 crossfade on 'hundertsechzig', so I keep the current params. Secondary problems: (1) The hero number is the unspoken m/s. The spoken km/h value is the smaller secondary figure. (2) The ropes are drawn from y = 110, so while the overlay box slides and fades in (0,5–0,95 s) the rope lines show through it. (3) The impact sparks fall into the subtitle band (y 920–990) for about 1 s after 8,35. NEEDED TEMPLATE CHANGES in physics_fall.js: (a) Add markers[i].hold (seconds). When the car passes marker h, freeze the fall state (car, h/t/v/km/h readouts, strobe, bar) for that many seconds, with a small 'STANDBILD' / pause tag on the badge, then resume. Take the total hold time out of the beats before computing N, so the ZEITLUPE/ZEITRAFFER badge stays honest. (b) Add primary_unit: 'kmh', which makes km/h (and result_label) the 140 px hero number and m/s the secondary one. (c) In drawRopes, start the ropes and the snapped upper rope end below OVR.y1 + 8 when the overlay covers CX (use OVR/overlayClear). (d) Clamp spark and debris particles to y ≤ 905. After the change, use these params: {\"height_m\":100,\"air_label\":\"rechnerisch, ohne Luftwiderstand\",\"title\":\"Freier Fall\",\"beats\":[3.5,8.6,8.65],\"markers\":[{\"h\":10,\"at\":4.6,\"hold\":1.65},{\"h\":100,\"at\":8.65}],\"kmh_round\":10,\"primary_unit\":\"kmh\"}. With these the rope snaps on 'nach' and N is about 0,76 (ZEITRAFFER ×1,3). The car reaches 10 m at 4,59 on 'rund' and the display holds exactly 14,0 m/s / 50 km/h through 'schnell' (6,24). Impact is at 8,60 on 'hundertsechzig'. Until the template changes, better_params_json keeps the current params, which are the best that params alone allow."
+   "scene_id": "s01_a",
+   "problem": "Timing, text and facts are correct: 1945 builds on the spoken year, the label arrives with 'Empire State Building', the fall starts on 'stürzt' (3.36 s), '≈ 75 Stockwerke' appears on 'rund fünfundsiebzig', and 'rund 300 m' is correctly suppressed. The blocker is the camera. slow_push_in scales about the frame centre (1.0 to 1.1), which moves the bottom of the drawing into the subtitle zone (y >= 910). In the final frame (u097) the landed cabin sits at about y 899-912, the pulsing red landing ring reaches about 931, the dimension line's bottom tick is at about 912, and the foundation and plate edge go down to about 932-940. That puts the end point of 'in die Tiefe' on the subtitle boundary, partly under the subtitles. A second, smaller problem shows only in the real timeline: the chapter badge 'KAPITEL 01 / Der Absturz von 1945' covers the top right from 0.3 to 4.3 s, directly above the big '1945'. With the push-in, the gap between the year and the badge underline shrinks to about 33 px by 3.9 s (I rendered this with chapters). I tested a param-only fix, focus [0.52,0.78] with the push-in. It keeps the pit above 910, but it pushes the year into the badge underline (about 15 px gap at 3.9 s), so I rejected it. FIX: change the camera to 'static' and leave the params unchanged. The pit then ends at y 904, the cabin at 866-878, and the year keeps a 54 px gap below the chapter badge. The fall animation supplies enough motion."
   },
   {
-   "scene_id": "s35_a",
-   "problem": "FACT: the scene shows 'Fallhöhe h 270,0 m', 'h = 270,0 m' on the ruler and 'v = √(2 · 9,81 m/s² · 270 m) = 72,8 m/s' as the height of the 75-storey fall. The project factbase (physics_buffers_betty_lou_oliver, which follows Guinness) records the fall as 75 storeys, 'über 300 m' (1,000 ft), and its own comparison calculation uses 300 m → 76,7 m/s ≈ 276 km/h. So 270 m understates the documented height by about 10 % and puts an inconsistent unspoken number in the working. POLISH: at 270 m the car starts at y 368, so the snapped upper rope ends at y about 178, and an 8 px red '|||' stub pokes out under the UNGEBREMSTER FALL box from about 1,0 s to the end (visible in the 1,9 / 4,3 / 4,8 s frames). Also, while the overlay fades in (0,55–0,95 s), the red flickering pre-snap ropes run through the half-transparent box and cross the letters 'T/E' of UNGEBREMSTER. That part is template-level: ropes are drawn from y = 110. HIERARCHY: the spoken payoff 'über 250 km/h' is only about 47 px cap height next to the unspoken 140 px m/s value. FIX (params, verified by render): height_m 300 with beats [1.0, 4.35, 4.45]. The badge then reads ZEITRAFFER ×2,3 (N = 0,428). The live counter reads 250 km/h at about 4,03 s, between 'als' (3,93) and 'zweihundertfünfzig' (4,15). Impact comes at 4,35 during 'zweihundertfünfzig' (276 km/h shows for about 0,2 s, which still fits 'mehr als 250'). 'über 250 km/h' fades in from 4,45 through 'Kilometer pro Stunde ergeben', and the working reads √(2 · 9,81 m/s² · 300 m) = 76,7 m/s. The car now starts at the top of the 0–300 m ruler, so the rope stub is hidden under the overlay and no longer shows. Keeping the overlay 'Ungebremster Fall', leaving out end_label and the timing of the title 'Rund 75 Stockwerke' (already set up in s01/s02) are all correct decisions. TEMPLATE CHANGE, shared with s19_b: clip the ropes under the overlay box (start below OVR.y1 + 8 when the overlay covers CX) so the red flicker does not cross the fading-in overlay. Also add primary_unit: 'kmh' so 'über 250 km/h' becomes the hero number and 76,7 m/s the secondary one."
+   "scene_id": "s04_b",
+   "problem": "The emphasis is on the wrong fact, and the next scene's content shows early. (1) From about 1.2 s the largest, most readable text on screen is the newspaper note '„schneidet gelegentlich das Seil durch“' (27 px, centred on the paper). That is s04_c's narration ('…der Erfinder schneide gelegentlich selbst das Seil durch'), shown 2-5 s early, and s04_c then shows it again ('Erfinder kappt gelegentlich selbst das Seil'). The template cannot hide it: highlight_note ''/' ' falls back to the default text, and highlight_note:false would print 'false'. (2) This scene's actual message, 'fehlt dieser Ausruf', is carried only by the small quote plate in the top-right corner: the quote is 25 px italic, 'FEHLT IN DEN BERICHTEN' is 16 px mono, it sits far from the newspaper, and it is fully visible only for about the last 0.5 s of a 3.18 s scene. (3) Polish: the pseudo-Fraktur masthead reads as garbled glyphs rather than a stylised title, and the overlay box nearly touches the tilted paper's top edge (about 10-25 px). Params alone cannot fix this. TEMPLATE CHANGE (newspaper_overlay): (a) support highlight_note:false or note:false, rendering neutral blind-text lines in the note area so the report's wording is first revealed in s04_c; (b) make the quote the focal element in this variant: quote about 36-40 px and by-line 22 px or more, placed beside the newspaper over the dimmed hall (for example centred at about x 1250-1750, y 300-420), with an amber or red strike-through or a 'FEHLT' stamp that animates on at quote_at; (c) replace the Fraktur squiggles with clean abstract masthead bars. Keep the current params after the change, add note:false, and keep quote_at 2.0 (on 'fehlt')."
   },
   {
-   "scene_id": "s02_c",
-   "problem": "Content and timing are good. The rope strains red during 'kappen gleich in Gedanken' and snaps on 'Seile' (1,97 s). The stopwatch shows 0,000 s at 2,75 s, before 'Millisekunde' (2,85 s), with the caption GEDANKENEXPERIMENT. The subtitle quotes the sentence and fades in just before 'keine'. FANGVORRICHTUNG types in on 'Sicherung' (7,26 s). The HUD is off, all text is German, no number is ahead of the narration, and the bottom 170 px stay free. It fails on one visible overlap that neither the tuner nor the previous review caught. The amber Geschwindigkeitsbegrenzer wheel (the governor, with its bracket box) and the machine-room floor lines sit directly behind the top-right corner of the last title letter, the 'N' of 'EIN'. In u035, u071 and u095 the ring centre is at about x 1215, y 323, while title line 1 ends at about x 1241. The wheel peeks out from behind the glyph from about 2,4 s to the end. At the snap (1,97–2,3 s) the 90 px red flash halo also touches the 'N' (u020: flash ring edge about 20 px from the glyph). Cause: the title is width-limited and always fills maxW 1060, ending at x0+1060 ≈ 1241. The default blueprint position under slow_pull_out (x 1315, scale 0.9) puts the governor at x 1200–1230. Shortening the title does not help, because the template scales the title to fill maxW. I verified the fix by re-rendering (scratchpad rv/s02_fix3, frames at 0,97 / 2,15 / 3,77 / 7,65 / 10,23 s): with blueprintX 1366 and blueprintScale 0.83 the governor ring sits about 45 px right of the title and the snap flash is clear of the text. The label column (x 1586) stays clear of the machine-room box and at least 90 px from the edge under the pull-out, and the car and snap stay clearly readable. Accepted, not blocking: (1) only one of the four ropes snaps although the narration says 'alle Seile'; this matches the description ('reißt ein Seil') as a teaser for 'gleich'; (2) the readout decode shows scrambled digits such as '0,048 s' on single frames between 3,05 and 3,65 s (template decode effect)."
+   "scene_id": "s32_a",
+   "problem": "The leaders cross and point at the wrong figures from 'Kabine' to the end (u084 at 8.23 s, u097 at 9.51 s). The rescue anchors put both label boxes at the same clamped x (person bx = clamp(tcx-40, 720, 1300) = 1300 at y 432; helpers bx = about 1286 at y 482). Once she is carried right, the 'Liftführerin' leader runs from its box's left edge down to her torso in the car, right through the 'Helfer' box. Meanwhile the 'Helfer' leader goes to the left helper's head. The two leaders form an X, so 'Helfer' seems to point at the woman and 'Liftführerin' at a helper. Everything else is correct and on time: 'Liftführerin' about 2.36 s, '80. Stock' about 3.96 s, lift on 'Helfer' 6.32 s, seated on 'Kabine' 7.94 s, down arrow on 'nach unten' 8.63 s, and the title plate uses only established facts. FIX (params only): drop the 'Helfer' label. The two silhouettes that lift her on the word 'Helfer' make it clear without a label. I rendered this at 7.06, 8.23 and 9.51 s: no crossings or box overlaps. The only small blemish left is the 'Liftführerin' leader passing the front helper's head in the final state."
   },
   {
-   "scene_id": "s37_a",
-   "problem": "The narration sync is good. 'DIE SICHERHEITSKETTE' starts at 0,55 s ('Sicherheitskette' is spoken at 0,63 s) and 'IM RÖNTGENBLICK' at 1,45 s on 'im'. The kicker 'MIT ANDEREN AUGEN' decodes on 'mit anderen Augen' (3,4 s). The subscribe pill 'ABONNIERE VISUAL SCIENCE' with bell wipes in on 'abonniere' and is fully decoded around 'Visual' (it finishes about 0,25 s before 'Science', which is negligible). The car rises visibly, all ropes are intact, the HUD is off, there are no unnarrated numbers, the scan line stays right of the text, the bottom 170 px are free, and the next scene's overlay is unaffected. It fails on a real overlap that the tuner notes call 'no overlap'. The amber governor wheel (Geschwindigkeitsbegrenzer, with its bracket box) sits on the top-right corner of the final 'E' of 'SICHERHEITSKETTE', and the bracket and machine-room floor lines cross the letter. In u026, u050, u083 and u095 the ring is at about x 1218, y 300–325, and the title ends at about x 1228. This lasts from about 1,9 s to the end, on the most prominent text of the end card. Cause: the title is width-limited and fills maxW 1060, while the default blueprint under slow_pull_out places the governor at x 1200–1230. I tested 'Sicherheitskette | im *Röntgenblick*' (without 'Die'): it does not help, because the title just scales up to fill the same width. I verified the fix by re-rendering (scratchpad rv/s37_fix3, frames at 0,9 / 1,9 / 4,7 / 7,0 s): with blueprintX 1366 and blueprintScale 0.83 the ring sits about 45 px right of the title. The BREMSE and FANGVORRICHTUNG labels stay clear of the machine-room box and at least 90 px from the edge, and the rising car in the x-ray shaft stays clearly visible. All other params stay unchanged."
+   "scene_id": "s17_a",
+   "problem": "From 0 to 2.4 s, a quarter of the scene, the frame is empty during 'Spulen wir die Zeitlupe zurück'. There is only the overlay and a head crawling about 220 px from the left end to the 0 ms node, because head arrival is tied to the first pop at 2.4 s. The words ask for a rewind, but nothing rewinds. The cards, highlight and timings are otherwise correct. Fix with params only: direction 'rtl' with the same per-event 'at'. The head then starts at the right end (arrow plus ZEIT visible from about 0.4 s), speeds up leftwards with rewind chevrons, and passes the placeholders at 1.5, 1.8 and 2.1 s. It reaches 0 ms at 2.4 s, on 'zurück… Seile', and the whole axis is drawn by about 3.0 s. The cards then replay forwards at their narration times (0 ms 2.4, Hundertstel 4.95, sofort 6.65, dann 7.75), with the highlight on 'Begrenzer' at 6.1 s. Other settings: counter:false (rtl turns it on by default), gaps:false, and beats[2]=9.2 to suppress the right-to-left pulse loop, so no backwards pulse runs over the forward replay. I rendered and checked this (scratchpad/rev_s17a2/timeline_sheet.png): there is no clipping, the overlay is clear of the cards, and the lowest card bottom is at about 850 px."
+  },
+  {
+   "scene_id": "s25_a",
+   "problem": "(1) Dead area: from 0 to about 4.4 s (46% of the scene) the frame is about 85% empty. Up to 2.4 s there is only the overlay; after that a small 36 px title line and three faint ghost nodes. Then the axis snaps across in about 0.9 s. Params cannot fix this. Head arrivals are pinned to pop times: node 2 at 5.3 s, and nodes 0 and 1 at 5.3 minus 0.3 s steps. An earlier beats[0] only makes the head crawl about 230 px to node 0 and then jump 540 px every 0.3 s. Needed template change, either option works: (a) a hero-title mode (e.g. title:{hero:true}). While no card is visible, the title is drawn large (about 60–72 px, up to 2 lines), centred in the axis band. It then shrinks and moves up into the title slot when the head starts at beats[0]. (b) A decoupled axis-build window (e.g. sweep:[2.4,5.3]), so the head draws the axis evenly during 'etwa vom TÜV oder von der DEKRA', independent of the per-node pop times. A non-template alternative is to split s25 so that the first sentence (0–4.9 s) uses a different template. (2) Polish, fixable now: the '≤' glyph falls back to a thin non-Oxanium font next to bold digits. I rendered 'MAX. 2 JAHRE': it stays entirely in Oxanium at nearly the same size, and the label keeps one line at full size. (3) The title at 2.4 s shows DEKRA about 1.9 s before it is spoken. title.at 2.75 aligns 'z. B.' with 'etwa' (2.74), so TÜV lands on 'Tüff' (3.25). The facts are correct: under BetrSichV, a Hauptprüfung is due at the latest every 2 years with a Zwischenprüfung in between, done by a ZÜS such as TÜV or DEKRA."
+  },
+  {
+   "scene_id": "s38_a",
+   "problem": "Most of the scene works: the header matches the first sentence, '8.000' in the title lands with 'achttausend', the rev-up is timed to the number, the callout, channel name and signoff are timed to the narration, everything is German and correct, and all content sits above y 910. Two defects remain. (1) The opening is almost empty and shows the wrong thing (param fix). From 0.3 to about 1.6 s, while 'Nächstes Mal wird es richtig schnell' is spoken, the frame shows only the header and a half-drawn subscribe circle (see u008 at 0.9 s). The left two-thirds of the screen is blank, and at 1.5 s there is still only an empty outline. What is being said is 'next time', which is the next-video slot, but that slot only starts drawing at 1.3 s, and its engine content only fills in between about 1.6 and 2.5 s. Fix: draw the next-video frame first, at 0.3 s on 'Nächstes Mal'. The subscribe circle follows at 0.6 s, which keeps the continuation from 'abonniere' and matches the template's default left-to-right order. The engine then idles, alive with the crank turning and combustion flashes, through 'richtig schnell ... Was passiert im Motor', and revs up at 3.3 s as before. The idle-then-rev contrast is the payoff of 'richtig schnell'. (2) The digital readout contradicts the narration (template fix). backOut(k, 0.8) is applied to the displayed value as well as the needle. I computed the readout: it shows 8.050 to 8.150 from about 3.87 to 4.25 s, which is most of the word 'achttausend' (3.47-4.12 s), before it snaps to 8.000. The viewer hears 'achttausend' while reading 8.150. No parameter controls this. Needed template change in end_card.js: in the big-frame content callback, keep the needle overshoot but clamp the readout while 0 < k < 1. Replace readout = fmtInt(Math.round(Math.max(0, v) / 50) * 50) with fmtInt(Math.round(clamp(v, 0, rp.val) / 50) * 50), or add an rpmOvershoot param, 0 for no overshoot, that feeds backOut's c1. Minor, acceptable as is: 'U/min?' in the title appears about 0.75 s before 'Umdrehungen pro Minute' is spoken, because the word stagger is fixed at 0.07 s. The unit reads as part of the number, so no change is needed."
+  },
+  {
+   "scene_id": "s27_c",
+   "problem": "The status chip swap between 1,6 and 1,95 s produces garbled text. chip2 draws 'KABINE FÄHRT LOS' (red) and 'KABINE STEHT' (green) at the same left-aligned position and crossfades them over 0,35 s, so the words overlap as 'KABINE SŦEHT LOS'. The wider red outline also sticks out past the green one, which is visible in sheet frame 3 (u034). The red 'KABINE FÄHRT LOS' chip also does not match this scene's narration ('Er stoppt die Kabine …'): it repeats the status s27_a already showed, and at 0,7 s it says the opposite of what is being said. Fix with params only: set hazard_label to \"\" (chip2 returns early for an empty label). Movement is still shown by the red chevrons, the red gap and the blinking red door chip. The green 'KABINE STEHT' then fades in cleanly between 1,6 and 1,95 s during 'spätestens'. I re-rendered with this change (scene-qa2/s27_c_rev): no overlap, and everything else stays the same. The rest is correct: 1,20 m is not shown before 'Meter zwanzig', 'Türzone' carries no unspoken number, the Stopp mark (0,5 m) is inside the limit, direction is up and matches s27_a, the subtitle band is free, and the rope brake is at y≥94. Optional template improvement, not required: chip2 should fade out the old status first and then fade in the new one, instead of crossfading them in the same place."
+  },
+  {
+   "scene_id": "s01_b",
+   "problem": "The timing, content and '?' overlay are right, but there is a clear collision. The template always anchors 'car' at the car's RIGHT inner wall (anchorOf: x = carX1-6), whatever the side is. So both left-side leaders run across the whole car. In u060 and u097 the cyan leader of 'schwer verletzte junge Frau' strikes straight through the seated woman's torso (~x1115, y760), which is the person it names. The green 'überlebt' diagonal cuts through the top of the counterweight and the cabin floor. Params fix, test-rendered in rv_sx1/s01b_right: side:'right' for both labels. That gives clean short leaders, chevrons move to the left of the shaft automatically, the first label wraps to 2 lines, and all boxes stay above y≈860. The cost is that the left ~40% of the frame is empty, because the full-focus camera is fixed at cx=1110. Template change for the ideal version: make the car anchor side-aware (carX0+6 when side is 'left'), so the original left-side params work without crossing the passenger. Alternatively, shift the full-focus camera toward the side opposite the callouts. Minor points: the passenger is only ~15x40 px, and at 0.27 s the pit (y 910–985) sits in the subtitle band."
+  },
+  {
+   "scene_id": "s02_b",
+   "problem": "Content and timing are good: the amber highlight comes on 'dünnen' and the callout on 'Stahlseilen', and there are no numbers. The blocker is the subtitle band. For the whole scene the hanging car with both passengers sits at y≈880–1020 (u080 and u097: passengers at 915–995, safety gear at ~1010). tilt_up pushes the content a further 45 px down by the end, so the subtitles will cover the car that 'an dünnen Stahlseilen hängt'. Params cannot fix this, which I tested. In ropes focus the camera rect bottom is hitchY+70, so the car is always pinned under the frame edge. floor 3 (rv_sx1/s02b_f3) and floor 4 (s02b_f4) leave it at the same y≈880–1040. A static camera (s02b_static) only raises the car base to ~945, with the passengers at 850–920. floor 5 would fix it but duplicates the s05_b/s06_a framing. focus 'full' (s02b_full) makes the ropes tiny and leaves ~45% of the frame empty. Template change needed: in ropes focus include the whole car, e.g. rect bottom = max(carY + 30, sy + 250), or clamp the scale so the car bottom stays ≤ 870 px on screen. After that, keep these params, preferably with a static camera or slow_push_in instead of tilt_up. Minor: the title shows 'so gut wie nie' about 1 s before it is spoken. It is a question paraphrase, so this is acceptable."
+  },
+  {
+   "scene_id": "s07_a",
+   "problem": "The narration sync is correct: 'Maschine' at 0.3 s, 'Kabine' at 1.2 s, and ✕ plus 'nicht festgeschraubt' readable at about 2.4 s. The composition is not polished. (1) The left ~41% of the frame (x 0–790 below the title) is dead space, and after ~2.86 s the title fades and it is completely empty. All three callouts are stacked in one column on the right (1480–1770). (2) The 'Maschine' leader runs from the drive across the governor's switch arm (x≈1250, y≈180), which is a near-collision. (3) The 'Maschine' callout repeats the title 'DIE MASCHINE OBEN', which appears 0.4 s later. Partial params fix, test-rendered in rv_sx1/s07a_sheaveL: attach 'Maschine' to part 'sheave' with side:'left'. The callout then sits left of the building at x≈530–685, y≈258, with no title collision, the governor graze is gone and the frame is somewhat more balanced. The leader starts on the sheave's rope wrap, amber on amber, which is acceptable. x 0–530 is still empty, however. This cannot be fixed with params, because the full-focus camera is hard-coded (cx=1110, s=1), and any left callout for 'car' or 'ropes' would cross the car or the rope bundle (both are right-side anchors). Template change needed, shared with s01_b: side-aware anchors for car and ropes, or a full-focus camera that shifts the building away from a one-sided callout column, or an offset_x param."
+  },
+  {
+   "scene_id": "s23_c",
+   "problem": "(1) Misleading pairing: from about 0.8 s to 1.9 s the only callout on screen is 'Puffer', directly under the headline 'DIE EIGENTLICHE RETTUNG' (u030 at 1.08 s). The frame reads 'the real rescue = the buffer', which is the opposite of the message. 'Puffer' is also not spoken in this scene. (2) Subtitle band: the tilt_up camera (scale 1.08, dy -45 to +45) pushes the pit down. From about 2 s the buffers, the 'Puffer' leader anchor dot (y≈932) and the template's small 'SCHACHTGRUBE' text (y≈970) sit inside the bottom 170 px (u080, u095). FIX: drop the Puffer label; the pit stays visible, so 'weiter oben' still reads. Change the scene camera (a scene field, not a param) from tilt_up to 'static'. In full focus the pit floor then stays at y≈900–910 and 'SCHACHTGRUBE' at about 895. Wedge timing ('Schienen' at 2.5 s, rest at 3.3 s) and the Fangvorrichtung/Schienen callouts are good as they are. If the camera cannot be changed, the template needs a change: in drawScreenLabels, tighten the SCHACHTGRUBE guard from py < 1000 to py < 905 (as the floor labels do), and in fixCamera clamp the tilt/zoom for focus 'full' so the pit floor stays above y 905."
+  },
+  {
+   "scene_id": "s25_b",
+   "problem": "The plate now exists and the text is correct: the overlay appears with 'nächsten Termin', the callout 'Prüfplakette / in der Kabine' appears with the word, and there are no numbers. But the subject is still not the shot. The plate box is about 125 px wide on a 1920 px frame, and about 60 % of the frame is empty car wall and shaft lines (u030/u095). The 'nächster Termin' information is a roughly 15 px pulsing amber tick at 12 o'clock that does not read at viewing size. With 12 plain ticks and two white bars, the plate looks more like a gauge or dial than an inspection sticker. Params cannot fix this: the plate focus is capped at sMax 4.2 with G.plateR = 10. Highlighting would spotlight the plate, but drawPlate fills the next-date segment with 's.h ? HLC : COL.amber', so the marker vanishes into the highlight colour. TEMPLATE CHANGE NEEDED: (a) for focus 'plate', draw the plate at about 2× size (plateR ≈ 20 world units, box scaled with it), or raise sMax to about 7 for plate focus with line-width compensation, so the plate is about 250–300 px on screen and fills the right half of the frame; (b) always draw the next-date segment in COL.amber (independent of s.h) and make it about 2 ticks wide with a small outer notch, so highlight can dim the rest while the marker stays distinct. The better_params add a cyan highlight at 'Prüfplakette' to dim the surroundings. They ASSUME change (b); with the current template the amber marker would turn cyan."
+  },
+  {
+   "scene_id": "s26_b",
+   "problem": "Content and timing are very good. The counterweight glows at 'Gegengewicht'. 'in der Regel schwerer' (text about 2.1 s), 'leere Kabine' (about 3.2 s) and 'Bremse versagt' (about 5.0 s) each appear with their words. The runaway starts at 'bei versagender' with no deceleration, and the amber arrows and red shaft-head line read clearly. No numbers; 'Ursache: Gegengewicht' is fair. The only failure is the subtitle band. The tilt_up camera (scale 1.08, dy up to +45) pushes the pit down, so from about 3 s to the end the template text 'SCHACHTGRUBE' (y≈965–978), the pit buffers (y≈930–975) and the tip of the counterweight arrow (y≈915, u097) sit inside the bottom 170 px. They would collide with the subtitles. FIX: set the scene camera (a scene field, not a param) to 'static'. In full focus the pit floor then stays at about 900–910 and 'SCHACHTGRUBE' at about 895, and the car/counterweight motion carries the shot. Params stay unchanged. Optional template hardening: in drawScreenLabels use py < 905 instead of py < 1000 for SCHACHTGRUBE."
+  },
+  {
+   "scene_id": "s31_c",
+   "problem": "The second half is good. The engine breaks through the shaft wall at 'Aufzugsschacht' (3.7 s) and hits the rope bundle at 'und beschädigt' (4.55 s). The ropes show a red frayed damage spot rather than a snap, the engine comes to rest on the car roof, and 'Seile beschädigt' appears with 'Seile'. But 0–3.7 s, 57 % of the scene, is a calm, unchanged shaft shot while the narration says 'Ein Triebwerk durchschlägt das ganze Haus, das andere stürzt in einen …'. Nothing on screen shows the first engine or the fall. Meanwhile the overlay 'TRIEBWERK IM SCHACHT' (template-fixed at 0.5 s) states the result about 3 s before 'in einen Aufzugsschacht' is spoken, so it is ahead of the narration. Params cannot show the first engine. TEMPLATE CHANGE NEEDED: add an optional pass-through engine to the debris feature, e.g. debris:{at:4.55, pass_at:1.0}. It would draw a second radial-engine silhouette that enters the right facade at pass_at (red crack + amber burst), crosses the upper floors horizontally behind the shaft in X-ray style over about 1.2 s, and exits the left facade with a second crack. That fills 'durchschlägt das ganze Haus' (0.46–2.38 s). The existing shaft engine keeps its current timing. Also change on_screen_text (scene field) to a label that does not pre-empt the narration, e.g. 'Zwei Triebwerke' ('Ein Triebwerk … das andere'). The current params are otherwise correct, so better_params = current params; add pass_at once the template supports it."
+  },
+  {
+   "scene_id": "s32_b",
+   "problem": "Narrative sync is now right. The damaged spot flickers from 'beschädigte'. Ropes snap at 'reißen' (1.5 s), the free fall starts at about 2.3 s ('Kabine stürzt'), and the car hits the pit at 'Untergeschoss' (3.55 s) with flash and shake. The 'Untergeschoss' callout appears with the word, 'SCHACHTGRUBE' is suppressed, and there are no numbers. Failure: the climax sits in the subtitle band. The slow_push_in camera scales about the frame centre by up to 1.1, which moves the pit floor from about 910 to about 945. At impact and after (u080/u095), the car's lower edge, the compressed amber buffers, the impact flash and the 'Untergeschoss' anchor dot (y≈918) all sit inside the bottom 170 px. Subtitles would cover the exact crash point. FIX: set the scene camera (a scene field, not a param) to 'static'. The pit floor then stays at about 900–910, the resting car sits at about 790–900, and the fall itself carries the motion. Params stay unchanged. Minor, acceptable: the overlay 'Beschädigte Seile reißen' is readable about 0.7 s before 'reißen', within the same clause."
+  },
+  {
+   "scene_id": "s33_a",
+   "problem": "The timing and mechanism are good. The '?' badge at the safety gear is fully in on 'Fangvorrichtung?' (0.93 s), the governor rope turns red on 'ebenfalls beschädigtes', and the callout 'Begrenzerseil beschädigt?' is readable just as 'Begrenzerseil' is spoken (6.9 s). The subtitle zone stays free, and the close-up adds to s32_b's full-view fall rather than repeating it. One on-screen fact problem remains: the floor labels read '5. OG', '4. OG', '3. OG' and '2. OG' while the car falls, but this is the Empire State accident, where the car fell about 75 storeys (s35_a says 'rund fünfundsiebzig Stockwerke'). Viewers can read the labels as 'the car fell from the 5th floor'. Fix: floor_labels:false. The floor slabs still scroll, so the sense of falling stays, and nothing else changes (checked in scratchpad/rv4_s33a_nofl/shaft_xray_sheet.png). Minor note, no action needed: the governor turns red on overspeed at about 2–3 s. This is physically consistent, since it detects overspeed but the damaged rope cannot pass the trip on, and it fits the story that follows."
+  },
+  {
+   "scene_id": "s34_b",
+   "problem": "The content and sync are now right. The rope coil grows on 'Seil … aufgehäuft', the car lands at 2.95 s on 'federte', the buffers no longer glow, the air escapes and the hatching fades on 'Luftdicht ist aber kein Aufzugsschacht', and both caveats appear in sync with their words. Nothing is ahead of the narration, and the subtitle zone is free. The remaining fault is the layout. From 7.4 s on, three callouts are stacked on the left: 'Schacht nicht luftdicht', 'Luftpolster' and 'Kolbeneffekt meist deutlich schwächer'. The 'Luftpolster' and 'Kolbeneffekt' leaders converge on the same dot at shallow angles and cross the counterweight and its spring buffer. The right side carries only the rope callout, so the final frame is cluttered and lopsided. Fix: anchor 'Kolbeneffekt meist deutlich schwächer' to part 'car'. The car is the piston, so this is also the better target. The callout then sits in the free right column above the rope callout, clear of the escape arrows (at y≈603, box top ≈618). The left side keeps only two callouts, and no two leaders share an anchor (checked in scratchpad/rv4_s34b_car/shaft_xray_u087.png and the sheet). 'Schacht nicht luftdicht' still points at the pit corner rather than the door gaps. That is a template limitation: there is no door-gap anchor. The escape arrows carry the point, so it is acceptable."
+  },
+  {
+   "scene_id": "s36_a",
+   "problem": "The narration sync and facts are correct. The rope sequence starts on 'mehreren', the whole bundle is cyan by 'Europa', and the amber callout 'in Europa: je Seil mindestens 12-fache Sicherheit' is readable on 'zwölffacher'. EN 81-20 sets a minimum safety factor of 12 per rope for traction drives with three or more ropes, and 6 ropes are shown. The fault is framing: with floor 3, the ropes focus puts the frame's bottom edge only 70 px below the rope hitch, and slow_push_in pushes further down. As a result, the cabin's lower half (passengers' legs, car floor, safety gear, y≈910–995) sits in the subtitle zone in every frame, and the counterweight is clipped at the bottom edge. The car is the subject of 'Die Kabine hängt …', so subtitles would cover it. Fix: floor 5. The rope framing then includes the whole car. With slow_push_in the car's bottom edge is at y≈893 at the end, and with a static camera at ≈862. The subtitle zone is free, the counterweight leaves the frame, and all three callouts stay readable on the right (checked in scratchpad/rv4_s36a_f5/shaft_xray_u088.png and u096.png). Small side effect: the 'mehrere Tragseile' box touches the governor stand in the machine room, which is minor and not the subject. For more clearance, floor 4.8 with camera static gives a ≈20 px gap to the governor and the car's bottom edge at ≈897 (scratchpad/rv4_s36a_f4.8_static). Do not combine 4.8 with slow_push_in: that puts the car's bottom edge at ≈932, inside the subtitle zone."
   }
  ],
  "gaps": [
+  {
+   "scene_id": "s15_b",
+   "missing": "In range mode, the lower bound (lo) and the upper value share one reveal beat (countAt). The lo value cannot appear on its own word before the upper value, and with from=lo the upper slot shows the misleading intermediate '1,2 bis 1×' at full opacity before it rolls.",
+   "suggestion": "Add a separate loAt beat, and keep the hi slot, separator and unit hidden until countAt (or show only unlit ghost digits there). Alternatively, start the hi counter from lo with its own decimals, so the transient reads as '1,2 bis 1,2'.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s13_b",
+   "missing": "The unlit ghost digits ('8'/'88') before countAt cannot be turned off. In s13_b a faint '8' shows for 1.5 s, in a scene where an 8-fach statement was just cut from the narration.",
+   "suggestion": "Add a ghost:false param, or a ghost glyph option such as '0' or segment outlines.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s15_b",
+   "missing": "There is no scene-specific illustration: graphic 'silhouette_on_scale' (a person on a scale with a rising needle) is ignored.",
+   "suggestion": "Add an optional small side pictogram slot (silhouette on scale, rope, cabin) linked to the gauge progress.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s15_b",
+   "missing": "Only one sublabel and one footnote can carry sequential caveats. There is no list of timed caption lines for scenes that add 2 or more qualifiers one after another.",
+   "suggestion": "Add a 'notes': [{text, at}] array rendered as stacked small lines under the label.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s05_c",
+   "missing": "While counting up to a 2-digit value, the single-digit phase sits off-centre, with a visible gap between the ≥ prefix and the digit.",
+   "suggestion": "Centre the visible digits dynamically while leading slots are blank, or let the prefix track the leftmost visible digit.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s02_a",
+   "missing": "When a label is set, p.text (on_screen_text) is only drawn if it is used as a kicker (kicker:true). An overlay that is not a name plate cannot be shown alongside a label.",
+   "suggestion": "Add a textPos option (kicker | label | hidden), or document that on_screen_text should be empty or equal to the kicker for this template.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s23_b",
+   "missing": "A second visual for comparisons: the storyboard's energy bars (tiny 'Auslegung' bar vs huge 'nach 10 m freiem Fall' bar). The gauge can only show one number.",
+   "suggestion": "Add an optional 'compare' param, e.g. {bars:[{label,value},{label,value}], at}. It would draw two horizontal bars on a shared scale, beside or under the gauge, each growing in at its own time.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s23_b",
+   "missing": "Full layouts (kicker + label + sublabel + footnote) fill y 96-897, so any scaled camera (slow_push_in, slow_pull_out, pan, tilt: 1.08-1.1) moves the footnote into the subtitle zone (about 910-916 px). All four scenes had to use a static camera.",
+   "suggestion": "Make the layout camera-aware: read p.scene.camera, and for scaled cameras shrink the block so that the scaled bottom stays at or above 905 px (for example BOT about 860 and top about 130).",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s30_a",
+   "missing": "Setting 'max' always labels both scale ends. With max:30 (a stopwatch face), '30' shows from 0.4 s, long before it is spoken at 8.36 s.",
+   "suggestion": "Add 'scaleLabels': false | {at: seconds}, so the range can be set without labels, or the labels can be timed.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s30_a",
+   "missing": "No stair or clock icon and no periodic icon flash (storyboard: 'bei jedem Umlauf leuchtet ein Treppen-Icon auf'). Before the count starts, the number slot only shows unlit 88 digits, which is 8 s in this scene.",
+   "suggestion": "Add an optional 'icon' param (stairs, clock, person) drawn in the dial before the count, which flashes on each loop ping. Alternatively allow a 'preValue' text in the number slot before [1].",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s30_a",
+   "missing": "The label always wipes in from the centre, so its middle and end words appear before its first word. A key word at the end of a label (here 'Treppenunfall') can show about 0.35 s before it is spoken.",
+   "suggestion": "Add labelReveal: 'center' | 'ltr' (left-to-right wipe), or word-level 'at' timing for label lines.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s30_a",
+   "missing": "When the sublabel is timed before the label, the divider and sublabel appear under an empty label area for several seconds.",
+   "suggestion": "If the sublabel starts before the label, draw it in the label position (or hide the divider) until the label arrives, then slide it down.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s15_b",
+   "missing": "The scene-specific graphic 'silhouette_on_scale' (a person on a scale inside the car) is still not supported. The range band on the gauge stands in for it.",
+   "suggestion": "Add an optional small silhouette-on-scale icon inside the gauge, or use a template that shows the car, if the storyboard insists on the silhouette.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s05_c",
+   "missing": "While counting, a 1-digit value sits in the ones slot, half a digit right of centre, until the tens digit rolls in (odometer behaviour). This is not a problem with a prefix above the number, and a left prefix now moves up to the digit, but the number block itself does not re-centre.",
+   "suggestion": "Optionally centre on the visible digits while counting (slide x0 the same way as the new prefix-hug offset), if reviewers ask for it.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s05_c",
+   "missing": "Edge case: when 'from' is negative and there is a left prefix, the reserved minus slot still leaves a gap once the value is positive. The new prefix hug is turned off when negative numbers are involved. No real scene uses this.",
+   "suggestion": "Also make the minus slot and the prefix move up to the first visible digit when the value is negative.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s04_c",
+   "missing": "Explicit beats[0]=0 (and any panel at=0) is clamped to 0.3 s, so passing the documented default 0 delays the panel entrance and leaves the first 0.3 s empty.",
+   "suggestion": "Clamp beats[0] and panel.at to [0, d-0.3] instead of [0.3, d-0.3], or treat 0 as 'use default'.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s04_c",
+   "missing": "beats[3] ties the winner highlight to the side strike. There is no separate global highlightAt/strikeAt, so I needed strike:false plus per-point strikeAt as a workaround.",
+   "suggestion": "Add params highlightAt and strikeAt (defaulting to beats[3]).",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s11_a",
+   "missing": "An analogy panel cannot show a placeholder or frame before its title and visual. Delaying the second analogy until it is spoken leaves half the screen empty for ~3 s, and entering it early would show 'Kettenkarussell' before it is said.",
+   "suggestion": "Add panel.titleAt/contentAt (the frame enters at panel.at, and the title and icon come later), or a 'ghost' entrance state with dimmed chrome and a '?' placeholder.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s14_b",
+   "missing": "The stat frame appears at tVis with nothing in it until stat.at, and the unit suffix always appears together with the number, so it cannot follow the spoken unit word.",
+   "suggestion": "Draw a dim placeholder ('– – cm/s') or delay the frame reveal to about stat.at-0.3, and add stat.suffixAt.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s20_c",
+   "missing": "When one panel has a text row and the other has none (visual only), the second panel keeps an empty strip at the bottom. The bar axis tick labels (up to '12 m') are visible long before the first height is spoken.",
+   "suggestion": "Vertically centre the visual in a panel without rows (or stretch the bar box), and add bar.axisAt to fade the tick labels in with the first value.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s34_a",
+   "missing": "The overlay (on_screen_text box) always appears at 0.5 s. A caveat like 'Nur rekonstruiert' (spoken at 2.75 s) or 'Soweit rekonstruierbar' (s35_b, spoken at 5.07 s) cannot be timed to its words.",
+   "suggestion": "Add params.textAt (seconds) to control when the overlay slides in, clamped to [0.3, d−0.8].",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s34_a",
+   "missing": "The heading entrance is fixed at about 0.15·k s and cannot be delayed. The chip tag has no own time and only follows the panel entrance.",
+   "suggestion": "Add headingAt, plus tagAt per panel.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s30_b",
+   "missing": "stat.label fades in together with the number, so a label spoken later ('ernsthafte Verletzungen' comes 0.8 s after 'siebzehntausend') appears early. I worked around it with separate points. The count-up also shows odd intermediate values (e.g. 931.371) for a spoken 'über eine Million'.",
+   "suggestion": "Add stat.labelAt, and a stat.count option ('none' for a fade/pop without counting, or 'rounded' steps).",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s28_b",
+   "missing": "highlight is a winner/loser verdict: it always dims the other panel by 20%. Moving the viewer's focus to the panel being narrated ('Wer?' → 'Woran?') without implying a loser is not possible.",
+   "suggestion": "Add a focus mode, e.g. focus:[{side,at}], that glows one panel without dimming the other, or add a highlightDim:false flag.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s35_b",
+   "missing": "A point is revealed as one unit. An enumeration spoken over 1.1 s ('Becken, Rücken und Hals gebrochen') cannot build word by word or phrase by phrase.",
+   "suggestion": "Allow point.parts: [{text, at}] that append inline within one row.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s28_b",
+   "missing": "The people visual is capped at 184 px high and the bracket label is small (24 px or less). In a text-heavy layout the silhouettes are rather small for the key message ('die Hälfte arbeitete dort').",
+   "suggestion": "Allow people.size/scale, or raise VH.people when the other panel has no visual, and allow a larger label size.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s30_b / s35_b (passed scenes)",
+   "missing": "Not a defect, a side effect to note: automatic solo centring also applies to these two passed scenes, because their right.at is 2.15 s and 4.9 s. Their first panel ('Treppe' stat / 'Oliver, 1945') is now centred until the partner enters, then slides to its side. The divider and badge now arrive with the partner.",
+   "suggestion": "I checked both with previews at their real durations and cameras (scene-qa2/s30_b_compat, s35_b_compat; s30_b uses slow_push_in). Both hand over cleanly with no overlap and no longer have an empty half-frame. If the old look is wanted, set \"solo\": false on that scene. s04_c (0.45 s gap), s20_c and s28_b are unaffected.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s11_a",
+   "missing": "The two rotary drawings are not phase-locked. They reach the same speed and dial reading, but the carousel spins up about 2.3 s after the governor, because its title must not come before 'Kettenkarussells'. Both swinging out at the very same moment is only possible if the carousel is on screen from the start (reviewer fallback right.at 0.3).",
+   "suggestion": "Accept. The late spin-up lands on 'Sitze' and matches the narration better. The end state is visibly synchronous (same DREHZAHL, same swing).",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s34_a",
+   "missing": "Rows sit on shared y-positions, so the lower third of the centred Kabine card has space reserved but empty for its two rows from about 4.4 s until 'wirkte vermutlich wie ein Kolben' at 5.95 s. This is a known limitation.",
+   "suggestion": "Possible later improvement: while the panel is solo, shift its visual down to the middle of the free body height and slide it back up as the rows arrive. Not needed to pass.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s09_b",
+   "missing": "A continuation or 'start built' mode. Every element re-animates from scratch: the time clamp is at least 0.3 s, and the axes, panel and title intro always run. A scene that continues the previous graph (same layout) therefore dims and redraws its curve during the 0.6 s crossfade.",
+   "suggestion": "Add params.start_state:'done' (or continue:true). Series, reference lines, bands and annotations without their own 'at' would then be fully drawn from t=0, with no intro sweep. Only items with 'at' would animate.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s09_b",
+   "missing": "Blink and the label cannot be timed separately. blink starts when the marker pops, and the sub line is only 18 px mono. So a marker cannot stay visible from the start and then blink or show a big number on cue. I had to drop the 'spätestens' label for the first 2.5 s.",
+   "suggestion": "Add annotations[i].blink_at, plus a way to make the delayed sub line large (sub_size, or label2 at 24 px).",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s16_a",
+   "missing": "Annotation label boxes always stack from the top of the plot. The 'gut 11 cm' box sits at the 60 cm level, about 330 px above its point near the bottom, joined only by the dashed marker.",
+   "suggestion": "Add a placement preference such as annotations[i].place:'near'|'top'|'above'|'below'. With 'near', scan outwards from the point's own y first.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s15_a",
+   "missing": "Reference-line and y_band labels are fixed at 19 px. The narrated key values ('1/5 g: ein Fünftel', '1 g: volle Erdbeschleunigung', 'Obergrenze: 1,5 m/s') come out small next to the 24 px annotation labels.",
+   "suggestion": "Add ref_lines[i].size or emphasis:true (for example 24 px bold in a box).",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s15_a",
+   "missing": "The y_unit is only added when the unit text does not already appear inside y_label, and the check is a plain substring match. So 'Verzögerung' plus y_unit 'g' shows no unit, because 'Verzögerung' contains the letter g.",
+   "suggestion": "Check only for an existing ' in <unit>', '(unit)' or '[unit]' ending (unitFrom), not for the unit anywhere in the label.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s22_b",
+   "missing": "The overlay always appears at a fixed 0.5 s and is upper-cased, so units become 'M/S' or 'MS'. An overlay therefore cannot be synced to a later word, and it cannot safely carry a number with a unit.",
+   "suggestion": "Add a params.text_at (or overlay_at) delay, and keep unit tokens (m/s, ms, cm, g) in their original case when upper-casing.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s09_b",
+   "missing": "The engine does not tell a template anything about the previous scene. With carry_in, phase-matching the blinks, rings and light sweeps needs hand-computed negative at values (at_new = at_old − previous duration), and carry_in needs the previous duration as a number.",
+   "suggestion": "Pass the previous scene (its template, params, duration) to p in engine.js, e.g. p.prev. Then carry_in:true could derive the offsets itself.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s09_b",
+   "missing": "During the first 0.3 s of the 0.6 s crossfade the engine renders the incoming scene frozen at t=0 (t = max(0, T − start)), so the incoming layer's ambient motion (blink, dust) stands still for those 0.3 s.",
+   "suggestion": "Let the engine pass the negative tRaw (or render the incoming scene at T − start without clamping) so continuation templates can animate through the whole crossfade.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s15_a",
+   "missing": "The graph panel has a fixed size for scale 1.0 (bottom at y 904). Any zoom camera (slow_pull_out, slow_push_in, pan and tilt at 1.08) pushes it into the overlay box and the subtitle zone. Only 'static' is safe.",
+   "suggestion": "Add a camera-safe layout mode (a smaller PANEL when scene.camera zooms, e.g. inset by 5 %), or have the engine limit zoom for templates that declare fullFrame:true.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s22_b",
+   "missing": "Same fixed-panel and zoom-camera conflict as s15_a; worked around with the static camera.",
+   "suggestion": "Same as s15_a: a camera-aware panel inset or an engine-side zoom limit.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s35_a",
+   "missing": "The big headline readout is always m/s (140 px). The km/h result the narration actually speaks ('über 250 km/h', '≈ 160') is squeezed into a ~186 px cell, so 'über 250' renders at about 62 px, and 'mehr als 250' would be even smaller. The unspoken 72,8 / 44,3 m/s dominates the payoff frame.",
+   "suggestion": "Add `primary_unit: \"kmh\"`, or `headline: \"kmh\"`, to swap the cells so km/h (or the result_label) is the big number and m/s the small one. Alternatively add `hide_ms: true`.",
+   "severity": "major"
+  },
+  {
+   "scene_id": "s19_b",
+   "missing": "The time scale is constant, so the live km/h counter cannot pause or linger on a marker value. At the spoken 'fünfzig' the live readout already shows 57–61 km/h; only the frozen chip says ≈ 50.",
+   "suggestion": "Add `markers[i].hold` (s) to briefly slow the time factor around a marker pass (variable time scale). Or add a per-marker option that keeps the km/h cell showing the marker value for N seconds.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s35_a",
+   "missing": "Between impact (beat [1]) and the result crossfade, the exact live value (262 km/h / 159 km/h) always flashes for about 0,2–0,45 s, even when result_label is meant to replace it.",
+   "suggestion": "Add an option `result_at_impact: true` that shows result_label directly at impact with no exact-value frame, or let beat [2] = beat [1] mean an instant swap.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s35_a",
+   "missing": "The ruler only shows metres, and its fixed tick labels are visible from the start (e.g. '250' on the 0–300 m scale, a different quantity from the spoken 250 km/h). There is no floor scale for 'rund 75 Stockwerke'.",
+   "suggestion": "Add `ruler_unit: \"floors\"` with `floor_height_m` (e.g. 3,6), to label the ruler in Stockwerke, or `ruler_labels: false`.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s19_b",
+   "missing": "The air-resistance note and panel title fade in with the build-in (~0,8 s) and cannot be timed to the spoken word ('rechnerisch' at 2,95 s).",
+   "suggestion": "Add `air_label_at` (s) / `title_at` (s), or let `beats` accept an entry for the note.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s19_b",
+   "missing": "The camera zoom (1,08 for tilt/pan, 1,1 for push/pull) is not compensated. The panel's right edge reaches about 1908 px, the pit and SCHACHTGRUBE fall into the 170 px subtitle band, and TRAGSEIL GERISSEN fades out under the overlay. Both scenes therefore had to use a static camera.",
+   "suggestion": "Scale the layout by 1/zoom (or inset margins) when a camera move is active, or offer a template-internal gentle drift that respects the 90 px margins and the subtitle band.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s19_b",
+   "missing": "Between the hold at 10 m and the impact, the live km/h counter runs continuously from 50 to 159 during 'Nach hundert Metern wären es etwa'. The exact 159 then shows for about 0,25 s at impact before '≈ 160' replaces it.",
+   "suggestion": "Acceptable as is: it is a continuous count-up and 159 ≈ 160. If needed, add an option that shows the rounded value at the moment of impact when result coincides with impact.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s35_a",
+   "missing": "When the overlay covers the shaft and the car starts at the top of the ruler, only about 40 px of intact rope is visible above the car. After the snap, the upper rope end retracts fully under the box, and only the red dot at the snap point stays visible.",
+   "suggestion": "Acceptable. The alternative would be moving the whole shaft graphic lower, which costs ruler height.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s02_c",
+   "missing": "breakRope snaps only one of the 4 ropes. The narration says 'Wir kappen gleich in Gedanken alle Seile', and there is no way to cut all ropes or a chosen number of them.",
+   "suggestion": "Add breakRope:\"all\" or breakCount:n (with optional per-rope stagger), for example the car-side ropes snapping one after another about 0,08 s apart, each with its own sparks and a single SEILBRUCH label. Optionally add carFall:true to let the car drop after an all-rope break.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s02_c",
+   "missing": "The stopwatch readout always scrambles its digits for about 0,6 s after appearing. Single frames then show random, unnarrated values such as '0,048 s' before settling on '0,000 s'.",
+   "suggestion": "Add stopwatch.decode:false, or scramble with non-numeric glyphs such as '–,––– s' or block characters instead of random digits, so no frame ever shows a plausible wrong time.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s02_c",
+   "missing": "Blueprint part labels are fixed at 15 px mono with alpha 0,7. On a 1080p YouTube frame, labels such as FANGVORRICHTUNG and SEILBRUCH are barely readable, although the narration relies on them ('keine Sicherung griff').",
+   "suggestion": "Add labelSize (for example 15–24) and labelAlpha params, or an emphasis flag per label ({part:'fang', emphasis:true}) that draws that label larger and in amber.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s37_a",
+   "missing": "In layout 'left' the GESCHWINDIGKEITSBEGRENZER label (side −1) is always filtered out because it overlaps the text block. There is also no 'puffer' part. A recap of the whole safety chain (Begrenzer → Fangvorrichtung → Puffer, plus Bremse) can therefore only label Bremse and Fangvorrichtung.",
+   "suggestion": "Let a label spec override its side ({part:'begrenzer', side:'right'}) so it routes to the right column. Add a 'puffer' part (with the view or blueprintScale able to include the pit), or add labels:'chain' as a preset for the safety chain.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s11_b",
+   "missing": "Label keyword bug: partOf() matches by substring, so the English part name 'spring' matches the ring part's keyword 'ring'. {\"part\":\"spring\"} is silently read as the ring label and dropped as a duplicate, so no 'Feder' tag appears.",
+   "suggestion": "In partOf(), check exact pd.id matches for all parts before running the substring keyword loop, or match whole words only. Workaround used: part 'feder'.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s11_b",
+   "missing": "From about 3.4 s to 6.0 s ('Das ist reine Mechanik') nothing new happens in the mechanism itself. There is no dedicated visual for 'rein mechanisch', such as briefly highlighting all the mechanical load-path parts (flyweight, spring, pawl, ring, clamp) as one chain.",
+   "suggestion": "Add an optional beat or param such as mech_chain_at: a travelling amber glow along flyweight → pawl → ring → rope → clamp with an optional small caption. Workaround used: a 'Feder' tag timed to 'reine Mechanik'.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s36_b",
+   "missing": "'lässt ein Schalter die Bremse einfallen' is shown only as the switch opening, 'Motor aus' and a text line. The drive brake itself is never shown engaging.",
+   "suggestion": "Add an optional small brake glyph in the switch panel (brake shoes closing on a drum, with an amber flash at [1]+0.3 s), e.g. show_brake:true.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s11_b",
+   "missing": "A card's label and subline always appear together. The subline cannot have its own 'at', so a two-part message timed to two phrases ('reine Mechanik' … 'ohne Strom') cannot be staged in one card.",
+   "suggestion": "Support no_power_icon.sub_at (and analogy.sub_at) so the subline fades in separately.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s36_b",
+   "missing": "If a clamp label's 'at' is less than labDur before beat [3], the tag box briefly shows 'Seilklemme' and then flips to 'Seil geklemmt', which reads as a flicker.",
+   "suggestion": "When the label reveal overlaps [3] by less than about 0.3 s, show hot_text from the start (or cross-fade the two texts). Workaround used: set the clamp text to 'Seil geklemmt'.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s29_b",
+   "missing": "The scope line ('für alle, die nicht am Aufzug arbeiten', spoken at 1.8 to 3.3 s) can only appear inside the result tile together with the result label. It cannot be shown in sync with its words before the result.",
+   "suggestion": "Add scope_at (or a separate BEATS entry) so the scope line appears on its own, for example under the counter, before the result tile.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s29_b",
+   "missing": "The decade ladder shows its end label 10^exp from the first frame, and the counter shows '1 von 10 Fahrten' at the start. The target magnitude is partly visible before it is spoken.",
+   "suggestion": "Option to reveal ladder labels only when the marker passes them, and to hide or dim the counter word until beats[1].",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s06_b",
+   "missing": "The readout tile's hanging-load symbol shows the unit glyph 't' as soon as the tile appears (beats[1]), before 'Tonnen' is spoken at beats[2].",
+   "suggestion": "Show the unit glyph with the value beat, or add then_readout.symbol ('t' | 'F' | '') so it can be neutral until the value.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s06_b",
+   "missing": "items[].dim_at starts the dimension line; the dimension text only appears about 0.5 s later (55 % of dimDur). The actual text time is not obvious from the API note 'dimension appears'.",
+   "suggestion": "Make dim_at the time the dimension text is readable, or document the offset (text ≈ dim_at + 0.55·dimDur).",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s06_b",
+   "missing": "With then_readout, the layout reserves the tile column from t=0. The rope and pencil sit left of centre and the right third stays empty for 6.6 s until the tile appears.",
+   "suggestion": "Centre the objects across the full width until the tile beat, then ease them left, or allow a readout layout option 'below'.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "all",
+   "missing": "With ownsText the overlay always appears at 0.5 s. Any number or result in on_screen_text is revealed before it is spoken, so overlays have to be generic.",
+   "suggestion": "Support params.text_at (seconds) so the overlay can be timed to a word, for example the key number.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s16_b",
+   "missing": "Unsupported key 'reference' (known). The layout below y≈860 ('cm' label at 892, 'Führungsschiene' at 868) enters the subtitle zone under any camera zoom or tilt, so the scene has to use a static camera.",
+   "suggestion": "Raise the vertical_ruler geometry (y1) by about 40 px so camera moves stay above y 910.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s14_c",
+   "missing": "The readout panel (panel1) always shows example numbers: speed tile, live g values, BREMSWEG mm and the a(t) chart with the 'zulässig Ø 0,2-1,0 g' band. It has no option to show only the title and status. Turning it off (panel:false) leaves the whole upper-right quadrant empty, and the energy panel or label card stays in the lower slot (P2Y=645).",
+   "suggestion": "Add a numberless panel mode (e.g. readouts:\"title\"/\"status\", or hideValues:true) showing only the title, subtitle, status pill and an optional unlabelled a(t) curve. Or, when panel:false, move or vertically centre panel2 (energy, label, topview) so the right half stays balanced.",
+   "severity": "major"
+  },
+  {
+   "scene_id": "s14_c",
+   "missing": "Energy bars follow v²/2, so the kinetic bar is about 75% gone halfway through braking. When the narration describes the conversion mid-braking ('verwandelt die Bewegungsenergie'), the panel is already mostly drained as it appears.",
+   "suggestion": "Add an option such as energyEase:\"linear\" or an energyAt window, so the bars can be animated across a given time span independently of the physics profile.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s18_a",
+   "missing": "Every non-static camera (push x1.1, tilt/pan x1.08) pushes the right-hand panels to x≈1900-1917. With tilt, the lever bar or label reaches the subtitle band (y≈908-941). The layout spans about 160-1844 px, which is too wide for any zoom within the 90 px margins, so the storyboard cameras slow_push_in and tilt_up had to become static.",
+   "suggestion": "Add a compact layout option (e.g. layout:\"compact\" or a margin param) that scales or insets the whole composition by about 0.9 so camera moves stay inside 90 px margins and above the subtitle band.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s26_c",
+   "missing": "With bidirectional:true and panel:false, the upward overspeed before arrowsAt is shown only by unlabelled red chevrons. drawDirection skips the 'Fahrt' label in bi mode, and the 'ÜBERGESCHW. AUFWÄRTS' status only lives in the disabled panel.",
+   "suggestion": "Draw a small 'Fahrt aufwärts' or 'ÜBERGESCHW. AUFWÄRTS' tag next to the chevrons when the panel is off (or always in bi mode before the double arrow appears).",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s14_c",
+   "missing": "The energy panel's footnote ('Wärme = Bewegungs- + Lageenergie der Bremsstrecke') cannot be hidden, so it adds a fact that is not in the narration.",
+   "suggestion": "Add an energyNote:false (or energyFootnote string) param.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s14_c",
+   "missing": "The energy panel always shows the real energy state (it falls with v²). When the panel appears late (panel2At 3.2 s, mid-braking), the kinetic bar is already about 35% drained at fade-in, and nothing can start the energy animation at the moment the panel appears.",
+   "suggestion": "Leave as is, because it is physically honest. If wanted, add an option such as energyFrom:'reveal' that eases the bars from full kinetic energy to the live state over about 0.5 s after panel2At.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s21_b",
+   "missing": "The comparison-mode principle chip (ENERGIESPEICHERND / ENERGIEVERZEHREND) cannot be hidden. mode:\"\" falls back to the default, and the chip colour stays fixed per type, so the hydraulic chip is red even when it only says HYDRAULIK. This forces unspoken facts, or a red 'danger' colour, onto the oil buffer.",
+   "suggestion": "Support buffers[i].mode:false or a global show_mode:false to hide the chip. Add buffers[i].mode_color (amber|cyan|green|red|#hex) and mode_at so the principle can be revealed when it is spoken.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s22_a",
+   "missing": "The dimension caption cannot be switched off (the workaround is caption:\" \"). With short strokes (7 cm at 1 m/s), the caption placed at ym-24 moves above the bracket and onto the Fahrkorb beam.",
+   "suggestion": "Accept caption:false or \"\". Place the caption below the value (or next to the note) when the bracket is shorter than about 60 px.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s22_a",
+   "missing": "The speed tag '↓ 1 m/s' stays static on the car while it hovers, while it rests compressed and while the spring car rebounds upward. The down arrow then contradicts the visible motion, and the tag cannot be told apart as rated speed.",
+   "suggestion": "Add speed_until or an option to fade the tag after touch-down. Optionally allow a caption such as 'Nenngeschw.' so the tag reads as rated speed rather than current speed.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s22_a",
+   "missing": "In side_by_side mode every car hovers motionless from about 0.15 s until shortly before its hit_at, so the second car waits about 3.5 s with no motion.",
+   "suggestion": "Add a gentle idle (slow creep or a slight bob), or an option for a car to enter from above just before its hit, while the buffers stay visible from the start.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s21_b",
+   "missing": "Under pan or tilt cameras (scale 1.08), the label chips at M_LABEL_Y=855 reach about y 907, which touches the subtitle-reserved zone (bottom 170 px, y > 910).",
+   "suggestion": "Move M_LABEL_Y up by about 15 px, or reduce the gap between the floor and the chips, so there is a margin under the 1.08–1.1 camera scales.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s22_a",
+   "missing": "While the overlay fades in at about 0.7 s, the text briefly sticks out of its growing box. The engine draws this overlay, not the template.",
+   "suggestion": "Fix in engine.js: clip or delay the overlay text until the box has finished growing. This cannot be fixed inside buffer.js.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s07_c",
+   "missing": "The balance panel draws the counterweight pan label 'Kabine + a–b %', the load-bar label 'Ausgleich a–b %' and 'BELADUNG 0 %' as soon as the panel opens, with no separate timing. The scale cannot appear on 'so schwer wie' (2.2 s) without giving away '40–50 %' before 'vierzig' (4.32 s), so the panel had to open late.",
+   "suggestion": "Time-gate the numeric pan and bar labels, either with the rest of the equation (tEq2 / beat 2) or with a new `numbers_at` override. Until then show the counterweight pan as 'Gegengewicht' only.",
+   "severity": "major"
+  },
+  {
+   "scene_id": "s07_c",
+   "missing": "In balance mode the right column stays completely empty until balance_at, because grooves and inset are ignored. When the panel has to open late, the right half of the frame is empty for about 4 s right after s07_b's insets fade out.",
+   "suggestion": "Allow the grooves/towel insets (or a slim placeholder) in balance mode until balance_at, then slide them out as the panel slides in, e.g. `hold_insets_until` or `inset_out_at`.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s07_c",
+   "missing": "The part of the equation after '+' always types over a fixed 0.8 s, so the last word ('Nutzlast') appears about 0.9 s before it is spoken. It cannot be spread over the spoken phrase.",
+   "suggestion": "Add `equation_rest_duration` (seconds), or per-word 'at' times for the equation.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s07_c",
+   "missing": "During the load ramp the counter and the car-pan label show intermediate percentages that are not in the narration (e.g. '+ 1 % Last', '3 %').",
+   "suggestion": "Add an option to hide the numeric readout while the ramp runs and show only the target value once it is reached (e.g. `load_readout: 'final'`).",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s07_b",
+   "missing": "The groove inset caption ('Sitzrille mit Unterschnitt' / 'Keilrille' / 'Rundrille (Sitzrille)') cannot be hidden, so a technical term not in the narration always appears. The towel inset also hard-codes the weight labels 'Kabine' and 'Gegengewicht', which introduces the counterweight one scene before the narration names it.",
+   "suggestion": "Add `groove_caption: false|string` and `towel_labels: [left,right] | false`.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s07_b",
+   "missing": "The 'sheave' callout anchor sits on the rope wrap at 212° on radius R, so the 'Treibscheibe' dot lands on the ropes rather than on the sheave body. Only the box position (x,y) can be overridden, not the anchor point.",
+   "suggestion": "Anchor 'sheave' on the sheave face (e.g. a spoke or the hub), or accept `px/py` anchor overrides in labels.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s07_c",
+   "missing": "The balance-mode panel still cannot open before beat 0 without showing the counterweight highlight. So between the end of the crossfade (about 0.3 s) and 1.35 s, the right column is empty and the picture is the s07_b end pose.",
+   "suggestion": "Accept this. It is about 1 s while 'Am anderen Ende hängt das' is spoken, and the counterweight is introduced on beat 0. If needed later, a separate panel_at param could open the panel frame earlier and keep the counterweight highlight on beats[0].",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s14_a",
+   "missing": "Several notes on one row are chained horizontally, never stacked vertically. A second note on the Fang row would run out of width, so the contrast 'statt schlaffes Seil' had to go on another row (Tragseile).",
+   "suggestion": "Add a note placement option such as 'stack:\"below\"|\"above\"' (or automatic vertical stacking when the chained x would exceed box.x1 - 250), which puts the note under the previous note on the same row with a short connector.",
+   "severity": "major"
+  },
+  {
+   "scene_id": "s21_a",
+   "missing": "Chained notes on a short-card row reach the right safe edge after two notes (right edge ≈1828 px). There is no way to replace or hide an earlier note (no 'until'/'out' time), so the Puffer row cannot carry a third fact.",
+   "suggestion": "Support notes[i].until (fade out) or 'replace:true' (the new note takes the previous note's slot on that row). Also add vertical stacking as above.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s05_a",
+   "missing": "Outline mode always shows every card label from the moment the plate appears. There is no way to show the empty roadmap with neutral placeholders and reveal each name when the layer is named or lit, so all six layer names are visible before they are introduced.",
+   "suggestion": "Add 'label_reveal':\"with_light\" (card shows only the number or '?' until tLit) or a per-layer 'label_at'.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s05_a",
+   "missing": "The newest sync pulse holds amber indefinitely, with no release time. Two layers cannot hold amber together through sync alone. A workaround was needed: an extra pulse on Begrenzer to clear the hold on Prüfungen, plus emphasis for Fang.",
+   "suggestion": "Add 'sync_hold': seconds (or false) and allow the same 'at' for several sync items to share the hold. Alternatively add 'focus':[refs] with 'at' to set a group amber focus.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s14_a",
+   "missing": "The heritage start caption 'Sperre von Otis' fades out at heritage.at+0.8…1.3 s, exactly while the words are usually spoken during the flight. Caption timing and flight start cannot be set separately.",
+   "suggestion": "Add heritage.fly_at (flight start) and keep the start caption visible until the flight begins, or add heritage.label_at.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s21_a",
+   "missing": "Note fitting always breaks after ':' / '.' / ';' when the text has two parts. 'etwa: Steuerung versagt' was forced into two unbalanced lines although it fits on one line at 23 px. 'z. B. …' would also split after 'z.'.",
+   "suggestion": "Only use the sentence-part split when the one-line fit fails. Ignore abbreviations such as 'z. B.', 'ca.', 'bzw.' in the split regex.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s33_b",
+   "missing": "There is no visual for a single common-cause event hitting two layers, such as a red strike or impact line running through both plates at once. The template can only put layers out and attach a label.",
+   "suggestion": "Add a params.impact option: {layers:[…], at}. It would draw a short red diagonal strike or shockwave through the listed plates at 'at', followed by their extinguish.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s35_c",
+   "missing": "There is no 'hypothetical failure' state, meaning 'would have to fail' as opposed to 'failed'. Red emphasis is the closest option, but it looks the same as a real alarm.",
+   "suggestion": "Add tone:'hypo' or a state 'at_risk': a red dashed outline that pulses, with the plate still lit and no ×.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s35_c",
+   "missing": "An overlay that summarises a later-spoken fact gives it away early, because the engine always shows the overlay text at 0.5–0.75 s. So the overlay has to stay neutral.",
+   "suggestion": "Add an engine-level scene.text_at (or per-scene overlay delay) so the overlay can appear together with its key word.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s24_a",
+   "missing": "In static scenes the stack and cards take up only the left ~55–60% of the frame, so the right third stays empty unless there are notes. In a 3 s scene the cascade also leaves roughly the first 0.4 s nearly blank.",
+   "suggestion": "Add a params.align option ('center' | 'left') or auto-centre the stack+card block when no notes are defined.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s36_c",
+   "missing": "The font size of notes and labels is fixed at about 20–27 px and cannot be changed, which is small for key recap words on a 1080p YouTube frame.",
+   "suggestion": "Add params.note_scale (for example 1.0–1.3), applied when there is enough horizontal space.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s14_a",
+   "missing": "The heritage (Otis) icon has a fixed dock position (cx+0.38A, just above the plate centre), so it always covers the front corner of the plate above. The docked caption is always placed to the right of the icon and is not collision-checked against the card column. Only a short label (e.g. 'Otis-Sperre') keeps it clear.",
+   "suggestion": "Clamp the docked caption's right edge to cardX-8k. If it does not fit there, shrink it down to 17k or move it above the icon. Optionally add a heritage.dock offset param [dx,dy] so the icon can be lowered onto the front half of the plate.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s05_a",
+   "missing": "When a sync pulse's amber hold ends, it fades out over 0.5 s through hot white (hotMix). A layer that is leaving focus briefly looks whitish instead of going straight back to cyan, which can pull the eye in fast pulse sequences.",
+   "suggestion": "Add an optional sync_hold_fade param, e.g. 0.25 s. Or fade the hold directly from amber to cyan (mix instead of hotMix) when the layer stays lit.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s14_a",
+   "missing": "Two notes cannot be stacked on the same row: every row has one right-hand slot, so a second note goes further right or runs out of space. Contrast pairs such as 'reagiert auf X / statt Y' therefore have to be split across different layers.",
+   "suggestion": "Let notes set stack:true to go under the previous note on the same row (offset by nt.h + 8k) when the vertical space between the rows allows it.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s12_b",
+   "missing": "There is no way to ping or highlight a target (for example the Begrenzer switch at 'Schalter am Begrenzer', 0,6–1,8 s) without adding a status card, so the switch is not emphasised while it is named, only when it opens.",
+   "suggestion": "Add params.highlights: [{target, at, color}] that uses the same ping() effect without a card.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s12_b",
+   "missing": "Motor off, magnet dark and switch opening are all tied to beats[0], so the motor stops about 1 s before 'Motor aus' is spoken. Because the brake has to fall in at 'Bremse zu', the arms also stay open for about 1,3 s after the magnet goes dark.",
+   "suggestion": "Add optional motor_off_at / magnet_off_at, defaulting to beats[0], so the circuit opening, motor stop and magnet de-energising can be timed separately.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s12_b",
+   "missing": "With slow_push_in, the hatching under the base plate (BASE_Y+30) ends at about y 912, 2 px into the 170 px subtitle band.",
+   "suggestion": "Move BASE_Y up by about 10 px, or shorten the hatch, when the camera scales up.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s12_b",
+   "missing": "The engine cannot delay when the overlay text appears: drawOverlayText always fades in at 0.5 s. A scene whose headline is spoken late therefore has to move the headline onto a timed card, which is what this scene does now.",
+   "suggestion": "Add an engine-level scene param such as text_at (seconds) to drawOverlayText. That is outside this template.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s24_b",
+   "missing": "A label callout cannot share the screen with the magnifier. The counter panel always sits above the magnifier (y>=208), and the callout box above the rope overlaps it once the magnifier travels under the callout. The callout also does not dodge the magnifier circle itself, and there is no way to fade the label out when the magnifier opens.",
+   "suggestion": "Add a `label_until` (or `label_hide_on_scan: true`) so the callout fades before the magnifier opens. Or add magnifier-circle and readout-path avoidance to drawCallout, for example flipping the box below the rope or to the far side of the magnifier path.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s24_c",
+   "missing": "Nothing carries the inspection state over from the previous scene. s24_c re-opens the magnifier from zero at the far left and re-counts the 3 breaks that s24_b already counted and ringed, so the crossfade briefly shows two magnifiers in different places.",
+   "suggestion": "Add `initial_counted` N, so the leftmost N breaks start with rings and count as already filled, and `lens_open_at_start: true` or `lens_start_u`, so the magnifier starts already open at a given rope position.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s24_c",
+   "missing": "When the magnifier starts at the left, the readout panel is forced to the top (y=208), right under the engine overlay box (about 38 px gap). No param moves the readout, for example below the magnifier or to its side.",
+   "suggestion": "Add `readout_side`: 'above' | 'below' | 'auto'. 'auto' would place the panel below the magnifier when it would sit within 60 px of the overlay zone (y<250, x<900).",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s24_c",
+   "missing": "The template can't read the previous scene. The engine keeps the timeline private, so carry has to repeat s24_b's params, duration and camera by hand. They can drift apart if s24_b is retuned.",
+   "suggestion": "Have engine.js pass p.prev = {template, params, d, camera} (the previous scene) into draw(). rope_macro could then use it automatically whenever the previous template is also rope_macro.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s24_c",
+   "missing": "No engine camera starts at exactly the transform s24_b ends on (scale 1.08, x shifted +60). slow_pull_out starts at 1.1, so labels, rings and the lens rim show a faint 2% ghost during the 0.6 s crossfade.",
+   "suggestion": "Add an engine camera option with a configurable start scale and offset (e.g. camera 'hold_then_pull_out' or params.camera_from {s, dx, dy}). The cut would then match pixel for pixel.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s24_c",
+   "missing": "With carry, the number of new breaks that fit cleanly is limited: they must sit ahead of the lens, clear of the lens rim and off the stamp axis. For this layout that is 4. More are placed in looser spots or dropped (e.g. 24 requested gives 15).",
+   "suggestion": "Accept the limit, or let the rope scroll further under a stationary lens (e.g. an optional larger rope pan in carry scenes) to open more room.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s32_a",
+   "missing": "No way to show a second, separately timed fact about the same person (here 'schwere Verbrennungen' at 4.82 s after 'Liftführerin' at 2.31 s): one label per anchor. The floor anchor's box is left-aligned at x 480, so any label longer than about 200 px runs into the detail panel and collides with the helpers label.",
+   "suggestion": "Add a second person anchor (e.g. 'injury'/'status', box under the person label), or allow a timed panel_title/caption (panel_title_at), and right-align the floor anchor box to the left of the tower marker (or cap its width at about 200 px with wrapping).",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s04_b",
+   "missing": "The newspaper note cannot be hidden or timed: highlight_note ''/false falls back to the default text, and the note is readable as soon as the paper slides in. Only the underline is tied to beat[1]. That shows s04_c's content early. The quote plate is small (25 px italic) and its position is fixed at the top right.",
+   "suggestion": "Support highlight_note:false plus note_at (the text fades in at a beat), and a quote size/position option, or a 'strike'/'missing' style for the quote.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s01_a",
+   "missing": "distance_sub cannot be cleared with '' (pick() treats '' as missing, so the default 'rund 300 m' for floor 75 comes back); a single space is needed as a workaround. The end of the fall is also tied to beat[3] (dimension line), and a cabin label would collide with the dimension line at x 1150.",
+   "suggestion": "Treat distance_sub:false/'' as 'hide'; add a separate beat for the fall end; move the car anchor box to the left of the shaft.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s31_b",
+   "missing": "The plane anchor box is left-aligned at x 440 while its target is to the right, so the leader runs under the box and attaches to its far left edge. Longer texts (e.g. 'amerikanischer Bomber') make the leader cross the text box.",
+   "suggestion": "Give the plane anchor align:'right' (box ending left of the target) or attach the leader to the nearest box edge.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s03_c",
+   "missing": "The status chip's first state 'SEIL ZIEHT · SPERRE GELÖST' appears in one piece with the force arrows at beat[0], so 'gelöst' can't be synced separately from 'Seil zieht'. The default title plate 'FANGVORRICHTUNG' overlaps the right post (plate left edge about x 1345 vs post edge 1360).",
+   "suggestion": "Split the chip into two lines or parts with their own times (status_at), or allow custom status texts; narrow or reposition the principle title plate.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s32_a",
+   "missing": "slow_push_in scales about the frame centre, so the decorative plate edge and the tower's foundation end up at about y 915-935 in the last frames. All real content (panel floor at about 903, figures at 848 or higher) stays above 910.",
+   "suggestion": "If a reviewer treats decorative edges under the subtitles as a fault, switch the camera to static. The figure animation supplies enough motion; no param change is needed.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s04_b",
+   "missing": "The newspaper variant with the stamp benched 41 ms per frame under load, slightly over the 40 ms idle target and well under the accepted 65 ms. Most of the cost is the glow text shadows.",
+   "suggestion": "Acceptable as is. If needed, cache the landed stamp as a sprite after quote_at+0.2 s.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s04_b",
+   "missing": "config caps quote_by at 60 characters and quote at 90, so extremely long texts are truncated. The stamp wraps and the quote gets an ellipsis, so nothing overflows.",
+   "suggestion": "Keep stamp texts short, e.g. 'FEHLT IN DEN BERICHTEN'; a first word of 8 characters or fewer is rendered large.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s04_a",
+   "missing": "There is no continue or resume mode. The storyboard wants the LEGENDE stamp to land on 'fehlt dieser Ausruf', but those words are spoken in s04_b, which uses historic_scene. myth_card cannot start with the card and claim already on screen and only stamp at a beat, so the verdict cannot land in a follow-up scene. s04_a therefore ends as a PRÜFE… cliffhanger and the LEGENDE stamp is never shown.",
+   "suggestion": "Add `resume:true` (or `typed:true`): card, header and claim fully visible from 0 s, no intro or typing, and only the stamp, mark and explanation run on their beats. s04_b could then be a myth_card continuation, or historic_scene could reuse the stamp renderer.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s20_a",
+   "missing": "In the full-width card layout, the reticle's 'ANALYSE / xx %' label runs across the FAKT divider and label whenever an explanation appears before the stamp (explanationAt < stampAt). Seen in scene-qa2/s20_a_v2 at 5.3 s.",
+   "suggestion": "When the explanation is visible before tImp, move the reticle up, shrink it, or fade out its label. Alternatively, lower regBot so the reticle and its label stay above E.divY.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s26_a",
+   "missing": "Typing runs at a fixed rate (typeDur or typeSpeed), so it cannot follow the speech rhythm. In short scenes where the stamp comes right after the last word (s26_a, s04_a), the last words appear 0.3–0.5 s before they are spoken.",
+   "suggestion": "Add per-word typing marks, e.g. `typeMarks:[{w:'oben',t:2.94},…]`, or accept word_times directly and type each word from its start time.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s19_a",
+   "missing": "In the film background, the car's fall and the sparks both start at sparksAt. The storyboard beats 'Funken sprühende Schienen' (2.0 s) and 'ungebremst rasende Kabine' (3.7 s) cannot be timed separately.",
+   "suggestion": "Add a separate `raceAt` or `fallAt` for the car's motion and speed lines, independent of sparksAt.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s04_a",
+   "missing": "With showStamp:false the reticle still counts up to 'ANALYSE 100 %' while the status stays 'PRÜFE…', which is a little contradictory for a cliffhanger.",
+   "suggestion": "When there is no stamp, cap the percentage at about 90–97 % or make it pulse, so the analysis reads as unfinished.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s17_a",
+   "missing": "Only one highlight per scene. The storyboard wants the Begrenzer highlighted during 'löst der Begrenzer aus' and then 'Keile an die Schienen' to glow green as the payoff. Currently Keile can only be bright green, without the glow or brackets.",
+   "suggestion": "Allow highlight as an array with per-item times, e.g. highlights:[{i:1,at:6.1},{i:3,at:8.3,tone:'green'}]. The previous highlight would hand over (fade to a normal card) or both stay emphasised.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s17_a",
+   "missing": "The year and label of a card always reveal together (label about 0.1·pop after the year). When the narration says the label before the number ('Seile weg bei null') or long before or after it (s03_a 'Kristallpalast', s27_b 'eigenen Schutz'), one of the two is early or late. The title slot had to be used as a workaround.",
+   "suggestion": "Per-event labelAt (and optionally yearAt), or a second 'sub' line with its own 'at' that types in later on the same card.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s31_a",
+   "missing": "The year decode effect flashes wrong numbers for 2–3 frames (e.g. '1999' before '1945', '1099' before '1854'). This can read as a number that is not in the narration.",
+   "suggestion": "Add yearFx:'fade'|'type'|'decode' (or decode:false), or decode only characters that differ from the final value while keeping the final digits' leading part stable.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s25_a",
+   "missing": "No custom span or bracket label between two non-numeric events. Gap labels only work between exact numeric years, so '≤ 2 Jahre' between the two Hauptprüfungen had to go into a card's year slot.",
+   "suggestion": "gaps as an array of custom spans, e.g. spans:[{from:0,to:2,label:'≤ 2 Jahre',at:5.5}], drawn as a dimension bracket above or below the axis.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s25_a",
+   "missing": "Nothing can animate before the first event or title except the overlay. In scenes whose first timeline fact comes late (s25_a about 2.4 s, s17_a about 2.4 s) the opening frames are sparse.",
+   "suggestion": "An optional intro element, e.g. an 'intro' icon/label slot or a slow ambient axis draw (beats[0] with a constant-speed head that does not depend on the first 'at'), so the axis can build evenly from the start without slowing down at the first node.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s25_a",
+   "missing": "While the hero is up (0–5.3 s), the band below the axis stays empty. The hero is always placed in the band between the overlay and the axis (so the axis can build underneath it) and is always horizontally centred. There is no option to centre it on the whole frame or follow the camera focus.",
+   "suggestion": "Add a hero placement option, e.g. hero:{place:'center'}, which centres the hero on the frame and fades the ghost rail in only when the hero lifts. Only worth it if a reviewer still finds the lower third too empty.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s25_a",
+   "missing": "The hero sub-line appears as a whole phrase, with no per-word timing. 'DEKRA' shows about 1.7 s before it is spoken (it is spoken at the end of the same phrase).",
+   "suggestion": "If needed, add per-word 'at' values for the sub-line (a typewriter reveal by word timestamps).",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s38_a",
+   "missing": "The idle reading is fixed in the template: the tacho always counts to min(850, rpm) and holds there until the rpm beat. There is no way to hide the digital readout until the rev-up or to set the idle value, so an unspoken number (850) is on screen for about 0.7 s.",
+   "suggestion": "Add rpm.idle (number, 0 allowed) and/or rpm.readoutAt, a time before which the readout is hidden or shows '—'.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s38_a",
+   "missing": "The title's word-by-word reveal uses a fixed stagger of at most 0.07 s per word, so it cannot follow the speech (here 'Was' at 2.01 s to '8.000' at 3.47 s). The whole title had to start at 2.95 s so the number would not show before it is spoken, which puts the first words about 0.9 s after they are heard.",
+   "suggestion": "Add a per-word timing array (titleWordTimes) or a titleStagger / titleDuration parameter so the title can be paced to word_times_s.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s38_a",
+   "missing": "The needle overshoot (backOut 0.8) is hard-coded, so the readout briefly shows values up to about 8.150 before settling on the spoken 8.000.",
+   "suggestion": "Add rpm.overshoot (0 = none), or clamp the readout at the target value while the needle itself overshoots.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s38_a",
+   "missing": "Title word stagger is fixed at 0.07 s, so 'U/min?' appears about 0.75 s before 'Umdrehungen pro Minute' is spoken. The reviewer accepted this as is.",
+   "suggestion": "Optional: per-word 'at' or a titleWordTimes param for the next_title, if exact word sync is ever needed.",
+   "severity": "minor"
+  },
   {
    "scene_id": "s27_a",
    "missing": "location_tag can only reveal its whole text at one time. It cannot show '2006' when the year is spoken (7,11 s) and add 'Tokio' when the place is spoken (8,28 s). Holding the tag for 'Tokio' leaves it on screen for only about 0,7 s before the scene ends.",
@@ -232,447 +1183,45 @@
    "severity": "minor"
   },
   {
-   "scene_id": "s14_a",
-   "missing": "Several notes on one row are chained horizontally, never stacked vertically. A second note on the Fang row would run out of width, so the contrast 'statt schlaffes Seil' had to go on another row (Tragseile).",
-   "suggestion": "Add a note placement option such as 'stack:\"below\"|\"above\"' (or automatic vertical stacking when the chained x would exceed box.x1 - 250), which puts the note under the previous note on the same row with a short connector.",
+   "scene_id": "s34_b",
+   "missing": "Callout layout is recomputed every frame in screen space including the engine camera scale. With slow_push_in (or tilt/pan at scale 1.08) a right-side callout in a zoomed focus switches between 'next to anchor' and 'pushed past the direction chevrons' mid-scene when chev.x1+26+w crosses 1830. In v2 the rope-coil callout jumped from x≈1480 to x≈1120 at about 5 s.",
+   "suggestion": "Compute the callout lane positions once per scene in the reference camera (without the engine push/tilt), or add hysteresis. Also reserve the chevron lane only while the car is actually moving.",
    "severity": "major"
   },
   {
-   "scene_id": "s21_a",
-   "missing": "Chained notes on a short-card row reach the right safe edge after two notes (right edge ≈1828 px). There is no way to replace or hide an earlier note (no 'until'/'out' time), so the Puffer row cannot carry a third fact.",
-   "suggestion": "Support notes[i].until (fade out) or 'replace:true' (the new note takes the previous note's slot on that row). Also add vertical stacking as above.",
+   "scene_id": "s34_b",
+   "missing": "No label anchor at the air-escape path or the EG door gaps. 'Schacht nicht luftdicht' can only point at the pit corner (part pit) or the hatching (air_cushion).",
+   "suggestion": "Add part 'air_escape' / 'door_gap' anchored at the EG door-gap exit point (G.S0-4 or G.S1+4, yEx), side left or right.",
    "severity": "minor"
   },
   {
-   "scene_id": "s05_a",
-   "missing": "Outline mode always shows every card label from the moment the plate appears. There is no way to show the empty roadmap with neutral placeholders and reveal each name when the layer is named or lit, so all six layer names are visible before they are introduced.",
-   "suggestion": "Add 'label_reveal':\"with_light\" (card shows only the number or '?' until tLit) or a per-layer 'label_at'.",
+   "scene_id": "s34_b",
+   "missing": "No direct control of callout placement: no x/y offset or lane per label. The rope-coil callout either covers the tension-pulley weight or needs a wording and width tuned so the chevron logic pushes it outside the shaft. Its lead line still crosses the right rail and the tension strut.",
+   "suggestion": "Support labels[i].dx/dy or 'lane':'outside' so a callout can be placed outside the shaft wall on purpose, with a lead line that avoids the tension-pulley column.",
    "severity": "minor"
   },
   {
-   "scene_id": "s05_a",
-   "missing": "The newest sync pulse holds amber indefinitely, with no release time. Two layers cannot hold amber together through sync alone. A workaround was needed: an extra pulse on Begrenzer to clear the hold on Prüfungen, plus emphasis for Fang.",
-   "suggestion": "Add 'sync_hold': seconds (or false) and allow the same 'at' for several sync items to share the hold. Alternatively add 'focus':[refs] with 'at' to set a group amber focus.",
+   "scene_id": "s33_a",
+   "missing": "No damaged/frayed style for the governor rope. damaged_ropes and broken_style only apply to the suspension ropes, so 'beschädigtes Begrenzerseil' can only be shown as a red highlight, not as a damage point.",
+   "suggestion": "Add governor_damage:{at, y} (red flicker plus frayed wires on the governor-rope strand, like damaged_ropes), or accept 'governor_rope' in damaged_ropes.",
    "severity": "minor"
   },
   {
-   "scene_id": "s14_a",
-   "missing": "The heritage start caption 'Sperre von Otis' fades out at heritage.at+0.8…1.3 s, exactly while the words are usually spoken during the flight. Caption timing and flight start cannot be set separately.",
-   "suggestion": "Add heritage.fly_at (flight start) and keep the start caption visible until the flight begins, or add heritage.label_at.",
+   "scene_id": "s33_a",
+   "missing": "Only one highlight_at for all highlighted parts, so parts cannot light up at different words (for example the safety gear at 0.9 s and the governor rope at 6.1 s). Also, the safety_gear '?' marker is placed up and to the right of the anchor, over the car's lower-left corner, instead of beside the wedge.",
+   "suggestion": "Allow highlight entries as objects {part, at, color}. Place the marker badge on the outward side of left-side anchors (dx = -36 for side 'left').",
    "severity": "minor"
   },
   {
-   "scene_id": "s21_a",
-   "missing": "Note fitting always breaks after ':' / '.' / ';' when the text has two parts. 'etwa: Steuerung versagt' was forced into two unbalanced lines although it fits on one line at 23 px. 'z. B. …' would also split after 'z.'.",
-   "suggestion": "Only use the sentence-part split when the one-line fit fails. Ignore abbreviations such as 'z. B.', 'ca.', 'bzw.' in the split regex.",
+   "scene_id": "s33_a",
+   "missing": "This is from reading the code; I did not render this setup. In focus 'car' the governor_rope anchor is fixed at carY+64, so with the car in the pit (on_buffer) the anchor falls below the tension pulley, into the earth. An aftermath close-up with a governor-rope callout is therefore not possible.",
+   "suggestion": "Clamp the governor_rope anchor in car and plate focus to [gy, tpY], for example by using carY-CH*0.5 when carY+64 > tpY.",
    "severity": "minor"
   },
   {
-   "scene_id": "s33_b",
-   "missing": "There is no visual for a single common-cause event hitting two layers, such as a red strike or impact line running through both plates at once. The template can only put layers out and attach a label.",
-   "suggestion": "Add a params.impact option: {layers:[…], at}. It would draw a short red diagonal strike or shockwave through the listed plates at 'at', followed by their extinguish.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s35_c",
-   "missing": "There is no 'hypothetical failure' state, meaning 'would have to fail' as opposed to 'failed'. Red emphasis is the closest option, but it looks the same as a real alarm.",
-   "suggestion": "Add tone:'hypo' or a state 'at_risk': a red dashed outline that pulses, with the plate still lit and no ×.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s35_c",
-   "missing": "An overlay that summarises a later-spoken fact gives it away early, because the engine always shows the overlay text at 0.5–0.75 s. So the overlay has to stay neutral.",
-   "suggestion": "Add an engine-level scene.text_at (or per-scene overlay delay) so the overlay can appear together with its key word.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s24_a",
-   "missing": "In static scenes the stack and cards take up only the left ~55–60% of the frame, so the right third stays empty unless there are notes. In a 3 s scene the cascade also leaves roughly the first 0.4 s nearly blank.",
-   "suggestion": "Add a params.align option ('center' | 'left') or auto-centre the stack+card block when no notes are defined.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s36_c",
-   "missing": "The font size of notes and labels is fixed at about 20–27 px and cannot be changed, which is small for key recap words on a 1080p YouTube frame.",
-   "suggestion": "Add params.note_scale (for example 1.0–1.3), applied when there is enough horizontal space.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s12_b",
-   "missing": "There is no way to ping or highlight a target (for example the Begrenzer switch at 'Schalter am Begrenzer', 0,6–1,8 s) without adding a status card, so the switch is not emphasised while it is named, only when it opens.",
-   "suggestion": "Add params.highlights: [{target, at, color}] that uses the same ping() effect without a card.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s12_b",
-   "missing": "Motor off, magnet dark and switch opening are all tied to beats[0], so the motor stops about 1 s before 'Motor aus' is spoken. Because the brake has to fall in at 'Bremse zu', the arms also stay open for about 1,3 s after the magnet goes dark.",
-   "suggestion": "Add optional motor_off_at / magnet_off_at, defaulting to beats[0], so the circuit opening, motor stop and magnet de-energising can be timed separately.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s12_b",
-   "missing": "With slow_push_in, the hatching under the base plate (BASE_Y+30) ends at about y 912, 2 px into the 170 px subtitle band.",
-   "suggestion": "Move BASE_Y up by about 10 px, or shorten the hatch, when the camera scales up.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s24_b",
-   "missing": "A label callout cannot share the screen with the magnifier. The counter panel always sits above the magnifier (y>=208), and the callout box above the rope overlaps it once the magnifier travels under the callout. The callout also does not dodge the magnifier circle itself, and there is no way to fade the label out when the magnifier opens.",
-   "suggestion": "Add a `label_until` (or `label_hide_on_scan: true`) so the callout fades before the magnifier opens. Or add magnifier-circle and readout-path avoidance to drawCallout, for example flipping the box below the rope or to the far side of the magnifier path.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s24_c",
-   "missing": "Nothing carries the inspection state over from the previous scene. s24_c re-opens the magnifier from zero at the far left and re-counts the 3 breaks that s24_b already counted and ringed, so the crossfade briefly shows two magnifiers in different places.",
-   "suggestion": "Add `initial_counted` N, so the leftmost N breaks start with rings and count as already filled, and `lens_open_at_start: true` or `lens_start_u`, so the magnifier starts already open at a given rope position.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s24_c",
-   "missing": "When the magnifier starts at the left, the readout panel is forced to the top (y=208), right under the engine overlay box (about 38 px gap). No param moves the readout, for example below the magnifier or to its side.",
-   "suggestion": "Add `readout_side`: 'above' | 'below' | 'auto'. 'auto' would place the panel below the magnifier when it would sit within 60 px of the overlay zone (y<250, x<900).",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s14_a",
-   "missing": "The heritage (Otis) icon has a fixed dock position (cx+0.38A, just above the plate centre), so it always covers the front corner of the plate above. The docked caption is always placed to the right of the icon and is not collision-checked against the card column. Only a short label (e.g. 'Otis-Sperre') keeps it clear.",
-   "suggestion": "Clamp the docked caption's right edge to cardX-8k. If it does not fit there, shrink it down to 17k or move it above the icon. Optionally add a heritage.dock offset param [dx,dy] so the icon can be lowered onto the front half of the plate.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s05_a",
-   "missing": "When a sync pulse's amber hold ends, it fades out over 0.5 s through hot white (hotMix). A layer that is leaving focus briefly looks whitish instead of going straight back to cyan, which can pull the eye in fast pulse sequences.",
-   "suggestion": "Add an optional sync_hold_fade param, e.g. 0.25 s. Or fade the hold directly from amber to cyan (mix instead of hotMix) when the layer stays lit.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s14_a",
-   "missing": "Two notes cannot be stacked on the same row: every row has one right-hand slot, so a second note goes further right or runs out of space. Contrast pairs such as 'reagiert auf X / statt Y' therefore have to be split across different layers.",
-   "suggestion": "Let notes set stack:true to go under the previous note on the same row (offset by nt.h + 8k) when the vertical space between the rows allows it.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s12_b",
-   "missing": "The engine cannot delay when the overlay text appears: drawOverlayText always fades in at 0.5 s. A scene whose headline is spoken late therefore has to move the headline onto a timed card, which is what this scene does now.",
-   "suggestion": "Add an engine-level scene param such as text_at (seconds) to drawOverlayText. That is outside this template.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s04_a",
-   "missing": "There is no continue or resume mode. The storyboard wants the LEGENDE stamp to land on 'fehlt dieser Ausruf', but those words are spoken in s04_b, which uses historic_scene. myth_card cannot start with the card and claim already on screen and only stamp at a beat, so the verdict cannot land in a follow-up scene. s04_a therefore ends as a PRÜFE… cliffhanger and the LEGENDE stamp is never shown.",
-   "suggestion": "Add `resume:true` (or `typed:true`): card, header and claim fully visible from 0 s, no intro or typing, and only the stamp, mark and explanation run on their beats. s04_b could then be a myth_card continuation, or historic_scene could reuse the stamp renderer.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s20_a",
-   "missing": "In the full-width card layout, the reticle's 'ANALYSE / xx %' label runs across the FAKT divider and label whenever an explanation appears before the stamp (explanationAt < stampAt). Seen in scene-qa2/s20_a_v2 at 5.3 s.",
-   "suggestion": "When the explanation is visible before tImp, move the reticle up, shrink it, or fade out its label. Alternatively, lower regBot so the reticle and its label stay above E.divY.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s26_a",
-   "missing": "Typing runs at a fixed rate (typeDur or typeSpeed), so it cannot follow the speech rhythm. In short scenes where the stamp comes right after the last word (s26_a, s04_a), the last words appear 0.3–0.5 s before they are spoken.",
-   "suggestion": "Add per-word typing marks, e.g. `typeMarks:[{w:'oben',t:2.94},…]`, or accept word_times directly and type each word from its start time.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s19_a",
-   "missing": "In the film background, the car's fall and the sparks both start at sparksAt. The storyboard beats 'Funken sprühende Schienen' (2.0 s) and 'ungebremst rasende Kabine' (3.7 s) cannot be timed separately.",
-   "suggestion": "Add a separate `raceAt` or `fallAt` for the car's motion and speed lines, independent of sparksAt.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s04_a",
-   "missing": "With showStamp:false the reticle still counts up to 'ANALYSE 100 %' while the status stays 'PRÜFE…', which is a little contradictory for a cliffhanger.",
-   "suggestion": "When there is no stamp, cap the percentage at about 90–97 % or make it pulse, so the analysis reads as unfinished.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s32_a",
-   "missing": "No way to show a second, separately timed fact about the same person (here 'schwere Verbrennungen' at 4.82 s after 'Liftführerin' at 2.31 s): one label per anchor. The floor anchor's box is left-aligned at x 480, so any label longer than about 200 px runs into the detail panel and collides with the helpers label.",
-   "suggestion": "Add a second person anchor (e.g. 'injury'/'status', box under the person label), or allow a timed panel_title/caption (panel_title_at), and right-align the floor anchor box to the left of the tower marker (or cap its width at about 200 px with wrapping).",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s04_b",
-   "missing": "The newspaper note cannot be hidden or timed: highlight_note ''/false falls back to the default text, and the note is readable as soon as the paper slides in. Only the underline is tied to beat[1]. That shows s04_c's content early. The quote plate is small (25 px italic) and its position is fixed at the top right.",
-   "suggestion": "Support highlight_note:false plus note_at (the text fades in at a beat), and a quote size/position option, or a 'strike'/'missing' style for the quote.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s01_a",
-   "missing": "distance_sub cannot be cleared with '' (pick() treats '' as missing, so the default 'rund 300 m' for floor 75 comes back); a single space is needed as a workaround. The end of the fall is also tied to beat[3] (dimension line), and a cabin label would collide with the dimension line at x 1150.",
-   "suggestion": "Treat distance_sub:false/'' as 'hide'; add a separate beat for the fall end; move the car anchor box to the left of the shaft.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s31_b",
-   "missing": "The plane anchor box is left-aligned at x 440 while its target is to the right, so the leader runs under the box and attaches to its far left edge. Longer texts (e.g. 'amerikanischer Bomber') make the leader cross the text box.",
-   "suggestion": "Give the plane anchor align:'right' (box ending left of the target) or attach the leader to the nearest box edge.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s03_c",
-   "missing": "The status chip's first state 'SEIL ZIEHT · SPERRE GELÖST' appears in one piece with the force arrows at beat[0], so 'gelöst' can't be synced separately from 'Seil zieht'. The default title plate 'FANGVORRICHTUNG' overlaps the right post (plate left edge about x 1345 vs post edge 1360).",
-   "suggestion": "Split the chip into two lines or parts with their own times (status_at), or allow custom status texts; narrow or reposition the principle title plate.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s17_a",
-   "missing": "Only one highlight per scene. The storyboard wants the Begrenzer highlighted during 'löst der Begrenzer aus' and then 'Keile an die Schienen' to glow green as the payoff. Currently Keile can only be bright green, without the glow or brackets.",
-   "suggestion": "Allow highlight as an array with per-item times, e.g. highlights:[{i:1,at:6.1},{i:3,at:8.3,tone:'green'}]. The previous highlight would hand over (fade to a normal card) or both stay emphasised.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s17_a",
-   "missing": "The year and label of a card always reveal together (label about 0.1·pop after the year). When the narration says the label before the number ('Seile weg bei null') or long before or after it (s03_a 'Kristallpalast', s27_b 'eigenen Schutz'), one of the two is early or late. The title slot had to be used as a workaround.",
-   "suggestion": "Per-event labelAt (and optionally yearAt), or a second 'sub' line with its own 'at' that types in later on the same card.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s31_a",
-   "missing": "The year decode effect flashes wrong numbers for 2–3 frames (e.g. '1999' before '1945', '1099' before '1854'). This can read as a number that is not in the narration.",
-   "suggestion": "Add yearFx:'fade'|'type'|'decode' (or decode:false), or decode only characters that differ from the final value while keeping the final digits' leading part stable.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s25_a",
-   "missing": "No custom span or bracket label between two non-numeric events. Gap labels only work between exact numeric years, so '≤ 2 Jahre' between the two Hauptprüfungen had to go into a card's year slot.",
-   "suggestion": "gaps as an array of custom spans, e.g. spans:[{from:0,to:2,label:'≤ 2 Jahre',at:5.5}], drawn as a dimension bracket above or below the axis.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s25_a",
-   "missing": "Nothing can animate before the first event or title except the overlay. In scenes whose first timeline fact comes late (s25_a about 2.4 s, s17_a about 2.4 s) the opening frames are sparse.",
-   "suggestion": "An optional intro element, e.g. an 'intro' icon/label slot or a slow ambient axis draw (beats[0] with a constant-speed head that does not depend on the first 'at'), so the axis can build evenly from the start without slowing down at the first node.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s35_a",
-   "missing": "The big headline readout is always m/s (140 px). The km/h result the narration actually speaks ('über 250 km/h', '≈ 160') is squeezed into a ~186 px cell, so 'über 250' renders at about 62 px, and 'mehr als 250' would be even smaller. The unspoken 72,8 / 44,3 m/s dominates the payoff frame.",
-   "suggestion": "Add `primary_unit: \"kmh\"`, or `headline: \"kmh\"`, to swap the cells so km/h (or the result_label) is the big number and m/s the small one. Alternatively add `hide_ms: true`.",
-   "severity": "major"
-  },
-  {
-   "scene_id": "s19_b",
-   "missing": "The time scale is constant, so the live km/h counter cannot pause or linger on a marker value. At the spoken 'fünfzig' the live readout already shows 57–61 km/h; only the frozen chip says ≈ 50.",
-   "suggestion": "Add `markers[i].hold` (s) to briefly slow the time factor around a marker pass (variable time scale). Or add a per-marker option that keeps the km/h cell showing the marker value for N seconds.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s35_a",
-   "missing": "Between impact (beat [1]) and the result crossfade, the exact live value (262 km/h / 159 km/h) always flashes for about 0,2–0,45 s, even when result_label is meant to replace it.",
-   "suggestion": "Add an option `result_at_impact: true` that shows result_label directly at impact with no exact-value frame, or let beat [2] = beat [1] mean an instant swap.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s35_a",
-   "missing": "The ruler only shows metres, and its fixed tick labels are visible from the start (e.g. '250' on the 0–300 m scale, a different quantity from the spoken 250 km/h). There is no floor scale for 'rund 75 Stockwerke'.",
-   "suggestion": "Add `ruler_unit: \"floors\"` with `floor_height_m` (e.g. 3,6), to label the ruler in Stockwerke, or `ruler_labels: false`.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s19_b",
-   "missing": "The air-resistance note and panel title fade in with the build-in (~0,8 s) and cannot be timed to the spoken word ('rechnerisch' at 2,95 s).",
-   "suggestion": "Add `air_label_at` (s) / `title_at` (s), or let `beats` accept an entry for the note.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s19_b",
-   "missing": "The camera zoom (1,08 for tilt/pan, 1,1 for push/pull) is not compensated. The panel's right edge reaches about 1908 px, the pit and SCHACHTGRUBE fall into the 170 px subtitle band, and TRAGSEIL GERISSEN fades out under the overlay. Both scenes therefore had to use a static camera.",
-   "suggestion": "Scale the layout by 1/zoom (or inset margins) when a camera move is active, or offer a template-internal gentle drift that respects the 90 px margins and the subtitle band.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s02_c",
-   "missing": "breakRope snaps only one of the 4 ropes. The narration says 'Wir kappen gleich in Gedanken alle Seile', and there is no way to cut all ropes or a chosen number of them.",
-   "suggestion": "Add breakRope:\"all\" or breakCount:n (with optional per-rope stagger), for example the car-side ropes snapping one after another about 0,08 s apart, each with its own sparks and a single SEILBRUCH label. Optionally add carFall:true to let the car drop after an all-rope break.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s02_c",
-   "missing": "The stopwatch readout always scrambles its digits for about 0,6 s after appearing. Single frames then show random, unnarrated values such as '0,048 s' before settling on '0,000 s'.",
-   "suggestion": "Add stopwatch.decode:false, or scramble with non-numeric glyphs such as '–,––– s' or block characters instead of random digits, so no frame ever shows a plausible wrong time.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s02_c",
-   "missing": "Blueprint part labels are fixed at 15 px mono with alpha 0,7. On a 1080p YouTube frame, labels such as FANGVORRICHTUNG and SEILBRUCH are barely readable, although the narration relies on them ('keine Sicherung griff').",
-   "suggestion": "Add labelSize (for example 15–24) and labelAlpha params, or an emphasis flag per label ({part:'fang', emphasis:true}) that draws that label larger and in amber.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s37_a",
-   "missing": "In layout 'left' the GESCHWINDIGKEITSBEGRENZER label (side −1) is always filtered out because it overlaps the text block. There is also no 'puffer' part. A recap of the whole safety chain (Begrenzer → Fangvorrichtung → Puffer, plus Bremse) can therefore only label Bremse and Fangvorrichtung.",
-   "suggestion": "Let a label spec override its side ({part:'begrenzer', side:'right'}) so it routes to the right column. Add a 'puffer' part (with the view or blueprintScale able to include the pit), or add labels:'chain' as a preset for the safety chain.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s11_b",
-   "missing": "Label keyword bug: partOf() matches by substring, so the English part name 'spring' matches the ring part's keyword 'ring'. {\"part\":\"spring\"} is silently read as the ring label and dropped as a duplicate, so no 'Feder' tag appears.",
-   "suggestion": "In partOf(), check exact pd.id matches for all parts before running the substring keyword loop, or match whole words only. Workaround used: part 'feder'.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s11_b",
-   "missing": "From about 3.4 s to 6.0 s ('Das ist reine Mechanik') nothing new happens in the mechanism itself. There is no dedicated visual for 'rein mechanisch', such as briefly highlighting all the mechanical load-path parts (flyweight, spring, pawl, ring, clamp) as one chain.",
-   "suggestion": "Add an optional beat or param such as mech_chain_at: a travelling amber glow along flyweight → pawl → ring → rope → clamp with an optional small caption. Workaround used: a 'Feder' tag timed to 'reine Mechanik'.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s36_b",
-   "missing": "'lässt ein Schalter die Bremse einfallen' is shown only as the switch opening, 'Motor aus' and a text line. The drive brake itself is never shown engaging.",
-   "suggestion": "Add an optional small brake glyph in the switch panel (brake shoes closing on a drum, with an amber flash at [1]+0.3 s), e.g. show_brake:true.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s11_b",
-   "missing": "A card's label and subline always appear together. The subline cannot have its own 'at', so a two-part message timed to two phrases ('reine Mechanik' … 'ohne Strom') cannot be staged in one card.",
-   "suggestion": "Support no_power_icon.sub_at (and analogy.sub_at) so the subline fades in separately.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s36_b",
-   "missing": "If a clamp label's 'at' is less than labDur before beat [3], the tag box briefly shows 'Seilklemme' and then flips to 'Seil geklemmt', which reads as a flicker.",
-   "suggestion": "When the label reveal overlaps [3] by less than about 0.3 s, show hot_text from the start (or cross-fade the two texts). Workaround used: set the clamp text to 'Seil geklemmt'.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s09_b",
-   "missing": "A continuation or 'start built' mode. Every element re-animates from scratch: the time clamp is at least 0.3 s, and the axes, panel and title intro always run. A scene that continues the previous graph (same layout) therefore dims and redraws its curve during the 0.6 s crossfade.",
-   "suggestion": "Add params.start_state:'done' (or continue:true). Series, reference lines, bands and annotations without their own 'at' would then be fully drawn from t=0, with no intro sweep. Only items with 'at' would animate.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s09_b",
-   "missing": "Blink and the label cannot be timed separately. blink starts when the marker pops, and the sub line is only 18 px mono. So a marker cannot stay visible from the start and then blink or show a big number on cue. I had to drop the 'spätestens' label for the first 2.5 s.",
-   "suggestion": "Add annotations[i].blink_at, plus a way to make the delayed sub line large (sub_size, or label2 at 24 px).",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s16_a",
-   "missing": "Annotation label boxes always stack from the top of the plot. The 'gut 11 cm' box sits at the 60 cm level, about 330 px above its point near the bottom, joined only by the dashed marker.",
-   "suggestion": "Add a placement preference such as annotations[i].place:'near'|'top'|'above'|'below'. With 'near', scan outwards from the point's own y first.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s15_a",
-   "missing": "Reference-line and y_band labels are fixed at 19 px. The narrated key values ('1/5 g: ein Fünftel', '1 g: volle Erdbeschleunigung', 'Obergrenze: 1,5 m/s') come out small next to the 24 px annotation labels.",
-   "suggestion": "Add ref_lines[i].size or emphasis:true (for example 24 px bold in a box).",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s15_a",
-   "missing": "The y_unit is only added when the unit text does not already appear inside y_label, and the check is a plain substring match. So 'Verzögerung' plus y_unit 'g' shows no unit, because 'Verzögerung' contains the letter g.",
-   "suggestion": "Check only for an existing ' in <unit>', '(unit)' or '[unit]' ending (unitFrom), not for the unit anywhere in the label.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s22_b",
-   "missing": "The overlay always appears at a fixed 0.5 s and is upper-cased, so units become 'M/S' or 'MS'. An overlay therefore cannot be synced to a later word, and it cannot safely carry a number with a unit.",
-   "suggestion": "Add a params.text_at (or overlay_at) delay, and keep unit tokens (m/s, ms, cm, g) in their original case when upper-casing.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s29_b",
-   "missing": "The scope line ('für alle, die nicht am Aufzug arbeiten', spoken at 1.8 to 3.3 s) can only appear inside the result tile together with the result label. It cannot be shown in sync with its words before the result.",
-   "suggestion": "Add scope_at (or a separate BEATS entry) so the scope line appears on its own, for example under the counter, before the result tile.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s29_b",
-   "missing": "The decade ladder shows its end label 10^exp from the first frame, and the counter shows '1 von 10 Fahrten' at the start. The target magnitude is partly visible before it is spoken.",
-   "suggestion": "Option to reveal ladder labels only when the marker passes them, and to hide or dim the counter word until beats[1].",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s06_b",
-   "missing": "The readout tile's hanging-load symbol shows the unit glyph 't' as soon as the tile appears (beats[1]), before 'Tonnen' is spoken at beats[2].",
-   "suggestion": "Show the unit glyph with the value beat, or add then_readout.symbol ('t' | 'F' | '') so it can be neutral until the value.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s06_b",
-   "missing": "items[].dim_at starts the dimension line; the dimension text only appears about 0.5 s later (55 % of dimDur). The actual text time is not obvious from the API note 'dimension appears'.",
-   "suggestion": "Make dim_at the time the dimension text is readable, or document the offset (text ≈ dim_at + 0.55·dimDur).",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s06_b",
-   "missing": "With then_readout, the layout reserves the tile column from t=0. The rope and pencil sit left of centre and the right third stays empty for 6.6 s until the tile appears.",
-   "suggestion": "Centre the objects across the full width until the tile beat, then ease them left, or allow a readout layout option 'below'.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "all",
-   "missing": "With ownsText the overlay always appears at 0.5 s. Any number or result in on_screen_text is revealed before it is spoken, so overlays have to be generic.",
-   "suggestion": "Support params.text_at (seconds) so the overlay can be timed to a word, for example the key number.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s16_b",
-   "missing": "Unsupported key 'reference' (known). The layout below y≈860 ('cm' label at 892, 'Führungsschiene' at 868) enters the subtitle zone under any camera zoom or tilt, so the scene has to use a static camera.",
-   "suggestion": "Raise the vertical_ruler geometry (y1) by about 40 px so camera moves stay above y 910.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s14_c",
-   "missing": "The readout panel (panel1) always shows example numbers: speed tile, live g values, BREMSWEG mm and the a(t) chart with the 'zulässig Ø 0,2-1,0 g' band. It has no option to show only the title and status. Turning it off (panel:false) leaves the whole upper-right quadrant empty, and the energy panel or label card stays in the lower slot (P2Y=645).",
-   "suggestion": "Add a numberless panel mode (e.g. readouts:\"title\"/\"status\", or hideValues:true) showing only the title, subtitle, status pill and an optional unlabelled a(t) curve. Or, when panel:false, move or vertically centre panel2 (energy, label, topview) so the right half stays balanced.",
-   "severity": "major"
-  },
-  {
-   "scene_id": "s14_c",
-   "missing": "Energy bars follow v²/2, so the kinetic bar is about 75% gone halfway through braking. When the narration describes the conversion mid-braking ('verwandelt die Bewegungsenergie'), the panel is already mostly drained as it appears.",
-   "suggestion": "Add an option such as energyEase:\"linear\" or an energyAt window, so the bars can be animated across a given time span independently of the physics profile.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s18_a",
-   "missing": "Every non-static camera (push x1.1, tilt/pan x1.08) pushes the right-hand panels to x≈1900-1917. With tilt, the lever bar or label reaches the subtitle band (y≈908-941). The layout spans about 160-1844 px, which is too wide for any zoom within the 90 px margins, so the storyboard cameras slow_push_in and tilt_up had to become static.",
-   "suggestion": "Add a compact layout option (e.g. layout:\"compact\" or a margin param) that scales or insets the whole composition by about 0.9 so camera moves stay inside 90 px margins and above the subtitle band.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s26_c",
-   "missing": "With bidirectional:true and panel:false, the upward overspeed before arrowsAt is shown only by unlabelled red chevrons. drawDirection skips the 'Fahrt' label in bi mode, and the 'ÜBERGESCHW. AUFWÄRTS' status only lives in the disabled panel.",
-   "suggestion": "Draw a small 'Fahrt aufwärts' or 'ÜBERGESCHW. AUFWÄRTS' tag next to the chevrons when the panel is off (or always in bi mode before the double arrow appears).",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s14_c",
-   "missing": "The energy panel's footnote ('Wärme = Bewegungs- + Lageenergie der Bremsstrecke') cannot be hidden, so it adds a fact that is not in the narration.",
-   "suggestion": "Add an energyNote:false (or energyFootnote string) param.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s21_b",
-   "missing": "The comparison-mode principle chip (ENERGIESPEICHERND / ENERGIEVERZEHREND) cannot be hidden. mode:\"\" falls back to the default, and the chip colour stays fixed per type, so the hydraulic chip is red even when it only says HYDRAULIK. This forces unspoken facts, or a red 'danger' colour, onto the oil buffer.",
-   "suggestion": "Support buffers[i].mode:false or a global show_mode:false to hide the chip. Add buffers[i].mode_color (amber|cyan|green|red|#hex) and mode_at so the principle can be revealed when it is spoken.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s22_a",
-   "missing": "The dimension caption cannot be switched off (the workaround is caption:\" \"). With short strokes (7 cm at 1 m/s), the caption placed at ym-24 moves above the bracket and onto the Fahrkorb beam.",
-   "suggestion": "Accept caption:false or \"\". Place the caption below the value (or next to the note) when the bracket is shorter than about 60 px.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s22_a",
-   "missing": "The speed tag '↓ 1 m/s' stays static on the car while it hovers, while it rests compressed and while the spring car rebounds upward. The down arrow then contradicts the visible motion, and the tag cannot be told apart as rated speed.",
-   "suggestion": "Add speed_until or an option to fade the tag after touch-down. Optionally allow a caption such as 'Nenngeschw.' so the tag reads as rated speed rather than current speed.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s22_a",
-   "missing": "In side_by_side mode every car hovers motionless from about 0.15 s until shortly before its hit_at, so the second car waits about 3.5 s with no motion.",
-   "suggestion": "Add a gentle idle (slow creep or a slight bob), or an option for a car to enter from above just before its hit, while the buffers stay visible from the start.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s21_b",
-   "missing": "Under pan or tilt cameras (scale 1.08), the label chips at M_LABEL_Y=855 reach about y 907, which touches the subtitle-reserved zone (bottom 170 px, y > 910).",
-   "suggestion": "Move M_LABEL_Y up by about 15 px, or reduce the gap between the floor and the chips, so there is a margin under the 1.08–1.1 camera scales.",
+   "scene_id": "s36_a",
+   "missing": "The safety_factor chip is always placed left of the car-side rope, where in focus 'ropes' it covers the counterweight-side rope run. There is no side option, and the caption is fixed at 15 px.",
+   "suggestion": "Add safety_factor.side ('left'|'right') and snap it to the callout column on the right when right is chosen. Allow a caption size of 18–20 px.",
    "severity": "minor"
   }
  ]

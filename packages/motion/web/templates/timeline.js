@@ -11,11 +11,15 @@
            (Vorrang: highlightAt > events[hl].hlAt > beats[1])          (ohne events[].at: nach dem letzten Ereignis)
      [2] = Lichtimpuls-Schleife startet                                 Standard: 0,2 s nach Ende des Achsenaufbaus
      [3] = Titel erscheint (title.at / titleAt haben Vorrang)           Standard 0,35 s
+   sweep: [von, bis] (Sekunden; auch {from,to} oder "2.4-5.3") = Achsen-Aufbaufenster: der Lichtkopf zeichnet die Achse
+          GLEICHMÄSSIG in diesem Fenster (unabhängig von den Pop-Zeiten, aber nie später als ein Knoten poppt).
+          Ersetzt beats[0] als Start (beats[0] hat Vorrang). Funktioniert auch mit direction:"rtl" (Zurückspulen).
    "at" (Sekunden ab Szenenstart; String "40%" = Anteil von d) akzeptieren:
      events[i].at  – Knoten poppt; Karte ist ≈ 0,8·pop später ganz lesbar (pop = 0,11·d, 0,4 … 1,2 s).
                      Fehlende "at" werden zwischen gesetzten interpoliert; Array-Form [year, label, tone, at].
                      Der Lichtkopf erreicht jeden Knoten spätestens zu dessen "at". events[i].hlAt = Highlight-Zeit.
-     title.at, titleAt, highlightAt.  Ohne beats/at skaliert alles mit d (Ereignisse ≈ 0,1·d … 0,55·d).
+     title.at, title.subAt, title.until (Heldentitel), titleAt, highlightAt.
+     Ohne beats/at skaliert alles mit d (Ereignisse ≈ 0,1·d … 0,55·d).
    Abstands-Labels („3 Jahre“) erscheinen erst mit dem später poppenden der beiden Ereignisse.
 
    params (alle optional):
@@ -31,11 +35,21 @@
      counter    rollender Jahreszähler am Lichtkopf zwischen zwei Jahres-Knoten (Std.: an bei rtl, sonst aus).
      gaps       true (Std.) | false/"none" (keine Abstands-Labels, keine Bruchlinien) | "labels" | "breaks".
                 Aliase: showGaps, show_gaps, gapLabels.
-     title      "Text" oder { text, at, tone } – zentrierte Titelzeile oberhalb der Achse (unter der Overlay-Zone);
-                Achse/Karten rücken dafür nach unten. Aliase: titel, heading, headline, caption.
+     title      "Text" oder { text, at, tone, sub, subAt, hero, until } – zentrierte Titelzeile oberhalb der Achse (unter der
+                Overlay-Zone); Achse/Karten rücken dafür nach unten. Aliase: titel, heading, headline, caption.
+                sub (oder "Haupt\nZusatz"): Zusatzzeile; einzeilig erscheint der Titel als „HAUPT, ZUSATZ“ mit Zusatz in Amber.
+                hero:true (oder hero:{until} / hero:Sekunden): HELDENTITEL – solange noch keine Karte da ist, steht der Titel
+                groß (bis 88 px, bis 2 Zeilen, Zusatzzeile in Amber mit eigener Zeit subAt) mit Eckklammern mittig zwischen
+                Overlay und Achse; ab until (Std.: 0,55 s vor dem ersten Pop, spätestens so, dass er vor der ersten Karte weg
+                ist) fliegen Haupt- und Zusatzzeile in 0,65 s passgenau in die Titelzeile. Ohne at: Ereignisse folgen danach.
+                Die Achse (Geisterschiene, mit sweep auch der Lichtkopf) darf unter dem Heldentitel schon laufen.
      firstSide  "up" (Std.) | "down" – Seite der ersten Karte (Wechsel danach). flip:true = "down".
      revealStart / revealEnd   Zeit des ersten/letzten Ereignisses (≤ 1 = Anteil von d, sonst Sekunden).
      pop        Pop-Dauer je Ereignis in s.
+     pulse      true (Std.) | false/"none" (keine Lichtimpuls-Schleife) | "ltr"/"rtl" (Richtung; Std. wie die Achse).
+                Nach einem Zurückspulen mit Vorwärts-Wiedergabe der Karten: pulse:false oder "ltr".
+     rewindLabel  nur bei rtl: Plakette „◀◀ TEXT“ fährt beim Zurückspulen mit dem Lichtkopf (unter der Achse; mit Zähler
+                darüber) und verschwindet, wenn der Kopf links ankommt. Z. B. "Zurückspulen".
    Text: p.text wird selbst als Overlay oben links im Engine-Stil gezeichnet (ownsText) – lange Texte werden
          verkleinert/zweizeilig. Karten oberhalb der Achse halten dazu ≥ 40 px Abstand (inkl. Kamerafahrt). */
 (function () {
@@ -285,7 +299,7 @@
     if (!text) return null;
     const trimEnd = (x) => x.replace(/[\s,;:·–—-]+$/, "");
     const full = compact ? String(compact).replace(/\s+/g, " ").trim() : sub ? trimEnd(text) + ", " + sub : text;
-    return { text: full.slice(0, 140), main: text.slice(0, 100), sub, at, subAt, tone, hero: heroOn, heroUntil };
+    return { text: full.slice(0, 140), main: text.slice(0, 100), mainTrim: trimEnd(text), sub, explicitCompact: !!compact, at, subAt, tone, hero: heroOn, heroUntil };
   }
 
   // ---------------- Textumbruch ----------------
@@ -440,8 +454,12 @@
     let size = 88, lines = [m];
     while (size > 58 && meas(size, m) > MAXW) size -= 2;
     if (meas(size, m) > MAXW) {
-      size = 66; setFont(ctx, 700, size, F_HEAD, 4);
-      lines = wrapBalanced(ctx, m, MAXW);
+      // zweizeilig; erst verkleinern, dann (notfalls) kürzen
+      for (size = 66; ; size -= 4) {
+        setFont(ctx, 700, size, F_HEAD, 4);
+        lines = wrapBalanced(ctx, m, MAXW);
+        if (lines.length <= 2 || size <= 46) break;
+      }
       if (lines.length > 2) { lines = lines.slice(0, 2); lines[1] = ellipsize(ctx, lines[1], MAXW); }
     }
     let w = 0;
@@ -462,7 +480,7 @@
     ctx.restore();
     const lh = Math.round(size * 1.14), slh = Math.round(ss * 1.3);
     const hMain = 0.74 * size + (lines.length - 1) * lh;
-    const gap = subLines.length ? Math.round(size * 0.62) : 0;
+    const gap = subLines.length ? Math.round(Math.max(36, size * 0.62)) : 0;
     const hSub = subLines.length ? 0.74 * ss + (subLines.length - 1) * slh : 0;
     return { size, lines, w, lh, ss, subLines, slh, hMain, gap, hSub, h: hMain + gap + hSub };
   }
@@ -536,6 +554,15 @@
       if (OVL) top = Math.max(top, worldTop(OV_TOP + OVL.h + OV_GAP, cams, env.fy));
       TT = Object.assign({}, TI, lay, { top: Math.round(top) });
       if (TI.hero) TT.HL = heroLayout(ctx, TI.main, TI.sub);
+      if (TI.sub && !TI.explicitCompact && lay.lines.length === 1) {
+        // einzeiliger Titel „HAUPT, ZUSATZ“: Zusatz in Amber; Heldentitel verwandelt sich passgenau hinein
+        ctx.save(); setFont(ctx, 700, lay.size, F_HEAD, 3);
+        const prefix = upper(TI.mainTrim + ", "), subStr = upper(TI.sub);
+        const wPrefix = ctx.measureText(prefix).width, wMain = ctx.measureText(upper(TI.mainTrim)).width, wSub = ctx.measureText(subStr).width;
+        ctx.restore();
+        const left = W0 / 2 - (wPrefix + wSub) / 2;
+        TT.split = { prefix, subStr, left, wPrefix, mainCX: left + wMain / 2, subCX: left + wPrefix + wSub / 2 };
+      }
       topLim = TT.top + lay.h + 36;
     }
     const AY0 = Math.round((topLim + botLim) / 2) + 4;
@@ -864,22 +891,29 @@
     if (!TT) return;
     if (T.heroOn && TT.HL) {
       if (t < T.titleAt) return;
-      const mk = eo(seg(t, T.heroOut, HERO_MORPH));
-      if (mk < 1) drawHero(ctx, L, M, T, t, mk);
-      const ca = seg(mk, 0.45, 0.55);
-      if (ca > 0) drawCompactTitle(ctx, L, TT, t, ca, T.heroOut + HERO_MORPH * 0.6);
+      const m = seg(t, T.heroOut, HERO_MORPH), mk = eo(m);
+      const exact = !!(TT.split && TT.HL.lines.length === 1 && TT.HL.subLines.length === 1);
+      if (m < 1) drawHero(ctx, L, M, T, t, exact ? m : mk, exact);
+      const ca = exact ? seg(m, 0.78, 0.2) : seg(mk, 0.45, 0.55);
+      if (ca > 0) drawCompactTitle(ctx, L, TT, t, ca, T.heroOut + HERO_MORPH * 0.6, true);
       return;
     }
     const a = seg(t, T.titleAt, 0.55);
     if (a <= 0) return;
-    drawCompactTitle(ctx, L, TT, t, a, T.titleAt + 0.15);
+    drawCompactTitle(ctx, L, TT, t, a, T.titleAt + 0.15, false);
   }
-  function drawCompactTitle(ctx, L, TT, t, a, ruleAt) {
+  function drawCompactTitle(ctx, L, TT, t, a, ruleAt, noRise) {
     const cx = W0 / 2, col = TT.tone || COL.cyan;
-    const rise = 10 * (1 - eo(a));
-    TT.lines.forEach((ln, k) => txt(ctx, ln, cx, TT.top + 0.74 * TT.size + k * TT.lh + rise, {
-      font: F_HEAD, weight: 700, size: TT.size, ls: 3, color: COL.white, align: "center", glow: 14, glowColor: rgba(col, 0.75), alpha: eo(a),
-    }));
+    const rise = noRise ? 0 : 10 * (1 - eo(a));
+    if (TT.split) {
+      const SP = TT.split, by = TT.top + 0.74 * TT.size + rise;
+      txt(ctx, SP.prefix, SP.left, by, { font: F_HEAD, weight: 700, size: TT.size, ls: 3, color: COL.white, glow: 14, glowColor: rgba(col, 0.75), alpha: eo(a) });
+      txt(ctx, SP.subStr, SP.left + SP.wPrefix, by, { font: F_HEAD, weight: 700, size: TT.size, ls: 3, color: COL.amber, glow: 10, glowColor: rgba(COL.amber, 0.55), alpha: eo(a) });
+    } else {
+      TT.lines.forEach((ln, k) => txt(ctx, ln, cx, TT.top + 0.74 * TT.size + k * TT.lh + rise, {
+        font: F_HEAD, weight: 700, size: TT.size, ls: 3, color: COL.white, align: "center", glow: 14, glowColor: rgba(col, 0.75), alpha: eo(a),
+      }));
+    }
     // Seitenlinien mit Rauten (Blueprint-Überschrift)
     const midY = TT.top + TT.h / 2;
     const half = TT.w / 2 + 28;
@@ -898,62 +932,76 @@
       ctx.restore();
     }
   }
-  /** Heldentitel: große Hauptzeile (+ Zusatzzeile) mit Zielerfassungs-Klammern; mk = Fortschritt der Verwandlung in den Titelplatz. */
-  function drawHero(ctx, L, M, T, t, mk) {
-    const TT = M.TT, H = TT.HL, col = TT.tone || COL.cyan;
-    const cyHero = TT.heroTop + H.h / 2, cyComp = TT.top + TT.h / 2;
-    const sc = lerp(1, TT.size / H.size, mk);
-    const fade = 1 - seg(mk, 0.3, 0.45);
-    if (fade <= 0) return;
+  /** Eine Zeile des Heldentitels an (x, Grundlinie y) mit Skalierung s; öffnet sich von der Mitte (rv < 1) mit leuchtenden Kanten. */
+  function heroLine(ctx, L, str, x, y, s, size, ls, color, glowColor, glow, alpha, rv, halfW) {
+    if (alpha <= 0.003) return;
     ctx.save();
-    ctx.translate(W0 / 2, lerp(cyHero, cyComp, mk));
-    ctx.scale(sc, sc);
-    const top = -H.h / 2, halfW = H.w / 2;
-    const breath = 0.85 + 0.15 * Math.sin(t * 2.1);
-    // Hauptzeile: öffnet sich von der Mitte aus, mit leuchtenden Kanten
-    const ma = seg(t, T.titleAt, 0.6), rv = eo(ma);
-    const ex = (halfW + 24) * rv;
-    if (rv < 1) { ctx.save(); ctx.beginPath(); ctx.rect(-ex, top - 50, 2 * ex, H.hMain + 100); ctx.clip(); }
-    H.lines.forEach((ln, k) => txt(ctx, ln, 0, top + 0.74 * H.size + k * H.lh + 8 * (1 - rv), {
-      font: F_HEAD, weight: 700, size: H.size, ls: 4, color: COL.white, align: "center", glow: 20, glowColor: rgba(col, 0.8), alpha: fade * Math.min(1, ma * 1.6),
-    }));
+    ctx.translate(x, y); ctx.scale(s, s);
+    const ex = (halfW + 24) * rv, capH = 0.74 * size;
+    if (rv < 1) { ctx.save(); ctx.beginPath(); ctx.rect(-ex, -capH - 40, 2 * ex, capH + 80); ctx.clip(); }
+    txt(ctx, str, 0, 0, { font: F_HEAD, weight: 700, size, ls, color, align: "center", glow, glowColor, alpha });
     if (rv < 1) {
       ctx.restore();
-      const ea = (1 - rv) * fade;
-      L.line(ctx, -ex, top - 14, -ex, top + H.hMain + 14, COL.ice, 2, 1, { alpha: ea, cap: "butt" });
-      L.line(ctx, ex, top - 14, ex, top + H.hMain + 14, COL.ice, 2, 1, { alpha: ea, cap: "butt" });
+      const ea = (1 - rv) * alpha;
+      L.line(ctx, -ex, -capH - 14, -ex, 14, COL.ice, 2, 1, { alpha: ea, cap: "butt" });
+      L.line(ctx, ex, -capH - 14, ex, 14, COL.ice, 2, 1, { alpha: ea, cap: "butt" });
     }
-    // Trennlinie (Blueprint) unter der Hauptzeile mit Rauten an den Enden
-    const ruleY = H.subLines.length ? top + H.hMain + H.gap * 0.5 : top + H.hMain + 26;
-    const rl = (halfW * 0.72) * eo(seg(t, T.titleAt + 0.2, 0.7));
-    if (rl > 2) {
-      L.line(ctx, -rl, ruleY, rl, ruleY, col, 1.5, 0.7, { alpha: 0.55 * fade, cap: "butt" });
-      ctx.save(); ctx.globalAlpha = fade * breath; ctx.fillStyle = COL.amber;
+    ctx.restore();
+  }
+  /** Heldentitel: große Hauptzeile (+ Zusatzzeile) mit Zielerfassungs-Klammern; mk = Fortschritt der Verwandlung in den Titelplatz.
+      exact: Haupt- und Zusatzzeile fliegen einzeln an ihre Stelle in der einzeiligen Titelzeile (passgenaue Überblendung). */
+  function drawHero(ctx, L, M, T, t, mk, exact) {
+    const TT = M.TT, H = TT.HL, col = TT.tone || COL.cyan, cx = W0 / 2;
+    // exact: mk ist linear; Geometrie ist bei 0,82 fertig (gestaffelt: erst Größe + seitlich, dann hoch), danach reine Überblendung
+    const q = clamp(mk / 0.82, 0, 1);
+    const qx = eo(seg(q, 0, 0.7)), qy = sm(seg(q, 0.3, 0.7)), qs = sm(seg(q, 0, 0.85));
+    const heroA = exact ? 1 - seg(mk, 0.82, 0.18) : 1 - seg(mk, 0.3, 0.45);
+    if (heroA <= 0) return;
+    const deco = 1 - seg(mk, 0, 0.3);
+    // Blocktransformation (einfache Verwandlung); bei exact bleiben Linie/Klammern stehen und blenden nur aus
+    const sc = exact ? 1 : lerp(1, TT.size / H.size, mk), bcy = exact ? TT.heroTop + H.h / 2 : lerp(TT.heroTop + H.h / 2, TT.top + TT.h / 2, mk);
+    const blk = (dy) => bcy + (dy - H.h / 2) * sc; // Blockversatz ab Oberkante -> absolute y (einfache Verwandlung)
+    const cb = TT.top + 0.74 * TT.size;            // Grundlinie der Titelzeile
+    const breath = 0.85 + 0.15 * Math.sin(t * 2.1);
+    const halfW = H.w / 2;
+    // Hauptzeile(n)
+    const ma = seg(t, T.titleAt, 0.6), rv = eo(ma);
+    H.lines.forEach((ln, k) => {
+      const by = 0.74 * H.size + k * H.lh;
+      let x = cx, y = blk(by), s2 = sc, ls = 4;
+      if (exact) { const se = TT.size / H.size; x = lerp(cx, TT.split.mainCX, qx); y = lerp(TT.heroTop + by, cb, qy); s2 = lerp(1, se, qs); ls = lerp(4, 3 / se, qs); }
+      heroLine(ctx, L, ln, x, y + 8 * (1 - rv) * s2, s2, H.size, ls, COL.white, rgba(col, 0.8), 20, heroA * Math.min(1, ma * 1.6), rv, halfW);
+    });
+    // Trennlinie (Blueprint) mit Rauten an den Enden
+    const ruleDy = H.subLines.length ? H.hMain + H.gap * 0.5 : H.hMain + 26;
+    const rl = halfW * 0.72 * eo(seg(t, T.titleAt + 0.2, 0.7)) * sc;
+    const ra = deco * heroA;
+    if (rl > 2 && ra > 0) {
+      const ry = blk(ruleDy);
+      L.line(ctx, cx - rl, ry, cx + rl, ry, col, 1.5, 0.7, { alpha: 0.55 * ra, cap: "butt" });
+      ctx.save(); ctx.globalAlpha = ra * breath; ctx.fillStyle = COL.amber;
       for (const sx of [-1, 1]) {
-        const x = sx * rl;
-        ctx.beginPath(); ctx.moveTo(x, ruleY - 5); ctx.lineTo(x + 5, ruleY); ctx.lineTo(x, ruleY + 5); ctx.lineTo(x - 5, ruleY); ctx.closePath(); ctx.fill();
+        const x = cx + sx * rl;
+        ctx.beginPath(); ctx.moveTo(x, ry - 5); ctx.lineTo(x + 5, ry); ctx.lineTo(x, ry + 5); ctx.lineTo(x - 5, ry); ctx.closePath(); ctx.fill();
       }
       ctx.restore();
     }
     // Zusatzzeile (z. B. Beispiele) – eigene Einblendzeit
     if (H.subLines.length) {
       const sa = seg(t, T.subAt, 0.55), srv = eo(sa);
-      if (sa > 0) {
-        const sTop = top + H.hMain + H.gap;
-        const sx = (halfW + 24) * srv;
-        const sf = 1 - seg(mk, 0, 0.3);
-        if (srv < 1) { ctx.save(); ctx.beginPath(); ctx.rect(-sx, sTop - 40, 2 * sx, H.hSub + 80); ctx.clip(); }
-        H.subLines.forEach((ln, k) => txt(ctx, ln, 0, sTop + 0.74 * H.ss + k * H.slh + 6 * (1 - srv), {
-          font: F_HEAD, weight: 700, size: H.ss, ls: 4, color: COL.amber, align: "center", glow: 12, glowColor: rgba(COL.amber, 0.6), alpha: fade * sf * Math.min(1, sa * 1.6),
-        }));
-        if (srv < 1) ctx.restore();
-      }
+      if (sa > 0) H.subLines.forEach((ln, k) => {
+        const by = H.hMain + H.gap + 0.74 * H.ss + k * H.slh;
+        let x = cx, y = blk(by), s2 = sc, ls = 4, a = heroA * (exact ? 1 : deco);
+        if (exact) { const se = TT.size / H.ss; x = lerp(cx, TT.split.subCX, qx); y = lerp(TT.heroTop + by, cb, qy); s2 = lerp(1, se, qs); ls = lerp(4, 3 / se, qs); }
+        heroLine(ctx, L, ln, x, y + 6 * (1 - srv) * s2, s2, H.ss, ls, COL.amber, rgba(COL.amber, 0.6), 12, a * Math.min(1, sa * 1.6), srv, halfW);
+      });
     }
     // Zielerfassung: Eckklammern um den ganzen Block (ziehen sich zusammen, atmen leicht)
-    const ba = seg(t, T.titleAt, 0.5) * (1 - seg(mk, 0, 0.3));
+    const ba = seg(t, T.titleAt, 0.5) * deco * heroA;
     if (ba > 0) {
-      const o = lerp(46, 26, eo(seg(t, T.titleAt, 0.8)));
-      const x1 = -halfW - o - 12, x2 = halfW + o + 12, y1 = top - o, y2 = top + H.h + o, k = 28;
+      const o = lerp(46, 26, eo(seg(t, T.titleAt, 0.8))) * sc;
+      const bw = (halfW + 12) * sc, y1 = blk(0) - o, y2 = blk(H.h) + o, k = 28 * sc;
+      const x1 = cx - bw - o, x2 = cx + bw + o;
       L.glowPath(ctx, (c) => {
         c.moveTo(x1, y1 + k); c.lineTo(x1, y1); c.lineTo(x1 + k, y1);
         c.moveTo(x2 - k, y1); c.lineTo(x2, y1); c.lineTo(x2, y1 + k);
@@ -961,7 +1009,6 @@
         c.moveTo(x1 + k, y2); c.lineTo(x1, y2); c.lineTo(x1, y2 - k);
       }, col, 2.2, 0.9, { alpha: ba * (0.75 + 0.25 * breath), cap: "square" });
     }
-    ctx.restore();
   }
 
   // ---------------- Zeichnen: Achse ----------------

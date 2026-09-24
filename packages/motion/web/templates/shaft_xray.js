@@ -312,12 +312,17 @@
       plateOn: !!plateRaw || highlight.includes("inspection_plate") || labels.some((l) => l.part === "inspection_plate") || focus === "plate",
       plateText: pr.plate_text ?? plateRaw?.text ?? null,
       trip: bool(pr.trip ?? pr.governor_trips, false),
-      debris: debrisRaw ? { type: key(debrisRaw.type ?? pr.debris ?? "engine"), at: tsec(debrisRaw.at) } : null,
+      debris: debrisRaw ? { type: key(debrisRaw.type ?? pr.debris ?? "engine"), at: tsec(debrisRaw.at), passAt: tsec(debrisRaw.pass_at ?? debrisRaw.through_at ?? debrisRaw.pass ?? pr.pass_at), passDur: num(debrisRaw.pass_dur ?? debrisRaw.through_dur, null), passFloor: num(debrisRaw.pass_floor ?? debrisRaw.through_floor, null) } : null,
       damageAt: tsec(pr.damage_at ?? pr.damaged_at),
       markers, big, airCushion: airC ? { at: tsec(airC.at) } : null, ropeCoil: coil ? { at: tsec(coil.at) } : null,
       airEscape: esc ? { at: tsec(esc.at), dur: num(esc.dur ?? esc.duration, null) } : null,
       bufferGlow: bool(pr.buffer_glow, true), floorM: clamp(num(pr.floor_height_m ?? pr.storey_height_m, 3), 2, 6),
       snapGap: num(pr.snap_gap, null),
+      offX: clamp(num(pr.offset_x ?? pr.shift_x ?? pr.frame_offset_x, 0), -400, 400),
+      inclCar: bool(pr.include_car ?? pr.frame_car ?? pr.show_car, false),
+      loupe: focus === "plate" && bool(pr.plate_loupe ?? pr.loupe ?? (plateRaw && plateRaw.loupe), true),
+      loupeAt: tsec(pr.loupe_at ?? plateRaw?.at),
+      plateMonth: Math.round(clamp(num(pr.plate_month ?? plateRaw?.month, 6), 1, 12)),
     };
     if (o.ropeGap != null) o.ropeGap = clamp(o.ropeGap, 1.5, 6);
     return o;
@@ -465,6 +470,11 @@
     T.hlAt = at(o.hlAt);
     T.hudAt = at(o.hudAt) ?? 0;
     if (o.debris) T.debrisT = at(o.debris.at) ?? (st === "rope_snap" ? T.snap : st === "all_ropes_snap" && !o.preBroken ? T.F.cut : cl(Math.max(1.0, 0.45 * d)));
+    if (o.debris && o.debris.passAt != null) { // zweites Triebwerk: durchschlägt das Gebäude quer (hinter dem Schacht)
+      T.passAt = at(o.debris.passAt); T.passDur = clamp(o.debris.passDur ?? 1.2, 0.5, 3);
+      const zP = o.debris.passFloor != null ? clamp(o.debris.passFloor, 0.3, top) : top;
+      T.passY = G.levelY(zP) - 0.5 * G.fh;
+    }
     T.dmgAt = at(o.damageAt) ?? T.debrisT ?? cl(0.35 * d);
     const evEnd = st === "safety_engage" ? T.tS : st === "on_buffer" ? T.a + T.c : st === "stopped" ? (T.jolt != null ? T.jolt + 0.15 : 0.3) : st === "all_ropes_snap" ? (T.F.impact ? T.F.tImp : T.F.tEnd) : 0.3;
     T.frameAt = at(o.frameAt) ?? Math.min(hi, evEnd);
@@ -476,6 +486,7 @@
     T.bigAt = o.big ? at(o.big.at) ?? (T.F ? Math.min(hi, Math.min(T.F.tEnd, T.F.tImp) + 0.2) : cl(0.6 * d)) : null;
     T.airAt = o.airCushion ? at(o.airCushion.at) ?? 0 : null;
     T.coilAt = o.ropeCoil ? at(o.ropeCoil.at) ?? 0 : null;
+    if (o.loupe) T.loupeAt = at(o.loupeAt) ?? cl(0.3);
     if (o.airEscape) { T.escAt = at(o.airEscape.at) ?? cl(0.5 * d); T.escDur = clamp(o.airEscape.dur ?? Math.max(1, 0.35 * d), 0.3, d); }
     return T;
   }
@@ -1008,18 +1019,52 @@
     // Sternmotor (stilisiert, ohne Marke)
     const sd = sty0("debris");
     softDot(ctx, P.x, P.y, P.r * (P.fly ? 2.6 : 1.8), P.fly ? COL.hot : COL.amber, P.fly ? 1.3 : 0.7);
-    ctx.save(); ctx.translate(P.x, P.y); ctx.rotate(P.rot);
-    const col = sd ? HLC : COL.amber, r = P.r;
-    fill(ctx, (c) => c.arc(0, 0, r, 0, TAU), "#0a1426", 0.9);
-    glow(ctx, L, (c) => { c.arc(0, 0, r, 0, TAU); c.moveTo(r * 0.36, 0); c.arc(0, 0, r * 0.36, 0, TAU); }, col, 2, 1, 1);
-    stroke(ctx, (c) => { for (let k = 0; k < 7; k++) { const a = (k * TAU) / 7, ca = Math.cos(a), sa = Math.sin(a); const x1 = ca * r * 0.4, y1 = sa * r * 0.4, x2 = ca * r * 0.88, y2 = sa * r * 0.88; c.moveTo(x1, y1); c.lineTo(x2, y2); for (let f = 0; f < 3; f++) { const q = 0.55 + f * 0.12, px = ca * r * q, py = sa * r * q; c.moveTo(px - sa * 3.5, py + ca * 3.5); c.lineTo(px + sa * 3.5, py - ca * 3.5); } } }, col, 1.3, 0.85);
-    stroke(ctx, (c) => { for (let k = 0; k < 3; k++) { const a = 0.4 + (k * TAU) / 3; c.moveTo(Math.cos(a) * r * 0.36, Math.sin(a) * r * 0.36); c.lineTo(Math.cos(a) * r * 0.36 + Math.cos(a + 0.3) * r * 0.55, Math.sin(a) * r * 0.36 + Math.sin(a + 0.3) * r * 0.55); } }, COL.steel, 2.4, 0.8);
-    ctx.restore();
+    engineGlyph(ctx, L, P.x, P.y, P.r, P.rot, sd ? HLC : COL.amber, 1);
     // Einschlag in das Seilbündel
     const ai = t - tI;
     if (ai >= 0 && ai < 0.7) { const f = 1 - ai / 0.7; L.glowDot(ctx, G.carCX, M.dmgY, 16 + 50 * f, COL.hot, f); L.glowDot(ctx, G.carCX, M.dmgY, 8 + 12 * f, "#ffffff", 0.9 * f); burst(ctx, G.carCX, M.dmgY, ai, 33, 18, COL.amber); }
   }
   let sty0 = () => false; // wird pro Frame gesetzt (Hervorhebung für Trümmer)
+  /** Sternmotor (stilisiert, ohne Marke). */
+  function engineGlyph(ctx, L, x, y, r, rot, col, al) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
+    fill(ctx, (c) => c.arc(0, 0, r, 0, TAU), "#0a1426", 0.9 * al);
+    glow(ctx, L, (c) => { c.arc(0, 0, r, 0, TAU); c.moveTo(r * 0.36, 0); c.arc(0, 0, r * 0.36, 0, TAU); }, col, 2, 1, al);
+    stroke(ctx, (c) => { for (let k = 0; k < 7; k++) { const a = (k * TAU) / 7, ca = Math.cos(a), sa = Math.sin(a); const x1 = ca * r * 0.4, y1 = sa * r * 0.4, x2 = ca * r * 0.88, y2 = sa * r * 0.88; c.moveTo(x1, y1); c.lineTo(x2, y2); for (let f = 0; f < 3; f++) { const q = 0.55 + f * 0.12, px = ca * r * q, py = sa * r * q; c.moveTo(px - sa * 3.5, py + ca * 3.5); c.lineTo(px + sa * 3.5, py - ca * 3.5); } } }, col, 1.3, 0.85 * al);
+    stroke(ctx, (c) => { for (let k = 0; k < 3; k++) { const a = 0.4 + (k * TAU) / 3; c.moveTo(Math.cos(a) * r * 0.36, Math.sin(a) * r * 0.36); c.lineTo(Math.cos(a) * r * 0.36 + Math.cos(a + 0.3) * r * 0.55, Math.sin(a) * r * 0.36 + Math.sin(a + 0.3) * r * 0.55); } }, COL.steel, 2.4, 0.8 * al);
+    ctx.restore();
+  }
+  /** Zweites Triebwerk (debris.pass_at): tritt rechts in die Fassade ein, quert das Gebäude hinter dem Schacht, tritt links wieder aus. */
+  function passPath(G, T, tt) {
+    const t0 = T.passAt, D = T.passDur, y0 = T.passY, xR = G.BX1 + 8, xL = G.BX0 - 8, r = 21, dr = 0.22 * G.fh;
+    if (tt < t0 - 0.45) return null;
+    if (tt < t0) { const q = (tt - t0 + 0.45) / 0.45; return { x: lerp(xR + 520, xR + r * 0.4, q), y: y0 - 24 * (1 - q), rot: tt * 7, r, a: smooth(q * 3) }; }
+    if (tt < t0 + D) { const q = (tt - t0) / D; return { x: lerp(xR + r * 0.4, xL - r * 0.4, q * (1.2 - 0.2 * q)), y: y0 + dr * q * q, rot: tt * 7, r, a: 1 }; }
+    const q = (tt - t0 - D) / 0.45; if (q > 1) return null;
+    return { x: xL - r * 0.4 - 330 * q, y: y0 + dr + 0.5 * G.fh * q * q, rot: tt * 7, r, a: 1 - smooth(q) };
+  }
+  function drawPassThrough(ctx, L, G, o, T, t) {
+    if (T.passAt == null) return;
+    const t0 = T.passAt, D = T.passDur, y0 = T.passY;
+    // Durchbrüche in beiden Fassaden (bleiben sichtbar)
+    const hole = (xw, yc, age, sgn, seed) => {
+      if (age < 0) return;
+      const ba = smooth(age / 0.15);
+      fill(ctx, (c) => c.rect(xw - 5, yc - 28, 18, 56), "#07101f", ba);
+      stroke(ctx, (c) => { c.moveTo(xw + 4 * sgn, yc - 32); c.lineTo(xw - 3 * sgn, yc - 20); c.lineTo(xw + 5 * sgn, yc - 7); c.lineTo(xw - 4 * sgn, yc + 6); c.lineTo(xw + 4 * sgn, yc + 19); c.lineTo(xw - 2 * sgn, yc + 32); }, COL.red, 1.5, 0.85 * ba);
+      stroke(ctx, (c) => { c.moveTo(xw, yc - 12); c.lineTo(xw + 16 * sgn, yc - 22); c.moveTo(xw, yc + 10); c.lineTo(xw + 14 * sgn, yc + 20); c.moveTo(xw, yc - 26); c.lineTo(xw - 10 * sgn, yc - 38); }, COL.red, 1, 0.55 * ba);
+      if (age < 0.6) { L.glowDot(ctx, xw, yc, 20 + 40 * (1 - age / 0.6), COL.hot, 1 - age / 0.6); burst(ctx, xw, yc, age, seed, 16, COL.amber, 600); }
+    };
+    hole(G.BX1 + 4, y0, t - t0, 1, 83);
+    hole(G.BX0 - 4, y0 + 0.22 * G.fh, t - t0 - D, -1, 47);
+    const P = passPath(G, T, t); if (!P) return;
+    const inShaft = P.x > G.S0 - 12 && P.x < G.S1 + 12, al = P.a * (inShaft ? 0.42 : 1);
+    const Q = passPath(G, T, t - 0.07);
+    if (Q) stroke(ctx, (c) => { for (const dy of [-0.55, 0, 0.55]) { c.moveTo(P.x + P.r * 0.8, P.y + dy * P.r); c.lineTo(Q.x + (Q.x - P.x) * 2.2 + P.r * 0.8, Q.y + dy * P.r + (Q.y - P.y) * 2); } }, COL.amber, 2, 0.35 * al);
+    softDot(ctx, P.x, P.y, P.r * 2.4, COL.hot, (inShaft ? 0.5 : 1.1) * P.a);
+    engineGlyph(ctx, L, P.x, P.y, P.r, P.rot, COL.amber, al);
+    if (inShaft) stroke(ctx, (c) => c.arc(P.x, P.y, P.r + 5, 0, TAU), COL.amber, 1.2, 0.5 * P.a, [4, 5], -t * 30);
+  }
 
   // ---------- Gegengewicht ----------
   function drawCounterweight(ctx, L, G, sty, M, t) {
@@ -1081,12 +1126,66 @@
     fill(ctx, (c) => rr(c, x - r - 4, y - r - 4, 2 * r + 8, 2 * r + 8, 2.5), "#07142a", 0.95);
     stroke(ctx, (c) => rr(c, x - r - 4, y - r - 4, 2 * r + 8, 2 * r + 8, 2.5), COL.steel, 0.8, 0.7);
     glow(ctx, L, (c) => c.arc(x, y, r, 0, TAU), col, 1.3 * s.w, s.h ? s.g : 0.6, 1);
-    stroke(ctx, (c) => { for (let k = 0; k < 12; k++) { const a = -Math.PI / 2 + (k * TAU) / 12; c.moveTo(x + Math.cos(a) * r * 0.64, y + Math.sin(a) * r * 0.64); c.lineTo(x + Math.cos(a) * r * 0.88, y + Math.sin(a) * r * 0.88); } }, col, 0.8, 0.85);
-    const a0 = -Math.PI / 2 - TAU / 24, a1 = -Math.PI / 2 + TAU / 24;
-    fill(ctx, (c) => { c.arc(x, y, r * 0.95, a0, a1); c.arc(x, y, r * 0.58, a1, a0, true); c.closePath(); }, s.h ? HLC : COL.amber, 0.6 + 0.35 * Math.sin(t * 3));
+    // Monatsring: Trennstriche zwischen den Monatsfeldern; nächster Prüfmonat oben = amber Feld + Kerbe (unabhängig von der Hervorhebung)
+    stroke(ctx, (c) => { for (let k = 0; k < 12; k++) { const a = -Math.PI / 2 + TAU / 24 + (k * TAU) / 12; if (k === 0 || k === 11) continue; c.moveTo(x + Math.cos(a) * r * 0.64, y + Math.sin(a) * r * 0.64); c.lineTo(x + Math.cos(a) * r * 0.88, y + Math.sin(a) * r * 0.88); } }, col, 0.8, 0.85);
+    const a0 = -Math.PI / 2 - TAU / 24 - 0.05, a1 = -Math.PI / 2 + TAU / 24 + 0.05;
+    fill(ctx, (c) => { c.arc(x, y, r * 0.97, a0, a1); c.arc(x, y, r * 0.55, a1, a0, true); c.closePath(); }, COL.amber, 0.8 + 0.2 * Math.sin(t * 3));
+    fill(ctx, (c) => { c.moveTo(x, y - r - 0.5); c.lineTo(x - r * 0.3, y - r - 4); c.lineTo(x + r * 0.3, y - r - 4); c.closePath(); }, COL.amber, 0.95);
     stroke(ctx, (c) => c.arc(x, y, r * 0.52, 0, TAU), col, 0.6, 0.6);
     if (o.plateText) { ctx.save(); ctx.globalAlpha = 0.95; ctx.fillStyle = COL.white; ctx.font = `700 ${(r * 0.42).toFixed(2)}px "JetBrains Mono"`; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(String(o.plateText).slice(0, 4), x, y + 0.3); ctx.restore(); }
     else stroke(ctx, (c) => { c.moveTo(x - r * 0.28, y - r * 0.1); c.lineTo(x + r * 0.28, y - r * 0.1); c.moveTo(x - r * 0.18, y + r * 0.16); c.lineTo(x + r * 0.18, y + r * 0.16); }, COL.white, 0.9, 0.8);
+  }
+
+  /** Lupe (focus "plate"): vergrößerte Prüfplakette in Bildschirmkoordinaten, mit Verbindungslinien zur Plakette in der Kabine. */
+  function drawLoupe(ctx, L, G, o, sty, M, T, t, toS) {
+    const Lp = M.loupe; if (!Lp) return;
+    const q = (t - T.loupeAt) / 0.7, a = smooth(q * 1.4); if (a <= 0.01) return;
+    const e = easeOut(q), [px, py] = toS(G.plateX, M.carY - G.plateDY), pr = (G.plateR + 8) * Lp.ws;
+    const cx = lerp(px, Lp.cx, e), cy = lerp(py, Lp.cy, e), R = lerp(pr, Lp.R, e), k = R / Lp.R;
+    const s = sty("inspection_plate", COL.cyan), col = s.h ? HLC : COL.cyan;
+    // Ring um die kleine Plakette + Tangenten zur Lupe
+    stroke(ctx, (c) => c.arc(px, py, pr, 0, TAU), col, 1.8, 0.9 * a);
+    const dx = cx - px, dy = cy - py, D = Math.hypot(dx, dy);
+    if (D > R - pr + 4) {
+      const th = Math.atan2(dy, dx), al = Math.acos(clamp((pr - R) / D, -1, 1));
+      const tl = (c) => { for (const sg of [1, -1]) { const w = th + sg * al; c.moveTo(px + pr * Math.cos(w), py + pr * Math.sin(w)); c.lineTo(cx + R * Math.cos(w), cy + R * Math.sin(w)); } };
+      fill(ctx, (c) => { const w1 = th + al, w2 = th - al; c.moveTo(px + pr * Math.cos(w1), py + pr * Math.sin(w1)); c.lineTo(cx + R * Math.cos(w1), cy + R * Math.sin(w1)); c.lineTo(cx + R * Math.cos(w2), cy + R * Math.sin(w2)); c.lineTo(px + pr * Math.cos(w2), py + pr * Math.sin(w2)); c.closePath(); }, col, 0.035 * a);
+      stroke(ctx, tl, col, 1.4, 0.6 * a, [7, 6], -t * 18);
+    }
+    // Glas
+    fill(ctx, (c) => c.arc(cx, cy, R, 0, TAU), "#050d1d", 0.95 * a);
+    fill(ctx, (c) => c.arc(cx, cy, R, 0, TAU), col, 0.04 * a);
+    glow(ctx, L, (c) => c.arc(cx, cy, R, 0, TAU), col, 3, 1.4, a);
+    stroke(ctx, (c) => c.arc(cx, cy, R + 9 * k, 0, TAU), COL.steel, 1.2, 0.45 * a);
+    stroke(ctx, (c) => c.arc(cx, cy, R - 10 * k, Math.PI * 1.08, Math.PI * 1.42), "#ffffff", 3 * k, 0.12 * a);
+    if (k < 0.25) return;
+    // Plakette (rund, ohne Logo): Rand mit Perforation, Monatsring 1–12, nächster Prüfmonat oben (amber + Kerbe), Jahresfeld
+    const r0 = 0.8 * R, rO = 0.74 * R, rI = 0.53 * R, pa = a * sat((k - 0.25) / 0.4), m0 = o.plateMonth;
+    fill(ctx, (c) => c.arc(cx, cy, r0, 0, TAU), "#0b1b36", pa);
+    glow(ctx, L, (c) => c.arc(cx, cy, r0, 0, TAU), col, 2.4, s.h ? s.g : 0.8, pa);
+    ctx.save(); ctx.globalAlpha = 0.55 * pa; ctx.fillStyle = COL.steel; ctx.beginPath();
+    for (let i = 0; i < 48; i++) { const w = (i * TAU) / 48, rx = cx + Math.cos(w) * (r0 - 7 * k), ry = cy + Math.sin(w) * (r0 - 7 * k); ctx.moveTo(rx + 1.6 * k, ry); ctx.arc(rx, ry, 1.6 * k, 0, TAU); }
+    ctx.fill(); ctx.restore();
+    const w0 = -Math.PI / 2 - TAU / 24, w1 = -Math.PI / 2 + TAU / 24, pulse = 0.82 + 0.18 * Math.sin(t * 3.2);
+    fill(ctx, (c) => { c.arc(cx, cy, rO, w0, w1); c.arc(cx, cy, rI, w1, w0, true); c.closePath(); }, COL.amber, 0.92 * pa * pulse);
+    stroke(ctx, (c) => { c.arc(cx, cy, rO, 0, TAU); c.moveTo(cx + rI, cy); c.arc(cx, cy, rI, 0, TAU); for (let i = 0; i < 12; i++) { const w = w1 + (i * TAU) / 12; c.moveTo(cx + Math.cos(w) * rI, cy + Math.sin(w) * rI); c.lineTo(cx + Math.cos(w) * rO, cy + Math.sin(w) * rO); } }, col, 1.4, 0.8 * pa);
+    glow(ctx, L, (c) => { c.arc(cx, cy, rO, w0, w1); c.arc(cx, cy, rI, w1, w0, true); c.closePath(); }, COL.amber, 2, 1.2, pa);
+    // Kerbe außen (zeigt auf den Prüfmonat)
+    const nk = (c) => { c.moveTo(cx, cy - r0 + 3 * k); c.lineTo(cx - 13 * k, cy - r0 - 16 * k); c.lineTo(cx + 13 * k, cy - r0 - 16 * k); c.closePath(); };
+    fill(ctx, nk, COL.amber, pa); glow(ctx, L, nk, COL.amber, 1.5, 1, pa);
+    const fsM = Math.round(0.1 * R);
+    if (fsM >= 7) for (let i = 0; i < 12; i++) {
+      const w = -Math.PI / 2 + (i * TAU) / 12, rm = (rI + rO) / 2, mm = ((m0 - 1 + i) % 12) + 1;
+      L.text(ctx, String(mm), cx + Math.cos(w) * rm, cy + Math.sin(w) * rm + fsM * 0.36, { size: fsM, weight: 700, font: L.FONT.mono, color: i === 0 ? "#07142a" : COL.white, align: "center", alpha: (i === 0 ? 1 : 0.82) * pa });
+    }
+    // Mitte: Beschriftung + Jahresfeld (Text nur über plate_text, sonst Platzhalterbalken)
+    const fsC = Math.round(0.062 * R);
+    if (fsC >= 6) L.text(ctx, "NÄCHSTE PRÜFUNG", cx, cy - 0.2 * R, { size: fsC, weight: 700, font: L.FONT.mono, letterSpacing: Math.max(1, 1.5 * k), color: COL.muted, align: "center", alpha: pa });
+    const yw = 0.5 * R, yh = 0.2 * R, yx = cx - yw / 2, yy = cy - 0.07 * R;
+    stroke(ctx, (c) => rr(c, yx, yy, yw, yh, 6 * k), COL.white, 1.6, 0.75 * pa);
+    if (o.plateText) L.text(ctx, String(o.plateText).slice(0, 6), cx, yy + yh * 0.74, { size: Math.round(yh * 0.72), weight: 700, font: L.FONT.mono, color: COL.white, align: "center", alpha: pa });
+    else stroke(ctx, (c) => { c.moveTo(cx - yw * 0.3, yy + yh * 0.38); c.lineTo(cx + yw * 0.3, yy + yh * 0.38); c.moveTo(cx - yw * 0.2, yy + yh * 0.66); c.lineTo(cx + yw * 0.2, yy + yh * 0.66); }, COL.white, 3 * k, 0.8 * pa);
+    if (fsC >= 6) L.text(ctx, "JAHR", cx, yy + yh + 0.1 * R, { size: Math.round(fsC * 0.9), weight: 600, font: L.FONT.mono, letterSpacing: Math.max(1, 1.5 * k), color: COL.muted, align: "center", alpha: 0.8 * pa });
   }
 
   // ---------- Kabine mit Rahmen, Führungsschuhen, Fangvorrichtung ----------
@@ -1209,10 +1308,13 @@
     let rect = null, sMax = 2.8;
     if (o.focus === "machine_room") rect = [G.MR0 - 40, G.MRtop - 24, G.MR1 + 56, G.slabBot + 66];
     else if (o.focus === "car") { const cy = M.carY - G.CH * 0.45 - (o.state === "rope_snap" ? 40 : 0); rect = [G.carCX - 250, cy - 150, G.carCX + 200, cy + 150]; }
-    else if (o.focus === "plate") { const px = G.plateX, py = M.carY - G.plateDY; rect = [px - 120, py - 72, px + 70, py + 72]; sMax = 4.2; }
+    else if (o.focus === "plate") {
+      if (o.loupe) { const s0 = 3.1; return { s: s0 * lerp(0.9, 1, easeInOut(t / Math.max(0.3, Math.min(1.4, 0.3 * d)))), s0, cx: G.carCX, cy: M.carY - G.CH * 0.5, scx: 560, scy: 570 }; }
+      const px = G.plateX, py = M.carY - G.plateDY; rect = [px - 120, py - 72, px + 70, py + 72]; sMax = 4.2;
+    }
     else if (o.focus === "pit") rect = [G.S0 - 60, G.yBot - 186, G.S1 + 60, G.PB + 14];
-    else if (o.focus === "ropes") rect = [G.S0 - 20, G.sy - G.R - 34, G.S1 + 20, Math.max(M.hitchY + 70, G.sy + 250)];
-    if (!rect) return { s: 1, s0: 1, cx: 1110, cy: 500, scx: 1110, scy: 500 };
+    else if (o.focus === "ropes") rect = [G.S0 - 20, G.sy - G.R - 34, G.S1 + 20, Math.max(M.hitchY + 70, G.sy + 250, o.inclCar ? M.carY + 56 : -1e9)];
+    if (!rect) return { s: 1, s0: 1, cx: 1110 - o.offX, cy: 500, scx: 1110, scy: 500 };
     const bx0 = wide ? 300 : 330, bx1 = wide ? 1580 : 1450, by0 = 215, by1 = 890;
     const s0 = clamp(Math.min((bx1 - bx0) / (rect[2] - rect[0]), (by1 - by0) / (rect[3] - rect[1])), 1, sMax);
     const s = s0 * lerp(0.88, 1, easeInOut(t / Math.max(0.3, Math.min(1.4, 0.3 * d))));
@@ -1269,13 +1371,16 @@
   }
 
   // ---------- Bildschirm-Overlays ----------
-  function anchorOf(part, G, M, R, o) {
+  /** Ankerpunkt eines Bauteils. want = gewünschte Seite ("left"/"right", seitenabhängige Anker für car, ropes, safety_gear,
+      counterweight, rails, governor_rope, buffers, pit, inspection_plate), k = Index gleichartiger Labels (versetzte Anker). */
+  function anchorOf(part, G, M, R, o, want, k) {
+    const lf = want === "left", rt = want === "right", kk = k || 0;
     const band = (x, y0, y1) => { // sichtbarer Abschnitt eines senkrechten Bauteils in der Referenzkamera (ohne Kamerafahrt → stabil)
       const qx = R.rx(x); if (qx < 100 || qx > 1820) return null;
       const a = Math.max(Math.min(y0, y1), R.wy0), b = Math.min(Math.max(y0, y1), R.wy1);
       return a <= b ? [a, b] : null;
     };
-    const mid = (x, y0, y1) => { const bd = band(x, y0, y1); return { x, y: bd ? (bd[0] + bd[1]) / 2 : (y0 + y1) / 2 }; };
+    const mid = (x, y0, y1, f = 0.5) => { const bd = band(x, y0, y1); return { x, y: bd ? lerp(bd[0], bd[1], f) : lerp(Math.min(y0, y1), Math.max(y0, y1), f) }; };
     const far = (x) => { // stabiler Punkt entlang eines langen Bauteils, abseits der Kabinenbahn
       if (M.focus === "car" || M.focus === "plate") return { x, y: M.carY + 64 };
       const a = Math.min(M.carY0, M.carY1) - G.CH - 36, b = Math.max(M.carY0, M.carY1) + 36, top = G.slabBot + 40, bot = G.PB - 40;
@@ -1284,28 +1389,29 @@
     };
     switch (part) {
       case "ropes": {
-        if (o.ropeCoil && o.state === "on_buffer" && o.allBroken) return { x: G.carCX + G.coilW - 6, y: G.PB - M.coilH * 0.5, side: "right" };
-        if (M.allSnapped) return { x: G.carCX + 18, y: M.hitchY - 2, side: "right" };
-        if (o.damaged.length && M.dmgY != null) return { x: G.carCX + G.bundle / 2 + 2, y: M.dmgY, side: "right" };
-        const f = mid(G.carCX + G.bundle / 2 + 1, G.sy + 30, M.hitchY - 12); return { x: f.x, y: f.y, side: "right" };
+        const sx = lf ? -1 : 1, sd = lf ? "left" : "right";
+        if (o.ropeCoil && o.state === "on_buffer" && o.allBroken) return { x: G.carCX + sx * (G.coilW - 6), y: G.PB - M.coilH * 0.5, side: sd };
+        if (M.allSnapped) return { x: G.carCX + sx * 18, y: M.hitchY - 2, side: sd };
+        if (o.damaged.length && M.dmgY != null) return { x: G.carCX + sx * (G.bundle / 2 + 2), y: M.dmgY + 20 * kk, side: sd };
+        const f = mid(G.carCX + sx * (G.bundle / 2 + 1), G.sy + 30, M.hitchY - 12, clamp(0.5 + 0.24 * kk, 0.1, 0.86)); return { x: f.x, y: f.y, side: sd };
       }
-      case "car": return { x: G.carX1 - 6, y: M.carY - G.CH * 0.55, side: "right" };
-      case "counterweight": return { x: G.cwX0, y: M.cwTop + G.CWH * 0.5, side: "left" };
+      case "car": return { x: lf ? G.carX0 + 6 : G.carX1 - 6, y: M.carY - G.CH * Math.max(0.14, 0.55 - 0.25 * kk), side: lf ? "left" : "right" };
+      case "counterweight": return rt ? { x: G.cwX0 + G.cwW, y: M.cwTop + G.CWH * 0.5, side: "right" } : { x: G.cwX0, y: M.cwTop + G.CWH * 0.5, side: "left" };
       case "sheave": return { x: G.sx - 26, y: G.sy - 26, side: "left" };
       case "brake": return { x: G.sx + 72, y: G.sy - 20, side: "right" };
       case "governor": return { x: G.gx + G.rg + 2, y: G.gy + 2, side: "right" };
-      case "governor_rope": { const f = far(G.gR); return { x: f.x, y: f.y, side: "right" }; }
-      case "safety_gear": return { x: G.railL - 11, y: M.carY + 10, side: "left" };
+      case "governor_rope": { const f = far(lf ? G.gL : G.gR); return { x: f.x, y: f.y, side: lf ? "left" : "right" }; }
+      case "safety_gear": return rt ? { x: G.railR + 11, y: M.carY + 10, side: "right" } : { x: G.railL - 11, y: M.carY + 10, side: "left" };
       case "lever": { const m = M.leverMid || [G.railR + 18, M.carY + 6]; return { x: m[0], y: m[1], side: "right" }; }
-      case "rails": { const f = far(G.railL); return { x: f.x, y: f.y, side: "left" }; }
-      case "buffers": return { x: G.carCX + 49, y: G.PB - G.bufH * (1 - M.bufComp) + 4, side: "right" };
+      case "rails": { const f = far(rt ? G.railR : G.railL); return { x: f.x, y: f.y, side: rt ? "right" : "left" }; }
+      case "buffers": return { x: G.carCX + (lf ? -49 : 49), y: G.PB - G.bufH * (1 - M.bufComp) + 4, side: lf ? "left" : "right" };
       case "machine_room": return { x: G.MR0 + 6, y: G.MRtop + 40, side: "left" };
-      case "pit": return { x: G.S0 + 6, y: G.PB - 14, side: "left" };
+      case "pit": return rt ? { x: G.S1 - 6, y: G.PB - 14, side: "right" } : { x: G.S0 + 6, y: G.PB - 14, side: "left" };
       case "deflector": return { x: G.bx - G.rd - 12, y: G.by, side: "left" };
       case "tension_pulley": return { x: G.gx + G.tpR, y: G.tpY, side: "right" };
       case "shaft": return { x: G.S0 - 4, y: lerp(G.slabBot, G.PB, 0.5), side: "left" };
       case "switch": return { x: G.gx - 42, y: G.slabTop - 35, side: "right" };
-      case "inspection_plate": return { x: G.plateX + G.plateR + 4, y: M.carY - G.plateDY, side: "right" };
+      case "inspection_plate": return lf ? { x: G.plateX - G.plateR - 4, y: M.carY - G.plateDY, side: "left" } : { x: G.plateX + G.plateR + 4, y: M.carY - G.plateDY, side: "right" };
       case "air_cushion": return { x: G.S0 + 112, y: (Math.min(G.PB - 4, M.carY + 20) + G.PB) / 2, side: "left" };
       case "rope_coil": return { x: G.carCX + G.coilW - 4, y: G.PB - Math.max(12, M.coilH * 0.55), side: "right" };
       case "debris": return M.debrisPt ? { x: M.debrisPt[0] + M.debrisPt[2], y: M.debrisPt[1], side: "right" } : { x: G.S1 - 6, y: Math.max(G.slabBot + 40, (M.dmgY ?? M.hitchY - 60) - 1.4 * G.fh), side: "right" };
@@ -1360,10 +1466,13 @@
     if (!o.labels.length) return res;
     const d = T.d, full = o.focus === "full";
     const leftEdge = full ? toS(G.BX0 - 8, 0)[0] - 100 : -1e4, rightEdge = full ? toS(G.BX1 + 8, 0)[0] + 44 : 1e4;
-    const items = [];
+    const items = [], dup = {};
+    const loupeAnchor = (sd) => { const Lp = M.loupe, w = 0.42; return [Lp.cx + (sd === "left" ? -1 : 1) * Lp.R * Math.cos(w), Lp.cy + Lp.R * Math.sin(w)]; };
     o.labels.forEach((lb, i) => {
-      const an = anchorOf(lb.part, G, M, R, o); if (!an) return;
-      const [ax, ay] = toS(an.x, an.y);
+      const kk = (dup[lb.part] = (dup[lb.part] ?? -1) + 1);
+      const an = anchorOf(lb.part, G, M, R, o, lb.side, kk); if (!an) return;
+      let [ax, ay] = toS(an.x, an.y);
+      if (lb.part === "inspection_plate" && M.loupe) [ax, ay] = loupeAnchor(lb.side || "right");
       if (ax < 60 || ax > 1860 || ay < 60 || ay > 1000) return;
       const it = { ...lb, ax, ay, side: lb.side || an.side, i, start: lb.at != null ? T.at(lb.at) : Math.min(0.4 + i * 0.3, 0.42 * d) };
       let availR = 1830 - (full ? Math.max(rightEdge, ax + 60) : ax + 70), availL = (full ? Math.min(leftEdge, ax - 60) : ax - 70) - 90;
@@ -1372,6 +1481,10 @@
       const lim = lb.side ? 150 : 230;
       if (it.side === "right" && availR < lim && availL > availR) it.side = "left";
       if (it.side === "left" && availL < lim && availR > availL) it.side = "right";
+      if (lb.side && it.side !== lb.side) { // explizite Seite musste weichen → Anker auf die tatsächliche Seite legen
+        if (lb.part === "inspection_plate" && M.loupe) [it.ax, it.ay] = loupeAnchor(it.side);
+        else { const an2 = anchorOf(lb.part, G, M, R, o, it.side, kk); if (an2) [it.ax, it.ay] = toS(an2.x, an2.y); }
+      }
       Object.assign(it, layoutText(ctx, L, lb.text, it.side === "left" ? availL : availR));
       items.push(it);
     });
@@ -1605,7 +1718,7 @@
     const [mx, my] = toS(G.MR1 - 8, G.MRtop + 20);
     if (my > 60 && mx < 1900 && !o.labels.some((l) => l.part === "machine_room") && !clash(mx - 150, my - 14, mx, my + 4)) L.text(ctx, "TRIEBWERKSRAUM", mx, my, { size: 13, weight: 700, font: mono, letterSpacing: 2, color: COL.cyan, align: "right", alpha: 0.6 });
     const [px, py] = toS(G.S0 - 14, G.PB + 4);
-    if (py < 1000 && px > 150 && !o.labels.some((l) => l.part === "pit") && !clash(px - 130, py - 14, px, py + 4)) L.text(ctx, "SCHACHTGRUBE", px, py, { size: 13, weight: 700, font: mono, letterSpacing: 2, color: COL.cyan, align: "right", alpha: 0.6 });
+    if (py < 905 && px > 150 && !o.labels.some((l) => l.part === "pit") && !clash(px - 130, py - 14, px, py + 4)) L.text(ctx, "SCHACHTGRUBE", px, py, { size: 13, weight: 700, font: mono, letterSpacing: 2, color: COL.cyan, align: "right", alpha: 0.6 });
   }
 
   /** Titel-Overlay im Engine-Stil, aber mit Zeilenumbruch (bleibt links von x = 900). */
@@ -1656,6 +1769,7 @@
     let E = null; try { E = ctx.getTransform(); } catch (e) { E = null; }
     const toS = (x, y) => { const sx = C.scx + (x - C.cx) * C.s, sy = C.scy + (y - C.cy) * C.s; return E ? [E.a * sx + E.c * sy + E.e, E.b * sx + E.d * sy + E.f] : [sx, sy]; };
     const R = { rx: (x) => C.scx + (x - C.cx) * C.s0, wy0: C.cy + (250 - C.scy) / C.s0, wy1: C.cy + (860 - C.scy) / C.s0 };
+    if (o.loupe) { const es = E ? Math.hypot(E.a, E.b) : 1, lx = 1275, ly = 535; M.loupe = { cx: E ? E.a * lx + E.c * ly + E.e : lx, cy: E ? E.b * lx + E.d * ly + E.f : ly, R: 205 * es, ws: C.s * es }; }
     // Kamera-Erschütterung
     let sh = 0; const hit = (te, amp) => { if (te != null && t >= te) sh += amp * Math.exp(-(t - te) * 7); };
     if (o.state === "safety_engage") hit(T.te, 6);
@@ -1665,6 +1779,7 @@
     else if (o.state === "stopped") hit(T.jolt, 8);
     else if (o.state === "runaway_up" && T.R.trip != null) hit(T.R.trip, 6);
     if (o.debris) hit(T.debrisT, 4);
+    if (T.passAt != null) { hit(T.passAt, 2.5); hit(T.passAt + T.passDur, 1.5); }
     if (sh < 0.05) sh = 0;
     const shx = sh * Math.sin(t * 83), shy = sh * Math.cos(t * 71);
     // Callout-Layout vorab (Richtungspfeile weichen aus)
@@ -1679,6 +1794,7 @@
     drawAmbient(ctx, G, t, o.hl.size ? 1 - 0.4 * hk : 1);
     drawLimit(ctx, L, G, M, T, t);
     drawAir(ctx, G, o, M, T, t);
+    drawPassThrough(ctx, L, G, o, T, t);
     drawRails(ctx, L, G, sty, M);
     drawBuffers(ctx, L, G, o, sty, M);
     drawGovernor(ctx, L, G, o, sty, M, t);
@@ -1706,6 +1822,7 @@
     if (o.ruler) drawRuler(ctx, L, G, o, M, T, t, toS);
     if (o.safetyFactor) drawFactorChip(ctx, L, G, o, M, T, t, toS);
     if (M.frozen && o.freezeIcon) { const [qx, qy] = toS(G.carX1 + 34, M.carY - G.CH); const a = smooth(M.frozenAge / 0.3) * (0.7 + 0.3 * Math.sin(t * 3)); fill(ctx, (c) => { c.rect(qx, qy, 7, 24); c.rect(qx + 13, qy, 7, 24); }, COL.cyan, a); stroke(ctx, (c) => c.arc(qx + 10, qy + 12, 22, 0, TAU), COL.cyan, 1.5, 0.6 * a); }
+    drawLoupe(ctx, L, G, o, sty, M, T, t, toS);
     drawCallouts(ctx, L, o, lay, t);
     drawMarkers(ctx, L, G, o, M, T, t, toS, R);
     drawTitle(ctx, L, p.text, t, d);

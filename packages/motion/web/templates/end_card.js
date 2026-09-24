@@ -28,7 +28,9 @@
                  {type, at, title}. Standard: alle drei. Nur ein Video -> es steht immer im großen Rahmen.
      teaser_visual "crankshaft" (Standard; Aliase engine, motor, crankshaft_rotating) | "gears" | "none"
      rpm         Zahl | "8.000" | {value, at, max, redline, unit} | false. Standard 8000 bei crankshaft.
-                 rpmMax (Standard aufgerundet ~1,18·rpm), redline (Standard 0,85·max), rpmUnit ("U/min")
+                 rpmMax (Standard aufgerundet ~1,18·rpm), redline (Standard 0,85·max), rpmUnit ("U/min"),
+                 rpmOvershoot bzw. rpm.overshoot (Nadel-Überschwingen, Standard 0,8; 0 = keins). Die Digital-
+                 anzeige zählt immer nur bis zum Zielwert hoch (zeigt nie mehr als rpm).
      labels      Bauteil-Beschriftungen in der Motor-Skizze: Standard ["kurbelwelle"]; false = keine;
                  Einträge "kurbelwelle" | "kolben" | "pleuel" | "schwungrad" oder {part, text, at}
      second_title Unterzeile unter dem kleinen Rahmen (Standard leer), secondLabel Kicker (Standard "EMPFOHLEN")
@@ -231,7 +233,9 @@
     let red = num(pick(o, ["redline", "red", "rot"]) ?? pick(P, ["redline", "rpmRedline", "red_line"]));
     if (!(red > 0 && red < max)) red = Math.round((max * 0.85) / 500) * 500;
     const unit = clean(pick(o, ["unit", "einheit"]) ?? pick(P, ["rpmUnit", "rpm_unit", "unit"]) ?? "U/min") || "U/min";
-    return { val, max, red, unit, atRaw: num(pick(o, ["at"]) ?? pick(P, ["rpmAt", "rpm_at", "tachoAt"])) };
+    let os = num(pick(o, ["overshoot", "overshoot_c"]) ?? pick(P, ["rpmOvershoot", "rpm_overshoot", "overshoot"]));
+    os = os === undefined ? 0.8 : clamp(os, 0, 3);
+    return { val, max, red, unit, os, atRaw: num(pick(o, ["at"]) ?? pick(P, ["rpmAt", "rpm_at", "tachoAt"])) };
   }
   const PARTS = {
     kurbelwelle: "Kurbelwelle", kolben: "Kolben", pleuel: "Pleuelstange", schwungrad: "Schwungrad",
@@ -817,9 +821,10 @@
             const idle = Math.min(850, rp.val);
             let v = idle * eo(seg(t, atBig + fd * 0.5, 0.9));
             const k = seg(t, atRpm, D);
-            if (k > 0) v = idle + (rp.val - idle) * backOut(k, 0.8);
+            if (k > 0) v = idle + (rp.val - idle) * backOut(k, rp.os);
+            // Anzeige zählt monoton bis zum Zielwert (nie darüber) – nur die Nadel darf überschwingen
+            const readout = k >= 1 ? fmtInt(rp.val) : fmtInt(Math.round(clamp(v, 0, rp.val) / 50) * 50);
             v += (Math.sin(t * 23) * 0.6 + Math.sin(t * 37 + 1) * 0.4) * (6 + 0.004 * v);
-            const readout = k >= 1 ? fmtInt(rp.val) : fmtInt(Math.round(Math.max(0, v) / 50) * 50);
             drawTacho(ctx, tcx, tcy, TR, rp, Math.max(0, v), readout, A, t);
           }
         }, C.cyan);

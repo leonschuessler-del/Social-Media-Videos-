@@ -4,7 +4,9 @@
    SZENEN (params.scene; Aliase: kurze Stichwörter wie "otis", "empire", "hoist" werden erkannt)
      otis_1854_demo (Default)  Kristallpalast New York: Plattform zwischen Holzschienen mit Sperrzahnleisten, Gehilfe kappt
                     das Tragseil mit der Axt, Plattform sackt wenige cm ab, Wagenfeder spreizt, Klinken rasten ein. Detail-Lupe.
-                    variant "newspaper_overlay": stehende Vorführung abgedunkelt + stilisierte Zeitungsspalte mit Randnotiz.
+                    variant "newspaper_overlay": stehende Vorführung abgedunkelt + stilisierte Zeitungsspalte (abstrakter Kopf,
+                      zweites Blatt dahinter) mit Randnotiz; note:false = nur Blindtext + Suchlauf. Mit quote: Zitatkarte rechts
+                      als Blickfang (Zeiger auf Otis), Stempel quote_by (z. B. "FEHLT IN DEN BERICHTEN") landet bei quote_at.
      otis_principle Nahansicht Plattformkopf: solange das Seil zieht, hält die Blattfeder die Sperrklinken eingezogen;
                     reißt es, streckt sich die Feder, die Klinken greifen beidseits in die Zahnstangen.
                     (auch automatisch bei action "pawls_engage" / "rope_break", egal welche scene)
@@ -22,6 +24,8 @@
        otis_1854_demo  BEATS: [0] = Beschriftungen/Lupe, [1] = Axthieb = Seil gekappt (Plattform fängt 0,3 s später),
                               [2] = Maß "platform_drop" in der Lupe, [3] = Otis zieht den Hut / Publikum jubelt
          newspaper     BEATS: [0] = Zeitung schiebt sich ein (+ Abdunkeln), [1] = Randnotiz wird amber unterstrichen
+                              (note:false: Suchlauf über das Blatt endet bei quote_at bzw. [1]); quote_in = Zitatkarte erscheint
+                              (Default kurz nach [0]), quote_at = Stempel landet
        otis_principle  BEATS: [0] = Seilzug-Pfeile + Status, [1] = Seil reißt, [2] = Klinken greifen (Plattform hängt),
                               [3] = Zahnstangen beidseits leuchten
        haughwout_1857  BEATS: [0] = Fassade wird aufgeschnitten, [1] = Fahrkorb fährt los (+ Tempo-Chip), [2] = Fahrkorb hält
@@ -30,7 +34,8 @@
        empire rescue   BEATS: [0] = Markierung am Hochhaus, [1] = Detailfenster öffnet, [2] = Helfer heben sie an,
                               [3] = sie sitzt in der anderen Kabine, [4] = Pfeil "nach unten"
        early_hoist     BEATS: [0] = Beschriftungen/Lupe, [1] = Heben beginnt, [2] = Last oben, Klinke sperrt
-     "at" wird akzeptiert von: jedem Eintrag in labels ({text, at, target}), year_at (Jahreszahl/Titel), quote_at.
+     "at" wird akzeptiert von: jedem Eintrag in labels ({text, at, target}), year_at (Jahreszahl/Titel), quote_at,
+       quote_in (nur newspaper).
 
    PARAMS (alle optional)
      labels        true (Default-Beschriftungen) | false | ["Text", {text, at, target}]  – Text wird per Stichwort einem
@@ -39,7 +44,8 @@
      year_label / date_label  große Jahreszahl/Datum oben rechts (baut sich Ziffer für Ziffer auf); title, subtitle;
                    header false blendet die Kopfzeile aus. quote (Text|true), quote_by.
      otis: action "rope_cut"|"none", platform_drop ("wenige cm"), audience (true), inset (true), dim_background,
-           newspaper_label ("1854"), highlight_note ("schneidet gelegentlich das Seil durch").
+           newspaper_label ("1854"), highlight_note ("schneidet gelegentlich das Seil durch"; false/"none" oder note:false →
+           kein Notiztext, Notizbereich als Blindtext), quote_by = Stempeltext (erstes Wort ≤ 8 Zeichen groß).
      principle: status (true).   haughwout: speed_label ("v ≈ 0,2 m/s" | false).
      empire: highlight ["elevator_shaft"] (Schacht amber), fog (true|0..1), floor/from_floor (75), impact_floor (79),
              aircraft ("B-25"), engine_paths ["through_building","into_shaft"], measure (true), distance_label, distance_sub,
@@ -789,44 +795,40 @@
     const defs = [{ key: "rope", text: "Tragseil" }, { key: "spring", text: "Wagenfeder" }, { key: "rack", text: "Sperrzahnleiste" }];
     if (TT.cut) defs.push({ key: "cut", text: "Seil gekappt", def: TT.tc + 0.08 });
     drawLabels(ctx, L, t, T, resolveLabels(cfg.items, A, OT_FALLBACK, cfg.variant === "newspaper" ? [] : defs, TT.lab0, TT.st), A, hdr);
-    if (cfg.quote) {
+    if (cfg.quote && cfg.variant === "newspaper") npQuote(ctx, L, t, T, cfg);
+    else if (cfg.quote) {
       const q = typeof cfg.quote === "string" ? cfg.quote : "Alles sicher, meine Herren!", qa = T.at(cfg.quoteAt, Math.min(TT.tl + 0.6, d - 0.9));
       quotePlate(ctx, L, HX, hdr.y + 30, "„" + q + "“", cfg.quoteBy || "ÜBERLIEFERT · ZEITGENÖSSISCH NICHT BELEGT", inv(qa, qa + 0.6, t));
     }
   }
 
   // ---------- Variante "newspaper_overlay": stilisierte Zeitungsspalte mit hervorgehobener Randnotiz ----------
-  const NP = { x: 236, y: 214, w: 430, h: 656, noteY: 336, noteLH: 40 };
-  function npPaper(g) {
+  const NP = { x: 236, y: 214, w: 430, h: 656, noteY: 336, noteLH: 40, sc: 0.94, cy: 556 }; // sc/cy: Blatt verkleinert + tiefer (Abstand zur Overlay-Box, Untertitel-Zone frei)
+  /** Zeitungsblatt (lokale Koordinaten 0..w, 0..h). blank = Notizbereich ebenfalls mit Blindtext gefüllt (note:false). */
+  function npPaper(g, blank) {
     const w = NP.w, h = NP.h, ink = COL.pale;
     fil(g, rectB(0, 0, w, h), "#1d150b", 0.97);
     stk(g, (c) => { for (let y = 6; y < h; y += 5) { c.moveTo(4, y); c.lineTo(w - 4, y + (h01(y) - 0.5) * 2); } }, COL.ink, 0.5, 0.06);
     stk(g, (c) => c.rect(0, 0, w, h), ink, 1.3, 0.7);
     stk(g, (c) => c.rect(9, 9, w - 18, h - 18), ink, 0.8, 0.35);
-    // Zeitungskopf: unlesbare Frakturzeichen (kein echter Titel)
-    stk(g, (c) => {
-      let x = 44; const y0 = 46, y1 = 88;
-      for (let i = 0; i < 15 && x < w - 50; i++) {
-        if (i === 6) { x += 16; continue; }
-        const kind = h01(i * 3.7), lw = 17 + 8 * h01(i * 1.3);
-        c.moveTo(x, y0 + 8); c.lineTo(x, y1); c.moveTo(x - 4, y0 + 10); c.lineTo(x + 3, y0 + 4);
-        if (kind > 0.35) { c.moveTo(x, y0 + 12); c.lineTo(x + lw * 0.6, y0 + 6); c.lineTo(x + lw * 0.6, y1); }
-        if (kind > 0.75) { c.moveTo(x + lw * 0.6, y0 + 12); c.lineTo(x + lw, y0 + 8); c.lineTo(x + lw, y1); }
-        c.moveTo(x - 3, y1); c.lineTo(x + lw * 0.65, y1 - 3);
-        x += lw + 8;
-      }
-    }, ink, 3.2, 0.85);
+    // Zeitungskopf: abstrakte Titelbalken (bewusst kein lesbarer/erfundener Titel)
+    {
+      const bars = [96, 132, 74], gap = 14, tot = bars.reduce((a, b) => a + b, 0) + gap * (bars.length - 1), x0 = (w - tot) / 2;
+      fil(g, (c) => { let x = x0; for (const bw of bars) { rr(c, x, 48, bw, 30, 3); x += bw + gap; } }, ink, 0.74);
+      fil(g, (c) => { for (const cx of [x0 - 22, x0 + tot + 22]) { c.moveTo(cx, 56); c.lineTo(cx + 7, 63); c.lineTo(cx, 70); c.lineTo(cx - 7, 63); c.closePath(); } }, COL.ink, 0.75);
+      fil(g, (c) => rr(c, w / 2 - 86, 86, 172, 5, 2), ink, 0.32);
+    }
     stk(g, (c) => { c.moveTo(18, 104); c.lineTo(w - 18, 104); c.moveTo(18, 109); c.lineTo(w - 18, 109); c.moveTo(18, 152); c.lineTo(w - 18, 152); }, ink, 1.1, 0.7);
     stk(g, (c) => { for (const [a, b] of [[22, 130], [w - 130, w - 22]]) for (const y of [124, 138]) { c.moveTo(a, y); c.lineTo(b - 12 * h01(a + y), y); } }, ink, 1.6, 0.35);
-    // Spalten mit Blindtext-Zeilen (Notizbereich ausgespart)
+    // Spalten mit Blindtext-Zeilen (Notizbereich ausgespart, außer blank)
     const cols = [[22, 206], [224, 408]], n0 = NP.noteY - 48, n1 = NP.noteY + 3 * NP.noteLH;
-    stk(g, (c) => { c.moveTo(215, 166); c.lineTo(215, n0 - 8); c.moveTo(215, n1 + 8); c.lineTo(215, h - 24); }, ink, 0.8, 0.4);
+    stk(g, (c) => { if (blank) { c.moveTo(215, 166); c.lineTo(215, h - 24); } else { c.moveTo(215, 166); c.lineTo(215, n0 - 8); c.moveTo(215, n1 + 8); c.lineTo(215, h - 24); } }, ink, 0.8, 0.4);
     stk(g, (c) => { for (const [a, b] of cols) { c.moveTo(a, 174); c.lineTo(a + (b - a) * 0.8, 174); c.moveTo(a, 184); c.lineTo(a + (b - a) * 0.55, 184); } }, ink, 3, 0.55);
     stk(g, (c) => {
       cols.forEach(([a, b], ci) => {
         let row = 0;
         for (let y = 204; y < h - 26; y += 14, row++) {
-          if (y > n0 - 12 && y < n1 + 10) continue;
+          if (!blank && y > n0 - 12 && y < n1 + 10) continue;
           if (ci === 1 && y > 486 && y < 612) continue;
           const last = row % 7 === 6; let x = a + (row % 7 === 0 ? 10 : 0); const end = last ? a + (b - a) * (0.3 + 0.4 * h01(y + ci)) : b;
           while (x < end - 8) { const wl = Math.min(end - x, 10 + 34 * h01(x * 0.37 + y * 1.3 + ci)); c.moveTo(x, y); c.lineTo(x + wl, y); x += wl + 6; }
@@ -838,31 +840,113 @@
     hatch(g, rectB(237, 491, 158, 116), 237, 491, 158, 116, 70, 4, COL.ink, 0.6, 0.18);
     fil(g, (c) => { c.arc(308, 516, 5, 0, TAU); c.rect(302, 522, 12, 24); }, ink, 0.55);
   }
+  /** Zeiten der Zeitungsvariante: t0 Blatt, t1 Unterstreichung, qi Zitatkarte erscheint, qa Stempel (quote_at). */
+  function npTimes(T, cfg) {
+    const d = T.d, t0 = T.beat(0, 0.3), t1 = Math.max(t0 + 0.4, T.beat(1, Math.max(t0 + 0.9, 0.5 * d)));
+    const qa = T.at(cfg.quoteAt, Math.max(t0 + 1.0, 0.62 * d));
+    const qi = Math.min(T.at(cfg.quoteIn, Math.min(t0 + 0.35, qa - 0.6)), Math.max(0.3, qa - 0.3));
+    return { t0, t1, qi, qa };
+  }
   function newspaper(ctx, L, t, T, cfg) {
-    const t0 = T.beat(0, 0.3), t1 = Math.max(t0 + 0.4, T.beat(1, Math.max(t0 + 0.9, 0.5 * T.d)));
+    const { t0, t1, qa } = npTimes(T, cfg), w = NP.w, h = NP.h, blank = !cfg.note;
     const ks = inv(t0, t0 + 0.7, t); if (ks <= 0) return;
     const k = easeOutBack(ks), sG = GA; GA = sG * clamp(ks * 3);
     ctx.save(); ctx.beginPath(); plateClip(ctx); ctx.clip();
-    ctx.translate(NP.x + NP.w / 2 - (1 - k) * 560, NP.y + NP.h / 2); ctx.rotate(-2 * D2R); ctx.translate(-NP.w / 2, -NP.h / 2);
-    fil(ctx, rectB(14, 16, NP.w, NP.h), "#000", 0.45);
-    layer(ctx, "np_paper", -2, -2, NP.w + 4, NP.h + 4, 1, npPaper);
-    if (cfg.paperLabel) txt(L, ctx, cfg.paperLabel, NP.w / 2, 140, { size: 28, weight: 700, font: L.FONT.head, letterSpacing: 6, color: COL.ink, align: "center", glow: 8, glowColor: "rgba(255,179,71,0.4)" });
-    if (cfg.note) {
-      let size = 27, lh = NP.noteLH, lines = L.wrap(ctx, "„" + cfg.note + "“", NP.w - 70, { size, weight: "italic 500" });
-      if (lines.length > 3) { size = 23; lh = 33; lines = L.wrap(ctx, "„" + cfg.note + "“", NP.w - 60, { size, weight: "italic 500" }).slice(0, 4); }
+    ctx.translate(NP.x + 12 + w / 2 - (1 - k) * 560, NP.cy); ctx.scale(NP.sc, NP.sc);
+    // zweites Blatt dahinter ("wenige Berichte"), dunkler
+    ctx.save(); ctx.translate(-26, 0); ctx.rotate(2.2 * D2R); ctx.translate(-w / 2, -h / 2);
+    fil(ctx, rectB(10, 14, w, h), "#000", 0.35);
+    layer(ctx, "np_paper0", -2, -2, w + 4, h + 4, 1, (g) => npPaper(g, true));
+    fil(ctx, rectB(-1, -1, w + 2, h + 2), "#07090f", 0.55);
+    ctx.restore();
+    ctx.rotate(-2 * D2R); ctx.translate(-w / 2, -h / 2);
+    fil(ctx, rectB(14, 16, w, h), "#000", 0.45);
+    layer(ctx, blank ? "np_paper0" : "np_paper1", -2, -2, w + 4, h + 4, 1, (g) => npPaper(g, blank));
+    if (cfg.paperLabel) txt(L, ctx, cfg.paperLabel, w / 2, 140, { size: 28, weight: 700, font: L.FONT.head, letterSpacing: 6, color: COL.ink, align: "center", glow: 8, glowColor: "rgba(255,179,71,0.4)" });
+    if (!blank) {
+      let size = 27, lh = NP.noteLH, lines = L.wrap(ctx, "„" + cfg.note + "“", w - 70, { size, weight: "italic 500" });
+      if (lines.length > 3) { size = 23; lh = 33; lines = L.wrap(ctx, "„" + cfg.note + "“", w - 60, { size, weight: "italic 500" }).slice(0, 4); }
       const hk = easeOut(inv(t1, t1 + 0.3, t));
       if (hk > 0) {
-        fil(ctx, (c) => c.rect(20, NP.noteY - 36, NP.w - 40, lines.length * lh + 18), COL.ink, 0.09 * hk + 0.03 * hk * Math.sin(t * 3));
+        fil(ctx, (c) => c.rect(20, NP.noteY - 36, w - 40, lines.length * lh + 18), COL.ink, 0.09 * hk + 0.03 * hk * Math.sin(t * 3));
         stk(ctx, (c) => { c.moveTo(22, NP.noteY - 30); c.lineTo(14, NP.noteY - 30); c.lineTo(14, NP.noteY - 30 + (lines.length * lh + 6) * hk); c.lineTo(22, NP.noteY - 30 + (lines.length * lh + 6) * hk); }, COL.ink, 2.2, hk, 0.8);
       }
       lines.forEach((s, i) => {
-        const y = NP.noteY + i * lh, w = meas(L, ctx, s, { size, weight: "italic 500" });
-        txt(L, ctx, s, NP.w / 2, y, { size, weight: "italic 500", color: hk > 0.5 ? COL.white : COL.pale, align: "center", alpha: 0.9 });
+        const y = NP.noteY + i * lh, lw = meas(L, ctx, s, { size, weight: "italic 500" });
+        txt(L, ctx, s, w / 2, y, { size, weight: "italic 500", color: hk > 0.5 ? COL.white : COL.pale, align: "center", alpha: 0.9 });
         const ui = easeInOut(inv(t1 + 0.15 + i * 0.3, t1 + 0.55 + i * 0.3, t));
-        if (ui > 0) stk(ctx, (c) => { c.moveTo(NP.w / 2 - w / 2, y + 10); c.lineTo(NP.w / 2 - w / 2 + w * ui, y + 10 + 1.5 * Math.sin(ui * 9)); }, COL.ink, 2.6, 1, 1);
+        if (ui > 0) stk(ctx, (c) => { c.moveTo(w / 2 - lw / 2, y + 10); c.lineTo(w / 2 - lw / 2 + lw * ui, y + 10 + 1.5 * Math.sin(ui * 9)); }, COL.ink, 2.6, 1, 1);
       });
+    } else {
+      // Suchlauf über den Blindtext (Blatt gelandet → Stempel bzw. BEAT [1]): "der Ausruf steht nicht drin"
+      const s0 = t0 + 0.6, s1 = (cfg.quote ? qa : t1) - 0.04, kw = s1 - s0 >= 0.4 ? inv(s0, s1, t) : 0;
+      if (kw > 0 && kw < 1) {
+        const y = lerp(170, h - 30, easeInOut(kw)), a = Math.sin(kw * Math.PI);
+        ctx.save(); ctx.globalAlpha = GA * a; const gr = ctx.createLinearGradient(0, y - 64, 0, y); gr.addColorStop(0, rgba(COL.ink, 0)); gr.addColorStop(1, rgba(COL.ink, 0.2)); ctx.fillStyle = gr; ctx.fillRect(16, y - 64, w - 32, 64); ctx.restore();
+        stk(ctx, (c) => { c.moveTo(16, y); c.lineTo(w - 16, y); }, COL.ink, 2, 0.9 * a, 0.9);
+      }
     }
     ctx.restore(); GA = sG;
+  }
+  /** Zitat bevorzugt am Komma umbrechen, sonst normal (max. 3 Zeilen). */
+  function quoteLines(L, ctx, q, size, maxW) {
+    const o = { size, weight: "italic 500" };
+    if (meas(L, ctx, q, o) <= maxW) return [q];
+    const i = q.indexOf(", ");
+    if (i > 0) { const a = q.slice(0, i + 1), b = q.slice(i + 2); if (meas(L, ctx, a, o) <= maxW && meas(L, ctx, b, o) <= maxW) return [a, b]; }
+    const ls = L.wrap(ctx, q, maxW, o);
+    if (ls.length > 3) { ls.length = 3; ls[2] = ls[2].replace(/[\s,;:.“"]+$/, "") + " …“"; }
+    return ls;
+  }
+  /** Zeitungsvariante: Zitat als Blickfang rechts neben der Vorführung (Zeiger auf Otis), Stempel landet bei quote_at.
+      Stempeltext = quote_by (erstes kurzes Wort groß, z. B. "FEHLT" / "IN DEN BERICHTEN"). */
+  const QC = { xr: 1712, y: 282, hx: 1090, hy: 424 };
+  function npQuote(ctx, L, t, T, cfg) {
+    const { qi, qa } = npTimes(T, cfg), kin = inv(qi, qi + 0.5, t); if (kin <= 0) return;
+    const raw = (typeof cfg.quote === "string" ? cfg.quote : "Alles sicher, meine Herren!").replace(/^[\s„"“”»«']+|[\s„"“”»«']+$/g, "");
+    const size = 40, lh = 52, lines = quoteLines(L, ctx, "„" + raw + "“", size, 420);
+    let lw = 0; for (const s of lines) lw = Math.max(lw, meas(L, ctx, s, { size, weight: "italic 500" }));
+    // Stempeltext
+    const by = (cfg.quoteBy || "NICHT BELEGT").toUpperCase(), wd = by.split(/\s+/).filter(Boolean);
+    const big = wd.length >= 2 && wd[0].length <= 8 ? wd[0] : "", small = big ? wd.slice(1).join(" ") : by;
+    const bo = { size: 44, weight: 700, font: L.FONT.head, letterSpacing: 7 };
+    // Kleinzeile: passt sie nicht in 400 px, ausgewogen auf 2 Zeilen umbrechen, notfalls verkleinern (min. 14 px)
+    let ss = 22; const so = () => ({ size: ss, weight: 700, font: L.FONT.head, letterSpacing: 3 }), SMW = 400;
+    let sl = [small], sw = meas(L, ctx, small, so());
+    if (sw > SMW) {
+      const ws = small.split(/\s+/);
+      if (ws.length > 1) { let best = null; for (let i = 1; i < ws.length; i++) { const a = ws.slice(0, i).join(" "), b = ws.slice(i).join(" "), m = Math.max(meas(L, ctx, a, so()), meas(L, ctx, b, so())); if (!best || m < best.m) best = { a, b, m }; } sl = [best.a, best.b]; sw = best.m; }
+      if (sw > SMW) { ss = Math.max(14, Math.floor((ss * SMW) / sw)); sw = 0; for (const x of sl) sw = Math.max(sw, meas(L, ctx, x, so())); }
+    }
+    const slh = Math.round(ss * 1.3), bw0 = big ? meas(L, ctx, big, bo) : 0, stW = Math.min(Math.max(bw0, sw) + 52, 470), stH = (big ? 44 + 10 : 0) + ss + (sl.length - 1) * slh + 34;
+    const cw = clamp(Math.max(lw, stW) + 72, 340, 520), x0 = QC.xr - cw, y0 = QC.y, qH = 44 + lines.length * lh;
+    const kg = easeOut(inv(qa - 0.12, qa + 0.12, t)), ch = qH + 6 + (stH + 44) * kg;
+    const a = easeOut(kin), dx = (1 - a) * 36;
+    ctx.save(); ctx.translate(dx, 0);
+    // Zeiger zu Otis (gestrichelt) + Sprechkarten-Spitze
+    const py = y0 + 34 + size * 0.5;
+    stk(ctx, (c) => { c.moveTo(x0 - 30, py + 22); c.lineTo(QC.hx + 24, QC.hy - 4); }, COL.pale, 1.2, 0.4 * a, 0, [6, 7], -t * 14);
+    fil(ctx, (c) => { c.moveTo(x0 + 2, py - 14); c.lineTo(x0 - 28, py + 22); c.lineTo(x0 + 2, py + 10); c.closePath(); }, "rgb(7,9,16)", 0.92 * a);
+    stk(ctx, (c) => { c.moveTo(x0, py - 14); c.lineTo(x0 - 28, py + 22); c.lineTo(x0, py + 10); }, COL.ink, 1.3, 0.75 * a);
+    // Karte
+    fil(ctx, (c) => rr(c, x0, y0, cw, ch, 6), "rgb(7,9,16)", 0.92 * a);
+    stk(ctx, (c) => rr(c, x0, y0, cw, ch, 6), COL.ink, 1.3, 0.75 * a, 0.4);
+    fil(ctx, rectB(x0, y0 + 14, 5, ch - 28), COL.ink, 0.9 * a);
+    lines.forEach((s, i) => txt(L, ctx, s, x0 + 36, y0 + 34 + size * 0.78 + i * lh, { size, weight: "italic 500", color: COL.white, alpha: a * (1 - 0.18 * kg) }));
+    ctx.restore();
+    // Stempel (BEAT quote_at): fällt mit Überschwung auf die Karte, danach leichtes Glühen
+    const ks = inv(qa, qa + 0.2, t); if (ks <= 0) return;
+    const sc = 1 + 0.75 * (1 - easeOut(ks)), sa = clamp(ks * 2.2), cx = x0 + cw / 2 + 3, cy = y0 + qH + 6 + (stH + 44) / 2 - 2, pul = 0.5 + 0.5 * Math.sin((t - qa) * 3.2);
+    const land = t - qa - 0.2;
+    ctx.save(); ctx.translate(cx, cy); ctx.rotate(-4 * D2R); ctx.scale(sc, sc);
+    fil(ctx, (c) => c.rect(-stW / 2, -stH / 2, stW, stH), "rgb(34,8,10)", 0.6 * sa);
+    stk(ctx, (c) => c.rect(-stW / 2, -stH / 2, stW, stH), COL.red, 3.2, sa, land > 0 ? 0.5 + 0.35 * pul : 0.5);
+    stk(ctx, (c) => c.rect(-stW / 2 + 7, -stH / 2 + 7, stW - 14, stH - 14), COL.red, 1.2, 0.8 * sa);
+    if (big) txt(L, ctx, big, 3.5, -stH / 2 + 17 + 44 * 0.76, Object.assign({}, bo, { color: COL.red, align: "center", alpha: sa, glow: 12, glowColor: "rgba(255,90,95,0.55)" }));
+    const sy0 = big ? stH / 2 - 17 - ss * 0.2 - (sl.length - 1) * slh : ss * 0.36 - ((sl.length - 1) * slh) / 2;
+    sl.forEach((x, i) => txt(L, ctx, x, 1.5, sy0 + i * slh, Object.assign(so(), { color: COL.red, align: "center", alpha: sa }, big ? {} : { glow: 10, glowColor: "rgba(255,90,95,0.5)" })));
+    if (land > 0 && land < 0.55) { const f = land / 0.55, e = 10 + 26 * easeOut(f); stk(ctx, (c) => c.rect(-stW / 2 - e, -stH / 2 - e, stW + 2 * e, stH + 2 * e), COL.red, 2, 0.7 * (1 - f)); }
+    ctx.restore();
   }
 
   // =====================================================================================
@@ -1568,12 +1652,18 @@
       txt(L, ctx, cfg.panelTitle || "DETAIL · AUFZUGSVORRAUM", P.x + 18, P.y - 16, { size: 18, weight: 700, font: L.FONT.mono, color: COL.ink, letterSpacing: 2, alpha: inv(0.5, 1, rp) });
     }
     const hdr = drawHeader(ctx, L, t, T, cfg, { title: "EMPIRE STATE BUILDING", sub: "New York · 28. Juli 1945", size: 28, subSize: 20 }, cfg.ov);
-    const tcx = lerp(J.sh[0], J.hp[0], 0.5), tcy = lerp(J.sh[1], J.hp[1], 0.5);
+    const tcx = lerp(J.sh[0], J.hp[0], 0.5), tcy = lerp(J.sh[1], J.hp[1], 0.5), rhx = rearX - 20 * kp + 16.7 * (0.4 * kl * dz + 0.35 * (1 - kl)); // Kopf des hinteren Helfers
     const A = {
       floor: { re: /stock|etage|geschoss|floor/, def: b0 + 0.6, g: () => ({ tx: mx, ty: my, bx: 480, by: 506, color: COL.ink }) },
-      person: { re: /liftführ|führerin|frau|verletzt|oliver|betty|opfer|patient|fahrstuhlführ/, def: b1 + 0.8, g: () => (rp > 0.5 ? { tx: tcx, ty: tcy, bx: clamp(tcx - 40, 720, 1300), by: 432 } : null) },
-      car: { re: /kabine|aufzug|fahrkorb|lift(?!führ)/, def: b2 + 0.8, g: () => (rp > 0.5 ? { tx: P.dB + 40, ty: F - 170, bx: 1735, by: 500, align: "right", color: COL.cyan } : null) },
-      helpers: { re: /helfer|retter|feuerwehr|männer|sanitäter/, def: b2, g: () => (rp > 0.5 ? { tx: rearX + 4, ty: F - 172, bx: clamp(rearX - 30, 720, 1300), by: 482 } : null) },
+      // Box links oberhalb der Person (folgt ihr, Führungslinie fällt steil rechts an den Helfern vorbei); zu lange Texte → alte Anordnung
+      person: { re: /liftführ|führerin|frau|verletzt|oliver|betty|opfer|patient|fahrstuhlführ/, def: b1 + 0.8, g: (s) => {
+        if (rp <= 0.5) return null;
+        const bw = Math.min(470, meas(L, ctx, s, { size: 24, weight: 600 }) + 28);
+        return 937 - 50 - bw >= P.x + 16 ? { tx: tcx, ty: tcy, bx: clamp(tcx - 50, P.x + 16 + bw, 1480), by: 426, align: "right" } : { tx: tcx, ty: tcy, bx: clamp(tcx - 40, 720, 1300), by: 432 };
+      } },
+      // Kabinen-Box in derselben Zeile rechts (über dem Stockwerksanzeiger, der bei BEAT [4] ausschlägt)
+      car: { re: /kabine|aufzug|fahrkorb|lift(?!führ)/, def: b2 + 0.8, g: () => (rp > 0.5 ? { tx: P.dB + 40, ty: F - 170, bx: 1735, by: 426, align: "right", color: COL.cyan } : null) },
+      helpers: { re: /helfer|retter|feuerwehr|männer|sanitäter/, def: b2, g: () => (rp > 0.5 ? { tx: rhx, ty: F - 174, bx: clamp(rhx - 40, P.x + 130, 1480), by: 488, align: "right" } : null) },
       building: { re: /empire|gebäude|building|hochhaus|wolkenkratzer/, g: () => ({ tx: rbX(ES.cx + 10), ty: rbY(esY(95)), bx: 480, by: rbY(esY(99)) }) },
     };
     const defs = [{ key: "floor", text: fl + ". Stock", def: b0 + 0.6 }, { key: "person", text: "Liftführerin", def: b1 + 0.8 }];
@@ -1787,6 +1877,8 @@
     const subtitle = capt && ovText && ovText.includes(norm(capt)) ? "" : capt;
     const hb = bool(pick(P, ["header", "title_plate", "show_title", "kopfzeile"]));
     const qv = pick(P, ["quote", "zitat"]), qb = bool(qv);
+    const NOTE_K = ["highlight_note", "note", "note_text", "randnotiz", "show_note"], noteV = pick(P, NOTE_K.slice(0, 4));
+    const noteOff = NOTE_K.some((k) => P[k] === false || P[k] === 0 || (typeof P[k] === "string" && /^(false|off|none|no|nein|keine|aus|0)$/i.test(P[k].trim())));
     const hl = listv(pick(P, ["highlight", "highlights", "hervorheben"])).join(" ");
     const fogv = pick(P, ["fog", "nebel"]), fb = bool(fogv), fn = numv(fogv);
     const dimv = pick(P, ["dim_background", "dim", "abdunkeln"]), db = bool(dimv), dn = numv(dimv);
@@ -1801,10 +1893,10 @@
       dropText: dropv === false ? "" : str(dropv, 40) || "wenige cm",
       dim: dn !== undefined ? clamp(dn, 0, 0.85) : db === true ? 0.55 : db === false ? 0 : np ? 0.5 : 0,
       paperLabel: str(pick(P, ["newspaper_label", "paper_label", "zeitung_label"]), 24) || (np ? year || "1854" : ""),
-      note: str(pick(P, ["highlight_note", "note", "note_text", "randnotiz"]), 110) || "schneidet gelegentlich das Seil durch",
+      note: noteOff ? "" : (typeof noteV === "string" || typeof noteV === "number" ? str(noteV, 110) : "") || "schneidet gelegentlich das Seil durch",
       year: np && !has(["year_label", "year", "jahr"]) ? "" : year, title, subtitle,
       titleAt: pick(P, ["year_at", "title_at", "header_at"]),
-      quote: qb === true ? true : qb === false || qv === undefined ? false : str(qv, 90), quoteBy: str(pick(P, ["quote_by", "quote_source", "quelle"]), 60), quoteAt: pick(P, ["quote_at"]),
+      quote: qb === true ? true : qb === false || qv === undefined ? false : str(qv, 90), quoteBy: str(pick(P, ["quote_by", "quote_source", "quelle"]), 60), quoteAt: pick(P, ["quote_at", "stamp_at"]), quoteIn: pick(P, ["quote_in", "quote_show_at"]),
       hlShaft: /shaft|schacht|elevator|aufzug/.test(hl),
       floor: numv(pick(P, ["from_floor", "floor", "etage", "mark_floor", "stock"])) || floorFromLabels,
       impactFloor: numv(pick(P, ["impact_floor", "floor", "etage", "stock"])) || floorFromLabels,

@@ -19,15 +19,31 @@
                     stamp_color "red" (Default) | "green" | "amber" | "cyan" | #rrggbb
      stamp_at       Sekunden | "threshold" (Default) – threshold: 0,35 s nachdem der Zähler die Grenze erreicht (ohne Lupe:
                     0,5 s nach dem letzten Bruch). stamp_count N = wenn N Brüche gezählt sind. Grenze nie erreicht -> kein Stempel.
+     carry          {d, camera, params} – ANSCHLUSS an die vorherige rope_macro-Szene (Aliase continue_from, from_prev):
+                    params = deren params (1:1 kopiert), d = deren Dauer, camera = deren Kamera. Die Vorszene wird mit
+                    derselben Rechnung bis zu ihrem Ende nachgerechnet und über beide Kameras (Vorszene u = 1, diese u = 0)
+                    auf den Szenenstart abgebildet: dieselben Brüche an denselben Bildstellen (gleiches Aussehen, Prüfringe
+                    bleiben), Litzenmuster phasengleich, Lupe offen an ihrer Parkstelle, Anzeige in ihrer Form; die Anzeige
+                    wird danach (kurz vor dem ersten neuen Zählschritt bzw. der Grenzmarke) zur eigenen Form umgebaut.
+                    broken_wires = Gesamtzahl (vorhandene + neue). Neue Brüche liegen in Scanrichtung vor der Lupe, 1–3 davon
+                    im Kern der End-Lupe, keine Flächenbrüche auf der Achse, wo der Stempel landet (bei Platzmangel weniger).
+                    Tipp: Kamera mit ähnlicher Startskala wählen (Ende pan_* 1,08 -> slow_pull_out 1,1), dann gibt es beim
+                    Überblenden praktisch kein Doppelbild.
+     initial_counted bool – vorhandene Brüche sind schon gezählt (Ring ab t = 0, Anzeige startet damit); carry: aus der Vorszene
+     lens_open_at_start bool – Lupe ist bei t = 0 schon offen (carry: automatisch); ohne Startlage am letzten vorhandenen Bruch
+     lens_start_x   Bildschirm-x – Startlage der Lupe; scan_dir "left" | "right" (Default: zur Seite der ungezählten Brüche)
      orientation    "diagonal" | "horizontal" (Default diagonal), angle (Grad -22..8, überschreibt)
      speed          px/s (12) – Seillauf; diameter_mm (10), spec ("8 × 19 Seale · Fasereinlage"), dimension (true)
    BEATS  params.beats = Sekunden ab Szenenstart (auf [0,3 ; d-0,3] geklemmt, null/fehlend = Default):
      [0] = erster Drahtbruch, [1] = letzter Drahtbruch (dazwischen gleichmäßig), [2] = Lupe beginnt zu scannen (öffnet ~0,4 s vorher),
      [3] = Lupe am Ziel = Zählung abgeschlossen, [4] = Callout (label), [5] = Stempel
+     (mit carry: [0]/[1] gelten für die NEUEN Brüche, [2] = die schon offene Lupe fährt los)
    "at" (s) akzeptieren: breaks[i] bzw. breaks[i].at, label.at / label_at, stamp.at / stamp_at, threshold.at / threshold_at
      (Grenzmarke erscheint), scan_start / scan_end (= beats[2]/[3]).
    Ohne beats/at: Brüche 0,08–0,42·d, Lupe öffnet 0,12·d und scannt 0,2–0,62·d; Callout 0,52·d (bei verdeckter Zahl nach der
-     Zählung, ohne Lupe 0,35 s nach dem letzten Bruch). Ein gesetzter Stempelzeitpunkt verkürzt den Scan, damit die Zählung vorher endet. */
+     Zählung, ohne Lupe 0,35 s nach dem letzten Bruch). Ein gesetzter Stempelzeitpunkt verkürzt den Scan, damit die Zählung vorher endet.
+   Endlage der Lupe: Skalenring (RL+29) nach Kamera (p.scene.camera) über dem Untertitelbereich (y ≤ 908) und ≥ 95 px vom Rand.
+   CE.debugRopeMacro(params, d, t, camera) liefert Zeitplan, Zählzeiten und Bildlagen (nur lesend, für die Wort-Synchronisation). */
 (function () {
   "use strict";
   const CE = window.CE;
@@ -206,7 +222,7 @@
   }
 
   function buildBreaks(S) {
-    if (S.carryI && S.carryI.breaks.length) return buildCarryBreaks(S);
+    if (S.carryI && (S.carryI.breaks.length || S.lensStartU != null)) return buildCarryBreaks(S);
     const n = S.nb; const d = S.d;
     const out = { list: [], sFirst: 0, sLast: 0 };
     if (!n) return out;
@@ -261,7 +277,7 @@
     let dir = S.scanDir;
     if (!dir) dir = lu == null ? 1 : lu - sLo > sHi - lu ? -1 : 1;
     out.dir = dir;
-    const os = old.map((b) => b.s), oMin = Math.min(...os), oMax = Math.max(...os);
+    const os = old.map((b) => b.s), oMin = os.length ? Math.min(...os) : Infinity, oMax = os.length ? Math.max(...os) : -Infinity;
     // Spalten (halbe Kronenteilung) in Scanrichtung; je Spalte die zulässigen Bruchlagen
     const mk = (k, type) => {
       const i = 40 + Math.round(k * 2 + 200) * 7 + ["top", "bottom", "face", "up45", "lo45", "up22", "lo22"].indexOf(type);
@@ -353,13 +369,14 @@
     let hasStart = S.lensStartU != null;
     if (hasStart) { plan.mS = S.lensStartU; plan.yS = S.lensStartY || 0; }
     if (!B.list.length) {
-      if (hasStart) plan.mE = plan.mS + 60; else { plan.mS = -520 - S.v * tS; plan.mE = 220 - S.v * tE; }
+      if (hasStart) { plan.mE = plan.mS; plan.yE = plan.yS; plan.park = true; } else { plan.mS = -520 - S.v * tS; plan.mE = 220 - S.v * tE; }
       return plan;
     }
     const pre = B.list.filter((b) => b.pre);
     if (!hasStart && S.lensOpenStart && pre.length) { hasStart = true; plan.mS = pre[pre.length - 1].s; } // offen am letzten vorhandenen Bruch
     if (!hasStart) plan.mS = Math.max(B.sFirst - 300, -600 - S.v * tS);
     const todo = B.list.filter((b) => !b.counted), pool = todo.length ? todo : B.list;
+    if (hasStart && !todo.length) { plan.mE = plan.mS; plan.yE = plan.yS; plan.park = true; return plan; } // nichts Neues zu zählen: Lupe bleibt stehen
     let dir = 1;
     if (hasStart) dir = B.dir || S.scanDir || (pool.reduce((a, b) => a + b.s, 0) / pool.length < plan.mS ? -1 : 1);
     plan.dir = dir;
@@ -390,7 +407,8 @@
   const lensM = (L, plan, t) => L.lerp(plan.mS, plan.mE, L.easeInOut((t - plan.tS) / (plan.tE - plan.tS)));
   // Querlage der Lupe: vom Start-Versatz (Anschluss) zur Achse, spät zur Kante des Zielbruchs
   function lensY(S, L, t) {
-    const P = S.plan, late = P.yE * L.smooth(L.inv(P.tS + 0.55 * (P.tE - P.tS), P.tE, t));
+    const P = S.plan; if (P.park) return P.yS;
+    const late = P.yE * L.smooth(L.inv(P.tS + 0.55 * (P.tE - P.tS), P.tE, t));
     return P.yS ? late + P.yS * (1 - L.smooth(L.inv(P.tS, P.tS + 0.4 * (P.tE - P.tS), t))) : late;
   }
   function crossTime(L, plan, target) {
