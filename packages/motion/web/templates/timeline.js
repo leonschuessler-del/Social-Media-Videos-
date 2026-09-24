@@ -431,6 +431,42 @@
     return { size, lines, w, lh, h: Math.round(size * 0.74 + (lines.length - 1) * lh) };
   }
 
+  /** Großer Heldentitel (Hauptzeile + optionale Zusatzzeile), zentriert; schrumpft später in den Titelplatz. */
+  function heroLayout(ctx, main, sub) {
+    const MAXW = 1380;
+    const meas = (sz, s2) => { setFont(ctx, 700, sz, F_HEAD, 4); return ctx.measureText(s2).width; };
+    const m = upper(main);
+    ctx.save();
+    let size = 88, lines = [m];
+    while (size > 58 && meas(size, m) > MAXW) size -= 2;
+    if (meas(size, m) > MAXW) {
+      size = 66; setFont(ctx, 700, size, F_HEAD, 4);
+      lines = wrapBalanced(ctx, m, MAXW);
+      if (lines.length > 2) { lines = lines.slice(0, 2); lines[1] = ellipsize(ctx, lines[1], MAXW); }
+    }
+    let w = 0;
+    for (const ln of lines) w = Math.max(w, meas(size, ln));
+    let ss = 0, subLines = [];
+    if (sub) {
+      const su = upper(sub);
+      ss = clamp(Math.round(size * 0.53), 30, 46);
+      while (ss > 28 && meas(ss, su) > MAXW) ss -= 2;
+      subLines = [su];
+      if (meas(ss, su) > MAXW) {
+        setFont(ctx, 700, ss, F_HEAD, 4);
+        subLines = wrapBalanced(ctx, su, MAXW);
+        if (subLines.length > 2) { subLines = subLines.slice(0, 2); subLines[1] = ellipsize(ctx, subLines[1], MAXW); }
+      }
+      for (const ln of subLines) w = Math.max(w, meas(ss, ln));
+    }
+    ctx.restore();
+    const lh = Math.round(size * 1.14), slh = Math.round(ss * 1.3);
+    const hMain = 0.74 * size + (lines.length - 1) * lh;
+    const gap = subLines.length ? Math.round(size * 0.62) : 0;
+    const hSub = subLines.length ? 0.74 * ss + (subLines.length - 1) * slh : 0;
+    return { size, lines, w, lh, ss, subLines, slh, hMain, gap, hSub, h: hMain + gap + hSub };
+  }
+
   // ---------------- Modell (Layout, gecacht pro Parametersatz/Kamera/Text/Dauer) ----------------
   let CACHE_KEY = null, CACHE_M = null;
   function getModel(ctx, params, env) {
@@ -461,6 +497,8 @@
     const dimOthers = !falsy(pick(P, ["dimOthers", "dim_others", "dim", "abdunkeln"]));
     const cv = pick(P, ["counter", "yearCounter", "year_counter", "zaehler", "zähler"]);
     const counter = cv === undefined ? rtl : truthy(cv);
+    const rwl = pick(P, ["rewindLabel", "rewind_label", "rewindText", "rewind_text", "rueckspulText"]);
+    const rewindLabel = rtl && typeof rwl === "string" && rwl.trim() ? upper(rwl.replace(/\s+/g, " ").trim()).slice(0, 28) : "";
 
     // ---- horizontal ----
     const inset = cameraInset(env.cam);
@@ -497,6 +535,7 @@
       let top = SAFE_T - 6;
       if (OVL) top = Math.max(top, worldTop(OV_TOP + OVL.h + OV_GAP, cams, env.fy));
       TT = Object.assign({}, TI, lay, { top: Math.round(top) });
+      if (TI.hero) TT.HL = heroLayout(ctx, TI.main, TI.sub);
       topLim = TT.top + lay.h + 36;
     }
     const AY0 = Math.round((topLim + botLim) / 2) + 4;
@@ -585,6 +624,11 @@
     }
     ctx.restore();
     const AY = best.AY, stem = best.stem;
+    if (TT && TT.HL) {
+      // Heldentitel: mittig im Band zwischen Titelplatz und Achse (Achse + Platzhalter bleiben frei)
+      const HB = TT.HL, lo = TT.top, hi = AY - 74;
+      TT.heroTop = Math.round(Math.max(lo - 20, Math.min((lo + hi) / 2 - HB.h / 2, hi - HB.h)));
+    }
     ev.forEach((e, i) => {
       e.ls = best.ls; e.lh = best.lh; e.lines = best.res[i].lines; e.h = best.res[i].h;
       e.ys = best.yss[i]; e.yearBase = best.yb[i];
@@ -621,7 +665,7 @@
     let a0 = xs;
     for (const g of gaps) if (g.brk) { pieces.push([a0, g.xm - GAPW]); a0 = g.xm + GAPW; }
     pieces.push([a0, xe]);
-    return { ev, n, hl, cardW, spacing, stem, xs, xe, SL, SR, AY, gaps, pieces, TT, rtl, counter, dimOthers, truncL: ws > 0, truncR: ws + MAX_VIS < all.length };
+    return { ev, n, hl, cardW, spacing, stem, xs, xe, SL, SR, AY, gaps, pieces, TT, rtl, counter, rewindLabel, dimOthers, truncL: ws > 0, truncR: ws + MAX_VIS < all.length };
   }
 
   // ---------------- Zeitplan (BEATS / at, sonst skaliert mit d) ----------------
@@ -632,26 +676,70 @@
     if (!Array.isArray(b)) return [];
     return b.map((v) => { const x = tArg(v, d, false); return x === null ? null : clampT(x, d); });
   }
+  /** Achsen-Aufbaufenster [von, bis] in Sekunden (Lichtkopf fährt gleichmäßig, unabhängig von den Pop-Zeiten). */
+  function sweepOf(P, d) {
+    const v = pick(P, ["sweep", "axisSweep", "axis_sweep", "axisBuild", "axis_build", "aufbau"]);
+    if (v === undefined) return null;
+    let a = null, b = null;
+    if (Array.isArray(v)) { a = tArg(v[0], d, false); b = tArg(v[1], d, false); }
+    else if (v && typeof v === "object") { a = tArg(pick(v, ["from", "start", "von", "a"]), d, false); b = tArg(pick(v, ["to", "end", "bis", "b"]), d, false); }
+    else if (typeof v === "string") {
+      const m = v.trim().split(/\s*(?:\.\.|–|—|;|\/)\s*|\s+-\s+|(?<=\d)-(?=\d)/).filter(Boolean);
+      if (m.length >= 2) { a = tArg(m[0], d, false); b = tArg(m[1], d, false); }
+    }
+    if (a === null || b === null) return null;
+    a = clampT(a, d); b = clampT(b, d);
+    if (b < a + 0.3) b = Math.min(d - 0.05, a + 0.3);
+    return [a, b];
+  }
+  /** Lichtimpuls-Schleife: an/aus und Richtung (null = wie die Achse). */
+  function pulseOf(P) {
+    const v = pick(P, ["pulse", "pulses", "impuls", "pulseDir", "pulse_dir"]);
+    if (v === undefined) return { on: true, rtl: null };
+    if (falsy(v)) return { on: false, rtl: null };
+    if (typeof v === "string") {
+      const s2 = v.trim();
+      if (/^(ltr|forward|forwards|vorwärts|vorwaerts|right|rechts)$/i.test(s2)) return { on: true, rtl: false };
+      if (/^(rtl|back|backward|backwards|reverse|rückwärts|rueckwaerts|left|links)$/i.test(s2)) return { on: true, rtl: true };
+    }
+    return { on: true, rtl: null };
+  }
+  const HERO_MORPH = 0.65; // Dauer: Heldentitel -> Titelplatz
   function buildTiming(M, P, d) {
     const n = M.n, B = beatsOf(P, d);
     const has = (k) => B[k] !== null && B[k] !== undefined;
     const popIn = tArg(pick(P, ["pop", "popDur", "pop_s", "popDuration"]), d, false);
     const pop = popIn !== null ? clamp(popIn, 0.25, 2) : clamp(0.11 * d, 0.4, 1.2);
-    let head0 = has(0) ? B[0] : Math.min(0.04 * d, 0.4);
+    const SW = sweepOf(P, d);
+    const PU = pulseOf(P);
+    // Titel / Heldentitel
+    let titleAt = 0.35, subAt = 0.35;
+    if (M.TT) {
+      const ta = tArg(M.TT.at, d, false);
+      titleAt = ta !== null ? clampT(ta, d) : has(3) ? B[3] : 0.35;
+      const sa = tArg(M.TT.subAt, d, false);
+      subAt = sa !== null ? clampT(sa, d) : titleAt + 0.45;
+    }
+    let heroOn = !!(M.TT && M.TT.HL), heroOut = null;
+    if (heroOn) { const hu = tArg(M.TT.heroUntil, d, false); if (hu !== null) heroOut = clampT(hu, d); }
+    let head0 = has(0) ? B[0] : SW ? SW[0] : Math.min(0.04 * d, 0.4);
     const lateCap = Math.max(0.3, d - 0.3 - 0.55 * pop); // späteste sinnvolle Pop-Zeit (Karte noch lesbar)
-    // Standardverteilung (ohne at)
-    let first = Math.max(head0 + 0.35, n > 1 ? Math.min(0.1 * d, 1.2) : Math.min(0.2 * d, 1.8));
-    const rs = tArg(pick(P, ["revealStart", "reveal_start", "firstAt", "first_at"]), d, true);
-    if (rs !== null) first = clampT(rs, d);
-    let last = n > 1 ? Math.max(first + 0.3 * (n - 1), 0.55 * d) : first;
-    const re = tArg(pick(P, ["revealEnd", "reveal_end", "lastAt", "last_at", "spread"]), d, true);
-    if (re !== null) last = clampT(re, d);
-    last = Math.min(last, lateCap); first = Math.min(first, last);
     const order = [];
     for (let k = 0; k < n; k++) order.push(M.rtl ? n - 1 - k : k);
-    const seqDef = order.map((_, k) => (n > 1 ? lerp(first, last, k / (n - 1)) : first));
     const seqAt = order.map((i) => { const x = tArg(M.ev[i].at, d, false); return x === null ? null : clampT(x, d); });
     const anyAt = seqAt.some((v) => v !== null);
+    const rs = tArg(pick(P, ["revealStart", "reveal_start", "firstAt", "first_at"]), d, true);
+    const re = tArg(pick(P, ["revealEnd", "reveal_end", "lastAt", "last_at", "spread"]), d, true);
+    // Heldentitel ohne Zeitangaben: erst groß stehen lassen, Ereignisse danach
+    if (heroOn && heroOut === null && !anyAt && rs === null) heroOut = Math.min(titleAt + clamp(0.3 * d, 1.5, 3.5), 0.6 * d);
+    const heroFloor = heroOn && heroOut !== null && !anyAt && rs === null ? heroOut + 0.55 : 0;
+    // Standardverteilung (ohne at)
+    let first = Math.max(head0 + 0.35, heroFloor, n > 1 ? Math.min(0.1 * d, 1.2) : Math.min(0.2 * d, 1.8));
+    if (rs !== null) first = clampT(rs, d);
+    let last = n > 1 ? Math.max(first + 0.3 * (n - 1), 0.55 * d) : first;
+    if (re !== null) last = clampT(re, d);
+    last = Math.min(last, lateCap); first = Math.min(first, last);
+    const seqDef = order.map((_, k) => (n > 1 ? lerp(first, last, k / (n - 1)) : first));
     const seq = anyAt ? seqAt.slice() : seqDef.slice();
     if (anyAt) {
       const step0 = n > 1 ? Math.max(0.3, (last - first) / (n - 1)) : 0.6;
@@ -672,14 +760,29 @@
     const tn = new Array(n);
     order.forEach((i, k) => { tn[i] = seq[k]; });
     // Ankunft des Lichtkopfs (monoton): spätestens, wenn ein Knoten auf oder hinter ihm poppt
-    // (bei nicht monotonen "at" fährt er zügig, aber sichtbar – min. 0,3 s je Knotenabstand – vor)
+    // (bei nicht monotonen "at" fährt er zügig, aber sichtbar – min. 0,3 s je Knotenabstand – vor).
+    // Mit sweep: gleichmäßige Fahrt im Aufbaufenster, aber nie später als der Pop eines Knotens.
     const arr = seq.slice();
-    for (let k = n - 2; k >= 0; k--) arr[k] = Math.min(arr[k], arr[k + 1] - (seq[k] > arr[k + 1] ? 0.3 : 0));
-    if (n && arr[0] < 0.2) { const sh = 0.2 - arr[0]; for (let k = 0; k < n; k++) arr[k] = Math.min(seq[k], arr[k] + sh); }
+    if (SW) {
+      const xa = M.rtl ? M.xe : M.xs, xb = M.rtl ? M.xs : M.xe, span = Math.max(1, Math.abs(xb - xa));
+      order.forEach((i, k) => { arr[k] = Math.min(seq[k], SW[0] + ((SW[1] - SW[0]) * Math.abs(M.ev[i].x - xa)) / span); });
+    }
+    const arr0 = arr.slice();
+    for (let k = n - 2; k >= 0; k--) arr[k] = Math.min(arr[k], arr[k + 1] - (arr0[k] > arr[k + 1] ? 0.3 : 0));
+    if (n && arr[0] < 0.2) { const sh = 0.2 - arr[0]; for (let k = 0; k < n; k++) arr[k] = Math.min(arr0[k], arr[k] + sh); }
     for (let k = 1; k < n; k++) arr[k] = Math.max(arr[k], arr[k - 1]);
-    head0 = Math.max(0, Math.min(head0, (n ? arr[0] : d) - 0.3));
+    // Heldentitel: spätestens so schrumpfen, dass er weg ist, bevor die erste Karte aufklappt
+    if (heroOn) {
+      const firstPop = n ? Math.min.apply(null, tn) : d;
+      if (heroOut === null) heroOut = firstPop - 0.55;
+      heroOut = Math.min(heroOut, firstPop + 0.3 * pop - HERO_MORPH);
+      if (heroOut < titleAt + 0.6) heroOn = false;
+    }
+    if (!has(0) && !SW && heroOn) head0 = heroOut;
+    head0 = Math.max(0, Math.min(head0, (n ? arr[0] : d) - (SW ? 0.05 : 0.3)));
     const lastArr = n ? arr[n - 1] : head0;
-    const headEnd = Math.max(lastArr, Math.min(d - 0.1, lastArr + Math.max(0.35, 0.06 * d)));
+    let headEnd = Math.max(lastArr, Math.min(d - 0.1, lastArr + Math.max(0.35, 0.06 * d)));
+    if (SW) headEnd = Math.max(lastArr + 0.05, Math.min(d - 0.1, SW[1]));
     // Highlight
     let hl = 1e9;
     if (M.hl >= 0) {
@@ -697,15 +800,13 @@
     const pulse0 = has(2) ? B[2] : headEnd + 0.2;
     const period = clamp(0.3 * d, 2.0, 3.6);
     const gapT = M.gaps.map((g) => Math.max(tn[g.i], tn[g.i + 1]) + 0.3 * pop);
-    let titleAt = 0.35;
-    if (M.TT) {
-      const ta = tArg(M.TT.at, d, false);
-      titleAt = ta !== null ? clampT(ta, d) : has(3) ? B[3] : 0.35;
-    }
     const kt = [head0].concat(arr, [headEnd]);
     const kx = [M.rtl ? M.xe : M.xs].concat(order.map((i) => M.ev[i].x), [M.rtl ? M.xs : M.xe]);
     for (let k = 1; k < kt.length; k++) kt[k] = Math.max(kt[k], kt[k - 1]);
-    return { head0, headEnd, pop, hl, hlDur, pulse0, period, tn, gapT, titleAt, kt, kx };
+    return {
+      head0, headEnd, pop, hl, hlDur, pulse0, period, tn, gapT, titleAt, subAt, heroOn, heroOut: heroOn ? heroOut : null, kt, kx,
+      lin: !!SW, pulseOn: PU.on, pulseRtl: PU.rtl,
+    };
   }
   function headPos(t, T) {
     const kt = T.kt, kx = T.kx;
@@ -713,6 +814,7 @@
     for (let k = 0; k < kt.length - 1; k++) {
       if (t < kt[k + 1]) {
         const f = (t - kt[k]) / Math.max(1e-6, kt[k + 1] - kt[k]);
+        if (T.lin) return lerp(kx[k], kx[k + 1], f); // sweep: gleichmäßige Fahrt
         return lerp(kx[k], kx[k + 1], 0.45 * f + 0.55 * sm(f)); // bremst an jedem Knoten leicht ab
       }
     }
@@ -760,8 +862,19 @@
   function drawTitle(ctx, L, M, T, t) {
     const TT = M.TT;
     if (!TT) return;
+    if (T.heroOn && TT.HL) {
+      if (t < T.titleAt) return;
+      const mk = eo(seg(t, T.heroOut, HERO_MORPH));
+      if (mk < 1) drawHero(ctx, L, M, T, t, mk);
+      const ca = seg(mk, 0.45, 0.55);
+      if (ca > 0) drawCompactTitle(ctx, L, TT, t, ca, T.heroOut + HERO_MORPH * 0.6);
+      return;
+    }
     const a = seg(t, T.titleAt, 0.55);
     if (a <= 0) return;
+    drawCompactTitle(ctx, L, TT, t, a, T.titleAt + 0.15);
+  }
+  function drawCompactTitle(ctx, L, TT, t, a, ruleAt) {
     const cx = W0 / 2, col = TT.tone || COL.cyan;
     const rise = 10 * (1 - eo(a));
     TT.lines.forEach((ln, k) => txt(ctx, ln, cx, TT.top + 0.74 * TT.size + k * TT.lh + rise, {
@@ -770,7 +883,7 @@
     // Seitenlinien mit Rauten (Blueprint-Überschrift)
     const midY = TT.top + TT.h / 2;
     const half = TT.w / 2 + 28;
-    const len = clamp(W0 / 2 - SAFE_L - 40 - half, 0, 170) * eo(seg(t, T.titleAt + 0.15, 0.6));
+    const len = clamp(W0 / 2 - SAFE_L - 40 - half, 0, 170) * eo(seg(t, ruleAt, 0.6));
     if (len > 3) {
       L.glowPath(ctx, (c) => {
         c.moveTo(cx - half, midY); c.lineTo(cx - half - len, midY); c.lineTo(cx - half - len, midY + 9);
@@ -784,6 +897,71 @@
       }
       ctx.restore();
     }
+  }
+  /** Heldentitel: große Hauptzeile (+ Zusatzzeile) mit Zielerfassungs-Klammern; mk = Fortschritt der Verwandlung in den Titelplatz. */
+  function drawHero(ctx, L, M, T, t, mk) {
+    const TT = M.TT, H = TT.HL, col = TT.tone || COL.cyan;
+    const cyHero = TT.heroTop + H.h / 2, cyComp = TT.top + TT.h / 2;
+    const sc = lerp(1, TT.size / H.size, mk);
+    const fade = 1 - seg(mk, 0.3, 0.45);
+    if (fade <= 0) return;
+    ctx.save();
+    ctx.translate(W0 / 2, lerp(cyHero, cyComp, mk));
+    ctx.scale(sc, sc);
+    const top = -H.h / 2, halfW = H.w / 2;
+    const breath = 0.85 + 0.15 * Math.sin(t * 2.1);
+    // Hauptzeile: öffnet sich von der Mitte aus, mit leuchtenden Kanten
+    const ma = seg(t, T.titleAt, 0.6), rv = eo(ma);
+    const ex = (halfW + 24) * rv;
+    if (rv < 1) { ctx.save(); ctx.beginPath(); ctx.rect(-ex, top - 50, 2 * ex, H.hMain + 100); ctx.clip(); }
+    H.lines.forEach((ln, k) => txt(ctx, ln, 0, top + 0.74 * H.size + k * H.lh + 8 * (1 - rv), {
+      font: F_HEAD, weight: 700, size: H.size, ls: 4, color: COL.white, align: "center", glow: 20, glowColor: rgba(col, 0.8), alpha: fade * Math.min(1, ma * 1.6),
+    }));
+    if (rv < 1) {
+      ctx.restore();
+      const ea = (1 - rv) * fade;
+      L.line(ctx, -ex, top - 14, -ex, top + H.hMain + 14, COL.ice, 2, 1, { alpha: ea, cap: "butt" });
+      L.line(ctx, ex, top - 14, ex, top + H.hMain + 14, COL.ice, 2, 1, { alpha: ea, cap: "butt" });
+    }
+    // Trennlinie (Blueprint) unter der Hauptzeile mit Rauten an den Enden
+    const ruleY = H.subLines.length ? top + H.hMain + H.gap * 0.5 : top + H.hMain + 26;
+    const rl = (halfW * 0.72) * eo(seg(t, T.titleAt + 0.2, 0.7));
+    if (rl > 2) {
+      L.line(ctx, -rl, ruleY, rl, ruleY, col, 1.5, 0.7, { alpha: 0.55 * fade, cap: "butt" });
+      ctx.save(); ctx.globalAlpha = fade * breath; ctx.fillStyle = COL.amber;
+      for (const sx of [-1, 1]) {
+        const x = sx * rl;
+        ctx.beginPath(); ctx.moveTo(x, ruleY - 5); ctx.lineTo(x + 5, ruleY); ctx.lineTo(x, ruleY + 5); ctx.lineTo(x - 5, ruleY); ctx.closePath(); ctx.fill();
+      }
+      ctx.restore();
+    }
+    // Zusatzzeile (z. B. Beispiele) – eigene Einblendzeit
+    if (H.subLines.length) {
+      const sa = seg(t, T.subAt, 0.55), srv = eo(sa);
+      if (sa > 0) {
+        const sTop = top + H.hMain + H.gap;
+        const sx = (halfW + 24) * srv;
+        const sf = 1 - seg(mk, 0, 0.3);
+        if (srv < 1) { ctx.save(); ctx.beginPath(); ctx.rect(-sx, sTop - 40, 2 * sx, H.hSub + 80); ctx.clip(); }
+        H.subLines.forEach((ln, k) => txt(ctx, ln, 0, sTop + 0.74 * H.ss + k * H.slh + 6 * (1 - srv), {
+          font: F_HEAD, weight: 700, size: H.ss, ls: 4, color: COL.amber, align: "center", glow: 12, glowColor: rgba(COL.amber, 0.6), alpha: fade * sf * Math.min(1, sa * 1.6),
+        }));
+        if (srv < 1) ctx.restore();
+      }
+    }
+    // Zielerfassung: Eckklammern um den ganzen Block (ziehen sich zusammen, atmen leicht)
+    const ba = seg(t, T.titleAt, 0.5) * (1 - seg(mk, 0, 0.3));
+    if (ba > 0) {
+      const o = lerp(46, 26, eo(seg(t, T.titleAt, 0.8)));
+      const x1 = -halfW - o - 12, x2 = halfW + o + 12, y1 = top - o, y2 = top + H.h + o, k = 28;
+      L.glowPath(ctx, (c) => {
+        c.moveTo(x1, y1 + k); c.lineTo(x1, y1); c.lineTo(x1 + k, y1);
+        c.moveTo(x2 - k, y1); c.lineTo(x2, y1); c.lineTo(x2, y1 + k);
+        c.moveTo(x2, y2 - k); c.lineTo(x2, y2); c.lineTo(x2 - k, y2);
+        c.moveTo(x1 + k, y2); c.lineTo(x1, y2); c.lineTo(x1, y2 - k);
+      }, col, 2.2, 0.9, { alpha: ba * (0.75 + 0.25 * breath), cap: "square" });
+    }
+    ctx.restore();
   }
 
   // ---------------- Zeichnen: Achse ----------------
@@ -912,6 +1090,7 @@
       }
       ctx.restore();
     }
+    if (M.rewindLabel && M.rtl && moving) drawRewindBadge(ctx, L, M, T, t, headX, ha);
     if (M.counter && moving) {
       // rollender Jahreszähler zwischen zwei Jahres-Knoten
       for (let k = 0; k < M.n - 1; k++) {
@@ -928,19 +1107,48 @@
     }
   }
 
+  /** „◀◀ ZURÜCKSPULEN“-Plakette, die beim Zurückspulen mit dem Lichtkopf mitfährt (unter der Achse; mit Zähler darüber). */
+  function drawRewindBadge(ctx, L, M, T, t, headX, ha) {
+    const a = ha * (1 - seg(t, T.headEnd - 0.35, 0.3));
+    if (a <= 0.01) return;
+    const AY = M.AY, label = M.rewindLabel, fs = 21;
+    ctx.save();
+    setFont(ctx, 700, fs, F_MONO, 4);
+    const tw = ctx.measureText(label).width;
+    ctx.restore();
+    const icon = 30, w = 16 + icon + 12 + tw + 14, h = 40;
+    const cx = clamp(headX, M.SL + w / 2 + 4, M.SR - w / 2 - 4);
+    const cy = M.counter ? AY - 70 : AY + 78;
+    const x0 = cx - w / 2, y0 = cy - h / 2;
+    const pop = eob(seg(t, T.head0, 0.35));
+    ctx.save();
+    ctx.translate(cx, cy); ctx.scale(pop, pop); ctx.translate(-cx, -cy);
+    L.panel(ctx, x0, y0, w, h, { fill: "rgba(4,12,26,0.86)", stroke: rgba(COL.cyan, 0.55), r: 6, alpha: a });
+    // Doppel-Dreieck ◀◀ (gezeichnet, nicht aus der Schrift) – blinkt leicht im Spultakt
+    const blink = 0.7 + 0.3 * Math.sin(t * 9);
+    ctx.globalAlpha = a * blink; ctx.fillStyle = COL.ice;
+    const ix = x0 + 16, iy = cy;
+    for (const off of [0, 14]) { ctx.beginPath(); ctx.moveTo(ix + off, iy); ctx.lineTo(ix + off + 15, iy - 9); ctx.lineTo(ix + off + 15, iy + 9); ctx.closePath(); ctx.fill(); }
+    ctx.restore();
+    txt(ctx, label, x0 + 16 + icon + 12, cy + fs * 0.36, { font: F_MONO, weight: 700, size: fs, ls: 4, color: COL.ice, glow: 8, glowColor: COL.cyan, alpha: a * pop });
+    // feine Verbindung zum Kopf
+    L.line(ctx, headX, AY + (M.counter ? -14 : 14), headX, cy + (M.counter ? h / 2 : -h / 2), COL.ice, 1.2, 0.4, { alpha: 0.5 * a, cap: "butt" });
+  }
+
   /** Lichtimpuls, der nach dem Aufbau wiederholt über die Achse läuft (in Laufrichtung). Gibt x und Stärke zurück. */
   function pulseState(M, T, t) {
-    if (t < T.pulse0) return null;
+    if (!T.pulseOn || t < T.pulse0) return null;
     const ph = ((t - T.pulse0) / T.period) % 1;
     const TRAVEL = 0.72;
     if (ph >= TRAVEL) return null;
     const q = ph / TRAVEL;
-    return { x: M.rtl ? lerp(M.xe, M.xs, q) : lerp(M.xs, M.xe, q), a: Math.min(1, q / 0.05, (1 - q) / 0.05) };
+    const rtl = T.pulseRtl === null ? M.rtl : T.pulseRtl;
+    return { x: rtl ? lerp(M.xe, M.xs, q) : lerp(M.xs, M.xe, q), a: Math.min(1, q / 0.05, (1 - q) / 0.05), rtl };
   }
   function drawPulse(ctx, L, M, P) {
     if (!P || P.a <= 0) return;
     const AY = M.AY;
-    const x0 = M.rtl ? Math.min(M.xe, P.x + 200) : Math.max(M.xs, P.x - 200);
+    const x0 = P.rtl ? Math.min(M.xe, P.x + 200) : Math.max(M.xs, P.x - 200);
     ctx.save();
     if (Math.abs(P.x - x0) > 1) {
       const g = ctx.createLinearGradient(x0, 0, P.x, 0);

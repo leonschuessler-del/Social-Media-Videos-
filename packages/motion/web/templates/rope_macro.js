@@ -254,7 +254,7 @@
     const old = CI.breaks.slice(0, 24).map((b) => Object.assign({}, b, { s: b.s - S.scroll0, ta: -10, pre: true, counted: S.initialCounted == null ? !!b.counted : !!S.initialCounted }));
     const need = Math.max(0, Math.min(24, S.nb) - old.length);
     // sichtbarer Bereich (Material-Koordinaten) bei Szenenstart und -ende, Kamera beachtet
-    const range = (tt) => { const c = camOf(S.cam, tt / d, S.focus, L); const a = camInv(c, 330, S.CY), b = camInv(c, 1600, S.CY); return [(a[0] - S.CX) / S.ca - S.v * tt - S.scroll0, (b[0] - S.CX) / S.ca - S.v * tt - S.scroll0]; };
+    const range = (tt) => { const c = camOf(S.cam, tt / d, S.focus, L); const a = camInv(c, 250, S.CY), b = camInv(c, 1670, S.CY); return [(a[0] - S.CX) / S.ca - S.v * tt - S.scroll0, (b[0] - S.CX) / S.ca - S.v * tt - S.scroll0]; };
     const r0 = range(0), r1 = range(d);
     const sLo = Math.max(r0[0], r1[0]), sHi = Math.min(r0[1], r1[1]);
     const lu = S.lensStartU, ly = S.lensStartY || 0;
@@ -271,41 +271,57 @@
         lenA: 26 + 10 * H(i * 3.7 + 2), lenB: 20 + 10 * H(i * 5.1 + 3), seed: 11 + i * 17, pre: false, counted: false };
     };
     const gap = (c, arr) => { let md = Infinity; for (const o of arr) md = Math.min(md, Math.hypot(c.s - o.s, 0.7 * (c.y0 - o.y0))); return md; };
+    // Ziel der Lupe am Scan-Ende: fernes Ende des freien Bereichs, Lupe samt Skala (nach Kamera) im Bild
+    const lensOk = (m, tt) => { const c = camOf(S.cam, tt / d, S.focus, L), [X] = camFwd(c, ...toScreen(S, m + S.v * tt + S.scroll0, 0)), rr = (RL + 29) * c.s; return X - rr >= 100 && X + rr <= 1820; };
+    let mEnd = dir < 0 ? sLo + 70 : sHi - 70;
+    for (let q = 0; q < 250 && !(lensOk(mEnd, T.tE) && lensOk(mEnd, d)); q++) mEnd -= dir * 8;
+    if (lu != null && (mEnd - lu) * dir < 60) mEnd = lu + dir * 60;
+    out.mEnd = mEnd;
+    // Lage zur End-Lupe: 1 = sicher innen, 2 = sicher außen, 0 = Rand (auch bei leicht versetzter Endlage)
+    const endCls = (c) => { let r = -1; for (const [dm, dy] of [[0, 0], [-24, 20], [24, -20], [24, 20], [-24, -20]]) { const k = classify(c, mEnd + dm, dy); if (!k || (r > 0 && k !== r)) return 0; r = k; } return r; };
     const cols = [];
     for (let k = Math.ceil((2 * sLo) / LAT) / 2; k * LAT <= sHi + 1e-6; k += 0.5) {
-      const half = Math.abs(k - Math.round(k)) > 0.25, opts = [];
+      const half = Math.abs(k - Math.round(k)) > 0.25;
       for (const type of half ? ["up22", "lo22"] : ["top", "bottom", "face", "up45", "lo45"]) {
         const c = mk(k, type);
         if (c.s < sLo || c.s > sHi) continue;
         if (lu != null && (classify(c, lu, ly) === 0 || (c.s - lu) * dir < -150)) continue; // nicht unter dem Lupenrand, nicht hinter der Lupe
         if (gap(c, old) < 95) continue;
-        c.axisOk = edge(c) || !S.stamp || (dir < 0 ? c.s < oMin - 40 : c.s > oMax + 40); // Achse beim Stempel frei halten
-        opts.push(c);
+        c.zone = endCls(c); if (!c.zone) continue;
+        c.axisOk = c.edge || !S.stamp || c.zone === 1 || (dir < 0 ? c.s < oMin - 40 : c.s > oMax + 40); // Achse beim Stempel frei halten
+        let col = cols.find((q) => q.k === k && q.zone === c.zone);
+        if (!col) cols.push((col = { k, zone: c.zone, opts: [] }));
+        col.opts.push(c);
       }
-      if (opts.length) cols.push({ k, half, opts });
     }
-    function edge(c) { return c.edge; }
     cols.sort((p, q) => (p.k - q.k) * dir);
     // gewünschte Folge: Seiten wechseln, Tiefe variiert (Kante, Flanke, Mitte)
-    const nearOld = old.slice().sort((p, q) => Math.abs(p.s - (cols.length ? cols[0].k * LAT : 0)) - Math.abs(q.s - (cols.length ? cols[0].k * LAT : 0)))[0];
+    const k0 = cols.length ? cols[0].k * LAT : 0;
+    const nearOld = old.slice().sort((p, q) => Math.abs(p.s - k0) - Math.abs(q.s - k0))[0];
     const seqW = nearOld && nearOld.y0 < 0 ? ["bottom", "up", "top", "lo", "face"] : ["top", "lo", "bottom", "up", "face"];
     const Y = { top: -RR, bottom: RR, face: 0, up: -0.7 * RR, lo: 0.7 * RR };
     const picked = [];
     const take = (col, w, relax) => {
       const cand = col.opts.filter((c) => !c.used && (relax || c.axisOk) && gap(c, picked) >= (relax ? 70 : 95));
       if (!cand.length) return false;
-      cand.sort((p, q) => Math.abs(p.y0 - Y[w]) - Math.abs(q.y0 - Y[w]));
+      cand.sort((p, q) => (relax ? (p.axisOk ? 0 : 1000) - (q.axisOk ? 0 : 1000) : 0) + Math.abs(p.y0 - Y[w]) - Math.abs(q.y0 - Y[w]));
       cand[0].used = true; picked.push(cand[0]); col.n = (col.n || 0) + 1;
       return true;
     };
-    // 1) je Spalte höchstens ein Bruch, gleichmäßig über den Scanweg verteilt; 2) weitere Lagen je Spalte; 3) gelockert
-    const rest = need;
-    if (cols.length > rest) { for (let j = 0; j < rest; j++) take(cols[Math.round((rest > 1 ? j / (rest - 1) : 0) * (cols.length - 1))], seqW[picked.length % 5], false); }
-    for (let pass = 0; pass < 3 && picked.length < need; pass++) {
-      for (const col of cols) {
+    const spread = (list, n) => { // n Spalten gleichmäßig verteilt, je Spalte ein Bruch
+      if (n <= 0) return;
+      if (list.length <= n) { for (const c of list) take(c, seqW[picked.length % 5], false); return; }
+      for (let j = 0; j < n; j++) take(list[Math.round((n > 1 ? j / (n - 1) : 0) * (list.length - 1))], seqW[picked.length % 5], false);
+    };
+    // unterwegs (außerhalb der End-Lupe) und ein Nest von 1–3 Brüchen im Kern der End-Lupe
+    const mid = cols.filter((c) => c.zone === 2), core = cols.filter((c) => c.zone === 1);
+    const nCore = Math.min(core.length ? 3 : 0, need <= 2 ? 1 : need <= 4 ? 2 : 3);
+    spread(mid, need - nCore);
+    for (let pass = 0; pass < 4 && picked.length < need; pass++) {
+      for (const col of pass < 2 ? core : cols) {
         if (picked.length >= need) break;
-        if (pass === 0 && col.n) continue;
-        take(col, seqW[picked.length % 5], pass === 2);
+        if (pass % 2 === 0 && col.n) continue;
+        take(col, seqW[picked.length % 5], pass === 3);
       }
     }
     // Zeitpunkte in Scanrichtung (der Lupe voraus)
@@ -352,9 +368,9 @@
     const yOpts = (last.y0 > 0 ? [0.45, 0.32, 0.18, 0] : [0.24, 0.16, 0.08, 0]).map((k) => k * last.y0);
     let best = null, bestScore = Infinity;
     for (const yE of yOpts) {
-      const mA = dir > 0 ? last.s - 150 : last.s - 40, mB = dir > 0 ? last.s + 40 : last.s + 150;
+      const g = B.mEnd != null, mA = g ? B.mEnd - 24 : dir > 0 ? last.s - 150 : last.s - 40, mB = g ? B.mEnd + 24 : dir > 0 ? last.s + 40 : last.s + 150;
       for (let m = mA; m <= mB; m += 4) {
-        let score = Math.abs(m - last.s) + Math.abs(yE - yOpts[0]) * 0.6;
+        let score = Math.abs(m - (g ? B.mEnd : last.s)) + Math.abs(yE - yOpts[0]) * 0.6;
         for (const b of B.list) if (!classify(b, m, yE)) score += 10000;
         if (classify(last, m, yE) !== 1) score += 4000;
         // Anzeige über der Lupe muss passen; Lupe samt Skalenring (RL+29) nach Kamera weder im Untertitelbereich noch am Rand

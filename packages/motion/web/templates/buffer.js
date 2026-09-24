@@ -30,7 +30,8 @@
                 sequence | side_by_side (bool), labels [Text | {text, at, color}] (Reihenfolge oder per type),
                 dimensions [{type, stroke: "7 cm", at, note, caption}] (per type oder Reihenfolge; Einfederung maßstäblich),
                 show_stroke (bool; Hub nach EN 81-20 aus speed: Öl 0,0674·v², Feder 0,135·v²),
-                speed_label | speed ("1 m/s" | 1), context (Kennzeile oben), compress_duration (s, Default 0,12·d)
+                speed_label | speed ("1 m/s" | 1; Tag am Fahrkorb blendet nach dem Aufsetzen aus, speed_keep: true = Wert
+                bleibt gedimmt stehen, ohne Pfeil), context (Kennzeile oben), compress_duration (s, Default 0,12·d)
    Physik Einzelmodus (Beispielwerte, m = 1.600 kg, Zeitlupe relativ zu d bzw. beats):
      hydraulic   Aufprall 1,84 m/s (115 % von 1,6 m/s), Hub 250 mm, Verzögerung ca. 0,75 g (kurze Spitze ~1,1 g)
      spring      Aufprall 1,15 m/s (115 % von 1,0 m/s), c = 350 kN/m, Federweg ca. 128 mm, Rückprall
@@ -1291,7 +1292,16 @@
       Smm = Math.min(Smm, (capPx * MK) / it.mm);
     });
     const speedAt = atOf(P, d, ["speed_at", "speed_label_at", "v_at"]);
-    return { items, n, sp, seq, compress: cmp !== false, Dc, speedText, vNum, speedAt, context, ctxAt: ctxAt ?? tClamp(0.3, d), Smm, d };
+    const speedKeep = bool(pick(P, ["speed_keep", "speed_persist", "keep_speed"])) === true;
+    // Hub-Bemaßung liegt links neben dem Fahrkorb-Unterholm; der Wert darf in die Nachbarspalte ragen, solange dort
+    // kein Geschwindigkeits-Tag mehr steht (Tag blendet nach dem Aufsetzen aus).
+    const beamHalf = (M_BEAMW / 2) * MK;
+    items.forEach((it, i) => {
+      const prev = items[i - 1], base = it.cx - sp / 2 + 8;
+      const free = !speedText || (!speedKeep && cmp !== false && (!prev || prev.tH + 0.4 <= it.dimAt));
+      it.dimMinX = sp < 500 ? base : i === 0 ? Math.max(100, Math.min(base, it.cx - sp / 2 - 60)) : free ? Math.min(base, prev.cx + beamHalf + 30) : base;
+    });
+    return { items, n, sp, seq, compress: cmp !== false, Dc, speedText, vNum, speedAt, speedKeep, context, ctxAt: ctxAt ?? tClamp(0.3, d), Smm, d };
   }
 
   function slotState(it, M, t) {
@@ -1373,10 +1383,20 @@
     L.text(g, it.dimText, tx, ym + 13, { size: vsz, weight: 700, font: L.FONT.mono, color: col, align: "right", glow: 14, glowColor: col });
     if (it.dimNote) L.text(g, it.dimNote, tx, ym + 38, { size: 16, weight: 500, color: COL.muted, align: "right" });
   }
+  /** Lage der Hub-Bemaßung (statisch je Puffer): Maßlinie links neben dem Unterholm, Wert rechtsbündig davor. */
+  function dimBox(ctx, L, it, M) {
+    if (it._db) return it._db;
+    const x0 = it.cx + (geo(it.type).dimX - BX) * MK - 4, x = M.sp >= 500 ? Math.min(x0, it.cx - (M_BEAMW / 2) * MK - 12) : x0;   // 4 Puffer: zu eng
+    const y0 = MFLOOR + (Y_TOP - FLOOR) * MK, y1 = y0 + it.mm * M.Smm, tx = x - 18, ym = (y0 + y1) / 2;
+    const vw36 = meas(L, ctx, it.dimText, { size: 36, weight: 700, font: L.FONT.mono });
+    const vsz = clamp((36 * (tx - (it.dimMinX ?? it.cx - M.sp / 2 + 8))) / Math.max(1, vw36), 18, 36);
+    const nw = it.dimNote ? meas(L, ctx, it.dimNote, { size: 16, weight: 500 }) : 0;
+    return (it._db = { x, y0, y1, tx, ym, vw36, vsz, left: tx - Math.max((vw36 * vsz) / 36, nw) });
+  }
   function drawSlotDim(ctx, L, it, M, s, t, toX, toY) {
     if (!it.dimShow) return;
     const p = clamp((t - it.dimAt) / 0.7); if (p <= 0) return;
-    const col = COL.amber, x = toX(s.g.dimX) - 4, y0 = toY(Y_TOP), y1 = y0 + it.mm * M.Smm;
+    const db = dimBox(ctx, L, it, M), col = COL.amber, x = db.x, y0 = db.y0, y1 = db.y1;
     const lp = easeOut(inv(0, 0.5, p)), tp = easeOut(inv(0.2, 0.85, p)), pulse = p >= 1 ? 0.85 + 0.15 * Math.sin(t * 3 + it.i) : 1;
     stk(ctx, (c) => { c.moveTo(x - 12, y0); c.lineTo(x + 26, y0); c.moveTo(x - 12, y1); c.lineTo(x + 26, y1); }, col, 1.3, 0.4, 0.8 * lp);
     const ye = lerp(y0, y1, lp);
@@ -1387,8 +1407,7 @@
     const hx1 = toX(BX + Math.max(s.g.plateHalf, s.g.halfMax) + 10);
     stk(ctx, (c) => { c.moveTo(x + 26, y1); c.lineTo(hx1, y1); }, col, 1.2, 0.3, 0.6 * tp, { dash: [6, 5] });
     stk(ctx, (c) => { c.moveTo(x + 26, y0); c.lineTo(hx1, y0); }, COL.steel, 1, 0, 0.35 * tp, { dash: [3, 5] });
-    const tx = x - 18, ym = (y0 + y1) / 2;
-    const vw36 = meas(L, ctx, it.dimText, { size: 36, weight: 700, font: L.FONT.mono }), vsz = clamp((36 * (tx - (it.cx - M.sp / 2 + 8))) / Math.max(1, vw36), 18, 36);
+    const tx = db.tx, ym = db.ym, vw36 = db.vw36, vsz = db.vsz;
     if (tp >= 1) {
       const vw = (vw36 * vsz) / 36 + 40;
       layer(ctx, `md|${it.dimText}|${it.dimCap}|${it.dimNote}|${tx}|${ym}|${vsz}`, tx - Math.max(vw, 240), ym - 50, Math.max(vw, 240) + 24, 100, 1, (g) => dimValue(g, L, it, tx, ym, col, vsz));
@@ -1404,12 +1423,18 @@
   function drawSlotSpeed(ctx, L, it, M, s, t, toX, toY, a) {
     if (!M.speedText || a <= 0.004) return;
     const x = toX(BX + Math.max(s.g.plateHalf, 60) + 24), y = toY(s.yS - PLATE_H - M_COL * 0.5);
+    // Nach dem Aufsetzen steht der Fahrkorb (bzw. federt zurück): Tag blendet aus, nie Pfeil nach unten bei Aufwärtsbewegung.
+    const post = s.idle ? 0 : smooth(inv(it.tH, it.tH + 0.35, t));
+    const arA = (1 - post) * (s.v < 0 ? 0 : 1), txA = M.speedKeep ? 1 - 0.5 * post : 1 - post;
+    if (a * Math.max(arA, txA) <= 0.004) return;
     const mv = clamp(Math.abs(s.v) / s.ph.vi), sG = GA; GA = a;
     const aa = 0.45 + 0.55 * mv, sh = mv > 0.03 ? frac(t * 1.6) * 6 * mv : 0;
-    stk(ctx, (c) => { c.moveTo(x + 8, y - 22 + sh); c.lineTo(x + 8, y + 12 + sh); }, COL.cyan, 2.4, 1, aa);
-    arrowHead(ctx, x + 8, y + 22 + sh, Math.PI / 2, 12, COL.cyan, aa);
+    if (arA > 0.004) {
+      stk(ctx, (c) => { c.moveTo(x + 8, y - 22 + sh); c.lineTo(x + 8, y + 12 + sh); }, COL.cyan, 2.4, 1, aa * arA);
+      arrowHead(ctx, x + 8, y + 22 + sh, Math.PI / 2, 12, COL.cyan, aa * arA);
+    }
     const w24 = meas(L, ctx, M.speedText, { size: 24, weight: 700, font: L.FONT.mono }), ssz = clamp((24 * (it.cx + M.sp / 2 - 8 - (x + 26))) / Math.max(1, w24), 14, 24);
-    txt(L, ctx, M.speedText, x + 26, y + 8, { size: ssz, weight: 700, font: L.FONT.mono, color: COL.cyan, alpha: 0.95 });
+    txt(L, ctx, M.speedText, x + 26, y + 8, { size: ssz, weight: 700, font: L.FONT.mono, color: COL.cyan, alpha: 0.95 * txA });
     GA = sG;
   }
 
@@ -1482,7 +1507,7 @@
     drawSlotLabel(ctx, L, it, M, t);
   }
 
-  function drawFloorM(ctx, L, M) {
+  function drawFloorM(ctx, L, M, t) {
     const xL = Math.max(96, M.items[0].cx - M.sp / 2 + 10), xR = Math.min(1824, M.items[M.n - 1].cx + M.sp / 2 - 10);
     layer(ctx, `mfloor|${xL}|${xR}`, xL - 4, MFLOOR - 8, xR - xL + 8, 70, 1, (g) => {
       const P = pats(g), fl = rect(xL, MFLOOR, xR - xL, 58);
@@ -1493,8 +1518,14 @@
       fadeMask(g, xL, 0, xR, 0, [[0, 0], [0.06, 1], [0.94, 1], [1, 0]]);
     });
     for (let i = 1; i < M.n; i++) {
-      const x = (M.items[i - 1].cx + M.items[i].cx) / 2;
-      stk(ctx, (c) => { c.moveTo(x, 350); c.lineTo(x, MFLOOR - 8); }, COL.cyan, 1, 0, 0.16, { dash: [3, 8], cap: "butt" });
+      const x = (M.items[i - 1].cx + M.items[i].cx) / 2, it = M.items[i];
+      // Trennlinie hinter einem hineinragenden Hub-Wert aussparen
+      let g0 = 0, g1 = 0;
+      if (it.dimShow && t >= it.dimAt) { const db = dimBox(ctx, L, it, M); if (db.left - 12 < x) { g0 = db.ym - 46; g1 = db.ym + 50; } }
+      stk(ctx, (c) => {
+        if (g1 > g0) { c.moveTo(x, 350); c.lineTo(x, g0); c.moveTo(x, g1); c.lineTo(x, MFLOOR - 8); }
+        else { c.moveTo(x, 350); c.lineTo(x, MFLOOR - 8); }
+      }, COL.cyan, 1, 0, 0.16, { dash: [3, 8], cap: "butt" });
     }
   }
   function drawContextM(ctx, L, M, t) {
@@ -1508,7 +1539,7 @@
   function drawMulti(ctx, L, M, t) {
     GA = 1;
     drawFX(ctx, null, t, FXM);
-    drawFloorM(ctx, L, M);
+    drawFloorM(ctx, L, M, t);
     if (M.context) drawContextM(ctx, L, M, t);
     for (const it of M.items) drawSlot(ctx, L, it, M, t);
     GA = 1;
