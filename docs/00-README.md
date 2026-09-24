@@ -18,6 +18,7 @@ Ein neuer Entwickler oder Agent muss das Projekt anhand dieser Doku übernehmen 
 | 10 | [Setup, Betrieb, Tests](10-setup-operations.md) | Lokal starten, Docker, CLI, API, Env-Variablen (nur Namen) |
 | 11 | [Status, bekannte Probleme, offene Entscheidungen](11-status-and-decisions.md) | Aktueller Stand, Blocker, nächste Schritte |
 | 12 | [Erstes Testvideo-Konzept](12-first-test-video.md) | „Was passiert, wenn ein Aufzugseil reißt?“ – Short + Longform-Prototyp |
+| 13 | [Lokale Produktion ohne externe KI](13-local-production.md) | Motion-Engine, lokale Stimme, prozedurale Musik – erstes komplettes 11-Minuten-Video |
 | ADR | [adr/](adr/) | Architekturentscheidungen (kurz, versioniert) |
 
 ## Automatisierungs-Labels (ehrlich)
