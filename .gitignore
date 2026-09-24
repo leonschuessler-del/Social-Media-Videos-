@@ -1,0 +1,24 @@
+# Video- und Mediendateien (zu groß fürs Repo)
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+*.mp3
+*.wav
+raw_videos/*
+!raw_videos/.gitkeep
+exports/*
+!exports/.gitkeep
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+
+# Editor-/System-Dateien
+.DS_Store
+.vscode/
+.idea/
