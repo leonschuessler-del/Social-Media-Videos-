@@ -6,19 +6,22 @@ _Stand: 2026-09-24 (wird bei jedem Meilenstein aktualisiert)_
 
 **Phase 0 abgeschlossen, Phase 1 (Vertical Slice) implementiert.** Review-Modus SAFE, PROVIDER_MODE mock, `maxVideosPerDay=3` (Seed) – für Live-Start auf 1 setzen.
 
-## Was funktioniert (verifiziert)
+## Was funktioniert (verifiziert, 2026-09-24)
 
-- Unit-Tests core: State Machine, Scoring, Budget, Capacity, Usage, Ähnlichkeit (21 Tests grün).
-- Postgres-Schema + Migration angewendet (16 Tabellen).
-- FFmpeg-Render: Szenenclips (Ken Burns), xfade, Overlays, ASS-Wort-Captions, Musik-Ducking, loudnorm → MP4 1080×1920 (E2E-Lauf 3 erzeugte ein 53-s-Short).
-- E2E-Test: Ergebnis siehe Abschnitt „Bekannte Probleme“ (wird bei grün hier aktualisiert).
+- **E2E-Vertical-Slice grün** (`packages/pipeline/src/e2e.test.ts`, Mock-Provider, echter FFmpeg-Render, ~2,5 min):
+  Thema „Was passiert, wenn ein Aufzugseil reißt?“ → RESEARCH (7 Claims, 4 Quellen) → FACT_CHECK (Urteile je Claim, 1 Korrektur) → SCRIPT (6 Sektionen, HOOK zuerst) → STORYBOARD (10 Szenen) → ASSETS (8 Bilder + Infografik + Textkarte) → VOICE (Wort-Zeitstempel) → EDIT (MP4 1080×1920, ≈55 s, −13,9 LUFS, Wort-Captions, Overlays, Musik-Ducking) → QA (8 Checks, PASS, Score > 0,6) → REVIEW (SAFE) → APPROVE → READY → Mock-Upload → SCHEDULED. Kosten-Ledger: > 10 Einträge, 0 € (Mock). Originalitäts-Check blockiert Duplikat-Thema.
+- Unit-Tests (30): State Machine, Scoring, Budget, Capacity, Usage/Preise, Ähnlichkeit, Szenen-Alignment, Publish-Slot, ASS/SRT-Captions, OpenAI-Helfer.
+- PgStore-Integrationstest gegen PostgreSQL 16 (Migration, CRUD, Kosten-Snapshot, Asset-Reuse, Analytics-Upsert).
+- QA hat während der Entwicklung einen echten Messfehler gefunden (LUFS-Parsing) – der Check greift.
 
 ## Bekannte Probleme
 
-- (wird nach E2E-Fix aktualisiert)
+- Longform-Prototyp (Mock, ~16 Szenen 16:9): Render-Zeit auf 2 vCPU mehrere Minuten; Ergebnis siehe Abschnitt unten, sobald Lauf abgeschlossen.
 - Mock-Visual-QA bewertet Platzhalterbilder pauschal mit 0,7 – im Mock ist Visual-QA `SEMI_AUTOMATED`.
 - `gpt-6-astra`-Preise in Quellen uneinheitlich (5–10 $ / 25–50 $ pro 1M) → konservativ 10/50 in Preistabelle, `unknown=true`.
 - Storyboard-Narrationsverteilung: bei inkonsistenter LLM-Ausgabe wird das Skript deterministisch gleichmäßig auf Szenen verteilt (Bild-Text-Sync dann gröber).
+- Kill Switch per API wirkt prozessweit nur im API-Prozess; der Worker liest `KILL_SWITCH` aus der Env (harter Stopp = Env setzen + Neustart). Persistenter Schalter in DB ist ein kleiner Folgeschritt.
+- Live-Modus (OpenAI) ist implementiert, aber mangels Key **nicht live getestet** – erste Live-Runs werden Prompt-/Parameter-Anpassungen brauchen (Responses-API-Feldnamen, Bildgrößen, Stimme).
 
 ## Blocker (benötigen dich)
 

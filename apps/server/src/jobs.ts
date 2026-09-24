@@ -24,8 +24,13 @@ export async function startWorker(app: App): Promise<PgBoss> {
   const boss = new PgBoss({ connectionString: app.env.DATABASE_URL, schema: "pgboss", archiveCompletedAfterSeconds: 3600 * 24 * 7, deleteAfterDays: 30 });
   boss.on("error", (e) => logger.error({ err: e }, "pg-boss"));
   await boss.start();
-  for (const q of Object.values(QUEUES)) await boss.createQueue(q, { name: q, retryLimit: 3, retryDelay: 60, retryBackoff: true, deadLetter: `${q}.dlq` }).catch(() => {});
-  for (const q of Object.values(QUEUES)) await boss.createQueue(`${q}.dlq`, { name: `${q}.dlq` }).catch(() => {});
+  // Reihenfolge wichtig: Dead-Letter-Queues zuerst, dann Haupt-Queues (pg-boss validiert deadLetter-Referenz)
+  const ensureQueue = async (name: string, opts: Partial<PgBoss.Queue> = {}) => {
+    if (await boss.getQueue(name)) return;
+    await boss.createQueue(name, { name, ...opts });
+  };
+  for (const q of Object.values(QUEUES)) await ensureQueue(`${q}.dlq`);
+  for (const q of Object.values(QUEUES)) await ensureQueue(q, { retryLimit: 3, retryDelay: 60, retryBackoff: true, deadLetter: `${q}.dlq` });
 
   const guard = () => { if (app.ctx.isKilled()) { logger.warn("KILL_SWITCH aktiv – Job übersprungen"); return false; } return true; };
 

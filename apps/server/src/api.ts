@@ -15,7 +15,7 @@ import { QUEUES } from "./jobs.ts";
 const app = await bootstrap();
 const boss = new PgBoss({ connectionString: app.env.DATABASE_URL, schema: "pgboss" });
 await boss.start();
-for (const q of Object.values(QUEUES)) await boss.createQueue(q, { name: q }).catch(() => {});
+for (const q of Object.values(QUEUES)) { if (!(await boss.getQueue(q))) { logger.warn({ q }, "Queue fehlt – Worker zuerst starten (legt Queues inkl. DLQ an)"); } }
 
 const api = new Hono();
 
