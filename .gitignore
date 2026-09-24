@@ -43,3 +43,7 @@ venv/
 
 # Produktions-Ausgaben (große Mediendateien)
 productions/*/out/
+
+# temporäre Agenten-/Profiling-Dateien
+*.tmp.ts
+*.tmp.js
