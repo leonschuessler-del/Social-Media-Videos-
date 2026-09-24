@@ -17,6 +17,18 @@ _Stand: 2026-09-24 (wird bei jedem Meilenstein aktualisiert)_
 - PgStore-Integrationstest gegen PostgreSQL 16 (Migration, CRUD, Kosten-Snapshot, Asset-Reuse, Analytics-Upsert).
 - QA hat während der Entwicklung einen echten Messfehler gefunden (LUFS-Parsing) – der Check greift.
 
+## Video 001 „Was passiert, wenn das Aufzugseil reißt?“ – fertig (2026-09-24)
+
+Vollständig lokal produziert, ohne externe KI-APIs (siehe Doku 13):
+- 10:23 min, 1920×1080, 30 fps, 90 Szenen in 11 Kapiteln, 22 eigene Motion-Graphics-Vorlagen im Röntgen-/Blueprint-Stil.
+- Stimme Coqui „Thorsten“ (lokal, CC0-Datensatz), prozedurale Musik und SFX, −14,1 LUFS, True Peak −1,2 dBTP.
+- Jede Szene ist auf die Wortzeiten der Sprachaufnahme getaktet (Zahlen erscheinen erst, wenn sie gesprochen werden), von einem unabhängigen Prüfer abgenommen; Fehlschläge in einer Fix-Runde nachgebessert.
+- Automatische Medien-QA bestanden (keine Schwarzbilder, keine Tonlücken, kein Clipping).
+- Auslieferung: `exports/video001/` (1080p ohne/mit eingebrannten Untertiteln, SRT, Thumbnail, Beschreibung mit Kapiteln und 45 Quellen, Upload-Anleitung). Master-Dateien in `productions/001-aufzugseil/out/` (nicht im Git).
+- Upload ist **MANUAL** (kein YouTube-OAuth vorhanden, B2).
+
+Bekannte Restpunkte Video 001: Stimme hörbar synthetisch; einzelne Szenen haben noch kleine Layout-Schwächen (leere Flächen, kleine Beschriftungen), dokumentiert in `productions/001-aufzugseil/scene_qa_report.json`. Die Abmoderation kündigt als nächstes Thema „Was passiert im Motor bei 8.000 Umdrehungen pro Minute?“ an.
+
 ## Bekannte Probleme
 
 - Longform-Prototyp (Mock, ~16 Szenen 16:9): Render-Zeit auf 2 vCPU mehrere Minuten; Ergebnis siehe Abschnitt unten, sobald Lauf abgeschlossen.
