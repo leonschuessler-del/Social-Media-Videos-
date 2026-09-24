@@ -8,7 +8,9 @@ const srv = await startStaticServer(); const browser = await chromium.launch({ e
 const page = await openEngine(browser, srv.url, tl);
 const keys = ["fx","back","rail","trace","parts","shell","heat","link","rope","tape","sparks","tags","p1","p2"];
 const sets: Record<string, string[]> = { all: [], none: keys };
-for (const k of keys) sets["only-" + k] = keys.filter((x) => x !== k);
+const MODE = process.argv[3] ?? "quick";
+if (MODE === "full") for (const k of keys) sets["only-" + k] = keys.filter((x) => x !== k);
+else { sets["all2"] = []; sets["none2"] = keys; sets["all3"] = []; sets["none3"] = keys; }
 const code = `(() => {
   const sets = ${JSON.stringify(sets)}; const params = ${JSON.stringify(params)};
   const w = window; const CE = w.CE; const L = CE.lib; const def = CE.templates.safety_gear;
@@ -17,8 +19,8 @@ const code = `(() => {
   const out = {};
   function run(sk) {
     w.__SGSKIP = Object.fromEntries(sk.map((k) => [k, true]));
-    const n = 90; const t0 = performance.now();
-    for (let f = 0; f < n; f++) { const t = (f * 2) / 30; ctx.fillStyle = "#000"; ctx.fillRect(0, 0, 1920, 1080); def.draw(ctx, { t, d: 6, u: t / 6, params, text: "", W: 1920, H: 1080, L, K: CE.kit, rng: L.rng("x"), T: t, fps: 30 }); c2.drawImage(cv, 0, 0); }
+    const n = 180; const t0 = performance.now();
+    for (let f = 0; f < n; f++) { const t = f / 30; ctx.fillStyle = "#000"; ctx.fillRect(0, 0, 1920, 1080); def.draw(ctx, { t, d: 6, u: t / 6, params, text: "", W: 1920, H: 1080, L, K: CE.kit, rng: L.rng("x"), T: t, fps: 30 }); c2.drawImage(cv, 0, 0); }
     c2.getImageData(0, 0, 1, 1);
     return (performance.now() - t0) / n;
   }

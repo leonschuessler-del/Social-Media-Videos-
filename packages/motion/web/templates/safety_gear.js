@@ -112,6 +112,10 @@
     return g;
   }
 
+  // Verläufe mit festen Koordinaten je Kontext cachen
+  const GRD = new WeakMap();
+  function cgrad(ctx, key, make) { let m = GRD.get(ctx); if (!m) { m = {}; GRD.set(ctx, m); } return m[key] || (m[key] = make()); }
+
   // ---------- Schraffur-Muster (Schnittflächen) ----------
   const PATS = new WeakMap();
   function pats(ctx) {
@@ -293,28 +297,16 @@
   }
 
   // ---------- Führungsschiene (Steg im Schnitt) ----------
-  // Bewegte Textur (periodisch) in Streifen mit Randausblendung zeichnen – ein Sprite, nur drawImage.
-  const STRIPS = (() => { const a = []; for (let y = 50; y < 190; y += 20) a.push([y, y + 20]); a.push([190, 870]); for (let y = 870; y < 1010; y += 20) a.push([y, y + 20]); return a.map((q) => [q[0], q[1], edgeFade((q[0] + q[1]) / 2)]); })();
-  function drawTex(ctx, tex, dx, w, off) {
-    if (!tex) return false;
-    ctx.save();
-    for (const q of STRIPS) { const a = GA * q[2]; if (a < 0.01) continue; ctx.globalAlpha = a; ctx.drawImage(tex, 0, q[0] + off, w, q[1] - q[0], dx, q[0], w, q[1] - q[0]); }
-    ctx.restore(); return true;
-  }
-  const RAIL_PER = 462; // kgV aus Schraffur (11 px) und Strich-Punkt-Linie (42 px)
   function drawRail(ctx, P, s) {
     const x0 = RX - BH, w = BH * 2, y0 = 30, y1 = 1050;
     layer(ctx, "railS", RX - 40, y0, 80, y1 - y0, 1, (g) => {
       fil(g, (c) => c.rect(x0, y0, w, y1 - y0), vGrad(g, "#163250", 0.96, y0, y1), 1);
       stk(g, (c) => { c.moveTo(x0, y0); c.lineTo(x0, y1); c.moveTo(x0 + w, y0); c.lineTo(x0 + w, y1); }, vGrad(g, "#cfe6fa", 1, y0, y1), 2.2, 1, 1);
     });
-    const tex = sprite("railT", w, 1080 + RAIL_PER, (g) => {
-      const PP = pats(g);
-      hatch(g, (c) => c.rect(0, 0, w, 1080 + RAIL_PER), PP.rail, 0, 0, 1);
-      stk(g, (c) => { c.moveTo(BH, 0); c.lineTo(BH, 1080 + RAIL_PER); }, COL.cyan, 1.2, 0, 0.55, { dash: [26, 6, 4, 6], cap: "butt" });
-    });
-    const off = ((s.D % RAIL_PER) + RAIL_PER) % RAIL_PER;
-    if (!drawTex(ctx, tex, x0, w, off)) hatch(ctx, (c) => c.rect(x0, 175, w, 690), P.rail, 0, -s.D, 1);
+    // Schnittschraffur + Strich-Punkt-Mittellinie wandern mit der Schiene (ein Pfad je Element)
+    const ph = ((s.D % 11) + 11) % 11;
+    stk(ctx, (c) => { for (let y = 40 - ph; y < 1040; y += 11) { c.moveTo(x0 + 1, y + w - 1); c.lineTo(x0 + w - 1, y + 1); } }, cgrad(ctx, "railH", () => vGrad(ctx, COL.steel, 0.42, 50, 1010)), 1, 0, 1, { cap: "butt" });
+    stk(ctx, (c) => { c.moveTo(RX, y0); c.lineTo(RX, y1); }, cgrad(ctx, "railC", () => vGrad(ctx, COL.cyan, 0.55, y0, y1)), 1.2, 0, 1, { dash: [26, 6, 4, 6], off: s.D, cap: "butt" });
   }
 
   // Bremsspur am Steg (fest auf der Schiene -> wandert mit nach oben)
@@ -545,8 +537,8 @@
       fil(g, (c) => c.rect(x - 6, y0, 12, y1 - y0), vGrad(g, "#0a1a30", 0.95, y0, y1), 1);
       stk(g, (c) => { c.moveTo(x - 6, y0); c.lineTo(x - 6, y1); c.moveTo(x + 6, y0); c.lineTo(x + 6, y1); }, vGrad(g, COL.rope, 0.95, y0, y1), 1.5, 0.6, 1);
     });
-    const tex = sprite("ropeT", 12, 1080 + 18, (g) => { stk(g, (c) => { for (let y = 0; y < 1100; y += 9) { c.moveTo(1, y + 3); c.lineTo(11, y - 3); } }, COL.rope, 1.3, 0, 0.75, { cap: "butt" }); });
-    drawTex(ctx, tex, x - 6, 12, ((off % 9) + 9) % 9);
+    const ph = ((off % 9) + 9) % 9;
+    stk(ctx, (c) => { for (let y = y0 + 9 - ph; y < y1; y += 9) { c.moveTo(x - 5, y + 3); c.lineTo(x + 5, y - 3); } }, cgrad(ctx, "ropeL", () => vGrad(ctx, COL.rope, 0.75, y0, y1)), 1.3, 0, 1, { cap: "butt" });
     // Seilklemme am Hebelende
     const pE = leverPt(s, ROPE_R), ye = pE[1];
     fil(ctx, (c) => rr(c, x - 15, ye - 28, 30, 56, 4), "#132a48", 1);
@@ -741,7 +733,7 @@
     const cx0 = x0 + 64, cx1 = x0 + w - 28, cy0 = y0 + 294, cy1 = y0 + 384;
     const yMax = s.inst ? 2.5 : 1.5, xMax = 0.3;
     const Yc = (g) => cy1 - (clamp(g, 0, yMax) / yMax) * (cy1 - cy0), Xc = (tau) => cx0 + (clamp(tau, 0, xMax) / xMax) * (cx1 - cx0);
-    layer(ctx, "p1|" + s.inst + "|" + s.eng, x0 - 14, y0 - 14, w + 28, h + 28, 1, (g) => {
+    const stat = (g) => {
       fil(g, (c) => rr(c, x0, y0, w, h, 14), "rgba(6,16,34,0.9)", 1);
       stk(g, (c) => rr(c, x0, y0, w, h, 14), COL.cyan, 1.4, 0.5, 0.55);
       txt(L, g, s.inst ? "SPERRFANGVORRICHTUNG" : "BREMSFANGVORRICHTUNG", x0 + 24, y0 + 46, { size: 30, weight: 700, font: L.FONT.head, color: COL.white, letterSpacing: 1.5 });
@@ -769,7 +761,7 @@
       }
       for (const v of [0, 0.1, 0.2, 0.3]) txt(L, g, v === 0.3 ? "0,3 s" : fmt(v, v ? 1 : 0), Xc(v), cy1 + 20, { size: 13, weight: 700, font: L.FONT.mono, color: COL.muted, align: v === 0.3 ? "right" : v ? "center" : "left" });
       stk(g, (c) => { c.moveTo(cx0, cy0 - 4); c.lineTo(cx0, cy1); }, COL.muted, 1, 0, 0.5);
-    });
+    };
     const chev = (ctx) => { // laufende Pfeile = Bewegung
       const tx = TXS[0] + TWS[0] - 16;
       for (let k = 0; k < 3; k++) { const f = ((k / 3 + t * clamp(s.speedPx * 0.006, 0.3, 1.6)) % 1); arrowHead(ctx, tx, tyT + 44 + f * 34, Math.PI / 2, 10, s.phase === "normal" ? COL.cyan : s.phase === "brake" ? COL.amber : COL.red, 0.9 * Math.sin(Math.PI * f)); }
@@ -829,9 +821,9 @@
     };
     const still = ap >= 1 && (s.phase === "normal" || (s.phase === "stop" && s.tau >= xMax && t > s.tm.tStop + 0.6));
     if (still) {
-      layer(ctx, "p1live|" + s.inst + "|" + s.eng + "|" + s.phase + "|" + Math.round(s.tm.k), x0 - 14, y0 - 14, w + 28, h + 28, 1, (g) => live(g, false));
+      layer(ctx, "p1live|" + s.inst + "|" + s.eng + "|" + s.phase + "|" + Math.round(s.tm.k), x0 - 14, y0 - 14, w + 28, h + 28, 1, (g) => { stat(g); live(g, false); });
       if (s.phase === "normal") chev(ctx);
-    } else live(ctx, true);
+    } else { layer(ctx, "p1|" + s.inst + "|" + s.eng, x0 - 14, y0 - 14, w + 28, h + 28, 1, stat); live(ctx, true); }
     GA = sG;
   }
 
@@ -875,6 +867,9 @@
       stk(g, (c) => { c.moveTo((rx1 + rx2) / 2, fy0 + 22); c.lineTo((rx1 + rx2) / 2, fy1 - 22); }, COL.cyan, 1, 0, 0.4, { dash: [6, 5] });
       for (const xr of [rx1, rx2]) stk(g, (c) => { c.rect(xr - 7, fy0 - 2, 14, 12); }, COL.steel, 1.2, 0, 0.8);
       txt(L, g, "Fahrkorb", (rx1 + rx2) / 2, (fy0 + fy1) / 2 + 5, { size: 14, weight: 600, color: COL.muted, align: "center" });
+      txt(L, g, s.inst ? "Rolle / Backe" : "Keile", hx1 + 12, yc - 30, { size: 14, weight: 600, color: COL.amber });
+      txt(L, g, "Fangvorrichtung", rx1 + 28, fy1 + 30, { size: 14, weight: 600, color: COL.amber });
+      for (const xr of [rx1, rx2]) stk(g, (c) => { c.moveTo(xr, y0 + 46); c.lineTo(xr, y0 + h - 18); }, "#cfe6fa", 2, 0.5, 0.9);
     });
     // Draufsicht: Keile/Backen schließen sich um den Steg
     const cf = s.eng ? (s.contact ? 0.55 + 0.45 * s.cf : smooth(inv(s.tm.tTrip, s.tm.tCon, t)) * 0.55) : 0;
@@ -882,15 +877,11 @@
     const kx0 = hx0 + 8, kx1 = hx1 - 22, fy1 = y0 + 214;
     const jb = (c) => { for (const sg of [-1, 1]) { const yin = yc + sg * (bh + gap), yout = yc + sg * 29; c.rect(kx0, Math.min(yin, yout), kx1 - kx0, Math.abs(yout - yin)); } };
     fil(ctx, jb, "#3a2a10", 1); stk(ctx, jb, COL.amber, 1.6, 0.8, 1);
-    layer(ctx, "p2lab|" + s.inst, x0 - 14, y0 - 14, w + 28, h + 28, 1, (g) => {
-      txt(L, g, s.inst ? "Rolle / Backe" : "Keile", hx1 + 12, yc - 30, { size: 14, weight: 600, color: COL.amber });
-      txt(L, g, "Fangvorrichtung", rx1 + 28, fy1 + 30, { size: 14, weight: 600, color: COL.amber });
-      for (const xr of [rx1, rx2]) stk(g, (c) => { c.moveTo(xr, y0 + 46); c.lineTo(xr, y0 + h - 18); }, "#cfe6fa", 2, 0.5, 0.9);
-    });
+
     if (s.contact) {
       const a = smooth(inv(s.tm.tCon, s.tm.tCon + 0.3, t));
-      layer(ctx, "p2arr", x0 - 14, y0 - 14, w + 28, h + 28, a, (g) => {
-        const xa = (kx0 + kx1) / 2;
+      const xa = (kx0 + kx1) / 2;
+      layer(ctx, "p2arr", xa - 16, yc - 84, 130, 168, a, (g) => {
         for (const sg of [-1, 1]) { stk(g, (c) => { c.moveTo(xa, yc + sg * 76); c.lineTo(xa, yc + sg * 58); }, COL.amber, 3, 1, 1); arrowHead(g, xa, yc + sg * 48, sg > 0 ? -Math.PI / 2 : Math.PI / 2, 12, COL.amber, 1); }
         txt(L, g, "Klemmkraft", xa + 14, yc - 66, { size: 14, weight: 600, color: COL.amber });
       });

@@ -175,12 +175,12 @@
   }
   function vecGlyph(ctx, ch, x, axis, size) {
     const cx = x + size * 0.3, hw = size * 0.2;
-    ctx.lineWidth = size * 0.085; ctx.lineCap = "butt"; ctx.lineJoin = "miter"; ctx.miterLimit = 6;
+    ctx.lineWidth = size * 0.09; ctx.lineCap = "butt"; ctx.lineJoin = "miter"; ctx.miterLimit = 6;
     ctx.beginPath();
     if (ch === "≥" || ch === "≤") {
       const s = ch === "≥" ? 1 : -1;
-      ctx.moveTo(cx - s * hw, axis - 0.25 * size); ctx.lineTo(cx + s * hw, axis - 0.09 * size); ctx.lineTo(cx - s * hw, axis + 0.07 * size);
-      ctx.moveTo(cx - hw, axis + 0.23 * size); ctx.lineTo(cx + hw, axis + 0.23 * size);
+      ctx.moveTo(cx - s * hw, axis - 0.3 * size); ctx.lineTo(cx + s * hw, axis - 0.1 * size); ctx.lineTo(cx - s * hw, axis + 0.1 * size);
+      ctx.moveTo(cx - hw, axis + 0.27 * size); ctx.lineTo(cx + hw, axis + 0.27 * size);
     } else if (ch === "≈") {
       for (const oy of [-0.09, 0.1]) {
         const y = axis + oy * size;
@@ -215,14 +215,20 @@
     const cw = m0.width;
     const capH = m0.actualBoundingBoxAscent || S * 0.73;
     const L = { S, cw, capH, items: [], w: 0 };
+    // Seitenränder (Bearing) der ersten/letzten Ziffer des Endwerts – für optisch korrekte Abstände/Zentrierung
+    ctx.textAlign = "left";
+    const fin = Math.abs(cfg.value).toFixed(cfg.dec);
+    const mF = ctx.measureText(fin.charAt(0)), mL = ctx.measureText(fin.charAt(fin.length - 1));
+    L.leadBearing = cfg.neg ? 0 : clamp(-(mF.actualBoundingBoxLeft || 0), 0, cw * 0.4);
+    L.tailBearing = clamp(cw - (mL.actualBoundingBoxRight || cw), 0, cw * 0.4);
     let x = 0;
     // Präfix
     if (cfg.prefix) {
       const sym = CENTER_SYM.test(cfg.prefix);
-      const ps = sym ? S * 0.46 : S * 0.3;
+      const ps = sym ? S * 0.5 : S * 0.3;
       const pw = richWidth(ctx, cfg.prefix, ps);
       L.prefix = { x, w: pw, size: ps, sym };
-      x += pw + (cfg.prefixGap ? S * 0.14 : S * 0.07);
+      x += pw + (cfg.prefixGap ? S * 0.14 : S * 0.07) - L.leadBearing;
     }
     // Vorzeichen-Reserve
     if (cfg.neg) { L.signX0 = x; x += cw * 0.85; }
@@ -244,13 +250,15 @@
       const us = sym ? S * 0.52 : S * 0.3;
       const gap = /^[×x·]/.test(u) ? S * 0.05 : sym ? S * 0.1 : S * 0.14;
       const uw = richWidth(ctx, u, us);
-      x += gap;
+      x += gap - L.tailBearing * 0.8;
       setFont(ctx, 700, us, MONO);
       const mu = ctx.measureText(u.replace(/[≥≤≈≠→]/g, "="));
       L.unit = { x, w: uw, size: us, center: CENTER_SYM.test(u), top: TOP_SYM.test(u), asc: mu.actualBoundingBoxAscent || us * 0.7, desc: mu.actualBoundingBoxDescent || 0 };
       x += uw;
     }
     L.w = x;
+    L.inkL = L.prefix ? 0 : L.leadBearing;
+    L.inkR = L.unit ? 0 : L.tailBearing;
     return L;
   }
 
@@ -300,7 +308,7 @@
         // Rollen nur im letzten Teil jedes Schritts (mechanischer Takt); schnelle Stellen rasten ein + Bewegungsunschärfe
         const spd = spdX / p10;
         const b = clamp((spd - 5) / 12);
-        const fr = sm((f - 0.35) / 0.65) * (1 - b);
+        const fr = sm((f - 0.45) / 0.55) * (1 - b);
         if (fr > 0.002 || b > 0.02) {
           const am = alpha * (1 - 0.3 * b);
           if (fr > 0.002) {
@@ -586,7 +594,7 @@
       const reveal = seg(t, 0, tIn);
       const cStart = 0.03 * d, cEnd = 0.45 * d;
       const cu = seg(t, cStart, cEnd - cStart);
-      const ease = (x) => 1 - Math.pow(1 - clamp(x), 3.2);
+      const ease = (x) => 1 - Math.pow(1 - clamp(x), 3);
       const valAt = (tt) => {
         const q = seg(tt, cStart, cEnd - cStart);
         return q >= 1 ? cfg.value : cfg.from + (cfg.value - cfg.from) * ease(q);
@@ -622,14 +630,15 @@
       const L100 = numberLayout(ctx, cfg, 100);
       const S = clamp((1480 / Math.max(1, L100.w)) * 100, 84, 285);
       const NL = numberLayout(ctx, cfg, S);
-      const numMid = cy - 4;
-      const base = numMid + NL.capH / 2;
-      const x0 = cx - NL.w / 2;
-      const hasComma = cfg.dec > 0;
       const pad = 26;
-      const boxes = [{ x0: x0 - pad - cx, x1: x0 + NL.w + pad - cx, y0: base - NL.capH - pad - cy, y1: base + (hasComma ? S * 0.16 : 0) + pad - cy }];
+      const wide = (NL.w - NL.inkL - NL.inkR) / 2 + pad > R_FINE - 8;
+      const numMid = cy + (wide ? 30 : -4);
+      const base = numMid + NL.capH / 2;
+      const x0 = cx - (NL.inkL + NL.w - NL.inkR) / 2;
+      const hasComma = cfg.dec > 0;
+      const boxes = [{ x0: x0 + NL.inkL - pad - cx, x1: x0 + NL.w - NL.inkR + pad - cx, y0: base - NL.capH - pad - cy, y1: base + (hasComma ? S * 0.16 : 0) + pad - cy }];
       // breite Zahl schneidet die Ringe seitlich: dann auch die Reststücke darunter weglassen (Skala wird zur „Haube")
-      if (Math.min(-boxes[0].x0, boxes[0].x1) > R_FINE - 8) boxes[0].y1 = 2000;
+      if (wide) boxes[0].y1 = 2000;
 
       // --- Hintergrund-Glow hinter der Zahl ---
       const numIn = sm(seg(t, 0.05, Math.min(0.5, 0.1 * d)));
