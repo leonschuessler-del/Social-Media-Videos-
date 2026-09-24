@@ -124,7 +124,13 @@
   "s36_a",
   "s27_a",
   "s27_c",
-  "s27_c"
+  "s27_c",
+  "s08_b",
+  "s10_b",
+  "s10_c",
+  "s12_c",
+  "s13_a",
+  "s17_b"
  ],
  "failed_review": [
   {
@@ -290,6 +296,18 @@
   {
    "scene_id": "s27_c",
    "problem": "The status chip swap between 1,6 and 1,95 s produces garbled text. chip2 draws 'KABINE FÄHRT LOS' (red) and 'KABINE STEHT' (green) at the same left-aligned position and crossfades them over 0,35 s, so the words overlap as 'KABINE SŦEHT LOS'. The wider red outline also sticks out past the green one, which is visible in sheet frame 3 (u034). The red 'KABINE FÄHRT LOS' chip also does not match this scene's narration ('Er stoppt die Kabine …'): it repeats the status s27_a already showed, and at 0,7 s it says the opposite of what is being said. Fix with params only: set hazard_label to \"\" (chip2 returns early for an empty label). Movement is still shown by the red chevrons, the red gap and the blinking red door chip. The green 'KABINE STEHT' then fades in cleanly between 1,6 and 1,95 s during 'spätestens'. I re-rendered with this change (scene-qa2/s27_c_rev): no overlap, and everything else stays the same. The rest is correct: 1,20 m is not shown before 'Meter zwanzig', 'Türzone' carries no unspoken number, the Stopp mark (0,5 m) is inside the limit, direction is up and matches s27_a, the subtitle band is free, and the rope brake is at y≥94. Optional template improvement, not required: chip2 should fade out the old status first and then fade in the new one, instead of crossfading them in the same place."
+  },
+  {
+   "scene_id": "s12_c",
+   "problem": "The content and timing are right. Brake, sheave, torn rope ends and the disconnected, sinking car are all visible together. 'Bremse zu', 'Treibscheibe' and 'Kabine hängt nicht mehr dran' each become readable just after the matching words. There are no unnarrated numbers and the bottom 170 px stays free. The scene still fails on polish. (1) From about 2.0 s to the end, the lower-left corner of the 'Bremse zu' box sits on the top-right corner of the red AUSGELÖST chip. At 2.2 s they touch, and at 4.2 s they overlap by about 10x5 px (box starts at x≈1236, y≈316; chip ends at x≈1247, y≈312). Params cannot fix this. The chevrons push the right label column to chev.x1+26 because 'Treibscheibe' sits on the left, and layoutCallouts does not treat the chip (drawScreenLabels, toS(G.gx+G.rg+12, G.gy-44)) as an obstacle. Moving the label to the left side, dropping 'Treibscheibe', or adding more labels either sends the leader across the sheave or makes the overlap worse. TEMPLATE CHANGE: when M.tripped is true or a trip happens inside the scene, pass the chip rect (about 110x22 px plus an 8 px margin) into layoutCallouts as a right-side obstacle, like col/hitsCol. Then move the colliding box up so its bottom sits at least 8 px above the chip top; for 'Bremse zu' that means ly≈280 instead of 293, and it stays at yMin 200 or below. The other option is to draw the chip left-aligned at the governor when a callout box covers its spot. (2) Secondary, scene-level: the template's own 0.88→1 zoom-in over about 1.33 s, combined with slow_pull_out and the ropes+include_car rect growing as the car sinks, zooms in about 8% until about 1.2 s and then out about 18%. That visible reversal was checked on the machine-room width: 568 px, then 613, then 503. Change the scene camera to 'slow_push_in'; after about 1.3 s the view then holds nearly steady, and the car bottom ends near 873 px, still above the band. The params themselves can stay."
+  },
+  {
+   "scene_id": "s13_a",
+   "problem": "The labels are correct German, point at the right parts (the lever label is on the lever, the wedge label on the left block) and follow the narration: the rope label is readable at about 0.7 s, the lever label at about 4.3 s, the wedge label at about 5.3 s, and the bite and shake come at 5.4 s. Three problems remain. (1) TEMPLATE BUG, visible from 0 to 5.4 s. In safety_engage, M.streak = {y0: carYAt(T.te), y1: M.carY} is also set BEFORE the bite. drawRails therefore draws a glowing amber and white brake streak on both rails BELOW the safety blocks, running from the car down to where the car will be at T.te. At 1.3 s it shows clearly as two orange 'exhaust flames' under the blocks. It shows braking while the narration says 'Kabine fällt weiter', which runs about 4 s ahead of 'Keile klemmen', and physically a rub mark cannot appear ahead of the brake shoe. Fix: M.streak = t >= T.te ? {...} : null. (2) TEMPLATE LIMITATION on the key mechanism. M.lever = clamp((12 + carY − carY(0))/24, 0, 0.6), so the trip lever is already at about 0.5 at t=0 and fully raised after a few px of fall. At 'Das stehende Seil zieht den Hebel' (3.63–4.78 s) nothing moves; only the amber highlight changes. Fix: in safety_engage, animate the lever from 0 to 0.6 between T.te−1.1 and T.te−0.3 (here about 4.3–5.1 s), optionally overridable by a new lever_at param, so the wedges rise right after it. (3) SCENE CAMERA: tilt_down moves the content up 90 px. The car-following camera therefore lifts the car about 80 px on screen during 'Kabine fällt weiter', and the dashes of the 'standing' governor rope visibly scroll upward, which contradicts 'Seil steht'. Change the camera to 'tilt_up'. It cancels the car-follow scroll, so the shaft and governor rope stay nearly still and the car visibly drops about 90 px. The labels then end at about 860 px or higher, still above the 170 px band. The params can stay as they are."
+  },
+  {
+   "scene_id": "s17_b",
+   "problem": "The pit view with the car dropping toward the buffers works. The bite, shake and sparks come at 2.6 s on 'Ruck' (2.65), the car is held above the pit at about 2.9–3.0 s, no numbers appear, and the pit floor sits above the band. It fails for three reasons. (1) The same TEMPLATE BUG as s13_a: before the bite, amber brake streaks are drawn below both safety blocks from 0 to 2.6 s (at 1.4 s they are clearly visible under the blocks while 'Absturz in den Keller' is spoken). That shows braking before it happens. Fix: in safety_engage, M.streak = t >= T.te ? {...} : null. (2) The ending contradicts the narration. The engine overlay (env 0.5 → d−0.3) fades out between about 2.75 and 3.2 s, exactly at the jolt. In the last ~0.5 s the only text left is the RED 'Absturz in den Keller' pointing into the pit, beside the car held in its green frame. The resolution 'wird ein kräftiger Ruck' has no text. Params fix: add a green car label 'Kräftiger Ruck' with at 2.45. Its leader starts at 2.45, the text reads from about 2.95 s (after 'Ruck' at 2.65), and it replaces the fading overlay, so the final frame reads as 'Absturz' (red, pit) versus 'Ruck' (green, car). It lands in the right column to the right of the chevrons (x≈1510–1760, y≈car middle), clear of the frame and the pit label. (3) Minor, not blocking: the overlay 'Kräftiger Ruck statt Absturz' is readable from about 1.0 s, roughly 1.2 s before 'kräftiger Ruck' is spoken; the engine fixes that timing. The anchor of the red pit label sits next to the amber counterweight buffer spring, so it slightly reads as labelling that spring."
   }
  ],
  "gaps": [
@@ -1257,6 +1275,72 @@
    "scene_id": "s27_c",
    "missing": "The default zone_label 'Türzone ±0,20 m' shows a number that narration rarely states. Every scene needs to override it manually to avoid unspoken figures.",
    "suggestion": "Default zone_label to 'Türzone' and show the value only when show_zone_value is true.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s10_b",
+   "missing": "Per-part highlight timing. highlight_at is global, so the governor rope glows together with the governor sheave at 'eigene Seilscheibe' (1.45 s), ~1.9 s before 'Seil' is spoken.",
+   "suggestion": "Accept highlight items as objects, e.g. highlight:[{part:'governor',at:1.45},{part:'governor_rope',at:2.8}], each with its own fade-in.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s08_b",
+   "missing": "The speed HUD always draws the fixed 'Nenn 1,0' and '115 %' tick labels and the live value (1,15 m/s at the end of the slow-motion window). That reveals the '+15 %' result before 'fünfzehn Prozent' is spoken, so the HUD had to be turned off (hud_at only delays the whole panel and leaves a gap above the stopwatch).",
+   "suggestion": "Add HUD options such as hud_marks:false (hide the 115 % tick and label) and hud_value_at (hold the value hidden until a given time), or let the column restack when hud_at > 0.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s10_c",
+   "missing": "The full-focus framing is fixed: the building is ~630 px wide, and there is no zoom or vertical-margin control. The tilt_down, tilt_up and slow_push_in cameras push the machine-room roof above the 90 px safe margin or the pit into the subtitle band. offset_x works but is undocumented.",
+   "suggestion": "Document offset_x and add a full-view zoom or fit-margin param that accounts for the engine camera scale (1.08-1.1), so camera moves stay inside the safe area.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s08_b",
+   "missing": "The ruler value comes only from the physics (1,6 cm for 15 ms at 1 m/s), and there is no way to set a display label such as '≈ 1,5 cm' to match the spoken wording.",
+   "suggestion": "Optional ruler.label or ruler.text to override the displayed value (the marker position still follows the physics).",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s13_a",
+   "missing": "In safety_engage, M.streak (the amber brake streak on the rails) is drawn before te, from the current carY down to carYAt(te). A glowing amber friction mark appears below both safety blocks for the whole pre-bite phase, which reveals the braking and where the car will stop before it is narrated (s13_a 0–5.4 s, s17_b 0–2.6 s).",
+   "suggestion": "Draw the streak only when t >= T.te, from carYAt(T.te) to M.carY, e.g. set M.streak = t >= T.te ? {...} : null in motion() for safety_engage.",
+   "severity": "major"
+  },
+  {
+   "scene_id": "s13_a",
+   "missing": "The trip lever cannot be timed. In safety_engage, M.lever = clamp((12 + dy)/24, 0, 0.6) is already 0.5 rad at t=0, so the narrated 'Das stehende Seil zieht den Hebel' (4.3–4.8 s) cannot be shown as a lever being pulled.",
+   "suggestion": "Add a lever_at param (seconds, default 0): lever stays at 0 before lever_at, then eases to 0.6 rad over ~0.4 s, optionally with the governor-rope hitch dot pulsing while it happens.",
+   "severity": "major"
+  },
+  {
+   "scene_id": "s17_b",
+   "missing": "In safety_engage the travel before the bite is fixed at 0.45 floors in total (w0 = 0.45/(te+(tS-te)/2)). With a late bite, needed to sync 'Ruck' at 2.6 s, the 'Absturz' is a slow creep, and neither the fall speed nor the distance can be set.",
+   "suggestion": "Add fall_floors (or pre_drop_floors) and/or v_fall for safety_engage, so the car can visibly plunge before te and then decelerate to tS.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s17_b",
+   "missing": "The jolt strength is fixed: the safety_engage bite shakes 6 px, and 'kräftiger Ruck' cannot be emphasised.",
+   "suggestion": "Add a jolt_strength or shake param (a multiplier on the hit() amplitude), optionally with a short white flash at te.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s12_c",
+   "missing": "Callout layout ignores the AUSGELÖST chip drawn at the governor. At ropes-focus scales (~1.2–1.4), the right-side 'Bremse zu' brake label box touches the chip corner.",
+   "suggestion": "Add the chip rect (toS(gx+rg+12, gy-44), ~105×22) to the right column's obstacle check in layoutCallouts, or place the chip above-left of the governor when a brake label exists.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s12_c",
+   "missing": "When all ropes have snapped, the 'ropes' label anchor always goes to the car hitch. No anchor exists for the torn upper rope ends hanging from the sheave, so in machine_room focus a rope label ('keine Verbindung zur Kabine') is dropped because the car is off screen.",
+   "suggestion": "Add a part such as 'rope_ends' (or ropes with end:'upper') anchored at the upper broken end (rp.carX, endY) of the centre rope.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s12_c",
+   "missing": "No state shows 'governor tripped and blocked, brake closed, ropes broken, car still falling, safety gear not yet engaged'. 'stopped' shows the wedges clamped, and all_ropes_snap keeps the governor spinning. I used overspeed with the trip at 0.3 s, which raises the lever slightly and anticipates s13_a.",
+   "suggestion": "Add a tripped_falling state (or all_ropes_snap with trip_at): governor frozen with the AUSGELÖST chip, brake closed, car in free fall, lever and wedges at rest until a later scene.",
    "severity": "minor"
   }
  ]

@@ -327,6 +327,7 @@
       bufferGlow: bool(pr.buffer_glow, true), floorM: clamp(num(pr.floor_height_m ?? pr.storey_height_m, 3), 2, 6),
       snapGap: num(pr.snap_gap, null),
       offX: clamp(num(pr.offset_x ?? pr.shift_x ?? pr.frame_offset_x, 0), -400, 400),
+      leverAt: tsec(pr.lever_at ?? pr.trip_lever_at),
       inclCar: bool(pr.include_car ?? pr.frame_car ?? pr.show_car, false),
       loupe: focus === "plate" && bool(pr.plate_loupe ?? pr.loupe ?? (plateRaw && plateRaw.loupe), true),
       loupeAt: tsec(pr.loupe_at ?? plateRaw?.at),
@@ -598,10 +599,11 @@
       const v0 = (2.0 * o.vNom) / 1.6;
       M.v = t < T.te ? -v0 : t < T.tS ? -v0 * (1 - (t - T.te) / (T.tS - T.te)) : 0; M.dir = M.v < -0.01 ? -1 : 0;
       M.speedPanel = true; M.slow = true; M.tripT = -1; M.danger = true;
-      M.lever = clamp((12 + M.carY - carYAt(o, G, T, 0)) / 24, 0, 0.6);
+      const lvA = o.leverAt != null ? Math.min(T.at(o.leverAt), T.te - 0.3) : Math.max(0.3, T.te - 1.1);
+      M.lever = 0.6 * smooth((t - lvA) / Math.max(0.3, T.te - 0.3 - lvA));
       M.wedge = smooth((t - (T.te - 0.2)) / 0.25);
       M.heat = t < T.te ? 0 : t < T.tS ? 1 : Math.exp(-(t - T.tS) * 0.9);
-      M.streak = { y0: carYAt(o, G, T, T.te), y1: M.carY };
+      M.streak = t >= T.te ? { y0: carYAt(o, G, T, T.te), y1: M.carY } : null;
       M.sparks = { t0: T.te, t1: T.tS, yAt: (tt) => carYAt(o, G, T, tt) };
       M.status = t < T.te ? "Begrenzer ausgelöst" : t < T.tS ? "Fangvorrichtung greift" : "Kabine gehalten";
       M.statusCol = t < T.te ? COL.red : t < T.tS ? COL.amber : COL.green;
@@ -1510,8 +1512,15 @@
       }
       const yMin = side === "left" ? 232 : 200, yMax = 890;
       const hitsCol = (y, h) => col && side === "right" && x < col.x1 && x + wMax > col.x0 && y + h / 2 > col.y0 - 12 && y - h / 2 < col.y1 + 12;
+      // AUSGELÖST-Chip am Begrenzer (drawScreenLabels) als Hindernis: Label darüber oder darunter setzen
+      const chipR = M.tripT != null ? (() => { const [gx, gy] = toS(G.gx + G.rg + 12, G.gy - 44); return [gx - 8, gy - 8, gx + 118, gy + 30]; })() : null;
+      const hitsChip = (y, h) => chipR && (side === "right" ? x < chipR[2] && x + wMax > chipR[0] : x - wMax < chipR[2] && x > chipR[0]) && y + h / 2 > chipR[1] && y - h / 2 < chipR[3];
       let prev = null;
-      for (const it of list) { let y = Math.max(it.ay, prev ? prev.ly + prev.h / 2 + it.h / 2 + 12 : -1e9, yMin + it.h / 2); if (hitsCol(y, it.h)) y = col.y1 + 16 + it.h / 2; it.ly = y; prev = it; }
+      for (const it of list) {
+        let y = Math.max(it.ay, prev ? prev.ly + prev.h / 2 + it.h / 2 + 12 : -1e9, yMin + it.h / 2); if (hitsCol(y, it.h)) y = col.y1 + 16 + it.h / 2;
+        if (hitsChip(y, it.h)) { const up = chipR[1] - it.h / 2; y = up >= yMin + it.h / 2 - 40 && (!prev || up - it.h / 2 >= prev.ly + prev.h / 2 + 8) ? up : chipR[3] + it.h / 2; }
+        it.ly = y; prev = it;
+      }
       let next = null;
       for (let j = list.length - 1; j >= 0; j--) { const it = list[j]; it.ly = Math.min(it.ly, next ? next.ly - next.h / 2 - it.h / 2 - 12 : 1e9, yMax - it.h / 2); next = it; }
       for (const it of list) { it.lx = x; it.box = side === "left" ? [x - it.w, it.ly - it.h / 2, x, it.ly + it.h / 2] : [x, it.ly - it.h / 2, x + it.w, it.ly + it.h / 2]; }

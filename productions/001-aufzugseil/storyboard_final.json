@@ -304,15 +304,15 @@
    "id": "s08_b",
    "segment_id": "s08",
    "template": "shaft_xray",
-   "params_json": "{\"focus\":\"car\",\"state\":\"all_ropes_snap\",\"floor\":2,\"rope_count\":6,\"speed\":1.0,\"hud\":false,\"people\":2,\"labels\":[{\"part\":\"rails\",\"text\":\"nach gut 1,5 cm Fall\"}]}",
-   "on_screen_text": "Nach 15 ms: +15 %",
+   "params_json": "{\"focus\":\"car\",\"state\":\"all_ropes_snap\",\"floor\":2.4,\"rope_count\":6,\"speed\":1.0,\"moving\":true,\"slowmo_ms\":15,\"beats\":[1.15,3.95],\"hud\":false,\"people\":2,\"stopwatch\":{\"at\":1.75},\"readout\":{\"text\":\"+15 %\",\"caption\":\"Geschwindigkeit\",\"at\":6.2},\"ruler\":{\"at\":8.4}}",
+   "on_screen_text": "Alle Seile durchtrennt",
    "weight": 0.63,
-   "camera": "static",
+   "camera": "slow_push_in",
    "sfx": "rope_snap",
    "description": "Beim Wort 'durchtrennen' peitschen alle Seile amber weg. Eine große Stoppuhr läuft in extremer Zeitlupe von 0 auf 15 ms, der Mini-Tacho steigt um 15 Prozent, ein Lineal an der Führungsschiene zeigt 1,5 cm Fall.",
    "qa": {
-    "quality": 6,
-    "review_pass": false
+    "quality": 8.5,
+    "review_pass": true
    }
   },
   {
@@ -364,14 +364,14 @@
    "id": "s10_b",
    "segment_id": "s10",
    "template": "shaft_xray",
-   "params_json": "{\"focus\":\"machine_room\",\"state\":\"idle\",\"highlight\":[\"governor\",\"governor_rope\"],\"labels\":[{\"part\":\"sheave\",\"text\":\"Treibscheibe\"},{\"part\":\"governor\",\"text\":\"Geschwindigkeitsbegrenzer\"},{\"part\":\"governor_rope\",\"text\":\"eigenes, dünnes Seil\"}],\"hud\":false}",
-   "on_screen_text": "Eigene Scheibe, eigenes Seil",
+   "params_json": "{\"focus\":\"machine_room\",\"state\":\"idle\",\"highlight\":[\"governor\",\"governor_rope\"],\"highlight_at\":1.45,\"labels\":[{\"part\":\"sheave\",\"text\":\"Treibscheibe\",\"at\":0.7},{\"part\":\"governor\",\"text\":\"Eigene Seilscheibe\",\"at\":1.45},{\"part\":\"governor_rope\",\"text\":\"Eigenes, dünnes Seil\",\"at\":2.8}],\"hud\":false}",
+   "on_screen_text": "Begrenzer: klassische Bauart",
    "weight": 0.26,
    "camera": "slow_push_in",
    "sfx": "none",
    "description": "Maschinenraum: Neben der Treibscheibe leuchtet die kleine Begrenzerscheibe amber, das dünne Begrenzerseil wird hervorgehoben.",
    "qa": {
-    "quality": 8,
+    "quality": 8.5,
     "review_pass": true
    }
   },
@@ -379,15 +379,15 @@
    "id": "s10_c",
    "segment_id": "s10",
    "template": "shaft_xray",
-   "params_json": "{\"focus\":\"full\",\"state\":\"moving_down\",\"speed\":1.0,\"floor\":3,\"to_floor\":0,\"highlight\":[\"governor\",\"governor_rope\",\"tension_pulley\",\"safety_gear\"],\"labels\":[{\"part\":\"governor\",\"text\":\"Begrenzer\"},{\"part\":\"governor_rope\",\"text\":\"Begrenzerseil\"},{\"part\":\"tension_pulley\",\"text\":\"Spannrolle\"},{\"part\":\"lever\",\"text\":\"Hebel an der Kabine\"}],\"hud\":false}",
-   "on_screen_text": "Kabine zieht das Seil mit",
+   "params_json": "{\"focus\":\"full\",\"state\":\"moving_down\",\"speed\":1.0,\"floor\":3,\"to_floor\":1,\"beats\":[5.4,8.0],\"highlight\":[\"governor\",\"governor_rope\",\"tension_pulley\",\"lever\"],\"highlight_at\":0.55,\"labels\":[{\"part\":\"governor_rope\",\"text\":\"Begrenzerseil\",\"at\":0.6},{\"part\":\"tension_pulley\",\"text\":\"Spannrolle\",\"at\":1.6},{\"part\":\"lever\",\"text\":\"Hebel auf der Kabine\",\"at\":3.6}],\"hud\":false,\"offset_x\":-100}",
+   "on_screen_text": "Seil läuft als Schleife",
    "weight": 0.5,
-   "camera": "tilt_down",
+   "camera": "static",
    "sfx": "rumble",
    "description": "Gesamter Schacht: Die dünne amber Schleife läuft vom Begrenzer oben bis zur Spannrolle in der Grube, am Hebel auf der Kabine eingehängt. Die Kabine fährt, die Schleife läuft synchron mit.",
    "qa": {
     "quality": 8,
-    "review_pass": false
+    "review_pass": true
    }
   },
   {
@@ -454,30 +454,32 @@
    "id": "s12_c",
    "segment_id": "s12",
    "template": "shaft_xray",
-   "params_json": "{\"focus\":\"machine_room\",\"state\":\"stopped\",\"broken_ropes\":\"all\",\"highlight\":[\"sheave\",\"brake\"],\"labels\":[{\"part\":\"brake\",\"text\":\"Motor aus, Bremse zu\"},{\"part\":\"sheave\",\"text\":\"keine Verbindung zur Kabine\"}],\"hud\":false}",
-   "on_screen_text": "Hier hilft die Bremse nicht",
+   "params_json": "{\"focus\":\"ropes\",\"include_car\":true,\"state\":\"overspeed\",\"beats\":[0.3],\"broken_ropes\":\"all\",\"safety_circuit\":true,\"highlight\":[\"brake\",\"sheave\"],\"highlight_at\":0.4,\"labels\":[{\"part\":\"brake\",\"text\":\"Bremse zu\",\"at\":0.35},{\"part\":\"sheave\",\"text\":\"Treibscheibe\",\"at\":1.5},{\"part\":\"ropes\",\"text\":\"Kabine hängt nicht mehr dran\",\"at\":2.55,\"color\":\"red\"}],\"hud\":false}",
+   "on_screen_text": "Bremse hilft hier nicht",
    "weight": 0.3,
-   "camera": "slow_pull_out",
+   "camera": "slow_push_in",
    "sfx": "none",
    "description": "Maschinenraum im Röntgenblick: Die Treibscheibe steht gebremst, lose Seilenden hängen herab. Label: keine Verbindung zur Kabine.",
    "qa": {
     "quality": 8,
-    "review_pass": true
+    "review_pass": null,
+    "fixed": "template fix (streak/lever/chip) + reviewer params"
    }
   },
   {
    "id": "s13_a",
    "segment_id": "s13",
    "template": "shaft_xray",
-   "params_json": "{\"focus\":\"car\",\"state\":\"safety_engage\",\"broken_ropes\":\"all\",\"highlight\":[\"governor_rope\",\"safety_gear\"],\"labels\":[{\"part\":\"governor_rope\",\"text\":\"Stehendes Seil zieht den Hebel\"},{\"part\":\"safety_gear\",\"text\":\"Keile klemmen\"}],\"hud\":false}",
+   "params_json": "{\"focus\":\"car\",\"state\":\"safety_engage\",\"beats\":[5.4,7.1],\"broken_ropes\":\"all\",\"floor_labels\":false,\"highlight\":[\"governor_rope\",\"lever\"],\"highlight_at\":3.5,\"labels\":[{\"part\":\"governor_rope\",\"text\":\"Begrenzerseil\",\"at\":0.2},{\"part\":\"lever\",\"text\":\"Seil zieht den Hebel\",\"at\":3.85},{\"part\":\"safety_gear\",\"side\":\"left\",\"text\":\"Keile klemmen\",\"at\":4.85,\"color\":\"amber\"},{\"part\":\"rails\",\"side\":\"left\",\"text\":\"Kabine an den Schienen fest\",\"at\":6.3,\"color\":\"green\"}],\"frame_color\":\"green\",\"frame_at\":6.95,\"hud\":false}",
    "on_screen_text": "Seil steht, Kabine fällt weiter",
    "weight": 0.48,
-   "camera": "tilt_down",
+   "camera": "tilt_up",
    "sfx": "metal_creak",
    "description": "Das Begrenzerseil ist eingefroren, die Kabine gleitet weiter nach unten. Der Auslösehebel klappt hoch, die Keile fahren an die Führungsschienen und klemmen.",
    "qa": {
     "quality": 8,
-    "review_pass": false
+    "review_pass": null,
+    "fixed": "template fix (streak/lever/chip) + reviewer params"
    }
   },
   {
@@ -619,15 +621,16 @@
    "id": "s17_b",
    "segment_id": "s17",
    "template": "shaft_xray",
-   "params_json": "{\"focus\":\"car\",\"state\":\"safety_engage\",\"broken_ropes\":\"all\",\"highlight\":[\"safety_gear\",\"governor_rope\"],\"labels\":[{\"part\":\"safety_gear\",\"text\":\"Keile an die Schienen\"}],\"hud\":false}",
+   "params_json": "{\"focus\":\"pit\",\"state\":\"safety_engage\",\"floor\":1.2,\"beats\":[2.6,3.0],\"broken_ropes\":\"all\",\"floor_labels\":false,\"labels\":[{\"part\":\"pit\",\"side\":\"left\",\"text\":\"Absturz in den Keller\",\"at\":0.75,\"color\":\"red\"},{\"part\":\"car\",\"side\":\"right\",\"text\":\"Kräftiger Ruck\",\"at\":2.45,\"color\":\"green\"}],\"frame_color\":\"green\",\"frame_at\":2.9,\"hud\":false}",
    "on_screen_text": "Kräftiger Ruck statt Absturz",
    "weight": 0.38,
-   "camera": "slow_pull_out",
+   "camera": "static",
    "sfx": "impact",
    "description": "Die Kabine steht auf den Keilen an den Schienen, ein grüner Rahmen umschließt sie. Ein kurzer Ruck erschüttert das Bild.",
    "qa": {
-    "quality": 7,
-    "review_pass": false
+    "quality": 8,
+    "review_pass": null,
+    "fixed": "template fix (streak/lever/chip) + reviewer params"
    }
   },
   {
