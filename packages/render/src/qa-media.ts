@@ -23,10 +23,11 @@ export async function analyzeMedia(path: string, expect: { width: number; height
   const silenceStarts = [...log.matchAll(/silence_start: ([\d.]+)/g)].map((m) => Number(m[1]));
   const silenceEnds = [...log.matchAll(/silence_end: ([\d.]+)/g)].map((m) => Number(m[1]));
   const silenceSegments = silenceStarts.map((s, i) => ({ start: s, end: silenceEnds[i] ?? info.durationSec }));
-  const lufs = log.match(/I:\s+(-?[\d.]+) LUFS/);
-  const tp = log.match(/Peak:\s+(-?[\d.]+) dBFS/);
-  const integratedLufs = lufs ? Number(lufs[1]) : undefined;
-  const truePeakDb = tp ? Number(tp[1]) : undefined;
+  // ebur128 gibt pro Frame "I:" aus; die Zusammenfassung ("Integrated loudness: I: … LUFS") ist der LETZTE Treffer
+  const lufsAll = [...log.matchAll(/I:\s+(-?[\d.]+) LUFS/g)];
+  const tpAll = [...log.matchAll(/Peak:\s+(-?[\d.]+) dBFS/g)];
+  const integratedLufs = lufsAll.length ? Number(lufsAll[lufsAll.length - 1]![1]) : undefined;
+  const truePeakDb = tpAll.length ? Number(tpAll[tpAll.length - 1]![1]) : undefined;
   const clipping = truePeakDb !== undefined && truePeakDb > -0.5;
 
   if (info.width !== expect.width || info.height !== expect.height) issues.push(`Auflösung ${info.width}x${info.height} statt ${expect.width}x${expect.height}`);
