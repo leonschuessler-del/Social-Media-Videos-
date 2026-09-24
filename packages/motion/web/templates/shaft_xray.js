@@ -14,13 +14,21 @@
      stopped         [0] = Ruck (nur mit jolt:true)
      on_buffer       [0] = Aufsetzen, [1] = voll eingefedert
    "at" (Sekunden; Strings wie "60%" = Anteil an d) akzeptieren: labels[i].at, markers[i].at, overlay.at, readout(s)[i].at,
-     stopwatch.at, ruler.at, safety_factor.at, rope_sequence.at (+step), debris.at, damage_at, safety_circuit.at, frame_at,
-     air_cushion.at, rope_coil.at, air_escape.at (+dur), highlight_at. Ohne beats/at: Standard-Timing relativ zu d.
+     stopwatch.at, ruler.at, safety_factor.at, rope_sequence.at (+step), debris.at, debris.pass_at (+pass_dur), damage_at,
+     safety_circuit.at, frame_at, air_cushion.at, rope_coil.at, air_escape.at (+dur), highlight_at, hud_at,
+     inspection_plate.at (= loupe_at, Lupe öffnet). Ohne beats/at: Standard-Timing relativ zu d.
+   Layout: labels[i].side legt bei car, ropes, safety_gear, counterweight, rails, governor_rope, buffers, pit, inspection_plate
+     auch den Ankerpunkt auf diese Seite (Führungslinie kreuzt die Kabine nicht); mehrere Labels am selben Bauteil/derselben Seite
+     bekommen versetzte Anker. offset_x (px, nur focus full) verschiebt das Gebäude horizontal; include_car:true (focus ropes)
+     nimmt die ganze Kabine ins Bild (Unterkante über dem Untertitelband). focus plate: Lupe mit vergrößerter Plakette
+     (plate_loupe:false = alte Nahaufnahme, plate_month = Monat oben, plate_text = Jahresfeld). debris.pass_at: zweites
+     Triebwerk durchschlägt das Gebäude quer (Fassade rechts → hinter dem Schacht → Fassade links, pass_floor wählbar).
    Params (Auszug): focus full|car|machine_room|pit|ropes|plate, state (s. o.), rope_count, broken_ropes, broken_style snap|fade|damaged,
      damaged_ropes, highlight[], highlight_color, labels[{part,text,at,side}], floors, floor, to_floor, speed, people, passenger_pose,
      hud, cruise, v0/moving, slowmo_ms, v_end_factor, stopwatch, ruler, readout, fall_to, fall_floors, freeze_before_impact,
      pre_broken, floor_labels, level_marks, rope_sequence, safety_factor, panel_note, frame_color, jolt, safety_circuit,
-     inspection_plate, direction, trip, debris, markers, overlay, air_cushion, rope_coil, air_escape, buffer_glow. */
+     inspection_plate, direction, trip, debris, markers, overlay, air_cushion, rope_coil, air_escape, buffer_glow,
+     offset_x, include_car, plate_loupe, plate_month. */
 (function () {
   const TAU = Math.PI * 2;
   const COL = { cyan: "#3fd2ff", amber: "#ffb347", red: "#ff5a5f", green: "#5be49b", white: "#eef6ff", steel: "#9fc4e6", muted: "#8fb3d9", hot: "#ffe3a8" };

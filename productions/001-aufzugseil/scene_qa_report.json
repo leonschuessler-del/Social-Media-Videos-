@@ -96,8 +96,6 @@
   "s25_a",
   "s38_a",
   "s38_a",
-  "s27_a",
-  "s27_c",
   "s01_b",
   "s02_b",
   "s05_b",
@@ -113,6 +111,19 @@
   "s33_a",
   "s34_b",
   "s36_a",
+  "s01_b",
+  "s02_b",
+  "s07_a",
+  "s23_c",
+  "s25_b",
+  "s26_b",
+  "s31_c",
+  "s32_b",
+  "s33_a",
+  "s34_b",
+  "s36_a",
+  "s27_a",
+  "s27_c",
   "s27_c"
  ],
  "failed_review": [
@@ -233,10 +244,6 @@
    "problem": "Most of the scene works: the header matches the first sentence, '8.000' in the title lands with 'achttausend', the rev-up is timed to the number, the callout, channel name and signoff are timed to the narration, everything is German and correct, and all content sits above y 910. Two defects remain. (1) The opening is almost empty and shows the wrong thing (param fix). From 0.3 to about 1.6 s, while 'Nächstes Mal wird es richtig schnell' is spoken, the frame shows only the header and a half-drawn subscribe circle (see u008 at 0.9 s). The left two-thirds of the screen is blank, and at 1.5 s there is still only an empty outline. What is being said is 'next time', which is the next-video slot, but that slot only starts drawing at 1.3 s, and its engine content only fills in between about 1.6 and 2.5 s. Fix: draw the next-video frame first, at 0.3 s on 'Nächstes Mal'. The subscribe circle follows at 0.6 s, which keeps the continuation from 'abonniere' and matches the template's default left-to-right order. The engine then idles, alive with the crank turning and combustion flashes, through 'richtig schnell ... Was passiert im Motor', and revs up at 3.3 s as before. The idle-then-rev contrast is the payoff of 'richtig schnell'. (2) The digital readout contradicts the narration (template fix). backOut(k, 0.8) is applied to the displayed value as well as the needle. I computed the readout: it shows 8.050 to 8.150 from about 3.87 to 4.25 s, which is most of the word 'achttausend' (3.47-4.12 s), before it snaps to 8.000. The viewer hears 'achttausend' while reading 8.150. No parameter controls this. Needed template change in end_card.js: in the big-frame content callback, keep the needle overshoot but clamp the readout while 0 < k < 1. Replace readout = fmtInt(Math.round(Math.max(0, v) / 50) * 50) with fmtInt(Math.round(clamp(v, 0, rp.val) / 50) * 50), or add an rpmOvershoot param, 0 for no overshoot, that feeds backOut's c1. Minor, acceptable as is: 'U/min?' in the title appears about 0.75 s before 'Umdrehungen pro Minute' is spoken, because the word stagger is fixed at 0.07 s. The unit reads as part of the number, so no change is needed."
   },
   {
-   "scene_id": "s27_c",
-   "problem": "The status chip swap between 1,6 and 1,95 s produces garbled text. chip2 draws 'KABINE FÄHRT LOS' (red) and 'KABINE STEHT' (green) at the same left-aligned position and crossfades them over 0,35 s, so the words overlap as 'KABINE SŦEHT LOS'. The wider red outline also sticks out past the green one, which is visible in sheet frame 3 (u034). The red 'KABINE FÄHRT LOS' chip also does not match this scene's narration ('Er stoppt die Kabine …'): it repeats the status s27_a already showed, and at 0,7 s it says the opposite of what is being said. Fix with params only: set hazard_label to \"\" (chip2 returns early for an empty label). Movement is still shown by the red chevrons, the red gap and the blinking red door chip. The green 'KABINE STEHT' then fades in cleanly between 1,6 and 1,95 s during 'spätestens'. I re-rendered with this change (scene-qa2/s27_c_rev): no overlap, and everything else stays the same. The rest is correct: 1,20 m is not shown before 'Meter zwanzig', 'Türzone' carries no unspoken number, the Stopp mark (0,5 m) is inside the limit, direction is up and matches s27_a, the subtitle band is free, and the rope brake is at y≥94. Optional template improvement, not required: chip2 should fade out the old status first and then fade in the new one, instead of crossfading them in the same place."
-  },
-  {
    "scene_id": "s01_b",
    "problem": "The timing, content and '?' overlay are right, but there is a clear collision. The template always anchors 'car' at the car's RIGHT inner wall (anchorOf: x = carX1-6), whatever the side is. So both left-side leaders run across the whole car. In u060 and u097 the cyan leader of 'schwer verletzte junge Frau' strikes straight through the seated woman's torso (~x1115, y760), which is the person it names. The green 'überlebt' diagonal cuts through the top of the counterweight and the cabin floor. Params fix, test-rendered in rv_sx1/s01b_right: side:'right' for both labels. That gives clean short leaders, chevrons move to the left of the shaft automatically, the first label wraps to 2 lines, and all boxes stay above y≈860. The cost is that the left ~40% of the frame is empty, because the full-focus camera is fixed at cx=1110. Template change for the ideal version: make the car anchor side-aware (carX0+6 when side is 'left'), so the original left-side params work without crossing the passenger. Alternatively, shift the full-focus camera toward the side opposite the callouts. Minor points: the passenger is only ~15x40 px, and at 0.27 s the pit (y 910–985) sits in the subtitle band."
   },
@@ -279,6 +286,10 @@
   {
    "scene_id": "s36_a",
    "problem": "The narration sync and facts are correct. The rope sequence starts on 'mehreren', the whole bundle is cyan by 'Europa', and the amber callout 'in Europa: je Seil mindestens 12-fache Sicherheit' is readable on 'zwölffacher'. EN 81-20 sets a minimum safety factor of 12 per rope for traction drives with three or more ropes, and 6 ropes are shown. The fault is framing: with floor 3, the ropes focus puts the frame's bottom edge only 70 px below the rope hitch, and slow_push_in pushes further down. As a result, the cabin's lower half (passengers' legs, car floor, safety gear, y≈910–995) sits in the subtitle zone in every frame, and the counterweight is clipped at the bottom edge. The car is the subject of 'Die Kabine hängt …', so subtitles would cover it. Fix: floor 5. The rope framing then includes the whole car. With slow_push_in the car's bottom edge is at y≈893 at the end, and with a static camera at ≈862. The subtitle zone is free, the counterweight leaves the frame, and all three callouts stay readable on the right (checked in scratchpad/rv4_s36a_f5/shaft_xray_u088.png and u096.png). Small side effect: the 'mehrere Tragseile' box touches the governor stand in the machine room, which is minor and not the subject. For more clearance, floor 4.8 with camera static gives a ≈20 px gap to the governor and the car's bottom edge at ≈897 (scratchpad/rv4_s36a_f4.8_static). Do not combine 4.8 with slow_push_in: that puts the car's bottom edge at ≈932, inside the subtitle zone."
+  },
+  {
+   "scene_id": "s27_c",
+   "problem": "The status chip swap between 1,6 and 1,95 s produces garbled text. chip2 draws 'KABINE FÄHRT LOS' (red) and 'KABINE STEHT' (green) at the same left-aligned position and crossfades them over 0,35 s, so the words overlap as 'KABINE SŦEHT LOS'. The wider red outline also sticks out past the green one, which is visible in sheet frame 3 (u034). The red 'KABINE FÄHRT LOS' chip also does not match this scene's narration ('Er stoppt die Kabine …'): it repeats the status s27_a already showed, and at 0,7 s it says the opposite of what is being said. Fix with params only: set hazard_label to \"\" (chip2 returns early for an empty label). Movement is still shown by the red chevrons, the red gap and the blinking red door chip. The green 'KABINE STEHT' then fades in cleanly between 1,6 and 1,95 s during 'spätestens'. I re-rendered with this change (scene-qa2/s27_c_rev): no overlap, and everything else stays the same. The rest is correct: 1,20 m is not shown before 'Meter zwanzig', 'Türzone' carries no unspoken number, the Stopp mark (0,5 m) is inside the limit, direction is up and matches s27_a, the subtitle band is free, and the rope brake is at y≥94. Optional template improvement, not required: chip2 should fade out the old status first and then fade in the new one, instead of crossfading them in the same place."
   }
  ],
  "gaps": [
@@ -1063,36 +1074,6 @@
    "severity": "minor"
   },
   {
-   "scene_id": "s27_a",
-   "missing": "location_tag can only reveal its whole text at one time. It cannot show '2006' when the year is spoken (7,11 s) and add 'Tokio' when the place is spoken (8,28 s). Holding the tag for 'Tokio' leaves it on screen for only about 0,7 s before the scene ends.",
-   "suggestion": "Allow location_tag.parts: [{text, at}], or a typed reveal with per-segment 'at', so each part appears with its word.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s27_c",
-   "missing": "No beat or label target lets me highlight the landing reference (ruler '0' / Haltestelle level line) at a chosen time. So 'nach dem Verlassen der Haltestelle' (3,27–3,96 s) gets no new visual event after the 1,20 m bracket.",
-   "suggestion": "Add label target 'landing' (anchor at the ruler zero / sill) or a 'reference_at' beat that pulses the 0 mark and the dashed landing line.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s27_c",
-   "missing": "The status chip swap 'KABINE FÄHRT LOS' to 'KABINE STEHT' crossfades both texts in the same place, so they overlap for about 0,3 s around B[4].",
-   "suggestion": "Fade the old chip out completely before the new one scales in, or slide the new chip in vertically.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s27_c",
-   "missing": "The detect_and_stop layout is not camera-safe. Any push-in moves the top rope brake (y≈94) into the top margin or the lower-left sensor callout (bottom y≈868) into the subtitle band, whatever focus is used. Only static works.",
-   "suggestion": "Move the rope brake down about 30 px and the sensor callout up about 40 px, or add a 'camera_safe' layout scale of about 0,95.",
-   "severity": "minor"
-  },
-  {
-   "scene_id": "s27_c",
-   "missing": "The default zone_label 'Türzone ±0,20 m' shows a number that narration rarely states. Every scene needs to override it manually to avoid unspoken figures.",
-   "suggestion": "Default zone_label to 'Türzone' and show the value only when show_zone_value is true.",
-   "severity": "minor"
-  },
-  {
    "scene_id": "s01_b",
    "missing": "The on-screen title is always drawn by drawTitle from 0.5 s (text at about 0.75 s). There is no way to time it to the narration, so any summary title reveals the scene's result ('überlebt', 'Wie ist das möglich?') 2–3 s early. The same issue forced title changes in s06_a, s07_a and s08_a.",
    "suggestion": "Support params.title_at (seconds or '%') in drawTitle, and maybe title_until, so the overlay can appear with its words.",
@@ -1222,6 +1203,60 @@
    "scene_id": "s36_a",
    "missing": "The safety_factor chip is always placed left of the car-side rope, where in focus 'ropes' it covers the counterweight-side rope run. There is no side option, and the caption is fixed at 15 px.",
    "suggestion": "Add safety_factor.side ('left'|'right') and snap it to the callout column on the right when right is chosen. Allow a caption size of 18–20 px.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s01_b",
+   "missing": "Full focus has a fixed scale (the building is the full frame height), so the seated passenger stays about 15×40 px.",
+   "suggestion": "Optional full_zoom param that crops the machine room or pit when neither is the subject, or a small inset of the cabin interior.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s23_c",
+   "missing": "In full focus the building already reaches y≈910, so any zoom or downward tilt from the engine camera pushes the pit into the subtitle band. The template does not compensate; scenes must use camera 'static' (s23_c, s26_b and s32_b now do).",
+   "suggestion": "Opt-in subtitle_safe param that, in fixCamera, scales about a bottom pivot (960, 900) and clamps the positive dy for full focus.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s31_c",
+   "missing": "The second engine can only appear on the shaft wall 0,85 s before its rope hit, so between 2,3 and 3,7 s ('das andere stürzt in einen') only the facade cracks are new. The pass-through engine crosses the shaft as a ghost behind the ropes, which a viewer could still read as close to the ropes.",
+   "suggestion": "Add debris.enter_at so the shaft engine can fly in from outside through the facade before breaking into the shaft, and optionally a pass_depth cue (smaller scale) for the pass-through engine.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s34_b",
+   "missing": "There is no door-gap anchor for 'Schacht nicht luftdicht', and the 'Luftpolster' leader must cross the counterweight spring buffer.",
+   "suggestion": "Add a 'door_gap' part (anchor at the EG door slit where the escape arrows leave) and let air_cushion anchor under the right half of the car when side:'right'.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s27_a",
+   "missing": "location_tag can only reveal its whole text at one time. It cannot show '2006' when the year is spoken (7,11 s) and add 'Tokio' when the place is spoken (8,28 s). Holding the tag for 'Tokio' leaves it on screen for only about 0,7 s before the scene ends.",
+   "suggestion": "Allow location_tag.parts: [{text, at}], or a typed reveal with per-segment 'at', so each part appears with its word.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s27_c",
+   "missing": "No beat or label target lets me highlight the landing reference (ruler '0' / Haltestelle level line) at a chosen time. So 'nach dem Verlassen der Haltestelle' (3,27–3,96 s) gets no new visual event after the 1,20 m bracket.",
+   "suggestion": "Add label target 'landing' (anchor at the ruler zero / sill) or a 'reference_at' beat that pulses the 0 mark and the dashed landing line.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s27_c",
+   "missing": "The status chip swap 'KABINE FÄHRT LOS' to 'KABINE STEHT' crossfades both texts in the same place, so they overlap for about 0,3 s around B[4].",
+   "suggestion": "Fade the old chip out completely before the new one scales in, or slide the new chip in vertically.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s27_c",
+   "missing": "The detect_and_stop layout is not camera-safe. Any push-in moves the top rope brake (y≈94) into the top margin or the lower-left sensor callout (bottom y≈868) into the subtitle band, whatever focus is used. Only static works.",
+   "suggestion": "Move the rope brake down about 30 px and the sensor callout up about 40 px, or add a 'camera_safe' layout scale of about 0,95.",
+   "severity": "minor"
+  },
+  {
+   "scene_id": "s27_c",
+   "missing": "The default zone_label 'Türzone ±0,20 m' shows a number that narration rarely states. Every scene needs to override it manually to avoid unspoken figures.",
+   "suggestion": "Default zone_label to 'Türzone' and show the value only when show_zone_value is true.",
    "severity": "minor"
   }
  ]

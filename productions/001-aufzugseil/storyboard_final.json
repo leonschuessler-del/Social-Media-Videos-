@@ -19,7 +19,7 @@
    "id": "s01_b",
    "segment_id": "s01",
    "template": "shaft_xray",
-   "params_json": "{\"focus\":\"full\",\"state\":\"all_ropes_snap\",\"floors\":8,\"people\":1,\"passenger_pose\":\"seated\",\"hud\":false,\"floor_labels\":false,\"fall_to\":\"pit\",\"freeze_before_impact\":true,\"freeze_icon\":false,\"beats\":[0.4,3.0],\"snap_gap\":0.08,\"frame_color\":\"green\",\"frame_at\":3.0,\"labels\":[{\"part\":\"car\",\"text\":\"schwer verletzte junge Frau\",\"at\":1.3,\"side\":\"right\"},{\"part\":\"car\",\"text\":\"überlebt\",\"at\":2.65,\"side\":\"right\",\"color\":\"green\"}],\"overlay\":{\"type\":\"question_mark\",\"part\":\"car\",\"at\":3.8}}",
+   "params_json": "{\"focus\":\"full\",\"state\":\"all_ropes_snap\",\"floors\":8,\"people\":1,\"passenger_pose\":\"seated\",\"hud\":false,\"floor_labels\":false,\"fall_to\":\"pit\",\"freeze_before_impact\":true,\"freeze_icon\":false,\"beats\":[0.4,3.0],\"snap_gap\":0.08,\"frame_color\":\"green\",\"frame_at\":3.0,\"labels\":[{\"part\":\"car\",\"text\":\"schwer verletzte junge Frau\",\"at\":1.3,\"side\":\"left\"},{\"part\":\"car\",\"text\":\"überlebt\",\"at\":2.65,\"side\":\"right\",\"color\":\"green\"}],\"overlay\":{\"type\":\"question_mark\",\"part\":\"car\",\"at\":3.8}}",
    "on_screen_text": "",
    "weight": 0.55,
    "camera": "tilt_down",
@@ -27,7 +27,7 @@
    "description": "Harter Schnitt in den Röntgenschacht. Alle Tragseile peitschen rot weg, die Seilzahl bleibt unbeschriftet. Die Kabine mit einer sitzenden Silhouette rast nach unten, friert kurz vor der Grube ein, darüber ein großes Fragezeichen zu 'Wie ist das möglich?'.",
    "qa": {
     "quality": 8,
-    "review_pass": false
+    "review_pass": null
    }
   },
   {
@@ -49,15 +49,15 @@
    "id": "s02_b",
    "segment_id": "s02",
    "template": "shaft_xray",
-   "params_json": "{\"focus\":\"ropes\",\"state\":\"idle\",\"floor\":2,\"rope_count\":6,\"hud\":false,\"people\":2,\"floor_labels\":false,\"highlight\":[\"ropes\"],\"highlight_at\":3.3,\"labels\":[{\"part\":\"ropes\",\"text\":\"dünne Stahlseile\",\"at\":3.4}]}",
+   "params_json": "{\"focus\":\"ropes\",\"state\":\"idle\",\"floor\":2,\"rope_count\":6,\"hud\":false,\"people\":2,\"floor_labels\":false,\"include_car\":true,\"highlight\":[\"ropes\"],\"highlight_at\":3.3,\"labels\":[{\"part\":\"ropes\",\"text\":\"dünne Stahlseile\",\"at\":3.4}]}",
    "on_screen_text": "Warum so gut wie nie?",
    "weight": 0.25,
-   "camera": "tilt_up",
+   "camera": "slow_push_in",
    "sfx": "metal_creak",
    "description": "Nahaufnahme der dünnen Tragseile über der Kabine. Sie glühen cyan, die Kamera fährt an ihnen hoch zur Treibscheibe, passend zu 'obwohl sie an dünnen Stahlseilen hängen'.",
    "qa": {
-    "quality": 7.5,
-    "review_pass": false
+    "quality": 8,
+    "review_pass": null
    }
   },
   {
@@ -244,15 +244,15 @@
    "id": "s07_a",
    "segment_id": "s07",
    "template": "shaft_xray",
-   "params_json": "{\"focus\":\"full\",\"state\":\"idle\",\"floor\":2,\"hud\":false,\"floor_labels\":false,\"people\":2,\"highlight\":[\"sheave\",\"brake\",\"ropes\"],\"highlight_at\":0.3,\"labels\":[{\"part\":\"sheave\",\"text\":\"Maschine\",\"at\":0.3,\"side\":\"left\"},{\"part\":\"car\",\"text\":\"Kabine\",\"at\":1.2,\"side\":\"right\"},{\"part\":\"ropes\",\"text\":\"nicht festgeschraubt\",\"at\":1.9,\"side\":\"right\",\"color\":\"red\"}],\"markers\":[{\"part\":\"sheave\",\"symbol\":\"✕\",\"at\":2.0,\"color\":\"red\"}]}",
+   "params_json": "{\"focus\":\"full\",\"state\":\"idle\",\"floor\":2,\"hud\":false,\"floor_labels\":false,\"people\":2,\"offset_x\":-150,\"highlight\":[\"sheave\",\"brake\",\"ropes\"],\"highlight_at\":0.3,\"labels\":[{\"part\":\"car\",\"text\":\"Kabine\",\"at\":1.2,\"side\":\"left\"},{\"part\":\"ropes\",\"text\":\"nicht festgeschraubt\",\"at\":1.9,\"side\":\"right\",\"color\":\"red\"}],\"markers\":[{\"part\":\"sheave\",\"symbol\":\"✕\",\"at\":2.0,\"color\":\"red\"}]}",
    "on_screen_text": "Die Maschine oben",
    "weight": 0.2,
    "camera": "static",
    "sfx": "none",
    "description": "Blick in den Maschinenraum oben. Die Seile laufen über die Treibscheibe, es gibt keine Befestigung an der Maschine, das Label 'nicht festgeschraubt' blinkt.",
    "qa": {
-    "quality": 7,
-    "review_pass": false
+    "quality": 8,
+    "review_pass": null
    }
   },
   {
@@ -817,12 +817,12 @@
    "params_json": "{\"focus\":\"full\",\"state\":\"safety_engage\",\"broken_ropes\":\"all\",\"hud\":false,\"floor_labels\":false,\"highlight\":[\"safety_gear\",\"rails\"],\"highlight_at\":1.55,\"beats\":[2.5,3.3],\"labels\":[{\"part\":\"safety_gear\",\"text\":\"Fangvorrichtung\",\"at\":1.4},{\"part\":\"rails\",\"text\":\"Schienen\",\"at\":2.1}]}",
    "on_screen_text": "Die eigentliche Rettung",
    "weight": 0.18,
-   "camera": "tilt_up",
+   "camera": "static",
    "sfx": "whoosh",
    "description": "Kamerafahrt von den Puffern in der Grube hoch zur Kabine, wo die Fangvorrichtung an den Schienen amber aufleuchtet.",
    "qa": {
     "quality": 8,
-    "review_pass": false
+    "review_pass": null
    }
   },
   {
@@ -889,15 +889,15 @@
    "id": "s25_b",
    "segment_id": "s25",
    "template": "shaft_xray",
-   "params_json": "{\"focus\":\"plate\",\"state\":\"idle\",\"floor\":4,\"people\":0,\"hud\":false,\"floor_labels\":false,\"inspection_plate\":true,\"highlight\":[\"inspection_plate\"],\"highlight_at\":1.6,\"highlight_color\":\"cyan\",\"labels\":[{\"part\":\"inspection_plate\",\"text\":\"Prüfplakette\\nin der Kabine\",\"at\":1.55}]}",
+   "params_json": "{\"focus\":\"plate\",\"state\":\"idle\",\"floor\":4,\"people\":0,\"hud\":false,\"floor_labels\":false,\"inspection_plate\":{\"at\":0.35},\"highlight\":[\"inspection_plate\"],\"highlight_at\":1.6,\"highlight_color\":\"cyan\",\"labels\":[{\"part\":\"inspection_plate\",\"text\":\"Prüfplakette\\nin der Kabine\",\"at\":1.35}]}",
    "on_screen_text": "Nächster Prüftermin",
    "weight": 0.4,
    "camera": "slow_push_in",
    "sfx": "click",
    "description": "Zoom in die Kabine auf eine stilisierte Prüfplakette als Linienzeichnung ohne Firmenlogo. Label: Monat und Jahr der nächsten Prüfung.",
    "qa": {
-    "quality": 7,
-    "review_pass": false
+    "quality": 8.5,
+    "review_pass": null
    }
   },
   {
@@ -922,12 +922,12 @@
    "params_json": "{\"focus\":\"full\",\"state\":\"runaway_up\",\"floor\":0,\"people\":0,\"hud\":false,\"floor_labels\":false,\"beats\":[4.45],\"highlight\":[\"counterweight\"],\"highlight_at\":0.6,\"labels\":[{\"part\":\"counterweight\",\"text\":\"in der Regel schwerer\",\"at\":1.6},{\"part\":\"car\",\"text\":\"leere Kabine\",\"at\":2.75},{\"part\":\"brake\",\"text\":\"Bremse versagt\",\"at\":4.5}]}",
    "on_screen_text": "Ursache: Gegengewicht",
    "weight": 0.36,
-   "camera": "tilt_up",
+   "camera": "static",
    "sfx": "rumble",
    "description": "Die leere Kabine schießt nach oben, ein großer amber Pfeil zeigt nach oben, am Gegengewicht ein Pfeil nach unten. An der Schachtdecke blinkt eine rote Warnlinie.",
    "qa": {
     "quality": 8,
-    "review_pass": false
+    "review_pass": null
    }
   },
   {
@@ -1129,15 +1129,15 @@
    "id": "s31_c",
    "segment_id": "s31",
    "template": "shaft_xray",
-   "params_json": "{\"focus\":\"ropes\",\"state\":\"idle\",\"floor\":2,\"people\":0,\"hud\":false,\"floor_labels\":false,\"debris\":{\"at\":4.55},\"damaged_ropes\":\"all\",\"damage_at\":4.55,\"labels\":[{\"part\":\"ropes\",\"text\":\"Seile beschädigt\",\"at\":4.8}]}",
-   "on_screen_text": "Triebwerk im Schacht",
+   "params_json": "{\"focus\":\"ropes\",\"state\":\"idle\",\"floor\":2,\"people\":0,\"hud\":false,\"floor_labels\":false,\"include_car\":true,\"debris\":{\"at\":4.55,\"pass_at\":0.95,\"pass_dur\":1.3},\"damaged_ropes\":\"all\",\"damage_at\":4.55,\"labels\":[{\"part\":\"ropes\",\"text\":\"Seile beschädigt\",\"at\":4.8}]}",
+   "on_screen_text": "Zwei Triebwerke",
    "weight": 0.3,
    "camera": "tilt_down",
    "sfx": "metal_creak",
    "description": "Die zweite Flugbahn endet in einem Aufzugsschacht, ein Triebwerk-Umriss stürzt hinein. Die Tragseile flackern rot als beschädigt.",
    "qa": {
-    "quality": 7,
-    "review_pass": false
+    "quality": 8,
+    "review_pass": null
    }
   },
   {
@@ -1162,12 +1162,12 @@
    "params_json": "{\"focus\":\"full\",\"state\":\"all_ropes_snap\",\"floors\":8,\"floor\":6,\"fall_to\":\"pit\",\"people\":1,\"passenger_pose\":\"floating\",\"hud\":false,\"floor_labels\":false,\"damaged_ropes\":\"all\",\"damage_at\":0.6,\"beats\":[1.5,3.55],\"labels\":[{\"part\":\"pit\",\"text\":\"Untergeschoss\",\"at\":3.0}]}",
    "on_screen_text": "Beschädigte Seile reißen",
    "weight": 0.34,
-   "camera": "slow_push_in",
+   "camera": "static",
    "sfx": "rope_snap",
    "description": "Die eingefrorene Szene aus dem Kaltstart läuft weiter: Die beschädigten Seile reißen, die Kabine stürzt bis ins Untergeschoss.",
    "qa": {
     "quality": 8,
-    "review_pass": false
+    "review_pass": null
    }
   },
   {
@@ -1181,8 +1181,8 @@
    "sfx": "rumble",
    "description": "Begrenzerseil und Tragseile leuchten rot, am Begrenzerseil steht ein großes Fragezeichen.",
    "qa": {
-    "quality": 7.5,
-    "review_pass": false
+    "quality": 8,
+    "review_pass": null
    }
   },
   {
@@ -1219,15 +1219,15 @@
    "id": "s34_b",
    "segment_id": "s34",
    "template": "shaft_xray",
-   "params_json": "{\"focus\":\"pit\",\"state\":\"on_buffer\",\"broken_ropes\":\"all\",\"beats\":[2.95,3.98],\"people\":1,\"hud\":false,\"buffer_glow\":false,\"air_cushion\":{\"at\":0.3},\"rope_coil\":{\"at\":1.2},\"air_escape\":{\"at\":5.1,\"dur\":3.3},\"labels\":[{\"part\":\"air_cushion\",\"text\":\"Luftpolster\",\"at\":0.3},{\"part\":\"rope_coil\",\"text\":\"Seilhaufen federte\\nwohl den Aufprall ab\",\"at\":2.6,\"color\":\"amber\"},{\"part\":\"pit\",\"text\":\"Schacht nicht\\nluftdicht\",\"at\":5.1},{\"part\":\"car\",\"text\":\"Kolbeneffekt meist\\ndeutlich schwächer\",\"at\":7.4}]}",
+   "params_json": "{\"focus\":\"pit\",\"state\":\"on_buffer\",\"broken_ropes\":\"all\",\"beats\":[2.95,3.98],\"people\":1,\"hud\":false,\"floor_labels\":false,\"buffer_glow\":false,\"air_cushion\":{\"at\":0.3},\"rope_coil\":{\"at\":1.2},\"air_escape\":{\"at\":5.1,\"dur\":3.3},\"labels\":[{\"part\":\"air_cushion\",\"text\":\"Luftpolster\",\"at\":0.3},{\"part\":\"rope_coil\",\"text\":\"Seilhaufen federte\\nwohl den Aufprall ab\",\"at\":2.6,\"color\":\"amber\"},{\"part\":\"pit\",\"text\":\"Schacht nicht\\nluftdicht\",\"at\":5.1},{\"part\":\"car\",\"text\":\"Kolbeneffekt meist\\ndeutlich schwächer\",\"at\":7.4}]}",
    "on_screen_text": "Seil in der Grube",
    "weight": 0.53,
    "camera": "static",
    "sfx": "hydraulic_hiss",
    "description": "In der Grube liegt eine amber Seilspirale wie eine Sprungfeder, über ihr die Druckschraffur. Zum Satzende entweicht Luft durch die Türspalte, die Schraffur verblasst.",
    "qa": {
-    "quality": 8,
-    "review_pass": false
+    "quality": 7.5,
+    "review_pass": null
    }
   },
   {
@@ -1279,15 +1279,15 @@
    "id": "s36_a",
    "segment_id": "s36",
    "template": "shaft_xray",
-   "params_json": "{\"focus\":\"ropes\",\"state\":\"idle\",\"floor\":5,\"rope_count\":6,\"people\":2,\"hud\":false,\"highlight\":[\"ropes\"],\"highlight_color\":\"cyan\",\"highlight_at\":1.8,\"rope_sequence\":{\"at\":1.9,\"step\":0.08},\"labels\":[{\"part\":\"car\",\"text\":\"Kabine\",\"at\":0.8},{\"part\":\"ropes\",\"text\":\"mehrere Tragseile\",\"at\":1.7},{\"part\":\"ropes\",\"text\":\"in Europa: je Seil mindestens\\n12-fache Sicherheit\",\"at\":3.75,\"color\":\"amber\"}]}",
+   "params_json": "{\"focus\":\"ropes\",\"state\":\"idle\",\"floor\":2.5,\"include_car\":true,\"rope_count\":6,\"people\":2,\"hud\":false,\"floor_labels\":false,\"highlight\":[\"ropes\"],\"highlight_color\":\"cyan\",\"highlight_at\":1.8,\"rope_sequence\":{\"at\":1.9,\"step\":0.08},\"labels\":[{\"part\":\"car\",\"text\":\"Kabine\",\"at\":0.8},{\"part\":\"ropes\",\"text\":\"mehrere Tragseile\",\"at\":1.7},{\"part\":\"ropes\",\"text\":\"in Europa: je Seil mindestens\\n12-fache Sicherheit\",\"at\":3.75,\"color\":\"amber\"}]}",
    "on_screen_text": "Zusammengefasst",
    "weight": 0.3,
    "camera": "slow_push_in",
    "sfx": "none",
    "description": "Zusammenfassung, Schritt 1: Das Seilbündel leuchtet cyan, Label 'je mindestens 12-fach'.",
    "qa": {
-    "quality": 8,
-    "review_pass": false
+    "quality": 8.5,
+    "review_pass": null
    }
   },
   {
