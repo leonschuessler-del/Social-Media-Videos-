@@ -1360,10 +1360,11 @@
   }
 
   /** Richtungspfeile neben der Kabine (Fahrt / Fall). */
-  function drawDirection(ctx, L, G, M, t, side) {
+  function drawDirection(ctx, L, G, M, t, side, fadeAt) {
     if (!M.dir || Math.abs(M.v) < 0.05) return;
     const col = M.danger ? COL.red : COL.cyan;
-    const x = side === "left" ? G.S0 - 44 : G.S1 + 44, yc = M.carY - G.CH / 2, dir = M.dir, a = Math.min(1, Math.abs(M.v) / 0.6);
+    const x = side === "left" ? G.S0 - 44 : G.S1 + 44, yc = M.carY - G.CH / 2, dir = M.dir, a = Math.min(1, Math.abs(M.v) / 0.6) * (fadeAt != null ? 1 - smooth((t - fadeAt + 0.1) / 0.3) : 1);
+    if (a <= 0.01) return;
     for (let i = 0; i < 3; i++) {
       const ph = (t * 1.6 + i / 3) % 1, y = yc - dir * (ph - 0.5) * 60, al = Math.sin(ph * Math.PI) * a;
       L.poly(ctx, [[x - 11, y + dir * 6], [x, y - dir * 6], [x + 11, y + dir * 6]], col, 2.4, 0.8, { alpha: al });
@@ -1469,7 +1470,7 @@
     const items = [], dup = {};
     const loupeAnchor = (sd) => { const Lp = M.loupe, w = 0.42; return [Lp.cx + (sd === "left" ? -1 : 1) * Lp.R * Math.cos(w), Lp.cy + Lp.R * Math.sin(w)]; };
     o.labels.forEach((lb, i) => {
-      const kk = (dup[lb.part] = (dup[lb.part] ?? -1) + 1);
+      const dk = lb.part + "|" + (lb.side || ""), kk = (dup[dk] = (dup[dk] ?? -1) + 1);
       const an = anchorOf(lb.part, G, M, R, o, lb.side, kk); if (!an) return;
       let [ax, ay] = toS(an.x, an.y);
       if (lb.part === "inspection_plate" && M.loupe) [ax, ay] = loupeAnchor(lb.side || "right");
@@ -1508,6 +1509,10 @@
       for (const it of list) { it.lx = x; it.box = side === "left" ? [x - it.w, it.ly - it.h / 2, x, it.ly + it.h / 2] : [x, it.ly - it.h / 2, x + it.w, it.ly + it.h / 2]; }
     }
     if (full && items.some((it) => it.part === "car" && it.side === "right") && !items.some((it) => it.part === "car" && it.side === "left")) res.chevSide = "left";
+    else if (full && items.some((it) => it.part === "car" && it.side === "left")) { // Kabinen-Labels auf beiden Seiten: Pfeile rechts, ausblenden sobald das rechte Label kommt
+      const rs = items.filter((it) => it.part === "car" && it.side === "right").map((it) => it.start);
+      if (rs.length) res.chevFade = Math.min(...rs);
+    }
     res.items = items;
     return res;
   }
@@ -1807,7 +1812,7 @@
     drawDebris(ctx, L, G, o, M, T, t);
     frictionSparks(ctx, G, M, t);
     drawEscape(ctx, G, o, M, T, t);
-    drawDirection(ctx, L, G, M, t, lay.chevSide);
+    drawDirection(ctx, L, G, M, t, lay.chevSide, lay.chevFade);
     drawHalos(ctx, G, o, M, T, t, C.s);
     if (M.landed && M.impactAge < 0.7) { const f = 1 - M.impactAge / 0.7; L.glowDot(ctx, G.carCX, G.PB - 20, 60 + 90 * f, COL.red, 0.8 * f); L.glowDot(ctx, G.carCX, G.PB - 20, 20 + 30 * f, "#ffffff", 0.7 * f); burst(ctx, G.carX0 + 6, M.carY + 12, M.impactAge, 91, 14, COL.amber); burst(ctx, G.carX1 - 6, M.carY + 12, M.impactAge, 57, 14, COL.amber); }
     ctx.restore();

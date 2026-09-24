@@ -158,15 +158,21 @@ if (stage === "all" || stage === "mux" || stage === "meta") {
   let sources: string[] = [];
   if (await exists(join(dir, "factbase.json"))) {
     const fb = JSON.parse(await readFile(join(dir, "factbase.json"), "utf8")) as { sources: string[] }[];
-    sources = [...new Set(fb.flatMap((f) => f.sources))].filter((u) => /^https?:\/\//.test(u)).slice(0, 20);
+    // je Fakt die erste noch nicht genutzte Quelle, höchstens 2 pro Domain -> breite Abdeckung aller Kapitel
+    const perDomain = new Map<string, number>();
+    for (const f of fb) for (const u of f.sources.filter((x) => /^https?:\/\//.test(x))) {
+      const host = new URL(u).hostname.replace(/^www\./, ""); if (sources.includes(u) || (perDomain.get(host) ?? 0) >= 2) continue;
+      sources.push(u); perDomain.set(host, (perDomain.get(host) ?? 0) + 1); break;
+    }
   }
   const title = arg("title", script.title_candidates[0])!;
-  const description = [
+  let description = [
     arg("hook", "Was passiert wirklich, wenn das Seil eines Aufzugs reißt? Wir machen die unsichtbare Sicherheitskette sichtbar – vom Tragseil über den Geschwindigkeitsbegrenzer bis zur Fangvorrichtung."),
     "", "Kapitel:", ...chapters.map((c) => `${fmt(c.start)} ${c.title}`),
     "", "Quellen:", ...sources.map((u) => `• ${u}`),
     "", "Hinweis: Alle Animationen sind computergeneriert und stellen technische Prinzipien vereinfacht dar. Die Sprachausgabe ist synthetisch (lokale Open-Source-Stimme). Kein Ersatz für Fachberatung; in Notfällen gilt immer die Anleitung im Aufzug.",
   ].join("\n");
+  while (Buffer.byteLength(description, "utf8") > 4600 && sources.length) { sources.pop(); description = description.replace(/\n• [^\n]*(?=\n\nHinweis)/, ""); }
   const meta = { title, title_candidates: script.title_candidates, description, chapters, tags: ["Aufzug", "Fahrstuhl", "Aufzugseil", "Fangvorrichtung", "Geschwindigkeitsbegrenzer", "Elisha Otis", "Technik erklärt", "Was passiert wenn", "Physik", "Ingenieurwesen", "Sicherheit", "Visual Science"], categoryId: "28", defaultLanguage: "de", madeForKids: false, containsSyntheticMedia: false, containsSyntheticMediaNote: "Animationen sind klar erkennbar illustrativ/animiert (keine realistische Darstellung echter Personen/Ereignisse) – laut YouTube-Richtlinie keine Kennzeichnungspflicht; Hinweis steht dennoch in der Beschreibung.", captionsFile: "captions.srt" };
   await writeFile(join(out, "metadata.json"), JSON.stringify(meta, null, 1));
   await writeFile(join(out, "description.txt"), description);
