@@ -1,19 +1,43 @@
-/* Template „timeline“ – horizontale historische Zeitleiste im Stil „Visual Science“.
-   Eine leuchtende Zeitachse zeichnet sich von links nach rechts, an jedem Ereignis poppt ein Knoten auf,
-   ein Stiel wächst zur Karte (Jahr + umbrochenes Label), Karten wechseln oberhalb/unterhalb der Achse.
-   Große Zeitsprünge werden mit einer Bruchlinie (nicht maßstäblich) und dem Abstand in Jahren markiert.
-   Danach läuft ein Lichtimpuls wiederholt über die Achse; das hervorgehobene Ereignis wächst mit Amber-Glow.
+/* Template „timeline“ – horizontale Zeitleiste im Stil „Visual Science“.
+   Eine leuchtende Zeitachse zeichnet sich (Lichtkopf) von links nach rechts – oder mit direction:"rtl" als
+   „Zurückspulen“ von rechts nach links –, an jedem Ereignis poppt ein Knoten auf, ein Stiel wächst zur Karte
+   (Jahr + umbrochenes Label), Karten wechseln oberhalb/unterhalb der Achse. Große Zeitsprünge: Bruchlinie
+   (nicht maßstäblich) + Abstand in Jahren. Danach läuft ein Lichtimpuls wiederholt über die Achse; das
+   hervorgehobene Ereignis wächst mit Glow in seiner Tonfarbe (Standard Amber).
 
-   params:
-     events     [{ year, label }] – höchstens 6 sichtbar (bei mehr: Fenster um das Highlight).
-                Aliase: items, ereignisse, entries, eintraege; Felder: year|jahr|date|datum, label|text|title|titel.
-                Auch erlaubt: ["1854: Otis …", …], [[1854, "…"], …], { "1854": "…" }.
-                Optional je Ereignis: tone "danger"|"red" (Unfall/Versagen), "green" (sicher), "amber".
-     highlight  Index (0-basiert) des hervorgehobenen Ereignisses; alternativ Jahreszahl/-text ("1945", "heute"),
-                "last"; -1 / false / null / "none" = keine Hervorhebung. Standard 0.
-                Aliase: highlightIndex, highlighted, hervorheben, active, markiert.
-   Text: p.text wird selbst als Overlay oben links im Engine-Stil gezeichnet (ownsText: true) – identische Optik,
-         aber lange Texte werden verkleinert bzw. zweizeilig umbrochen statt abgeschnitten. */
+   BEATS (params.beats = Sekunden ab Szenenstart; jede Stelle optional/null; auf [0,3 ; d−0,3] geklemmt):
+     [0] = Achse beginnt sich zu zeichnen (Lichtkopf startet)          Standard min(0,04·d ; 0,4 s)
+     [1] = Highlight: Ereignis wächst, Glow + Eckklammern, Rest dimmt   Standard: Highlight-Karte fertig
+           (Vorrang: highlightAt > events[hl].hlAt > beats[1])          (ohne events[].at: nach dem letzten Ereignis)
+     [2] = Lichtimpuls-Schleife startet                                 Standard: 0,2 s nach Ende des Achsenaufbaus
+     [3] = Titel erscheint (title.at / titleAt haben Vorrang)           Standard 0,35 s
+   "at" (Sekunden ab Szenenstart; String "40%" = Anteil von d) akzeptieren:
+     events[i].at  – Knoten poppt; Karte ist ≈ 0,8·pop später ganz lesbar (pop = 0,11·d, 0,4 … 1,2 s).
+                     Fehlende "at" werden zwischen gesetzten interpoliert; Array-Form [year, label, tone, at].
+                     Der Lichtkopf erreicht jeden Knoten spätestens zu dessen "at". events[i].hlAt = Highlight-Zeit.
+     title.at, titleAt, highlightAt.  Ohne beats/at skaliert alles mit d (Ereignisse ≈ 0,1·d … 0,55·d).
+   Abstands-Labels („3 Jahre“) erscheinen erst mit dem später poppenden der beiden Ereignisse.
+
+   params (alle optional):
+     events     [{ year, label, tone, at, hlAt, side, highlight:true }] – höchstens 6 sichtbar (bei mehr: Fenster
+                um das Highlight). Aliase: items, ereignisse, entries, eintraege; Felder: year|jahr|date|datum,
+                label|text|title|titel. Auch erlaubt: ["1854: Otis …", …], [[1854, "…", "amber", 2.1], …], { "1854": "…" }.
+                tone: "danger"|"red" (Versagen), "green" (sicher), "amber", "#rrggbb"; side: "up"|"down".
+     highlight  Index (0-basiert) | Jahr/Jahrestext ("1945", "heute") | Labeltext-Teil | "last" | -1/false/"none". Std. 0.
+     highlightTone  Farbe des Highlights: "amber"|"green"|"red"|"#hex". Standard: Ton des Ereignisses, sonst Amber.
+     dimOthers  true (Std.): beim Highlight dimmen die VORHER erschienenen Karten; später poppende bleiben hell.
+     direction  "ltr" (Std.) | "rtl" (= rewind:true / reverse:true): Lichtkopf startet rechts (Pfeil) und spult
+                zurück; spätestes Ereignis poppt zuerst, das früheste zuletzt. Zeitpfeil zeigt weiter nach rechts.
+     counter    rollender Jahreszähler am Lichtkopf zwischen zwei Jahres-Knoten (Std.: an bei rtl, sonst aus).
+     gaps       true (Std.) | false/"none" (keine Abstands-Labels, keine Bruchlinien) | "labels" | "breaks".
+                Aliase: showGaps, show_gaps, gapLabels.
+     title      "Text" oder { text, at, tone } – zentrierte Titelzeile oberhalb der Achse (unter der Overlay-Zone);
+                Achse/Karten rücken dafür nach unten. Aliase: titel, heading, headline, caption.
+     firstSide  "up" (Std.) | "down" – Seite der ersten Karte (Wechsel danach). flip:true = "down".
+     revealStart / revealEnd   Zeit des ersten/letzten Ereignisses (≤ 1 = Anteil von d, sonst Sekunden).
+     pop        Pop-Dauer je Ereignis in s.
+   Text: p.text wird selbst als Overlay oben links im Engine-Stil gezeichnet (ownsText) – lange Texte werden
+         verkleinert/zweizeilig. Karten oberhalb der Achse halten dazu ≥ 40 px Abstand (inkl. Kamerafahrt). */
 (function () {
   "use strict";
   const CEX = window.CE;
@@ -21,14 +45,15 @@
 
   // ---------------- Konstanten ----------------
   const TAU = Math.PI * 2;
-  const W0 = 1920;
+  const W0 = 1920, H0 = 1080;
   const SAFE_L = 90, SAFE_R = 1830, SAFE_T = 204, SAFE_B = 900;
-  const AY = 556;            // Höhe der Zeitachse
+  const SUB_Y = 904;          // Bildschirm-y: darunter liegt die Untertitelzone (unterste 170 px) – mit Luft
+  const OV_X = 90, OV_TOP = 96, OV_GAP = 40;
   const STEM_MIN = 72, STEM_MAX = 124; // Abstand Achse -> Kartenkante (passt sich der Kartenhöhe an)
   const MAX_VIS = 6;
   const PADX = 26, PADT = 20, PADB = 22;
-  const GAPW = 7;            // halbe Breite der Achsenlücke an einer Bruchlinie
-  const TODAY_GUESS = 2025;  // nur Heuristik für die Bruchlinie vor „heute“ – wird nie angezeigt
+  const GAPW = 7;             // halbe Breite der Achsenlücke an einer Bruchlinie
+  const TODAY_GUESS = 2025;   // nur Heuristik (Bruchlinie, rollender Zähler) – „heute“ wird nie als Zahl gezeigt
   const COL = { cyan: "#3fd2ff", amber: "#ffb347", red: "#ff5a5f", green: "#5be49b", white: "#eef6ff", muted: "#8fb3d9", bg: "#07152b", ice: "#dff6ff" };
   const F_HEAD = "Oxanium", F_BODY = "Inter", F_MONO = "JetBrains Mono";
   const DEFAULT_EVENTS = [
@@ -38,6 +63,7 @@
     { year: "heute", label: "Mehrfach redundante Sicherheitskette" },
   ];
   const DIG = "0123456789", ALPH = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const ZW = /[​-‍⁠﻿]/g;
 
   // ---------------- Helfer ----------------
   const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
@@ -68,6 +94,7 @@
   };
   const upper = (s) => { try { return String(s).toLocaleUpperCase("de-DE"); } catch (e) { return String(s).toUpperCase(); } };
   const fmtInt = (n) => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  const clampT = (x, d) => clamp(x, 0.3, Math.max(0.3, d - 0.3));
   function setFont(ctx, weight, size, family, ls) {
     ctx.font = `${weight} ${size}px "${family}"`;
     try { ctx.letterSpacing = `${ls || 0}px`; } catch (e) { /* ältere Canvas-Implementierung */ }
@@ -82,11 +109,31 @@
     ctx.fillStyle = o.color || COL.white; ctx.fillText(s, x, y);
     ctx.restore();
   }
+  /** Zeitangabe -> Sekunden. Zahl/"2,5"/"2.5s" = Sekunden, "40%" = Anteil von d; fracMode: Werte ≤ 1 = Anteil von d. */
+  function tArg(v, d, fracMode) {
+    if (v === null || v === undefined || v === "" || typeof v === "boolean") return null;
+    if (typeof v === "object" && !Array.isArray(v)) return tArg(pick(v, ["at", "t", "s", "sec"]), d, fracMode);
+    let x = null, pct = false;
+    if (typeof v === "number") x = v;
+    else if (typeof v === "string") {
+      const m = v.trim().replace(",", ".").match(/^(-?\d+(?:\.\d+)?)\s*(%|s|sek|sec)?$/i);
+      if (m) { x = parseFloat(m[1]); pct = m[2] === "%"; }
+    }
+    if (x === null || !isFinite(x)) return null;
+    if (pct) return (x / 100) * d;
+    if (fracMode && x <= 1) return x * d;
+    return x;
+  }
+  const truthy = (v) => v === true || v === 1 || (typeof v === "string" && /^(true|ja|yes|on|an|1)$/i.test(v.trim()));
+  const falsy = (v) => v === false || v === 0 || (typeof v === "string" && /^(false|nein|no|off|aus|none|kein|keine|0)$/i.test(v.trim()));
 
   // ---------------- Parameter normalisieren ----------------
   const YEAR_KEYS = ["year", "jahr", "date", "datum", "when", "wann", "zeit", "time", "y"];
   const LABEL_KEYS = ["label", "text", "title", "titel", "desc", "description", "beschreibung", "name", "event", "ereignis", "caption"];
   const TONE_KEYS = ["tone", "color", "farbe", "accent", "kind", "typ", "type"];
+  const AT_KEYS = ["at", "at_s", "atS", "appear", "appearAt", "appear_at", "showAt", "show_at", "revealAt", "reveal_at", "zeitpunkt"];
+  const HLAT_KEYS = ["hlAt", "hl_at", "highlightAt", "highlight_at"];
+  const SIDE_KEYS = ["side", "seite", "place", "lage"];
   function toneColor(v) {
     if (typeof v !== "string") return null;
     const s = v.trim().toLowerCase();
@@ -96,12 +143,22 @@
     if (/^(green|grün|gruen|ok|safe|sicher|success)$/.test(s)) return COL.green;
     return null;
   }
+  function sideOf(v) {
+    if (typeof v !== "string") return null;
+    const s = v.trim().toLowerCase();
+    if (/^(up|top|above|oben|über|ueber|oberhalb)$/.test(s)) return "up";
+    if (/^(down|bottom|below|unten|unter|unterhalb)$/.test(s)) return "down";
+    return null;
+  }
   function parseEntry(e) {
     if (e === null || e === undefined) return null;
-    let y, l, tone;
-    if (Array.isArray(e)) { y = e[0]; l = e[1]; tone = e[2]; }
-    else if (typeof e === "object") { y = pick(e, YEAR_KEYS); l = pick(e, LABEL_KEYS); tone = pick(e, TONE_KEYS); }
-    else {
+    let y, l, tone, at = null, hlAt = null, side = null, flag = false;
+    if (Array.isArray(e)) { y = e[0]; l = e[1]; tone = e[2]; at = e[3]; }
+    else if (typeof e === "object") {
+      y = pick(e, YEAR_KEYS); l = pick(e, LABEL_KEYS); tone = pick(e, TONE_KEYS);
+      at = pick(e, AT_KEYS); hlAt = pick(e, HLAT_KEYS); side = pick(e, SIDE_KEYS);
+      flag = truthy(e.highlight) || truthy(e.hl) || truthy(e.highlighted) || truthy(e.hervorheben);
+    } else {
       const s = String(e).trim();
       let m = s.match(/^([^:|]{1,24}?)\s*[:|]\s*(.+)$/);
       if (!m) m = s.match(/^(\d{1,4}(?:er)?|heute|today)\s*[–—-]?\s+(.+)$/i);
@@ -109,14 +166,16 @@
     }
     y = y === null || y === undefined ? "" : String(y).trim().slice(0, 60);
     l = l === null || l === undefined ? "" : String(l).trim().slice(0, 360); // Karten sind keine Fließtexte
-    if (!y && !l) return null;
+    const yc = y.replace(ZW, "").trim(); // Nullbreiten-Zeichen (alter Workaround gegen Abstands-Labels) nicht anzeigen
+    if (!yc && !l) return null;
+    // Zahl nur aus dem Original: „20​09“ bleibt bewusst ohne Zahlwert (kein Abstands-Label) – rückwärtskompatibel
     const exact = /^[+-]?\d{1,4}$/.test(y) ? parseInt(y, 10) : null;
     const approx = exact === null ? y.match(/(\d{3,4})/) : null;
-    const today = /^(heute|today|jetzt|gegenwart|now|aktuell)$/i.test(y);
+    const today = /^(heute|today|jetzt|gegenwart|now|aktuell)$/i.test(yc);
     return {
-      year: y, yearTxt: /\d/.test(y) ? y : upper(y), label: l, tone: toneColor(tone), today,
+      year: yc, yearKey: yc.toLowerCase(), yearTxt: /\d/.test(yc) ? yc : upper(yc), label: l, tone: toneColor(tone), today,
       num: exact !== null ? exact : approx ? parseInt(approx[1], 10) : today ? TODAY_GUESS : null,
-      exact: exact !== null,
+      exact: exact !== null, at, hlAt, side: sideOf(side), flag,
     };
   }
   function normEvents(raw) {
@@ -141,19 +200,23 @@
     return { set: false, v: undefined };
   }
   function resolveHighlight(h, evs) {
-    if (!h.set) return 0;
+    if (!h.set) { const f = evs.findIndex((e) => e.flag); return f >= 0 ? f : 0; }
     let v = h.v;
     if (Array.isArray(v)) v = v[0];
     if (v === undefined || v === "") return 0;
     if (v === null || v === false) return -1;
     if (v === true) return 0;
     if (typeof v === "string") {
-      const s = v.trim().toLowerCase();
+      const s = v.replace(ZW, "").trim().toLowerCase();
       if (/^(none|kein|keins|keine|false|nein|off|aus|null)$/.test(s)) return -1;
       if (/^(last|letztes|letzte|ende)$/.test(s)) return evs.length - 1;
       if (/^(first|erstes|erste)$/.test(s)) return 0;
       if (/^[+-]?\d+$/.test(s)) v = parseInt(s, 10);
-      else return evs.findIndex((e) => e.year.toLowerCase() === s);
+      else {
+        let k = evs.findIndex((e) => e.yearKey === s);
+        if (k < 0 && s.length >= 3) k = evs.findIndex((e) => e.label.toLowerCase().includes(s));
+        return k;
+      }
     }
     if (typeof v === "number" && isFinite(v)) {
       const k = Math.round(v);
@@ -163,14 +226,44 @@
     }
     return 0;
   }
+  function parseDir(P) {
+    const v = pick(P, ["direction", "dir", "richtung", "flow"]);
+    if (typeof v === "string" && /^(rtl|rewind|reverse|back|backward|backwards|zurück|zurueck|rückwärts|rueckwaerts|right_to_left|right-to-left|left)$/i.test(v.trim())) return true;
+    return truthy(P.rewind) || truthy(P.reverse) || truthy(P.rueckwaerts) || truthy(P.zurueck);
+  }
+  function parseGaps(P) {
+    let labels = true, breaks = true;
+    const v = pick(P, ["gaps", "showGaps", "show_gaps", "gapLabels", "gap_labels", "yearGaps", "abstaende"]);
+    if (v !== undefined) {
+      if (falsy(v)) { labels = false; breaks = false; }
+      else if (typeof v === "string" && /^(labels?|text)$/i.test(v.trim())) breaks = false;
+      else if (typeof v === "string" && /^(breaks?|bruch|brueche|brüche)$/i.test(v.trim())) labels = false;
+    }
+    if (falsy(P.breaks)) breaks = false;
+    return { labels, breaks };
+  }
+  function parseTitle(P) {
+    const v = pick(P, ["title", "titel", "heading", "headline", "ueberschrift", "überschrift", "caption"]);
+    if (v === undefined || typeof v === "boolean") return null;
+    let text = v, at = pick(P, ["titleAt", "title_at", "titelAt"]), tone = null;
+    if (v && typeof v === "object" && !Array.isArray(v)) {
+      text = pick(v, ["text", "label", "title", "titel"]);
+      const a = pick(v, AT_KEYS); if (a !== undefined) at = a;
+      tone = toneColor(pick(v, TONE_KEYS));
+    }
+    if (Array.isArray(text)) text = text.join(" ");
+    if (text === undefined || text === null || typeof text === "boolean") return null;
+    text = String(text).replace(/\s+/g, " ").trim();
+    return text ? { text: text.slice(0, 140), at, tone } : null;
+  }
 
   // ---------------- Textumbruch ----------------
-  const SHY = "\u00ad";
+  const SHY = "­";
   const vis = (w) => w.split(SHY).join("");
   // Fugen deutscher Komposita (Technik-Wortschatz) als bevorzugte Trennstellen
   const HY_SUFFIX = /(keits|heits|ungs|schafts|tions|täts|ings|werks|gangs|fahrts|stands|gewichts|seil|seils|sicherheits)$/i;
   const HY_PARTS = ["begrenzer", "vorrichtung", "schiene", "scheibe", "gewicht", "seil", "aufzug", "aufzüge", "kabine", "bremse", "raum", "grube",
-    "kette", "sicherheit", "geschwindigkeit", "puffer", "anlage", "prüfung", "richtlinie", "antrieb", "motor", "schacht", "werk", "maschine", "system", "kraft", "fahrt", "rolle"];
+    "kette", "sicherheit", "geschwindigkeit", "puffer", "anlage", "prüfung", "richtlinie", "antrieb", "motor", "schacht", "werk", "maschine", "system", "kraft", "fahrt", "rolle", "norm", "palast"];
   /** Überlanges Wort trennen: vorhandener Bindestrich > weiches Trennzeichen > Kompositionsfuge > Zeichen. Gibt [kopf, rest] zurück. */
   function hyphenSplit(ctx, w, maxW) {
     const fits = (s2) => ctx.measureText(s2).width <= maxW;
@@ -190,7 +283,7 @@
   function wrapLines(ctx, str, maxW) {
     const out = [];
     for (const para of String(str).split(/\n/)) {
-      const words = para.split(/[ \t\r]+/).filter(Boolean); // geschützte Leerzeichen (\u00a0) bleiben zusammen
+      const words = para.split(/[ \t\r]+/).filter(Boolean); // geschützte Leerzeichen ( ) bleiben zusammen
       let cur = "";
       for (let w of words) {
         let guard = 0;
@@ -235,12 +328,9 @@
     return t + "…";
   }
 
-
-  // ---------------- Modell (Layout, gecacht pro Parametersatz) ----------------
-  let CACHE_KEY = null, CACHE_M = null;
+  // ---------------- Kamera (Engine-Fahrten) -> sichere Weltkoordinaten ----------------
   /** Zusätzlicher Seitenrand, damit Kamerafahrten der Engine (Zoom/Pan) nichts aus dem Bild schieben. */
-  function cameraInset(p) {
-    const cam = p && p.scene && p.scene.camera;
+  function cameraInset(cam) {
     switch (cam) {
       case "slow_push_in": case "slow_pull_out": return 80;
       case "pan_left": case "pan_right": return 120;
@@ -248,16 +338,82 @@
       default: return 0;
     }
   }
-  function getModel(ctx, params, inset) {
+  /** Extremzustände der Kamera {s, dx, dy} (Engine: translate(c+d) · scale(s) · translate(−c)). */
+  function camStates(cam) {
+    switch (cam) {
+      case "slow_push_in": case "slow_pull_out": return [{ s: 1, dx: 0, dy: 0 }, { s: 1.1, dx: 0, dy: 0 }];
+      case "pan_left": case "pan_right": return [{ s: 1.08, dx: 60, dy: 0 }, { s: 1.08, dx: -60, dy: 0 }];
+      case "tilt_up": case "tilt_down": return [{ s: 1.08, dx: 0, dy: 45 }, { s: 1.08, dx: 0, dy: -45 }];
+      default: return [{ s: 1, dx: 0, dy: 0 }];
+    }
+  }
+  /** Welt-y, unterhalb dessen Inhalte in JEDEM Kamerazustand unter Bildschirm-y ys liegen. */
+  const worldTop = (ys, cams, cy) => cams.reduce((m, c) => Math.max(m, cy + (ys - cy - c.dy) / c.s), -1e9);
+  /** Welt-y, oberhalb dessen Inhalte in jedem Kamerazustand über Bildschirm-y ys bleiben. */
+  const worldBot = (ys, cams, cy) => cams.reduce((m, c) => Math.min(m, cy + (ys - cy - c.dy) / c.s), 1e9);
+  /** Welt-x, rechts davon liegen Inhalte in jedem Kamerazustand rechts von Bildschirm-x xs. */
+  const worldRight = (xs, cams, cx) => cams.reduce((m, c) => Math.max(m, cx + (xs - cx - c.dx) / c.s), -1e9);
+
+  // ---------------- Titel / Overlay-Layout ----------------
+  let OV_KEY = null, OV = null;
+  function overlayLayout(ctx, text) {
+    if (OV && OV_KEY === text) return OV;
+    const str = upper(text).replace(/\s+/g, " ").trim();
+    const MAXW = 1160; // Box bis x ≈ 1250 – Kapitel-Badge rechts oben bleibt frei
+    let size = 40, lines = [str];
+    ctx.save();
+    const meas = (sz, s2) => { setFont(ctx, 700, sz, F_HEAD, 2); return ctx.measureText(s2).width; };
+    while (size > 30 && meas(size, str) + 70 > MAXW) size -= 2;
+    if (meas(size, str) + 70 > MAXW) {
+      size = 32;
+      for (;;) {
+        setFont(ctx, 700, size, F_HEAD, 2);
+        lines = wrapBalanced(ctx, str, MAXW - 70);
+        if (lines.length <= 2 || size <= 24) break;
+        size -= 2;
+      }
+      if (lines.length > 2) { setFont(ctx, 700, size, F_HEAD, 2); lines = lines.slice(0, 2); lines[1] = ellipsize(ctx, lines[1], MAXW - 70); }
+    }
+    let w = 0;
+    for (const ln of lines) w = Math.max(w, meas(size, ln));
+    ctx.restore();
+    const lhh = size * 1.18;
+    OV_KEY = text; OV = { size, lines, w: w + 70, lhh, h: size + 34 + (lines.length - 1) * lhh };
+    return OV;
+  }
+  function titleLayout(ctx, text) {
+    const str = upper(text);
+    const MAXW = 1300;
+    ctx.save();
+    const meas = (sz, s2) => { setFont(ctx, 700, sz, F_HEAD, 3); return ctx.measureText(s2).width; };
+    let size = 36, lines = [str];
+    while (size > 28 && meas(size, str) > MAXW) size -= 2;
+    if (meas(size, str) > MAXW) {
+      size = 30; setFont(ctx, 700, size, F_HEAD, 3);
+      lines = wrapBalanced(ctx, str, MAXW);
+      if (lines.length > 2) { lines = lines.slice(0, 2); lines[1] = ellipsize(ctx, lines[1], MAXW); }
+    }
+    let w = 0;
+    for (const ln of lines) w = Math.max(w, meas(size, ln));
+    ctx.restore();
+    const lh = Math.round(size * 1.28);
+    return { size, lines, w, lh, h: Math.round(size * 0.74 + (lines.length - 1) * lh) };
+  }
+
+  // ---------------- Modell (Layout, gecacht pro Parametersatz/Kamera/Text/Dauer) ----------------
+  let CACHE_KEY = null, CACHE_M = null;
+  function getModel(ctx, params, env) {
     let key = "";
-    try { key = JSON.stringify(params === undefined ? null : params) + "|" + inset; } catch (e) { key = "?|" + inset; }
+    try { key = JSON.stringify(params === undefined ? null : params); } catch (e) { key = "?"; }
+    key += "|" + env.cam + "|" + env.fx + "|" + env.fy + "|" + env.text + "|" + env.d;
     if (CACHE_M && key === CACHE_KEY) return CACHE_M;
-    const M = buildModel(ctx, params, inset);
+    const P = params && typeof params === "object" && !Array.isArray(params) ? params : {};
+    const M = buildModel(ctx, P, env);
+    M.T = buildTiming(M, P, env.d);
     CACHE_KEY = key; CACHE_M = M;
     return M;
   }
-  function buildModel(ctx, params, inset) {
-    const P = params && typeof params === "object" ? params : {};
+  function buildModel(ctx, P, env) {
     const all = normEvents(pick(P, ["events", "items", "ereignisse", "entries", "eintraege", "einträge", "timeline", "data", "list"])) || normEvents(DEFAULT_EVENTS);
     let hl = resolveHighlight(rawHighlight(P), all);
     let ws = 0;
@@ -266,11 +422,25 @@
     hl = hl >= 0 ? hl - ws : -1;
     if (hl >= ev.length) hl = -1;
     const n = ev.length;
-    const SL = SAFE_L + (inset || 0), SR = SAFE_R - (inset || 0);
+    const rtl = parseDir(P);
+    const GM = parseGaps(P);
+    const fs = sideOf(pick(P, ["firstSide", "first_side", "startSide", "erste_seite"]));
+    const firstDown = fs === "down" || (fs === null && truthy(P.flip));
+    const hlTone = toneColor(pick(P, ["highlightTone", "highlight_tone", "hlTone", "highlightColor", "highlight_color"]));
+    const dimOthers = !falsy(pick(P, ["dimOthers", "dim_others", "dim", "abdunkeln"]));
+    const cv = pick(P, ["counter", "yearCounter", "year_counter", "zaehler", "zähler"]);
+    const counter = cv === undefined ? rtl : truthy(cv);
+
+    // ---- horizontal ----
+    const inset = cameraInset(env.cam);
+    const SL = SAFE_L + inset, SR = SAFE_R - inset;
+    ev.forEach((e, i) => { e.i = i; e.idx = ws + i; e.up = e.side ? e.side === "up" : (i % 2 === 0) !== firstDown; });
+    let minStep = 99;
+    for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) if (ev[i].up === ev[j].up) { minStep = Math.min(minStep, j - i); break; }
     const spacingFor = (cw) => (n > 1 ? Math.min(560, (SR - SL - cw) / (n - 1)) : 0);
     let cardW = n <= 3 ? 500 : n === 4 ? 480 : n === 5 ? 430 : 400;
-    // Karten auf derselben Seite (Abstand 2 × spacing) dürfen sich auch vergrößert nicht berühren
-    while (n > 2 && cardW > 300 && cardW * 1.1 + 24 > 2 * spacingFor(cardW)) cardW -= 10;
+    // Karten auf derselben Seite dürfen sich auch vergrößert nicht berühren
+    if (minStep < 99) while (cardW > 260 && cardW * 1.1 + 24 > minStep * spacingFor(cardW)) cardW -= 10;
     const baseYS = n <= 3 ? 76 : n === 4 ? 72 : n === 5 ? 62 : 56;
     const baseLS = n <= 3 ? 34 : n === 4 ? 33 : n === 5 ? 30 : 27;
     const sizes = [0, 2, 4, 6].map((k) => [baseLS - k, Math.round((baseLS - k) * 1.32)]);
@@ -279,73 +449,124 @@
     const xs = SL + 22 + (ws > 0 ? 34 : 0), xe = SR - 12; // bei abgeschnittener Vorgeschichte: Platz für gepunkteten Auslauf
     const inner = cardW - 2 * PADX;
 
+    // ---- vertikal: Untertitelzone, Overlay-Box, Titel (alles über alle Kamerazustände abgesichert) ----
+    const cams = camStates(env.cam);
+    const botLim = Math.min(SAFE_B, worldBot(SUB_Y, cams, env.fy));
+    let topLim = SAFE_T;
+    const OVL = env.text && String(env.text).trim() ? overlayLayout(ctx, String(env.text)) : null;
+    let ovTop = null, ovRight = null;
+    if (OVL) {
+      ovTop = Math.max(SAFE_T, worldTop(OV_TOP + OVL.h + OV_GAP, cams, env.fy));
+      ovRight = worldRight(OV_X + 14 + OVL.w + 24, cams, env.fx);
+    }
+    const TI = parseTitle(P);
+    let TT = null;
+    if (TI) {
+      const lay = titleLayout(ctx, TI.text);
+      let top = SAFE_T - 6;
+      if (OVL) top = Math.max(top, worldTop(OV_TOP + OVL.h + OV_GAP, cams, env.fy));
+      TT = Object.assign({}, TI, lay, { top: Math.round(top) });
+      topLim = TT.top + lay.h + 36;
+    }
+    const AY0 = Math.round((topLim + botLim) / 2) + 4;
+
     ctx.save();
-    ev.forEach((e, i) => {
-      e.i = i; e.idx = ws + i; e.x = x0 + i * spacing; e.up = i % 2 === 0;
+    ev.forEach((e) => {
+      e.x = x0 + e.i * spacing;
       e.color = e.tone || COL.cyan;
-      e.hlColor = e.tone === COL.red ? COL.red : COL.amber;
+      e.hlColor = (e.i === hl && hlTone) || e.tone || COL.amber;
       // Jahreszahl: Größe passend zur Kartenbreite (Platz für Index rechts)
       let ys = baseYS;
       setFont(ctx, 700, ys, F_HEAD, 1);
       while (ys > 28 && ctx.measureText(e.yearTxt || " ").width > inner - 50) { ys -= 2; setFont(ctx, 700, ys, F_HEAD, 1); }
       e.ys = ys;
       e.yearBase = PADT + 0.76 * ys;
-      e.room = (e.up ? AY - STEM_MIN - SAFE_T : SAFE_B - AY - STEM_MIN) - 14;
-    });
-    // gemeinsame Label-Schriftgröße für alle Karten (einheitliche Typografie)
-    const layoutAt = (ls, lh) => ev.map((e) => {
-      setFont(ctx, 600, ls, F_BODY, 0);
-      const lines = e.label ? wrapBalanced(ctx, e.label, inner) : [];
-      return { lines, hh: cardH(e.yearBase, ls, lh, lines.length) };
-    });
-    const sumLines = (R) => R.reduce((a, r) => a + r.lines.length, 0);
-    // Karten, die selbst in der kleinsten Stufe nicht passen, werden gekürzt und bestimmen die Größe nicht
-    const smallest = layoutAt(sizes[sizes.length - 1][0], sizes[sizes.length - 1][1]);
-    const hopeless = smallest.map((r, i) => r.hh > ev[i].room || r.lines.length > 3);
-    let chosen = null;
-    for (let k = 0; k < sizes.length && !chosen; k++) {
-      const [ls, lh] = sizes[k];
-      const R1 = layoutAt(ls, lh);
-      const ok = R1.every((r, i) => hopeless[i] || (r.hh <= ev[i].room && r.lines.length <= 3));
-      if (!ok && k < sizes.length - 1) continue;
-      chosen = { ls, lh, res: R1 };
-      // eine Stufe kleiner, wenn das Zeilen spart (weniger Umbrüche = ruhigeres Bild)
-      if (ok && k + 1 < sizes.length) {
-        const [ls2, lh2] = sizes[k + 1];
-        const R2 = layoutAt(ls2, lh2);
-        if (sumLines(R2) < sumLines(R1)) chosen = { ls: ls2, lh: lh2, res: R2 };
+      // Oberkante: Karten, die horizontal unter der Overlay-Box liegen, halten Abstand zu ihr
+      e.topLim = topLim;
+      if (e.up && ovTop !== null) {
+        const cx = clamp(e.x, SL + 16 + cardW * 0.55, SR - 16 - cardW * 0.55);
+        if (cx - cardW * 0.55 - 12 < ovRight) e.topLim = Math.max(topLim, ovTop);
       }
-    }
-    ev.forEach((e, i) => {
-      let lines = chosen.res[i].lines, hh = chosen.res[i].hh;
-      if (hh > e.room && lines.length > 1) {
-        // notfalls kürzen (Ellipse)
-        let keep = lines.length;
-        while (keep > 1 && cardH(e.yearBase, chosen.ls, chosen.lh, keep) > e.room) keep--;
-        setFont(ctx, 600, chosen.ls, F_BODY, 0);
-        lines = lines.slice(0, keep);
-        lines[keep - 1] = ellipsize(ctx, lines[keep - 1], inner);
-        hh = cardH(e.yearBase, chosen.ls, chosen.lh, keep);
-      }
-      e.ls = chosen.ls; e.lh = chosen.lh; e.lines = lines; e.h = Math.round(hh);
     });
-    ctx.restore();
-    // Stiellänge: so lang wie möglich (luftiger), ohne dass Karten den sicheren Bereich verlassen
-    let maxUp = 0, maxDn = 0;
-    for (const e of ev) { if (e.up) maxUp = Math.max(maxUp, e.h); else maxDn = Math.max(maxDn, e.h); }
-    const stem = Math.round(clamp(Math.min(AY - SAFE_T - maxUp * 1.08 - 16, SAFE_B - AY - maxDn * 1.08 - 16), STEM_MIN, STEM_MAX));
-    for (const e of ev) {
-      const room = e.up ? AY - stem - SAFE_T : SAFE_B - AY - stem;
-      e.sMax = clamp(Math.min(1.1, room / (e.h + 16)), 1, 1.1);
-    }
+    const bound = ev.some((e) => e.topLim > topLim);
 
-    // Zeitsprünge zwischen benachbarten Ereignissen
+    /** Kartenlayout für eine Achsenhöhe AY: gemeinsame Label-Schriftgröße, Umbruch, ggf. Kürzung. */
+    function layoutFor(AY, ysc) {
+      const room = ev.map((e) => (e.up ? AY - STEM_MIN - e.topLim : botLim - AY - STEM_MIN) - 14);
+      const yss = ev.map((e) => Math.round(e.ys * ysc));
+      const yb = yss.map((ys) => PADT + 0.76 * ys);
+      const layoutAt = (ls, lh) => ev.map((e, i) => {
+        setFont(ctx, 600, ls, F_BODY, 0);
+        const lines = e.label ? wrapBalanced(ctx, e.label, inner) : [];
+        return { lines, hh: cardH(yb[i], ls, lh, lines.length) };
+      });
+      const sumLines = (R) => R.reduce((a, r) => a + r.lines.length, 0);
+      // Karten, die selbst in der kleinsten Stufe nicht passen, werden gekürzt und bestimmen die Größe nicht
+      const smallest = layoutAt(sizes[sizes.length - 1][0], sizes[sizes.length - 1][1]);
+      const hopeless = smallest.map((r, i) => r.hh > room[i] || r.lines.length > 3);
+      let chosen = null;
+      for (let k = 0; k < sizes.length && !chosen; k++) {
+        const [ls, lh] = sizes[k];
+        const R1 = layoutAt(ls, lh);
+        const ok = R1.every((r, i) => hopeless[i] || (r.hh <= room[i] && r.lines.length <= 3));
+        if (!ok && k < sizes.length - 1) continue;
+        chosen = { ls, lh, res: R1 };
+        // eine Stufe kleiner, wenn das Zeilen spart (weniger Umbrüche = ruhigeres Bild)
+        if (ok && k + 1 < sizes.length) {
+          const [ls2, lh2] = sizes[k + 1];
+          const R2 = layoutAt(ls2, lh2);
+          if (sumLines(R2) < sumLines(R1)) chosen = { ls: ls2, lh: lh2, res: R2 };
+        }
+      }
+      let ellip = 0;
+      const res = ev.map((e, i) => {
+        let lines = chosen.res[i].lines, hh = chosen.res[i].hh;
+        if (hh > room[i] && lines.length > 1) {
+          // notfalls kürzen (Ellipse)
+          let keep = lines.length;
+          while (keep > 1 && cardH(yb[i], chosen.ls, chosen.lh, keep) > room[i]) keep--;
+          setFont(ctx, 600, chosen.ls, F_BODY, 0);
+          lines = lines.slice(0, keep);
+          lines[keep - 1] = ellipsize(ctx, lines[keep - 1], inner);
+          hh = cardH(yb[i], chosen.ls, chosen.lh, keep);
+          ellip++;
+        }
+        return { lines, h: Math.round(hh) };
+      });
+      // Stiellänge: so lang wie möglich (luftiger), ohne dass Karten den sicheren Bereich verlassen
+      let lim = STEM_MAX;
+      ev.forEach((e, i) => { lim = Math.min(lim, e.up ? AY - e.topLim - res[i].h * 1.08 - 16 : botLim - AY - res[i].h * 1.08 - 16); });
+      const stem = Math.round(clamp(lim, STEM_MIN, STEM_MAX));
+      const score = -ellip * 1000 + chosen.ls * 10 - sumLines(res) * 2 - Math.abs(AY - AY0) * 0.05 - (ysc < 1 ? 25 : 0);
+      return { AY, ls: chosen.ls, lh: chosen.lh, res, stem, score, ellip, yss, yb };
+    }
+    let best = layoutFor(AY0, 1);
+    // Overlay drückt eine obere Karte nach unten: Achse etwas absenken, wenn unten Platz ist;
+    // müsste gekürzt werden: kompaktere Jahreszahl (0,8×) versuchen, bevor Text verloren geht
+    for (const ysc of [1, 0.8]) {
+      if (ysc < 1 && best.ellip === 0) break;
+      for (const dy of bound ? [0, 18, 36, 54] : [0]) {
+        if (ysc === 1 && dy === 0) continue;
+        if (dy > 0 && AY0 + dy + STEM_MIN + 120 > botLim) break;
+        const c = layoutFor(AY0 + dy, ysc);
+        if (c.score > best.score) best = c;
+      }
+    }
+    ctx.restore();
+    const AY = best.AY, stem = best.stem;
+    ev.forEach((e, i) => {
+      e.ls = best.ls; e.lh = best.lh; e.lines = best.res[i].lines; e.h = best.res[i].h;
+      e.ys = best.yss[i]; e.yearBase = best.yb[i];
+      const room = e.up ? AY - stem - e.topLim : botLim - AY - stem;
+      e.sMax = clamp(Math.min(1.1, room / (e.h + 16)), 1, 1.1);
+    });
+
+    // ---- Zeitsprünge zwischen benachbarten Ereignissen ----
     const gaps = [];
     const rawG = [];
     for (let i = 0; i < n - 1; i++) {
       const a = ev[i], b = ev[i + 1];
-      const g = a.num !== null && b.num !== null ? b.num - a.num : null;
-      rawG.push(g);
+      rawG.push(a.num !== null && b.num !== null ? b.num - a.num : null);
     }
     const exactG = rawG.filter((g, i) => g !== null && g > 0 && !ev[i].today && !ev[i + 1].today);
     const anyG = rawG.filter((g) => g !== null && g > 0);
@@ -354,8 +575,8 @@
     for (let i = 0; i < n - 1; i++) {
       const a = ev[i], b = ev[i + 1], g = rawG[i];
       let label = "";
-      if (g !== null && g > 0 && !a.today && !b.today) label = (a.exact && b.exact ? "" : "ca. ") + fmtInt(g) + (g === 1 ? " Jahr" : " Jahre");
-      const brk = g !== null && g > 0 && unit > 0 && g >= 1.8 * unit && g - unit >= 8;
+      if (GM.labels && g !== null && g > 0 && !a.today && !b.today) label = (a.exact && b.exact ? "" : "ca. ") + fmtInt(g) + (g === 1 ? " Jahr" : " Jahre");
+      const brk = GM.breaks && g !== null && g > 0 && unit > 0 && g >= 1.8 * unit && g - unit >= 8;
       setFont(ctx, 700, 20, F_MONO, 1);
       const lw = label ? ctx.measureText(label).width : 0;
       gaps.push({ xm: (a.x + b.x) / 2, label, lw, brk, g: g || 0, i });
@@ -364,25 +585,99 @@
     // höchstens zwei Bruchlinien (die größten Sprünge) – sonst wirkt die Achse zerhackt
     const brks = gaps.filter((g) => g.brk).sort((a, b) => b.g - a.g || a.i - b.i);
     for (let k = 2; k < brks.length; k++) brks[k].brk = false;
-    return { ev, n, hl, cardW, spacing, stem, xs, xe, SL, SR, gaps, truncL: ws > 0, truncR: ws + MAX_VIS < all.length };
+    // Achsenstücke zwischen den Bruchlinien
+    const pieces = [];
+    let a0 = xs;
+    for (const g of gaps) if (g.brk) { pieces.push([a0, g.xm - GAPW]); a0 = g.xm + GAPW; }
+    pieces.push([a0, xe]);
+    return { ev, n, hl, cardW, spacing, stem, xs, xe, SL, SR, AY, gaps, pieces, TT, rtl, counter, dimOthers, truncL: ws > 0, truncR: ws + MAX_VIS < all.length };
   }
 
-  // ---------------- Zeitplan (skaliert mit d) ----------------
-  function timing(d, n) {
-    const head0 = Math.min(0.04 * d, 0.4);
-    const first = n > 1 ? Math.min(0.12 * d, 1.6) : Math.min(0.2 * d, 1.8); // Intro bei langen Szenen nicht zäh
-    const last = n > 1 ? 0.38 * d : first;
-    const headEnd = last + 0.06 * d;
-    const pop = clamp(0.11 * d, 0.4, 1.2);
-    const hl = Math.max(headEnd, last + pop * 0.75);
-    const hlDur = clamp(0.1 * d, 0.35, 1.0);
-    const pulse0 = headEnd + 0.2;
-    const period = clamp(0.3 * d, 2.0, 3.6);
-    return { head0, first, last, headEnd, pop, hl, hlDur, pulse0, period };
+  // ---------------- Zeitplan (BEATS / at, sonst skaliert mit d) ----------------
+  function beatsOf(P, d) {
+    let b = pick(P, ["beats", "beat", "takte"]);
+    if (typeof b === "string") b = b.split(/[;\s]+/).filter(Boolean);
+    if (typeof b === "number") b = [b];
+    if (!Array.isArray(b)) return [];
+    return b.map((v) => { const x = tArg(v, d, false); return x === null ? null : clampT(x, d); });
   }
-  function headPos(t, T, tn, M) {
-    const kt = [T.head0].concat(tn, [T.headEnd]);
-    const kx = [M.xs].concat(M.ev.map((e) => e.x), [M.xe]);
+  function buildTiming(M, P, d) {
+    const n = M.n, B = beatsOf(P, d);
+    const has = (k) => B[k] !== null && B[k] !== undefined;
+    const popIn = tArg(pick(P, ["pop", "popDur", "pop_s", "popDuration"]), d, false);
+    const pop = popIn !== null ? clamp(popIn, 0.25, 2) : clamp(0.11 * d, 0.4, 1.2);
+    let head0 = has(0) ? B[0] : Math.min(0.04 * d, 0.4);
+    const lateCap = Math.max(0.3, d - 0.3 - 0.55 * pop); // späteste sinnvolle Pop-Zeit (Karte noch lesbar)
+    // Standardverteilung (ohne at)
+    let first = Math.max(head0 + 0.35, n > 1 ? Math.min(0.1 * d, 1.2) : Math.min(0.2 * d, 1.8));
+    const rs = tArg(pick(P, ["revealStart", "reveal_start", "firstAt", "first_at"]), d, true);
+    if (rs !== null) first = clampT(rs, d);
+    let last = n > 1 ? Math.max(first + 0.3 * (n - 1), 0.55 * d) : first;
+    const re = tArg(pick(P, ["revealEnd", "reveal_end", "lastAt", "last_at", "spread"]), d, true);
+    if (re !== null) last = clampT(re, d);
+    last = Math.min(last, lateCap); first = Math.min(first, last);
+    const order = [];
+    for (let k = 0; k < n; k++) order.push(M.rtl ? n - 1 - k : k);
+    const seqDef = order.map((_, k) => (n > 1 ? lerp(first, last, k / (n - 1)) : first));
+    const seqAt = order.map((i) => { const x = tArg(M.ev[i].at, d, false); return x === null ? null : clampT(x, d); });
+    const anyAt = seqAt.some((v) => v !== null);
+    const seq = anyAt ? seqAt.slice() : seqDef.slice();
+    if (anyAt) {
+      const step0 = n > 1 ? Math.max(0.3, (last - first) / (n - 1)) : 0.6;
+      for (let k = 0; k < n; k++) {
+        if (seqAt[k] !== null) continue;
+        let kp = -1, kn = -1;
+        for (let j = k - 1; j >= 0; j--) if (seqAt[j] !== null) { kp = j; break; }
+        for (let j = k + 1; j < n; j++) if (seqAt[j] !== null) { kn = j; break; }
+        if (kp >= 0 && kn >= 0) seq[k] = lerp(seqAt[kp], seqAt[kn], (k - kp) / (kn - kp));
+        else if (kn >= 0) seq[k] = Math.min(seqDef[k], seqAt[kn] - 0.45 * (kn - k));
+        else {
+          const st = Math.min(step0, Math.max(0, lateCap - seqAt[kp]) / Math.max(1, n - 1 - kp));
+          seq[k] = seqAt[kp] + Math.max(0.12, st) * (k - kp);
+        }
+        seq[k] = clampT(seq[k], d);
+      }
+    }
+    const tn = new Array(n);
+    order.forEach((i, k) => { tn[i] = seq[k]; });
+    // Ankunft des Lichtkopfs (monoton): spätestens, wenn ein Knoten auf oder hinter ihm poppt
+    // (bei nicht monotonen "at" fährt er zügig, aber sichtbar – min. 0,3 s je Knotenabstand – vor)
+    const arr = seq.slice();
+    for (let k = n - 2; k >= 0; k--) arr[k] = Math.min(arr[k], arr[k + 1] - (seq[k] > arr[k + 1] ? 0.3 : 0));
+    if (n && arr[0] < 0.2) { const sh = 0.2 - arr[0]; for (let k = 0; k < n; k++) arr[k] = Math.min(seq[k], arr[k] + sh); }
+    for (let k = 1; k < n; k++) arr[k] = Math.max(arr[k], arr[k - 1]);
+    head0 = Math.max(0, Math.min(head0, (n ? arr[0] : d) - 0.3));
+    const lastArr = n ? arr[n - 1] : head0;
+    const headEnd = Math.max(lastArr, Math.min(d - 0.1, lastArr + Math.max(0.35, 0.06 * d)));
+    // Highlight
+    let hl = 1e9;
+    if (M.hl >= 0) {
+      const hx = tArg(pick(P, ["highlightAt", "highlight_at", "hlAt", "hl_at"]), d, false);
+      const ex = tArg(M.ev[M.hl].hlAt, d, false);
+      if (hx !== null) hl = clampT(hx, d);
+      else if (ex !== null) hl = clampT(ex, d);
+      else if (has(1)) hl = B[1];
+      else {
+        const base = anyAt ? tn[M.hl] : Math.max.apply(null, tn);
+        hl = Math.min(base + 0.75 * pop, Math.max(0.3, d - 0.45));
+      }
+    }
+    const hlDur = clamp(0.1 * d, 0.35, 1.0);
+    const pulse0 = has(2) ? B[2] : headEnd + 0.2;
+    const period = clamp(0.3 * d, 2.0, 3.6);
+    const gapT = M.gaps.map((g) => Math.max(tn[g.i], tn[g.i + 1]) + 0.3 * pop);
+    let titleAt = 0.35;
+    if (M.TT) {
+      const ta = tArg(M.TT.at, d, false);
+      titleAt = ta !== null ? clampT(ta, d) : has(3) ? B[3] : 0.35;
+    }
+    const kt = [head0].concat(arr, [headEnd]);
+    const kx = [M.rtl ? M.xe : M.xs].concat(order.map((i) => M.ev[i].x), [M.rtl ? M.xs : M.xe]);
+    for (let k = 1; k < kt.length; k++) kt[k] = Math.max(kt[k], kt[k - 1]);
+    return { head0, headEnd, pop, hl, hlDur, pulse0, period, tn, gapT, titleAt, kt, kx };
+  }
+  function headPos(t, T) {
+    const kt = T.kt, kx = T.kx;
     if (t <= kt[0]) return kx[0];
     for (let k = 0; k < kt.length - 1; k++) {
       if (t < kt[k + 1]) {
@@ -413,7 +708,7 @@
   }
 
   // ---------------- Zeichnen: Atmosphäre ----------------
-  function drawAtmosphere(ctx, t, W) {
+  function drawAtmosphere(ctx, t, W, AY) {
     // weiches Lichtband entlang der Achse – gestufte Vollflächen statt Verlauf (Verläufe großer Flächen sind teuer)
     ctx.save();
     ctx.fillStyle = "rgba(63,210,255,0.022)";
@@ -430,23 +725,49 @@
     ctx.restore();
   }
 
-  // ---------------- Zeichnen: Achse ----------------
-  function axisPath(c, M, hx) {
-    let a = M.xs;
-    for (const g of M.gaps) {
-      if (!g.brk) continue;
-      const g0 = g.xm - GAPW, g1 = g.xm + GAPW;
-      if (hx <= g0) break;
-      if (g0 > a) { c.moveTo(a, AY); c.lineTo(Math.min(g0, hx), AY); }
-      a = g1;
-      if (hx <= g1) return;
+  // ---------------- Zeichnen: Titel ----------------
+  function drawTitle(ctx, L, M, T, t) {
+    const TT = M.TT;
+    if (!TT) return;
+    const a = seg(t, T.titleAt, 0.55);
+    if (a <= 0) return;
+    const cx = W0 / 2, col = TT.tone || COL.cyan;
+    const rise = 10 * (1 - eo(a));
+    TT.lines.forEach((ln, k) => txt(ctx, ln, cx, TT.top + 0.74 * TT.size + k * TT.lh + rise, {
+      font: F_HEAD, weight: 700, size: TT.size, ls: 3, color: COL.white, align: "center", glow: 14, glowColor: rgba(col, 0.75), alpha: eo(a),
+    }));
+    // Seitenlinien mit Rauten (Blueprint-Überschrift)
+    const midY = TT.top + TT.h / 2;
+    const half = TT.w / 2 + 28;
+    const len = clamp(W0 / 2 - SAFE_L - 40 - half, 0, 170) * eo(seg(t, T.titleAt + 0.15, 0.6));
+    if (len > 3) {
+      L.glowPath(ctx, (c) => {
+        c.moveTo(cx - half, midY); c.lineTo(cx - half - len, midY); c.lineTo(cx - half - len, midY + 9);
+        c.moveTo(cx + half, midY); c.lineTo(cx + half + len, midY); c.lineTo(cx + half + len, midY + 9);
+      }, col, 1.6, 0.6, { alpha: 0.7 * a, cap: "butt" });
+      ctx.save();
+      ctx.globalAlpha = a * (0.8 + 0.2 * Math.sin(t * 2.3)); ctx.fillStyle = COL.amber;
+      for (const sx of [-1, 1]) {
+        const x = cx + sx * half;
+        ctx.beginPath(); ctx.moveTo(x, midY - 5); ctx.lineTo(x + 5, midY); ctx.lineTo(x, midY + 5); ctx.lineTo(x - 5, midY); ctx.closePath(); ctx.fill();
+      }
+      ctx.restore();
     }
-    if (hx > a) { c.moveTo(a, AY); c.lineTo(hx, AY); }
   }
-  function drawAxis(ctx, L, M, T, t, headX, tn) {
-    // Geisterschiene (gestrichelt, driftet langsam)
+
+  // ---------------- Zeichnen: Achse ----------------
+  function axisPath(c, M, x0, x1) {
+    const AY = M.AY;
+    for (const pc of M.pieces) {
+      const a = Math.max(pc[0], x0), b = Math.min(pc[1], x1);
+      if (b > a) { c.moveTo(a, AY); c.lineTo(b, AY); }
+    }
+  }
+  function drawAxis(ctx, L, M, T, t, headX) {
+    const AY = M.AY, tn = T.tn;
+    // Geisterschiene (gestrichelt, driftet langsam in Laufrichtung)
     ctx.save();
-    ctx.strokeStyle = "rgba(63,210,255,0.17)"; ctx.lineWidth = 1.5; ctx.setLineDash([3, 9]); ctx.lineDashOffset = -t * 14;
+    ctx.strokeStyle = "rgba(63,210,255,0.17)"; ctx.lineWidth = 1.5; ctx.setLineDash([3, 9]); ctx.lineDashOffset = (M.rtl ? 1 : -1) * t * 14;
     ctx.beginPath(); ctx.moveTo(M.xs, AY); ctx.lineTo(M.xe, AY); ctx.stroke();
     // Platzhalter der kommenden Knoten (Blueprint-Vorzeichnung)
     ctx.setLineDash([]); ctx.lineWidth = 1.5;
@@ -459,43 +780,50 @@
       ctx.beginPath(); ctx.moveTo(M.ev[i].x, AY + (M.ev[i].up ? -16 : 16)); ctx.lineTo(M.ev[i].x, AY + (M.ev[i].up ? -34 : 34)); ctx.stroke();
     }
     ctx.restore();
-    if (headX <= M.xs + 0.5) return;
+    if (t < T.head0) return;
+    const s0 = M.rtl ? headX : M.xs, s1 = M.rtl ? M.xe : headX; // bereits gezeichneter Abschnitt
 
-    // Teilstriche unterhalb der Achse (Lineal-Optik), nur bis zum Kopf
-    ctx.save();
-    ctx.strokeStyle = "rgba(63,210,255,0.26)"; ctx.lineWidth = 1.4; ctx.beginPath();
-    for (let x = M.xs + 20, k = 1; x < headX - 6; x += 20, k++) {
-      let skip = false;
-      for (const e of M.ev) if (Math.abs(x - e.x) < 26) { skip = true; break; }
-      if (!skip) for (const g of M.gaps) if (g.brk && Math.abs(x - g.xm) < GAPW + 12) { skip = true; break; }
-      if (skip) continue;
-      const hh = k % 5 === 0 ? 9 : 4;
-      ctx.moveTo(x + 0.5, AY + 8); ctx.lineTo(x + 0.5, AY + 8 + hh);
+    if (s1 - s0 > 0.5) {
+      // Teilstriche unterhalb der Achse (Lineal-Optik), nur im gezeichneten Abschnitt
+      ctx.save();
+      ctx.strokeStyle = "rgba(63,210,255,0.26)"; ctx.lineWidth = 1.4; ctx.beginPath();
+      for (let x = M.xs + 20, k = 1; x < M.xe - 6; x += 20, k++) {
+        if (x < s0 + 6 || x > s1 - 6) continue;
+        let skip = false;
+        for (const e of M.ev) if (Math.abs(x - e.x) < 26) { skip = true; break; }
+        if (!skip) for (const g of M.gaps) if (g.brk && Math.abs(x - g.xm) < GAPW + 12) { skip = true; break; }
+        if (skip) continue;
+        const hh = k % 5 === 0 ? 9 : 4;
+        ctx.moveTo(x + 0.5, AY + 8); ctx.lineTo(x + 0.5, AY + 8 + hh);
+      }
+      ctx.stroke(); ctx.restore();
+      // leuchtende Achse (mit Lücken an Bruchlinien)
+      L.glowPath(ctx, (c) => axisPath(c, M, s0, s1), COL.cyan, 3, 1);
     }
-    ctx.stroke(); ctx.restore();
-
-    // leuchtende Achse (mit Lücken an Bruchlinien)
-    L.glowPath(ctx, (c) => axisPath(c, M, headX), COL.cyan, 3, 1);
-    // linke Endkappe
-    const capA = seg(t, T.head0, 0.25);
-    L.line(ctx, M.xs, AY - 11, M.xs, AY + 11, COL.cyan, 2.5, 0.8, { alpha: capA });
-    if (M.truncL) {
-      ctx.save(); ctx.globalAlpha = 0.6 * capA; ctx.strokeStyle = COL.cyan; ctx.lineWidth = 2; ctx.setLineDash([4, 7]);
-      ctx.beginPath(); ctx.moveTo(M.xs - 8, AY); ctx.lineTo(M.SL, AY); ctx.stroke(); ctx.restore();
+    // linke Endkappe (rtl: erst, wenn der Kopf links angekommen ist)
+    const capA = M.rtl ? seg(M.xs + 30 - headX, 0, 30) : seg(t, T.head0, 0.25);
+    if (capA > 0) {
+      L.line(ctx, M.xs, AY - 11, M.xs, AY + 11, COL.cyan, 2.5, 0.8, { alpha: capA });
+      if (M.truncL) {
+        ctx.save(); ctx.globalAlpha = 0.6 * capA; ctx.strokeStyle = COL.cyan; ctx.lineWidth = 2; ctx.setLineDash([4, 7]);
+        ctx.beginPath(); ctx.moveTo(M.xs - 8, AY); ctx.lineTo(M.SL, AY); ctx.stroke(); ctx.restore();
+      }
     }
 
     // Bruchlinien + Zeitabstände
-    for (const g of M.gaps) {
-      if (g.brk && headX > g.xm + GAPW) {
-        const a = seg(headX, g.xm + GAPW, 40);
-        L.glowPath(ctx, (c) => {
-          c.moveTo(g.xm - GAPW - 5, AY + 13); c.lineTo(g.xm - GAPW + 5, AY - 13);
-          c.moveTo(g.xm + GAPW - 5, AY + 13); c.lineTo(g.xm + GAPW + 5, AY - 13);
-        }, COL.cyan, 2.2, 0.8, { alpha: a });
+    for (let gi = 0; gi < M.gaps.length; gi++) {
+      const g = M.gaps[gi];
+      if (g.brk) {
+        const a = M.rtl ? seg(g.xm - GAPW - headX, 0, 40) : seg(headX, g.xm + GAPW, 40);
+        if (a > 0) {
+          L.glowPath(ctx, (c) => {
+            c.moveTo(g.xm - GAPW - 5, AY + 13); c.lineTo(g.xm - GAPW + 5, AY - 13);
+            c.moveTo(g.xm + GAPW - 5, AY + 13); c.lineTo(g.xm + GAPW + 5, AY - 13);
+          }, COL.cyan, 2.2, 0.8, { alpha: a });
+        }
       }
       if (g.label) {
-        const tg = (tn[g.i] + tn[g.i + 1]) / 2;
-        const a = seg(t, tg, 0.35);
+        const a = seg(t, T.gapT[gi], 0.35);
         if (a > 0) {
           const y = AY - 24 - 6 * (1 - eo(a));
           txt(ctx, g.label, g.xm, y, { font: F_MONO, weight: 700, size: 20, color: COL.muted, align: "center", ls: 1, alpha: 0.9 * a });
@@ -510,8 +838,8 @@
       }
     }
 
-    // Pfeilspitze + „Zeit“
-    const arrA = seg(headX, M.xe - 30, 30);
+    // Pfeilspitze + „Zeit“ (Zeit läuft immer nach rechts – beim Zurückspulen steht der Pfeil von Anfang an)
+    const arrA = M.rtl ? seg(t, T.head0, 0.25) : seg(headX, M.xe - 30, 30);
     if (arrA > 0) {
       L.poly(ctx, [[M.xe - 17, AY - 12], [M.xe + 1, AY], [M.xe - 17, AY + 12]], COL.cyan, 3, 1, { alpha: arrA });
       txt(ctx, "ZEIT", M.xe + 2, AY + 40, { font: F_MONO, weight: 700, size: 16, color: COL.muted, align: "right", ls: 4, alpha: 0.75 * arrA });
@@ -522,38 +850,73 @@
     if (t < T.head0 || t > T.headEnd + 0.45) return;
     const ha = t < T.headEnd ? seg(t, T.head0, 0.15) : 1 - seg(t, T.headEnd, 0.45);
     if (ha <= 0) return;
-    const x0 = Math.max(M.xs, headX - 260);
+    const AY = M.AY;
+    const x0 = M.rtl ? Math.min(M.xe, headX + 260) : Math.max(M.xs, headX - 260); // Schweif hinter dem Kopf
     ctx.save();
-    const g = ctx.createLinearGradient(x0, 0, headX, 0);
-    g.addColorStop(0, "rgba(63,210,255,0)"); g.addColorStop(1, "rgba(210,244,255,0.95)");
-    ctx.globalAlpha = ha; ctx.strokeStyle = g; ctx.lineWidth = 5; ctx.lineCap = "round";
-    ctx.beginPath(); ctx.moveTo(x0, AY); ctx.lineTo(headX, AY); ctx.stroke();
+    if (Math.abs(headX - x0) > 1) {
+      const g = ctx.createLinearGradient(x0, 0, headX, 0);
+      g.addColorStop(0, "rgba(63,210,255,0)"); g.addColorStop(1, "rgba(210,244,255,0.95)");
+      ctx.globalAlpha = ha; ctx.strokeStyle = g; ctx.lineWidth = 5; ctx.lineCap = "round";
+      ctx.beginPath(); ctx.moveTo(x0, AY); ctx.lineTo(headX, AY); ctx.stroke();
+    }
     // vertikale Scanlinie
     const v = ctx.createLinearGradient(0, AY - 80, 0, AY + 80);
     v.addColorStop(0, "rgba(63,210,255,0)"); v.addColorStop(0.5, "rgba(63,210,255,0.55)"); v.addColorStop(1, "rgba(63,210,255,0)");
-    ctx.strokeStyle = v; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(headX, AY - 80); ctx.lineTo(headX, AY + 80); ctx.stroke();
+    ctx.globalAlpha = ha; ctx.strokeStyle = v; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(headX, AY - 80); ctx.lineTo(headX, AY + 80); ctx.stroke();
     ctx.restore();
     L.glowDot(ctx, headX, AY, 58, COL.cyan, 0.5 * ha);
     L.glowDot(ctx, headX, AY, 13, "#ffffff", 0.95 * ha);
+    const moving = t < T.headEnd;
+    if (M.rtl && moving) {
+      // Zurückspulen: wandernde Doppel-Chevrons vor dem Kopf („◀◀“)
+      const ph = (t * 2.6) % 1;
+      ctx.save();
+      ctx.strokeStyle = COL.ice; ctx.lineWidth = 2.4; ctx.lineCap = "round"; ctx.lineJoin = "round";
+      for (let k = 0; k < 3; k++) {
+        const q = (k + ph) / 3;
+        const x = headX - 24 - q * 42;
+        if (x < M.xs + 4) continue;
+        ctx.globalAlpha = ha * Math.sin(Math.PI * q) * 0.9;
+        ctx.beginPath(); ctx.moveTo(x + 7, AY - 8); ctx.lineTo(x, AY); ctx.lineTo(x + 7, AY + 8); ctx.stroke();
+      }
+      ctx.restore();
+    }
+    if (M.counter && moving) {
+      // rollender Jahreszähler zwischen zwei Jahres-Knoten
+      for (let k = 0; k < M.n - 1; k++) {
+        const a = M.ev[k], b = M.ev[k + 1];
+        if (headX <= a.x || headX >= b.x) continue;
+        if (a.num !== null && b.num !== null && a.num !== b.num) {
+          const f = (headX - a.x) / (b.x - a.x);
+          const va = ha * sm(Math.min(f, 1 - f) / 0.14);
+          const yr = Math.round(lerp(a.num, b.num, f));
+          txt(ctx, String(yr), headX, AY + 54, { font: F_MONO, weight: 700, size: 24, color: COL.ice, align: "center", ls: 2, alpha: 0.9 * va, glow: 10, glowColor: COL.cyan });
+        }
+        break;
+      }
+    }
   }
 
-  /** Lichtimpuls, der nach dem Aufbau wiederholt über die Achse läuft. Gibt x und Stärke zurück. */
+  /** Lichtimpuls, der nach dem Aufbau wiederholt über die Achse läuft (in Laufrichtung). Gibt x und Stärke zurück. */
   function pulseState(M, T, t) {
     if (t < T.pulse0) return null;
     const ph = ((t - T.pulse0) / T.period) % 1;
     const TRAVEL = 0.72;
     if (ph >= TRAVEL) return null;
     const q = ph / TRAVEL;
-    return { x: lerp(M.xs, M.xe, q), a: Math.min(1, q / 0.05, (1 - q) / 0.05) };
+    return { x: M.rtl ? lerp(M.xe, M.xs, q) : lerp(M.xs, M.xe, q), a: Math.min(1, q / 0.05, (1 - q) / 0.05) };
   }
   function drawPulse(ctx, L, M, P) {
     if (!P || P.a <= 0) return;
-    const x0 = Math.max(M.xs, P.x - 200);
+    const AY = M.AY;
+    const x0 = M.rtl ? Math.min(M.xe, P.x + 200) : Math.max(M.xs, P.x - 200);
     ctx.save();
-    const g = ctx.createLinearGradient(x0, 0, P.x, 0);
-    g.addColorStop(0, "rgba(63,210,255,0)"); g.addColorStop(1, "rgba(220,247,255,0.9)");
-    ctx.globalAlpha = P.a; ctx.strokeStyle = g; ctx.lineWidth = 4; ctx.lineCap = "round";
-    ctx.beginPath(); ctx.moveTo(x0, AY); ctx.lineTo(P.x, AY); ctx.stroke();
+    if (Math.abs(P.x - x0) > 1) {
+      const g = ctx.createLinearGradient(x0, 0, P.x, 0);
+      g.addColorStop(0, "rgba(63,210,255,0)"); g.addColorStop(1, "rgba(220,247,255,0.9)");
+      ctx.globalAlpha = P.a; ctx.strokeStyle = g; ctx.lineWidth = 4; ctx.lineCap = "round";
+      ctx.beginPath(); ctx.moveTo(x0, AY); ctx.lineTo(P.x, AY); ctx.stroke();
+    }
     ctx.restore();
     L.glowDot(ctx, P.x, AY, 36, COL.cyan, 0.6 * P.a);
     L.glowDot(ctx, P.x, AY, 7, "#ffffff", 0.9 * P.a);
@@ -563,7 +926,7 @@
   function drawStem(ctx, L, M, e, pp, col, dim, t) {
     const sp = eo(seg(pp, 0.12, 0.3));
     if (sp <= 0) return;
-    const dir = e.up ? -1 : 1;
+    const AY = M.AY, dir = e.up ? -1 : 1;
     const y0 = AY + dir * 20, y1 = AY + dir * M.stem;
     const yy = lerp(y0, y1, sp);
     L.line(ctx, e.x, y0, e.x, yy, col, 2, 0.7, { alpha: 0.9 * dim, cap: "butt" });
@@ -573,10 +936,10 @@
     ctx.beginPath(); ctx.moveTo(e.x, y0); ctx.lineTo(e.x, yy); ctx.stroke();
     ctx.restore();
   }
-  function drawNode(ctx, L, e, pp, col, dim, flash, isHL, hlS, T, t) {
+  function drawNode(ctx, L, M, e, pp, col, dim, flash, isHL, hlS, T, t) {
     const s = eob(seg(pp, 0, 0.35));
     if (s <= 0) return;
-    const x = e.x;
+    const x = e.x, AY = M.AY;
     const r = (11 + (isHL ? 5 * hlS : 0)) * s;
     // Halo
     L.glowDot(ctx, x, AY, 30 + 30 * flash + (isHL ? 26 * hlS : 0), col, (0.28 + 0.55 * flash + (isHL ? 0.3 * hlS : 0)) * dim);
@@ -604,7 +967,7 @@
   function cardGeom(M, e, isHL, hlB) {
     const w = M.cardW;
     const s = isHL ? 1 + (e.sMax - 1) * hlB : 1;
-    const ay = e.up ? AY - M.stem : AY + M.stem;
+    const ay = e.up ? M.AY - M.stem : M.AY + M.stem;
     const cx = clamp(e.x, M.SL + 16 + (w * s) / 2, M.SR - 16 - (w * s) / 2);
     return { w, s, ay, cx, cy: ay + (e.up ? -1 : 1) * (e.h * s) / 2 };
   }
@@ -683,45 +1046,19 @@
   }
 
   // ---------------- Text-Overlay (Engine-Stil, aber mit Verkleinerung/Umbruch für lange Texte) ----------------
-  let OV_KEY = null, OV = null;
-  function overlayLayout(ctx, text) {
-    if (OV && OV_KEY === text) return OV;
-    const str = upper(text).replace(/\s+/g, " ").trim();
-    const MAXW = 1160; // Box bis x ≈ 1250 – Kapitel-Badge rechts oben bleibt frei
-    let size = 40, lines = [str];
-    ctx.save();
-    const meas = (sz, s2) => { setFont(ctx, 700, sz, F_HEAD, 2); return ctx.measureText(s2).width; };
-    while (size > 30 && meas(size, str) + 70 > MAXW) size -= 2;
-    if (meas(size, str) + 70 > MAXW) {
-      size = 32;
-      for (;;) {
-        setFont(ctx, 700, size, F_HEAD, 2);
-        lines = wrapBalanced(ctx, str, MAXW - 70);
-        if (lines.length <= 2 || size <= 24) break;
-        size -= 2;
-      }
-      if (lines.length > 2) { setFont(ctx, 700, size, F_HEAD, 2); lines = lines.slice(0, 2); lines[1] = ellipsize(ctx, lines[1], MAXW - 70); }
-    }
-    let w = 0;
-    for (const ln of lines) w = Math.max(w, meas(size, ln));
-    ctx.restore();
-    OV_KEY = text; OV = { size, lines, w: w + 70 };
-    return OV;
-  }
   function drawOverlay(ctx, L, text, t, d) {
     if (!text || !String(text).trim()) return;
     const a = L.env(t, 0.5, d - 0.3, 0.45);
     if (a <= 0) return;
     const O = overlayLayout(ctx, String(text));
-    const x = 90, top = 96, lhh = O.size * 1.18;
-    const h = O.size + 34 + (O.lines.length - 1) * lhh;
+    const x = OV_X, top = OV_TOP;
     const slide = eo(seg(t, 0.5, 0.5));
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0); // wie die Engine: unabhängig von der Kamerafahrt
     ctx.globalAlpha = a;
-    ctx.fillStyle = COL.amber; ctx.fillRect(x, top, 8, h);
-    L.panel(ctx, x + 14, top, O.w * slide, h, { fill: "rgba(4,12,26,0.82)", stroke: "rgba(255,179,71,0.35)", r: 4, alpha: a });
-    O.lines.forEach((ln, k) => txt(ctx, ln, x + 44, top + 17 + 0.97 * O.size + k * lhh, { font: F_HEAD, weight: 700, size: O.size, ls: 2, color: COL.white, alpha: a * seg(t, 0.75, 0.35) }));
+    ctx.fillStyle = COL.amber; ctx.fillRect(x, top, 8, O.h);
+    L.panel(ctx, x + 14, top, O.w * slide, O.h, { fill: "rgba(4,12,26,0.82)", stroke: "rgba(255,179,71,0.35)", r: 4, alpha: a });
+    O.lines.forEach((ln, k) => txt(ctx, ln, x + 44, top + 17 + 0.97 * O.size + k * O.lhh, { font: F_HEAD, weight: 700, size: O.size, ls: 2, color: COL.white, alpha: a * seg(t, 0.75, 0.35) }));
     ctx.restore();
   }
 
@@ -729,22 +1066,26 @@
   function drawScene(ctx, p) {
     const L = p.L || (window.CE && window.CE.lib);
     if (!L) return;
-    const W = p.W || 1920;
+    const W = p.W || W0;
     const t = Math.max(0, +p.t || 0);
     const d = Math.max(0.5, +p.d || 8);
-    const M = getModel(ctx, p.params, cameraInset(p));
-    const n = M.n;
-    const T = timing(d, n);
-    const tn = M.ev.map((_, i) => (n > 1 ? lerp(T.first, T.last, i / (n - 1)) : T.first));
-    const headX = headPos(t, T, tn, M);
+    const sc = p.scene || {};
+    const foc = p.params && Array.isArray(p.params.focus) ? p.params.focus : null;
+    const env = {
+      cam: sc.camera || "static", d, text: p.text ? String(p.text) : "",
+      fx: (foc && isFinite(+foc[0]) ? +foc[0] : 0.5) * W0, fy: (foc && isFinite(+foc[1]) ? +foc[1] : 0.5) * H0,
+    };
+    const M = getModel(ctx, p.params, env);
+    const T = M.T, tn = T.tn;
+    const headX = headPos(t, T);
     const hlE = M.hl >= 0 ? seg(t, T.hl, T.hlDur) : 0;
     const hlS = eo(hlE), hlB = eob(hlE);
     const P = pulseState(M, T, t);
 
-    drawAtmosphere(ctx, t, W);
+    drawAtmosphere(ctx, t, W, M.AY);
 
     // Ambientes Leuchten hinter der hervorgehobenen Karte
-    if (M.hl >= 0 && hlS > 0) {
+    if (M.hl >= 0 && hlS > 0 && t >= tn[M.hl]) {
       const e = M.ev[M.hl];
       const G = cardGeom(M, e, true, hlB);
       // Halo um die Karte: gestaffelte, transparente Vollflächen (günstig, kein Verlauf)
@@ -756,20 +1097,23 @@
       ctx.restore();
     }
 
+    drawTitle(ctx, L, M, T, t);
+
     // Stiele liegen unter Achse und Knoten
     const st = M.ev.map((e, i) => {
       const isHL = i === M.hl;
       const pp = seg(t, tn[i], T.pop);
       const col = isHL ? hotMix(e.color, e.hlColor, hlS) : e.color;
-      const dim = M.hl >= 0 && !isHL ? 1 - 0.42 * hlS : 1;
+      // gedimmt werden nur Karten, die VOR dem Highlight da waren – spätere Ereignisse bleiben hell
+      const dim = M.hl >= 0 && !isHL && M.dimOthers && tn[i] <= T.hl + 0.05 ? 1 - 0.42 * hlS : 1;
       const flash = P ? P.a * Math.max(0, 1 - Math.abs(P.x - e.x) / 70) : 0;
       return { e, i, isHL, pp, col, dim, flash, on: t >= tn[i] };
     });
     for (const s of st) if (s.on) drawStem(ctx, L, M, s.e, s.pp, s.col, s.dim, t);
 
-    drawAxis(ctx, L, M, T, t, headX, tn);
+    drawAxis(ctx, L, M, T, t, headX);
     drawPulse(ctx, L, M, P);
-    for (const s of st) if (s.on) drawNode(ctx, L, s.e, s.pp, s.col, s.dim, s.flash, s.isHL, hlS, T, t);
+    for (const s of st) if (s.on) drawNode(ctx, L, M, s.e, s.pp, s.col, s.dim, s.flash, s.isHL, hlS, T, t);
     drawHead(ctx, L, M, T, t, headX);
 
     // Karten: Highlight zuletzt (liegt oben)

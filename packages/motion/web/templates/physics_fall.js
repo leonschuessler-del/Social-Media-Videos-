@@ -67,7 +67,7 @@
   const fmtFactor = (f) => (Math.abs(f - Math.round(f)) < 0.05 ? fmt(Math.round(f), 0) : fmt(f, 1));
 
   const clampT = (v, d) => clamp(v, Math.min(0.3, d / 2), Math.max(d - 0.3, d / 2));
-  const autoStep = (k) => (k >= 100 ? 10 : k >= 20 ? 5 : 1);
+  const autoStep = (k) => (k >= 100 ? 10 : 1);
   /** Gerundeter km/h-Wert als deutscher String (step −1/0 = automatisch). */
   function fmtKmh(k, step) {
     const st = step > 0 ? step : autoStep(k);
@@ -371,6 +371,24 @@
     ctx.restore();
   }
 
+  /** Overlay-Box (Bildschirmkoordinaten) des aktuellen Frames – für Kollisionsvermeidung unter Kamerafahrten. */
+  let OVR = null;
+  function overlayRect(ctx, text) {
+    if (!text || !String(text).trim()) return null;
+    const O = overlayLayout(ctx, String(text));
+    const lhh = O.size * 1.18;
+    return { x0: 90, y0: 96, x1: 104 + O.w, y1: 96 + O.size + 34 + (O.lines.length - 1) * lhh };
+  }
+  /** 1 = frei, → 0 wenn das Rechteck (Weltkoordinaten) unter der Overlay-Box läge. */
+  function overlayClear(ctx, x, y, w, h) {
+    if (!OVR) return 1;
+    let m; try { m = ctx.getTransform(); } catch (e) { return 1; }
+    const sx0 = m.a * x + m.c * y + m.e, sy0 = m.b * x + m.d * y + m.f;
+    const sx1 = sx0 + w * m.a;
+    if (sx1 < OVR.x0 - 8 || sx0 > OVR.x1 + 12) return 1;
+    return clamp((sy0 - OVR.y1 - 8) / 22);
+  }
+
   // ---------------- Zustand zum Zeitpunkt t ----------------
   function state(M, t) {
     const tr = clamp((t - M.t0) / M.N, 0, M.Tf); // reale Fallzeit
@@ -603,7 +621,7 @@
     }
     const k = t - tSnap; // Bildschirmzeit seit Riss
     // oberes Seilstück schnellt nach oben und verblasst
-    const ua = a * (1 - seg(k, 0.25, 0.9));
+    const ua = a * (1 - 0.55 * seg(k, 0.25, 0.9)); // oberes Seilende bleibt (gedimmt) hängen
     if (ua > 0) {
       const lift = 70 * easeOut(seg(k, 0, 0.6));
       ctx.save();
@@ -660,20 +678,145 @@
     }
     ctx.restore();
     // Marken + Beschriftung
+    const MK = M.mkL; // Chip-Layout der Zwischenmarken (falls vorhanden)
+    let lastDot = -1e9;
     for (const m of M.marks) {
       const age = t - (M.t0 + m.t * M.N); // Bildschirmzeit seit Passieren
       if (age < 0) break;
       const pop = easeOutBack(seg(age, 0, 0.25));
       const col = m.final ? COL.amber : COL.cyan;
+      // Zeitlabel ausblenden, wo ein Marken-Chip steht
+      let hide = 0;
+      if (MK && !m.final) for (const c of MK) { if (Math.abs(m.y - c.cy) < c.h / 2 + 16) hide = Math.max(hide, seg(t, c.m.tShow - 0.16, 0.16)); }
+      const dotOk = m.final || Math.abs(m.y - lastDot) >= 9;
+      if (dotOk) lastDot = m.y;
       // Verbindung Kabinenunterkante -> Zeitspur
       ctx.save(); ctx.globalAlpha = a0 * (m.final ? 0.5 : 0.22); ctx.strokeStyle = col; ctx.lineWidth = 1; ctx.setLineDash([3, 4]);
       ctx.beginPath(); ctx.moveTo(CX + CAR_W / 2 + 8, m.y); ctx.lineTo(TX - 6, m.y); ctx.stroke(); ctx.restore();
-      halo(ctx, TX, m.y, 14, col, a0 * (0.35 + 0.5 * Math.exp(-age * 3)) * pop);
-      dot(ctx, TX, m.y, 4.2 * pop, col, a0);
-      if (m.showLabel) {
-        txt(ctx, m.label, TX + 16, m.y + 8, { font: F_MONO, weight: 700, size: m.final ? 24 : 20, color: m.final ? COL.amber : COL.muted, alpha: a0 * seg(age, 0.03, 0.2) });
+      if (dotOk) {
+        halo(ctx, TX, m.y, 14, col, a0 * (0.35 + 0.5 * Math.exp(-age * 3)) * pop);
+        dot(ctx, TX, m.y, 4.2 * pop, col, a0);
+      }
+      if (m.showLabel && hide < 0.99) {
+        txt(ctx, m.label, TX + 16, m.y + 8, { font: F_MONO, weight: 700, size: m.final ? 24 : 20, color: m.final ? COL.amber : COL.muted, alpha: a0 * seg(age, 0.03, 0.2) * (1 - hide) });
       }
     }
+  }
+
+  // ---------------- Zwischenmarken (markers) ----------------
+  const CHIP_X = TX + 18, CHIP_MAXW = PX - 18 - (TX + 18);
+  function chipAlpha(c, t) { return seg(t, c.m.tShow, 0.3); }
+  /** Chip-Layout (einmal pro Modell): Größe, Umbruch, vertikale Entzerrung. */
+  function markerLayout(ctx, M) {
+    if (M.mkL !== undefined) return M.mkL;
+    if (!M.markers.length) { M.mkL = null; return null; }
+    const out = [];
+    for (const m of M.markers) {
+      const r1 = "h = " + fmtH(m.s) + " m";
+      const w1 = meas(ctx, r1, 700, 15, F_MONO, 1);
+      const inner = CHIP_MAXW - 26;
+      let sz = 24, lines = [m.label];
+      while (sz > 16 && meas(ctx, m.label, 700, sz, F_BODY, 0) > inner) sz -= 1;
+      if (meas(ctx, m.label, 700, sz, F_BODY, 0) > inner) {
+        sz = 17; lines = []; let cur = "";
+        for (const w of m.label.split(/\s+/)) { const tt = cur ? cur + " " + w : w; if (cur && meas(ctx, tt, 700, sz, F_BODY, 0) > inner) { lines.push(cur); cur = w; } else cur = tt; }
+        if (cur) lines.push(cur);
+        if (lines.length > 3) lines = [lines[0], lines[1], lines.slice(2).join(" ")];
+        lines = lines.map((ln) => { if (meas(ctx, ln, 700, sz, F_BODY, 0) <= inner) return ln; let q = ln; while (q.length > 1 && meas(ctx, q + "…", 700, sz, F_BODY, 0) > inner) q = q.slice(0, -1); return q.trimEnd() + "…"; });
+      }
+      let w2 = 0; for (const ln of lines) w2 = Math.max(w2, meas(ctx, ln, 700, sz, F_BODY, 0));
+      const lh = sz * 1.15;
+      const h = Math.round(24 + sz * 0.95 + (lines.length - 1) * lh + 10);
+      out.push({ m, r1, lines, sz, lh, w: Math.min(CHIP_MAXW, Math.max(w1, w2) + 26), h, y: M.yOfS(m.s), cy: M.yOfS(m.s) });
+    }
+    // vertikal entzerren (Abstand 8 px), unten Platz für die Aufprall-Zeitmarke lassen
+    const bottom = Y0 - 20, gap = 8;
+    for (let i = 1; i < out.length; i++) { const p = out[i - 1], c = out[i]; c.cy = Math.max(c.cy, p.cy + p.h / 2 + gap + c.h / 2); }
+    for (let i = out.length - 1; i >= 0; i--) { const c = out[i]; const lim = i === out.length - 1 ? bottom : out[i + 1].cy - out[i + 1].h / 2 - gap; if (c.cy + c.h / 2 > lim) c.cy = lim - c.h / 2; }
+    M.mkL = out;
+    return out;
+  }
+  /** Strich am Lineal, Ziellinie und Zielring (hinter der Kabine). */
+  function drawMarkerGuides(ctx, M, t, S) {
+    const MK = M.mkL; if (!MK) return;
+    const a = easeOut(seg(S.tb, 0.55, 0.5)); if (a <= 0) return;
+    for (const c of MK) {
+      const y = c.y, passed = t >= c.m.tPass, k = t - c.m.tPass;
+      const flash = passed ? Math.exp(-k * 3) : 0;
+      // Ziellinie quer durch den Schacht
+      ctx.save(); ctx.globalAlpha = a * (passed ? 0.34 + 0.4 * flash : 0.2); ctx.strokeStyle = COL.amber; ctx.lineWidth = 1.3; ctx.setLineDash([6, 6]);
+      ctx.lineDashOffset = -t * 10;
+      ctx.beginPath(); ctx.moveTo(RX + 8, y + 0.5); ctx.lineTo(TX - 8, y + 0.5); ctx.stroke(); ctx.restore();
+      if (flash > 0.02) glowPoly(ctx, [[SH_L + 4, y], [SH_R - 4, y]], COL.amber, 2, flash * a, 1);
+      // Strich am Lineal
+      glowPoly(ctx, [[RX - 26, y], [RX + 8, y]], COL.amber, 2.6, a, 0.8);
+      // Zielring an der Zeitspur
+      if (!passed) {
+        const pu = 0.5 + 0.5 * Math.sin(t * 3 + y * 0.05);
+        ctx.save(); ctx.globalAlpha = a * (0.55 + 0.3 * pu); ctx.strokeStyle = COL.amber; ctx.lineWidth = 1.6;
+        ctx.beginPath(); ctx.arc(TX, y, 6, 0, TAU); ctx.stroke(); ctx.restore();
+      }
+    }
+  }
+  /** Eingefrorene Label-Chips (vor allem anderen links). */
+  function drawMarkerChips(ctx, M, t, S) {
+    const MK = M.mkL; if (!MK) return;
+    const a0 = easeOut(seg(S.tb, 0.55, 0.5)); if (a0 <= 0) return;
+    for (const c of MK) {
+      const passed = t >= c.m.tPass;
+      if (passed) {
+        const k = t - c.m.tPass;
+        halo(ctx, TX, c.y, 26, COL.amber, a0 * (0.3 + 0.55 * Math.exp(-k * 2.5) + 0.12 * Math.sin(t * 2.2 + c.y)));
+        dot(ctx, TX, c.y, 5.2, COL.amber, a0);
+      }
+      const ca = chipAlpha(c, t) * a0; if (ca <= 0) continue;
+      const pop = easeOutBack(seg(t, c.m.tShow, 0.35));
+      const x = CHIP_X, top = c.cy - c.h / 2;
+      // Verbindung Punkt -> Chip
+      strokePoly(ctx, Math.abs(c.cy - c.y) < 2 ? [[TX + 7, c.y], [x, c.y]] : [[TX + 7, c.y], [TX + 11, c.y], [x - 2, c.cy]], rgba(COL.amber, 0.8), 1.4, ca);
+      const w = Math.max(20, c.w * clamp(0.35 + 0.65 * pop, 0, 1.08));
+      fillRR(ctx, x, top, w, c.h, 6, "rgba(10,14,22,0.92)", ca);
+      strokeRR(ctx, x, top, w, c.h, 6, rgba(COL.amber, 0.75 + 0.2 * Math.sin(t * 2 + c.y * 0.1)), 1.5, ca);
+      fillRR(ctx, x, top + 6, 3, c.h - 12, 1.5, COL.amber, ca);
+      const ta = ca * seg(t, c.m.tShow + 0.08, 0.25);
+      txt(ctx, c.r1, x + 14, top + 20, { font: F_MONO, weight: 700, size: 15, ls: 1, color: COL.muted, alpha: ta });
+      c.lines.forEach((ln, i) => txt(ctx, ln, x + 14, top + 24 + c.sz * 0.9 + i * c.lh, { font: F_BODY, weight: 700, size: c.sz, color: COL.amber, alpha: ta }));
+    }
+  }
+
+  // ---------------- Schlusstext (end_label) ----------------
+  function endLayout(ctx, M, maxW, size0, minSize, maxLines) {
+    maxLines = maxLines || 3;
+    const key = maxW + "|" + size0 + "|" + maxLines;
+    if (M.elL && M.elL.key === key) return M.elL;
+    const s = M.endLabel; let sz = size0, lines = [s];
+    while (sz > minSize && meas(ctx, s, 600, sz, F_BODY, 0.3, true) > maxW) sz -= 1;
+    if (meas(ctx, s, 600, sz, F_BODY, 0.3, true) > maxW) {
+      lines = []; let cur = "";
+      for (const w of s.split(/\s+/)) { const tt = cur ? cur + " " + w : w; if (cur && meas(ctx, tt, 600, sz, F_BODY, 0.3, true) > maxW) { lines.push(cur); cur = w; } else cur = tt; }
+      if (cur) lines.push(cur);
+      if (lines.length > maxLines) lines = lines.slice(0, maxLines - 1).concat([lines.slice(maxLines - 1).join(" ")]);
+      lines = lines.map((ln) => { if (meas(ctx, ln, 600, sz, F_BODY, 0.3, true) <= maxW) return ln; let q = ln; while (q.length > 1 && meas(ctx, q + "…", 600, sz, F_BODY, 0.3, true) > maxW) q = q.slice(0, -1); return q.trimEnd() + "…"; });
+    }
+    let w = 0; for (const ln of lines) w = Math.max(w, meas(ctx, ln, 600, sz, F_BODY, 0.3, true));
+    M.elL = { key, lines, sz, w };
+    return M.elL;
+  }
+  function drawEndLabelShaft(ctx, M, t, yb) {
+    if (!M.endLabel || M.endPos !== "shaft") return;
+    const a = easeOut(seg(t, M.tEnd, 0.9)); if (a <= 0) return;
+    const E = endLayout(ctx, M, 200, 26, 18, 3);
+    const lh = E.sz * 1.2;
+    const bw = E.w + 32, bh = E.sz + 22 + (E.lines.length - 1) * lh;
+    const carTop = yb - PLANK - CAB_H - XHEAD;
+    const by = carTop - 58 - bh + (1 - a) * 10;
+    const bx = CX - bw / 2;
+    fillRR(ctx, bx, by, bw, bh, bh / 2 > 24 ? 12 : bh / 2, "rgba(6,12,24,0.9)", a);
+    strokeRR(ctx, bx, by, bw, bh, bh / 2 > 24 ? 12 : bh / 2, rgba(COL.steel, 0.55), 1.3, a);
+    E.lines.forEach((ln, i) => txt(ctx, ln, CX, by + 11 + E.sz * 0.86 + i * lh, { font: F_BODY, italic: true, weight: 600, size: E.sz, ls: 0.3, color: COL.white, align: "center", alpha: a * 0.95 }));
+    // feine Führungslinie zur Kabine
+    const ly0 = by + bh + 4, ly1 = carTop - 34;
+    if (ly1 > ly0 + 4) { ctx.save(); ctx.globalAlpha = 0.5 * a; ctx.strokeStyle = COL.steel; ctx.lineWidth = 1.2; ctx.setLineDash([2, 4]); ctx.beginPath(); ctx.moveTo(CX, ly0); ctx.lineTo(CX, ly1); ctx.stroke(); ctx.restore(); }
   }
 
   // ---------------- Maßpfeil h (Fallhöhe) + Positionszeiger ----------------
@@ -792,11 +935,13 @@
     txt(ctx, "SCHACHTGRUBE", CX, PIT + 38, { font: F_MONO, weight: 700, size: 16, ls: 3, color: COL.muted, align: "center", alpha: 0.8 * a });
     // Seilriss-Hinweis
     const k = t - M.t0;
-    const sa = seg(k, 0.02, 0.25) * (1 - seg(k, Math.max(1.2, 0.5 * M.Ts), 0.5));
+    let sa = seg(k, 0.02, 0.25) * (1 - 0.35 * seg(k, Math.max(1.2, 0.5 * M.Ts), 0.6)); // bleibt lesbar
     if (sa > 0) {
       const ys = M.yOfS(0) - PLANK - CAB_H - XHEAD - 5 - SNAP_D;
       const x = SH_R + 12, y = ys + 26;
       const w = meas(ctx, "TRAGSEIL GERISSEN", 700, 18, F_HEAD, 2) + 24;
+      sa *= overlayClear(ctx, x, y, w, 28);
+      if (sa <= 0.003) return;
       strokePoly(ctx, [[CX + 8, ys + 2], [CX + 40, y + 14], [x, y + 14]], rgba(COL.red, 0.8), 1.5, sa);
       fillRR(ctx, x, y, w, 28, 4, "rgba(40,6,10,0.85)", sa);
       strokeRR(ctx, x, y, w, 28, 4, COL.red, 1.5, sa);
@@ -843,6 +988,23 @@
     return endX;
   }
 
+  function headerLayout(ctx, M) {
+    if (M.hd) return M.hd;
+    const bw = meas(ctx, M.badge, 700, 20, F_MONO, 3) + 56;
+    const avail = IX1 - bw - 26 - IX0;
+    const title = M.title.toUpperCase();
+    const subW = meas(ctx, "ENERGIEERHALTUNG", 700, 16, F_MONO, 3);
+    let size = 30, ls = 5, tw = meas(ctx, title, 700, size, F_HEAD, ls);
+    const sub = tw + 22 + subW <= avail;
+    let out = title;
+    if (!sub) {
+      for (const [sz, l] of [[30, 5], [30, 4], [30, 3], [28, 3], [26, 3], [25, 2.5], [24, 2], [22, 2]]) { size = sz; ls = l; tw = meas(ctx, title, 700, sz, F_HEAD, l); if (tw <= avail) break; }
+      if (tw > avail) { let q = title; while (q.length > 1 && meas(ctx, q + "…", 700, size, F_HEAD, ls) > avail) q = q.slice(0, -1); out = q.trimEnd() + "…"; tw = meas(ctx, out, 700, size, F_HEAD, ls); }
+    }
+    M.hd = { title: out, size, ls, tw, sub, bw };
+    return M.hd;
+  }
+
   function drawPanel(ctx, M, t, S, L, d) {
     const ap = easeOut(seg(S.tb, 0.1, 0.6)); if (ap <= 0) return;
     const slide = (1 - ap) * 40;
@@ -852,13 +1014,13 @@
     const cm = [[PX, PY, 1, 1], [PX + PW, PY, -1, 1], [PX, PY + PH, 1, -1], [PX + PW, PY + PH, -1, -1]];
     for (const [x, y, sx, sy] of cm) strokePoly(ctx, [[x + sx * 26, y + sy * 8], [x + sx * 8, y + sy * 8], [x + sx * 8, y + sy * 26]], COL.cyan, 2, 0.7 * ap);
 
-    // Kopfzeile
+    // Kopfzeile (gegen Badge gemessen)
     const hy = PY + 56;
-    txt(ctx, M.title.toUpperCase(), IX0, hy, { font: F_HEAD, weight: 700, size: 30, ls: 5, color: COL.white, alpha: ap });
-    const tw = meas(ctx, M.title.toUpperCase(), 700, 30, F_HEAD, 5);
-    txt(ctx, "ENERGIEERHALTUNG", IX0 + tw + 22, hy - 2, { font: F_MONO, weight: 700, size: 16, ls: 3, color: COL.muted, alpha: 0.8 * ap });
+    const HD = headerLayout(ctx, M);
+    txt(ctx, HD.title, IX0, hy, { font: F_HEAD, weight: 700, size: HD.size, ls: HD.ls, color: COL.white, alpha: ap });
+    if (HD.sub) txt(ctx, "ENERGIEERHALTUNG", IX0 + HD.tw + 22, hy - 2, { font: F_MONO, weight: 700, size: 16, ls: 3, color: COL.muted, alpha: 0.8 * ap });
     // Zeitlupen-Badge
-    const bw = meas(ctx, M.badge, 700, 20, F_MONO, 3) + 56;
+    const bw = HD.bw;
     const bx = IX1 - bw, by = hy - 28;
     const bcol = M.mode === "slow" ? COL.amber : M.mode === "fast" ? COL.cyan : COL.steel;
     const running = S.falling ? 1 : 0.35;
@@ -882,20 +1044,25 @@
     txt(ctx, " = " + fmt(M.g, 2) + " m/s²", gx + gw, fBase - 24, { font: F_BODY, weight: 600, size: 42, color: COL.white, alpha: ga });
     if (M.air) {
       const na = ap * seg(S.tb, 0.8, 0.4);
-      const nt = "ohne Luftwiderstand";
-      const nw = meas(ctx, nt, 600, 20, F_BODY, 0) + 42;
+      const nt = M.airText;
+      const nMax = IX1 - gx - 42;
+      const nfs = Math.max(14, Math.min(20, (20 * nMax) / Math.max(1, meas(ctx, nt, 600, 20, F_BODY, 0))));
+      const nw = meas(ctx, nt, 600, nfs, F_BODY, 0) + 42;
       const ny = fBase + 4;
       fillRR(ctx, gx, ny, nw, 32, 16, rgba(COL.amber, 0.1), na);
       strokeRR(ctx, gx, ny, nw, 32, 16, rgba(COL.amber, 0.7), 1.3, na);
       // Info-Symbol
       strokeRR(ctx, gx + 10, ny + 7, 18, 18, 9, COL.amber, 1.5, na);
       txt(ctx, "i", gx + 19, ny + 22, { font: F_BODY, weight: 800, size: 14, color: COL.amber, align: "center", alpha: na });
-      txt(ctx, nt, gx + 34, ny + 23, { font: F_BODY, weight: 600, size: 20, color: COL.amber, alpha: na });
+      txt(ctx, nt, gx + 34, ny + 16 + nfs * 0.36, { font: F_BODY, weight: 600, size: nfs, color: COL.amber, alpha: na });
     }
     // Herleitung -> nach Aufprall: eingesetzte Werte
     const dy = PY + 250;
-    const subA = S.impacted ? seg(S.ti, 0.25, 0.5) : 0;
-    const derA = ap * seg(S.tb, 0.8, 0.5) * (1 - subA);
+    // erst blendet die Herleitung aus, dann erscheint die Rechnung mit eingesetzten Werten (kein Textsalat)
+    const fo0 = Math.max(M.t1, M.tRes - 0.28);
+    const derOut = S.impacted ? seg(t, fo0, Math.max(0.05, M.tRes - fo0)) : 0;
+    const subA = S.impacted ? seg(t, M.tRes, 0.4) : 0;
+    const derA = ap * seg(S.tb, 0.8, 0.5) * (1 - derOut);
     if (derA > 0) {
       let x = IX0;
       x += txt(ctx, "aus  ", x, dy, { size: 24, weight: 400, color: COL.muted, alpha: derA });
@@ -969,11 +1136,20 @@
     const kx = IX1 - 150;
     const mEnd = numRight + 16 + meas(ctx, "m/s", 600, 44, F_BODY, 0);
     const kS = Math.min(92, (92 * (kx - mEnd - 50)) / Math.max(1, meas(ctx, fmt(M.kmh, 0), 700, 92, F_MONO, 0)));
-    txt(ctx, fmt(S.v * 3.6, 0), kx, nb, { font: F_MONO, weight: 700, size: kS, color: COL.white, align: "right", alpha: va, glow: hit ? 10 + 8 * pulse : 0, glowColor: COL.red });
-    txt(ctx, "km/h", kx + 14, nb, { font: F_BODY, weight: 600, size: 40, color: COL.muted, alpha: va });
+    // Marken-Blitz: km/h leuchtet kurz, wenn die Kabine eine Zwischenmarke passiert
+    let mf = 0; for (const m of M.markers) if (t >= m.tPass && !(hit && m.s >= M.h - 1e-6)) mf = Math.max(mf, Math.exp(-(t - m.tPass) * 3));
+    const rr = hit && M.result ? easeOut(seg(t, M.tRes, 0.45)) : 0;
+    if (rr < 1) txt(ctx, fmt(S.v * 3.6, 0), kx, nb - 14 * rr, { font: F_MONO, weight: 700, size: kS, color: mf > 0.05 ? COL.hot : COL.white, align: "right", alpha: va * (1 - rr), glow: hit ? 10 + 8 * pulse : 26 * mf, glowColor: hit ? COL.red : COL.amber });
+    const unitOut = rr > 0 && M.result && (!M.result.num || (M.result.unit && M.result.unit !== "km/h")); // freier Text / andere Einheit ersetzt „km/h“
+    txt(ctx, "km/h", kx + 14, nb, { font: F_BODY, weight: 600, size: 40, color: COL.muted, alpha: va * (unitOut ? 1 - rr : 1) });
+    if (rr > 0) drawResult(ctx, M, kx, nb + 12 * (1 - rr), mEnd, va * rr, pulse);
     txt(ctx, "ENTSPRICHT", kx - 200, vy0, { font: F_MONO, weight: 700, size: 15, ls: 3, color: COL.muted, alpha: va * 0.8 });
-    // Balken v / v_end
+    // Balken v / v_end (weicht im Panel-Modus dem Schlusstext)
+    const ea = M.endLabel && M.endPos === "panel" ? easeOut(seg(t, M.tEnd, 0.9)) : 0;
     const barY = nb + 24, bx0 = IX0, bx1 = IX1;
+    if (ea > 0) drawEndLabelPanel(ctx, M, nb, ea * ap);
+    if (ea < 1) {
+    const va0 = va; { const va = va0 * (1 - ea);
     fillRR(ctx, bx0, barY, bx1 - bx0, 6, 3, rgba(COL.cyan, 0.12), va);
     const fw = (bx1 - bx0) * clamp(S.vf);
     if (fw > 1) {
@@ -982,8 +1158,50 @@
       fillRR(ctx, bx0, barY, fw, 6, 3, g, va);
       halo(ctx, bx0 + fw, barY + 3, 18, hit ? COL.red : COL.amber, 0.7 * va * (hit ? 0.6 + 0.4 * pulse : 1));
     }
+    } }
     ctx.restore();
     void d;
+  }
+
+  /** Gerundeter / freier Ergebniswert im km/h-Feld (rechtsbündig an kx, Einheit bleibt an kx + 14). */
+  function drawResult(ctx, M, kx, nb, mEnd, a, pulse) {
+    const R = M.result; if (!R || a <= 0) return;
+    if (!M.resL) {
+      const avail = kx - (mEnd + 36);
+      if (R.num) {
+        const pw = R.pre ? meas(ctx, R.pre, 600, 46, F_BODY, 0) : 0;
+        const nw = meas(ctx, R.num, 700, 92, F_MONO, 0);
+        const tot = nw + (R.pre ? pw + 14 : 0);
+        const k = Math.min(1, avail / Math.max(1, tot));
+        const unit = R.unit && R.unit !== "km/h" ? R.unit : "";
+        M.resL = { size: 92 * k, pre: 46 * Math.max(0.75, k), gap: 14 * k, unit };
+      } else {
+        const full = kx + 14 + meas(ctx, "km/h", 600, 40, F_BODY, 0) - (mEnd + 36);
+        let sz = 56; while (sz > 22 && meas(ctx, R.text, 700, sz, F_BODY, 0) > full) sz -= 2;
+        M.resL = { size: sz, full };
+      }
+    }
+    const RL = M.resL;
+    if (R.num) {
+      txt(ctx, R.num, kx, nb, { font: F_MONO, weight: 700, size: RL.size, color: COL.white, align: "right", alpha: a, glow: 12 + 10 * pulse, glowColor: COL.amber });
+      if (R.pre) {
+        const nw = meas(ctx, R.num, 700, RL.size, F_MONO, 0);
+        txt(ctx, R.pre, kx - nw - RL.gap, nb - RL.size * 0.08, { font: F_BODY, weight: 600, size: RL.pre, color: COL.amber, align: "right", alpha: a });
+      }
+      if (RL.unit) txt(ctx, RL.unit, kx + 14, nb, { font: F_BODY, weight: 600, size: 40, color: COL.muted, alpha: a });
+    } else {
+      const right = kx + 14 + meas(ctx, "km/h", 600, 40, F_BODY, 0);
+      txt(ctx, R.text, right, nb, { font: F_BODY, weight: 700, size: RL.size, color: COL.white, align: "right", alpha: a, glow: 10 + 8 * pulse, glowColor: COL.amber });
+    }
+  }
+
+  function drawEndLabelPanel(ctx, M, nb, a) {
+    const E = endLayout(ctx, M, 400, 23, 16, 1);
+    const y = nb + 31 + (1 - a) * 6;
+    const lw = 34, xr = IX1;
+    const w = E.w;
+    strokePoly(ctx, [[xr - w - 14 - lw, y - E.sz * 0.33], [xr - w - 14, y - E.sz * 0.33]], rgba(COL.steel, 0.7), 1.5, a);
+    txt(ctx, E.lines[0], xr, y, { font: F_BODY, italic: true, weight: 600, size: E.sz, ls: 0.3, color: COL.white, align: "right", alpha: a * 0.95 });
   }
 
   function drawMiniChart(ctx, M, t, S, x, y, w, h, a) {
@@ -1009,6 +1227,11 @@
     const m = Math.max(1, Math.ceil(f * n));
     for (let i = 0; i <= m; i++) { const ff = Math.min(f, i / n); cur.push([lerp(x0, x1, ff), lerp(y0, y1, Math.sqrt(ff))]); }
     glowPoly(ctx, cur, COL.amber, 2.5, a, 0.9);
+    for (const mk of M.markers) {
+      const fm = clamp(mk.s / M.h), mx = lerp(x0, x1, fm), my = lerp(y0, y1, Math.sqrt(fm));
+      if (S.s >= mk.s - 1e-9) { dot(ctx, mx, my, 4, COL.amber, a); strokePoly(ctx, [[mx, my + 6], [mx, y0]], rgba(COL.amber, 0.35), 1, a); }
+      else { ctx.save(); ctx.globalAlpha = 0.6 * a; ctx.strokeStyle = COL.amber; ctx.lineWidth = 1.3; ctx.beginPath(); ctx.arc(mx, my, 4, 0, TAU); ctx.stroke(); ctx.restore(); }
+    }
     const px = lerp(x0, x1, f), py = lerp(y0, y1, Math.sqrt(f));
     halo(ctx, px, py, 16, COL.amber, 0.6 * a * (0.7 + 0.3 * Math.sin(t * 5)));
     dot(ctx, px, py, 4.5, COL.white, a);
@@ -1056,9 +1279,12 @@
       yb += Math.sin(t * 2.2) * 0.8; // leichtes Pendeln am Seil
     }
 
+    markerLayout(ctx, M);
+    OVR = overlayRect(ctx, p.text);
     drawDust(ctx, t, S);
     drawShaft(ctx, M, t, S);
     drawRuler(ctx, M, t, S, L);
+    drawMarkerGuides(ctx, M, t, S);
     drawStrobe(ctx, M, t, S);
     drawBuffer(ctx, t, S, M);
     drawSpeedLines(ctx, M, t, S, yb);
@@ -1070,6 +1296,8 @@
     drawVelocityArrow(ctx, M, t, S, yb, carA, L);
     drawImpact(ctx, M, t, S, L);
     drawLeftLabels(ctx, M, t, S);
+    drawMarkerChips(ctx, M, t, S);
+    drawEndLabelShaft(ctx, M, t, yb);
     drawPanel(ctx, M, t, S, L, d);
     drawOverlay(ctx, L, p.text, t, d);
   }

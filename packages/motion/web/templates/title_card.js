@@ -1,7 +1,19 @@
-/* Template „title_card“ – Eröffnungs- bzw. Abschnitts-Titelkarte im Stil „Visual Science“.
+/* Template „title_card“ – Eröffnungs-, Abschnitts- bzw. Abspann-Titelkarte im Stil „Visual Science“.
    Hintergrund: langsam rotierender Röntgen-/Blueprint-Schacht (Triebwerksraum, Treibscheibe, Tragseile,
    Fahrkorb, Gegengewicht, Führungsschienen, Geschwindigkeitsbegrenzer, Puffer) mit Scanlinie.
-   Vordergrund: Kicker (Amber, Mono, Decode-Effekt), Titel (Oxanium-Versalien, Scan-Maske + Glow), Lineal, Untertitel.
+   Vordergrund: Kicker (Amber, Mono, Decode-Effekt), Titel (Oxanium-Versalien, Scan-Maske + Glow), Lineal, Untertitel,
+   optional Stoppuhr-HUD, Abonnieren-Button und Engine-artige Overlay-Box oben links.
+   ownsText: p.text wird NICHT als Overlay gezeichnet, sondern nur als Untertitel-Fallback (außer overlay:true).
+
+   BEATS (params.beats, Sekunden ab Szenenstart, geklemmt auf [0,3; d−0,3]):
+     [0] = Titel-Scan startet (Zeile 1; weitere Zeilen +0,22·ts versetzt; Kicker ~0,3 s davor)
+     [1] = Untertitel blendet ein (Lineal spätestens mit ihm)
+     [2] = Seilbruch (nur breakRope)
+     [3] = Stoppuhr erscheint (nur stopwatch)
+     [4] = Abonnieren-Button erscheint (nur subscribe)
+   "at" (Sekunden) akzeptieren: kickerAt, titleAt, lineAt[i] (pro Titelzeile), subtitleAt, breakAt,
+     labels[i].at, stopwatch.at (+ stopwatch.runAt), subscribe.at, overlay.at.  Explizites "at" schlägt beats.
+   Ohne Angaben skaliert das Default-Timing mit d (ts = clamp(d/6; 0,55; 1,4)).
 
    params:
      title     Titel. Zeilenumbruch mit "\n" oder " | ", *Wort* = Akzentfarbe.   (Aliase: headline, heading, titel)
@@ -9,8 +21,20 @@
      kicker    kleine Zeile über dem Titel, Standard "VISUAL SCIENCE"; "" = aus.  (Aliase: eyebrow, overline, label)
      layout    "left" (Standard, Blueprint rechts) | "center" (Blueprint zentral dahinter)   (Alias: align)
      breakRope true = ein Tragseil reißt im Hintergrund (rot), die übrigen halten.  (Aliase: snap, ropeBreak, seilbruch, danger)
-     accent    Akzentfarbe für *markierte* Wörter: amber | red | cyan | green (Standard amber, bei breakRope red)
-     labels    Bauteil-Beschriftungen im Blueprint (Standard true, nur layout "left") */
+     accent    Akzentfarbe für *markierte* Wörter: amber | red | cyan | green | #rrggbb (Standard amber, bei breakRope red)
+     labels    Bauteil-Beschriftungen (nur layout "left"): true (Standard) | false | Liste von Bauteilen
+               ["fahrkorb", {part:"gegengewicht", at:3.2, text:"GEGENGEWICHT"} …]; Teile: triebwerksraum, treibscheibe,
+               bremse, begrenzer, seile, fahrkorb, fangvorrichtung, gegengewicht, schiene
+     hud       false (Standard) | true = "RÖNTGENANSICHT" | eigener Text – kleine Metazeile unten rechts (ohne Zahlen)
+     car       Fahrkorb-Bewegung: "up" (Standard) | "down" | "idle"   (Aliase: motion, carMotion, background_state: moving_up …)
+     carSpeed  Faktor für die Fahrgeschwindigkeit (Standard 1)
+     blueprintAlpha  Deckkraft des Blueprints (Standard left 0,95 / center 0,5); carAlpha = eigene Deckkraft für Fahrkorb+Tragseile
+     blueprintX / blueprintScale  Position (px oder Anteil von W) / Skalierung des Blueprints
+     stopwatch true | Zahl (eingefrorener Wert) | { at, value:0, run:false, runAt, rate:1, label, decimals:3, unit:"s" }
+               HUD-Stoppuhr unter dem Untertitel, Standard eingefroren auf „0,000 s“.
+     subscribe true | "Text" | { at, label:"ABONNIEREN", bell:true, color:"amber" } – Abonnieren-Button mit Glocke + Puls.
+     overlay   true (= p.text) | "Text" | { text, at } – Overlay-Box oben links wie die Engine; Textblock rückt nach unten.
+   Sicherheitsrand: kamerabewusst (slow_push_in/pull_out/pan/tilt) – Texte bleiben ≥ 90 px vom Rand und über der Untertitelzone. */
 (function () {
   "use strict";
   const CEX = window.CE;
@@ -43,6 +67,74 @@
   const eio = (x) => { x = clamp(x, 0, 1); return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
   const invEio = (y) => { y = clamp(y, 0, 1); return y < 0.5 ? Math.cbrt(y / 4) : 1 - Math.cbrt(2 * (1 - y)) / 2; };
   const seg = (t, a, dur) => clamp((t - a) / Math.max(1e-6, dur), 0, 1);
+  const num = (v) => { if (v === undefined || v === null || v === "" || typeof v === "boolean") return undefined; const n = Number(typeof v === "string" ? v.replace(",", ".") : v); return isFinite(n) ? n : undefined; };
+  const OFF = /^(0|false|nein|no|off|aus|none|keine?)$/i, ON = /^(1|true|ja|yes|on|an|y)$/i;
+  const hexA = (hex, a) => { const h = String(hex).replace("#", ""); if (!/^[0-9a-f]{6}$/i.test(h)) return `rgba(255,179,71,${a})`; const n = parseInt(h, 16); return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`; };
+  const colorOf = (v, dflt) => { const k = String(v ?? "").toLowerCase().trim(); return ACCENTS[k] || (/^#[0-9a-f]{6}$/i.test(k) ? k : dflt); };
+
+  /** Kamerabewusster Sicherheitsbereich in Template-Koordinaten: 90 px Rand und die 170-px-Untertitelzone bleiben
+      auch beim maximalen Zoom/Schwenk der Engine-Kamera frei (gleiche Formeln wie cameraTransform in engine.js). */
+  function safeArea(p, W, H) {
+    const sc = (p && p.scene) || {};
+    const cam = String(sc.camera || "static");
+    const P = (p && p.params) || {};
+    const f = Array.isArray(P.focus) ? P.focus : null;
+    const fx = f ? num(f[0]) : undefined, fy = f ? num(f[1]) : undefined;
+    const cx = (fx ?? 0.5) * W, cy = (fy ?? 0.5) * H;
+    let s = 1, dx = 0, dy = 0;
+    if (cam === "slow_push_in" || cam === "slow_pull_out") s = 1.1;
+    else if (cam === "pan_left" || cam === "pan_right") { s = 1.08; dx = 60; }
+    else if (cam === "tilt_down" || cam === "tilt_up") { s = 1.08; dy = 45; }
+    return {
+      x0: Math.max(90, cx - (cx - dx - 90) / s), x1: Math.min(W - 90, cx + (W - 90 - cx - dx) / s),
+      y0: Math.max(90, cy - (cy - dy - 90) / s), y1: Math.min(H - 170, cy + (H - 170 - cy - dy) / s), s,
+    };
+  }
+
+  // ---------------- Parameter-Parser für optionale Elemente ----------------
+  function parseStopwatch(v) {
+    if (v === undefined || v === null || v === false) return null;
+    let o;
+    if (v === true) o = {};
+    else if (typeof v === "number") o = { value: v };
+    else if (typeof v === "string") {
+      const s = v.trim();
+      if (!s || /^(false|nein|no|off|aus|none)$/i.test(s)) return null;
+      if (/^(true|ja|yes|on|an|zero|null|reset|stop|frozen)$/i.test(s)) o = {};
+      else if (/^(run|running|läuft|laeuft|start|live)$/i.test(s)) o = { run: true };
+      else { const n = num(s.replace(/\s*s$/i, "")); o = n !== undefined ? { value: n } : { label: s }; }
+    } else if (typeof v === "object") o = Array.isArray(v) ? {} : v;
+    else return null;
+    const mode = String(o.mode ?? o.state ?? "").toLowerCase();
+    return {
+      atRaw: num(o.at), value: Math.max(0, num(o.value ?? o.start) ?? 0),
+      run: toBool(o.run ?? o.running, /^(run|läuft|laeuft|live|start)/.test(mode)),
+      runAtRaw: num(o.runAt ?? o.startAt), rate: clamp(num(o.rate ?? o.speed) ?? 1, 0, 1000),
+      label: upper(String(o.label ?? o.caption ?? "").trim()), dec: clamp(Math.round(num(o.decimals ?? o.dec) ?? 3), 0, 3),
+      unit: String(o.unit ?? "s").trim(),
+    };
+  }
+  function parseSubscribe(v) {
+    if (v === undefined || v === null || v === false || v === 0) return null;
+    let o;
+    if (v === true || typeof v === "number") o = {};
+    else if (typeof v === "string") { const s = v.trim(); if (!s || OFF.test(s)) return null; o = ON.test(s) || /^(bell|glocke|button|icon)$/i.test(s) ? {} : { label: s }; }
+    else if (typeof v === "object") o = Array.isArray(v) ? {} : v;
+    else return null;
+    const label = upper(String(o.label ?? o.text ?? "ABONNIEREN").trim()) || "ABONNIEREN";
+    return { atRaw: num(o.at), label, bell: toBool(o.bell ?? o.icon, true), color: colorOf(o.color ?? o.colour, ACCENTS.amber) };
+  }
+  function parseOverlay(v, text) {
+    if (v === undefined || v === null || v === false) return null;
+    const txt = String(text || "").replace(/\s+/g, " ").trim();
+    if (v === true || (typeof v === "string" && ON.test(v.trim()))) return txt ? { text: txt, fromText: true } : null;
+    if (typeof v === "string") { const s = v.replace(/\s+/g, " ").trim(); return !s || OFF.test(s) ? null : { text: s }; }
+    if (typeof v === "object" && !Array.isArray(v)) {
+      const own = v.text ?? v.label; const s = String(own ?? txt).replace(/\s+/g, " ").trim();
+      return s ? { text: s, atRaw: num(v.at), fromText: own === undefined } : null;
+    }
+    return null;
+  }
   function setFont(ctx, weight, size, family, ls) {
     ctx.font = `${weight} ${size}px "${family}"`;
     try { ctx.letterSpacing = `${ls || 0}px`; } catch (e) { /* ältere Canvas-Implementierung */ }
@@ -155,13 +247,14 @@
     const k = (V.D / (V.D - z2)) * V.sc;
     return [V.ox + xr * k, V.oy + y2 * k, z2];
   }
-  const COLS = ["d", "e", "s", "a", "c", "r"];
+  const COLS = ["d", "e", "s", "a", "c", "k", "r"]; // k = Fahrkorb + fahrkorbseitige Tragseile (eigene Deckkraft)
   const STY = {
     d: { color: "#3fd2ff", a: 0.24, w: 1, glow: 0 },
     e: { color: "#ffb347", a: 0.22, w: 1, glow: 0 },
     s: { color: "#9fc4e6", a: 0.3, w: 1.2, glow: 0 },
     a: { color: "#ffb347", a: 0.5, w: 1.4, glow: 1 },
     c: { color: "#3fd2ff", a: 0.48, w: 1.5, glow: 1 },
+    k: { color: "#3fd2ff", a: 0.48, w: 1.5, glow: 1 },
     r: { color: "#ff5a5f", a: 1, w: 2.4, glow: 1 },
   };
   const DEPTH = [0.5, 0.75, 1];
@@ -181,11 +274,11 @@
       addSeg(B, V, c, a[0], a[1], a[2], b[0], b[1], b[2]); addSeg(B, V, c, c2[0], c2[1], c2[2], d2[0], d2[1], d2[2]); addSeg(B, V, c, a[0], a[1], a[2], c2[0], c2[1], c2[2]);
     }
   }
-  function drawBatch(ctx, B, mul, redMul, glowMul) {
+  function drawBatch(ctx, B, mul, redMul, glowMul, carMul) {
     ctx.lineCap = "round"; ctx.lineJoin = "round";
     for (const key of COLS) {
       const st = STY[key]; ctx.strokeStyle = st.color;
-      const m = key === "r" ? redMul : mul;
+      const m = key === "r" ? redMul : key === "k" && carMul !== undefined ? carMul : mul;
       if (m <= 0.001) continue;
       for (let bi = 0; bi < 3; bi++) {
         const arr = B[key][bi]; if (!arr.length) continue;
@@ -306,6 +399,7 @@
   }
 
   // ---------------- Hauptzeichnung ----------------
+  const SW_R = 40, SB_H = 76; // Stoppuhr-Radius, Button-Höhe
   function drawCard(ctx, p) {
     const L = p.L, C = L.C;
     const W = p.W || 1920, H = p.H || 1080;
@@ -313,48 +407,131 @@
     const d = Math.max(0.5, Number(p.d) || 6);
     const P = p.params && typeof p.params === "object" ? p.params : {};
     const ts = clamp(d / 6, 0.55, 1.4); // Zeitmaßstab der Intro-Phasen
+    const SA = safeArea(p, W, H);
+    const tMin = Math.min(0.3, d / 2), tMax = Math.max(tMin, d - 0.3);
+    const clampT = (x) => clamp(x, tMin, tMax);
+    const beats = Array.isArray(P.beats) ? P.beats : [];
+    const when = (i, keys) => { const v = num(pick(P, keys)); if (v !== undefined) return clampT(v); const b = num(beats[i]); return b === undefined ? undefined : clampT(b); };
 
     const layoutRaw = String(pick(P, ["layout", "align", "variant"]) ?? "left").toLowerCase();
     const center = /^(center|centre|mitte|zentriert)$/.test(layoutRaw);
     const titleRaw = pick(P, ["title", "headline", "heading", "titel"]);
     const title = titleRaw === undefined || String(titleRaw).trim() === "" ? DEFAULT_TITLE : String(titleRaw);
+    const overlay = parseOverlay(pick(P, ["overlay", "overlayText", "overlay_text", "box"]), p.text);
     const subRaw = pick(P, ["subtitle", "sub", "subline", "untertitel", "subheading"]);
-    const subtitle = String(subRaw === undefined ? p.text || "" : subRaw).replace(/\s+/g, " ").trim();
+    const subtitle = String(subRaw === undefined ? (overlay && overlay.fromText ? "" : p.text || "") : subRaw).replace(/\s+/g, " ").trim();
     const kickerRaw = pick(P, ["kicker", "eyebrow", "overline", "label", "dachzeile"]);
     const kicker = upper(String(kickerRaw === undefined ? DEFAULT_KICKER : kickerRaw).trim());
     const breakRope = toBool(pick(P, ["breakRope", "break_rope", "ropeBreak", "snap", "seilbruch", "danger"]), false);
-    const accentKey = String(pick(P, ["accent", "accentColor", "akzent"]) ?? (breakRope ? "red" : "amber")).toLowerCase();
-    const accent = ACCENTS[accentKey] || (/^#[0-9a-f]{6}$/i.test(accentKey) ? accentKey : ACCENTS.amber);
-    const showLabels = !center && toBool(pick(P, ["labels", "showLabels", "beschriftung"]), true);
-
-    // ---------- Zeitplan ----------
-    const tScan1 = 1.7 * ts;                         // erster Scan baut den Blueprint auf
-    const tKick = 0.12 * ts, dKick = 0.75 * ts;
-    const tTitle = 0.4 * ts, dLine = 0.95 * ts, stag = 0.22 * ts;
+    const accent = colorOf(pick(P, ["accent", "accentColor", "akzent"]) ?? (breakRope ? "red" : "amber"), ACCENTS.amber);
+    const labelsRaw = pick(P, ["labels", "showLabels", "beschriftung"]);
+    const labelSpec = Array.isArray(labelsRaw) ? labelsRaw : null;
+    const showLabels = !center && (labelSpec ? labelSpec.length > 0 : toBool(labelsRaw, true));
+    const hudRaw = pick(P, ["hud", "hudLine", "hud_line", "meta"]);
+    const hudText = hudRaw === undefined || hudRaw === null || hudRaw === false ? "" : typeof hudRaw === "string" ? (OFF.test(hudRaw.trim()) || !hudRaw.trim() ? "" : ON.test(hudRaw.trim()) ? "RÖNTGENANSICHT" : upper(hudRaw.trim())) : hudRaw ? "RÖNTGENANSICHT" : "";
+    const sw = parseStopwatch(pick(P, ["stopwatch", "stoppuhr", "timer", "stopWatch"]));
+    const sb = parseSubscribe(pick(P, ["subscribe", "subscribe_icon", "subscribeIcon", "subscribeButton", "abo", "abonnieren"]));
+    const motRaw = String(pick(P, ["car", "motion", "carMotion", "car_motion", "background_state", "backgroundState", "fahrt"]) ?? "up").toLowerCase();
+    const carDir = /(idle|stop|still|halt|steht|stand|none|parked|parken|^off$|^false$|^0$)/.test(motRaw) ? 0 : /(down|abw|runter|sink|nieder)/.test(motRaw) ? -1 : 1;
+    const carSpeed = clamp(num(pick(P, ["carSpeed", "car_speed", "speed"])) ?? 1, 0, 4);
+    const bpA = num(pick(P, ["blueprintAlpha", "blueprint_alpha", "bpAlpha", "blueprintOpacity"]));
+    const bpMul = bpA !== undefined ? clamp(bpA, 0, 1.6) : center ? 0.5 : 0.95;
+    const carA = num(pick(P, ["carAlpha", "car_alpha"]));
+    const carMul = carA !== undefined ? clamp(carA, 0, 1.6) : bpMul;
 
     // ---------- Text-Layout ----------
-    const x0 = center ? W / 2 : 140;
-    const maxW = center ? 1480 : 1060;
-    const TL = layoutTitle(ctx, title, maxW, center ? 330 : 360, center ? 116 : 104, 40);
+    const x0 = center ? W / 2 : Math.max(140, Math.ceil(SA.x0 + 12));
+    const maxW = center ? Math.min(1480, SA.x1 - SA.x0 - 80) : Math.min(1060, SA.x1 - x0 - 480);
+    const kSize = 24;
+    const sub = subtitle ? layoutSub(ctx, L, subtitle, center ? Math.min(1300, maxW) : Math.min(1000, maxW), center ? 40 : 38) : null;
+    const subLH = sub ? sub.size * 1.34 : 0;
+    const hSub = sub ? 40 + sub.size * 0.78 + (sub.lines.length - 1) * subLH + sub.size * 0.25 : 10;
+    // Zusatzzeilen (Stoppuhr, Abonnieren) – Breiten für Zentrierung/Ausweichbox
+    const exGap = 38;
+    if (sw) {
+      const vmax = sw.value + (sw.run ? d * sw.rate : 0);
+      const rw = L.measure(ctx, fmtDe(vmax, sw.dec) + (sw.unit ? " " + sw.unit : ""), { size: 46, weight: 700, font: "JetBrains Mono" });
+      const lw = sw.label ? L.measure(ctx, sw.label, { size: 15, weight: 700, font: "JetBrains Mono", letterSpacing: 3 }) : 0;
+      sw.w = 2 * SW_R + 28 + Math.max(rw, lw);
+    }
+    if (sb) sb.w = (sb.bell ? SB_H + 6 : 36) + L.measure(ctx, sb.label, { size: 32, weight: 700, font: "Oxanium", letterSpacing: 3 }) - 3 + 38;
+    const hExtras = (sw ? exGap + 2 * SW_R + 22 : 0) + (sb ? exGap + SB_H : 0);
+    const minTop = Math.max(118, SA.y0 + 28, overlay ? 236 : 0);
+    const maxBot = Math.min(900, SA.y1 - 8);
+    const titleMaxH = clamp(maxBot - minTop - (kicker ? 74 : 0) - 44 - hSub - hExtras, 110, center ? 330 : 360);
+    const TL = layoutTitle(ctx, title, Math.floor(maxW), Math.floor(titleMaxH), center ? 116 : 104, 40);
     const nLines = TL ? TL.lines.length : 0;
-    const tTitleEnd = tTitle + Math.max(0, nLines - 1) * stag + dLine;
-    const tRuler = tTitleEnd - 0.25 * ts, dRuler = 0.8 * ts;
-    const tSub = tTitleEnd - 0.1 * ts, dSub = 0.75 * ts;
-    const tBreak = tTitleEnd + 0.35 * ts;
+    const S = TL ? TL.S : 80;
+    const capH = 0.72 * S;
+    const hKick = kicker ? kSize + 0.34 * S + 14 : 0;
+    const hTitle = TL ? capH + (nLines - 1) * TL.lh : 0;
+    const gapRuler = Math.max(26, 0.4 * S);
+    const total = hKick + hTitle + gapRuler + hSub + hExtras;
+    const yc = center ? 470 : 480;
+    const top = Math.max(minTop, Math.min(yc - total / 2, maxBot - total));
+    const kBase = top + kSize * 0.78;
+    const tBase0 = top + hKick + capH;
+    const tBottom = tBase0 + (nLines - 1) * (TL ? TL.lh : 0);
+    const rulerY = tBottom + gapRuler;
+    const subBase0 = rulerY + 40 + (sub ? sub.size * 0.78 : 0);
+    let yCur = sub ? subBase0 + (sub.lines.length - 1) * subLH + sub.size * 0.3 : rulerY + 10;
+    let swY = 0, sbY = 0;
+    if (sw) { swY = yCur + exGap + 14 + SW_R; yCur += exGap + 2 * SW_R + 22; }
+    if (sb) { sbY = yCur + exGap + SB_H / 2; yCur += exGap + SB_H; }
+    const blockBottom = yCur;
+    const subW = sub ? Math.max(0, ...sub.lines.map((ln) => L.measure(ctx, ln, { size: sub.size, weight: 400, font: "Inter" }))) : 0;
+    const exW = Math.max(sw ? sw.w : 0, sb ? sb.w + 30 : 0, subW);
+    const halfW = Math.max(TL ? TL.maxLine / 2 : 400, exW / 2);
+    const blockRight = center ? W / 2 + halfW : x0 + Math.max(TL ? TL.maxLine : 400, 700, exW);
+    const avoid = { x0: center ? W / 2 - halfW - 40 : 90, x1: blockRight + 40, y0: top - 36, y1: blockBottom + 30 };
+
+    // ---------- Zeitplan (BEATS / at) ----------
+    const tScan1 = 1.7 * ts;                         // erster Scan baut den Blueprint auf
+    const dLine = 0.95 * ts, stag = 0.22 * ts;
+    const bTitle = when(0, ["titleAt", "title_at"]);
+    const tTitle = bTitle ?? 0.4 * ts;
+    const lineAtRaw = pick(P, ["lineAt", "linesAt", "titleLinesAt", "line_at"]);
+    const lineAt = Array.isArray(lineAtRaw) ? lineAtRaw : [];
+    const lineSt = [], lineDur = [];
+    for (let i = 0; i < nLines; i++) {
+      const a = num(lineAt[i]);
+      const st = a !== undefined ? clampT(a) : i === 0 ? tTitle : lineSt[i - 1] + stag;
+      lineSt.push(st); lineDur.push(Math.max(0.45, Math.min(dLine, d - 0.25 - st)));
+    }
+    const tTitle0 = nLines ? Math.min(...lineSt) : tTitle;
+    const tTitleEnd = nLines ? Math.max(...lineSt.map((s0, i) => s0 + lineDur[i])) : tTitle + dLine;
+    const kAt = num(pick(P, ["kickerAt", "kicker_at"]));
+    const tKick = kAt !== undefined ? clampT(kAt) : bTitle !== undefined || lineAt.length ? Math.max(0.12 * ts, tTitle0 - 0.28 * ts) : 0.12 * ts;
+    const dKick = Math.max(0.35, Math.min(0.75 * ts, d - 0.25 - tKick));
+    const bSub = when(1, ["subtitleAt", "subAt", "subtitle_at"]);
+    const tSub = bSub ?? tTitleEnd - 0.1 * ts;
+    const dSub = Math.max(0.35, Math.min(0.75 * ts, d - 0.25 - tSub));
+    const tRuler = sub && bSub !== undefined ? Math.min(tTitleEnd - 0.25 * ts, tSub - 0.1) : tTitleEnd - 0.25 * ts;
+    const dRuler = 0.8 * ts;
+    const tBreak = when(2, ["breakAt", "break_at", "snapAt"]) ?? tTitleEnd + 0.35 * ts;
+    if (sw) {
+      sw.at = sw.atRaw !== undefined ? clampT(sw.atRaw) : when(3, ["stopwatchAt", "stoppuhrAt"]) ?? Math.min(tMax, tSub + 0.45 * ts);
+      sw.runAt = sw.runAtRaw !== undefined ? clampT(sw.runAtRaw) : breakRope ? Math.max(tBreak, sw.at + 0.9) : sw.at + 1.0;
+    }
+    if (sb) sb.at = sb.atRaw !== undefined ? clampT(sb.atRaw) : when(4, ["subscribeAt", "aboAt"]) ?? Math.min(tMax, tSub + (sw ? 0.95 : 0.6) * ts);
+    if (overlay) overlay.at = overlay.atRaw !== undefined ? clampT(overlay.atRaw) : 0.5;
 
     // ---------- Blueprint ----------
     const yawRate = Math.min(3, 22 / d) * DEG;
     const yaw = (center ? 22 : 24) * DEG + yawRate * t;
-    const bpOx = (center ? W / 2 : 1385) + Math.sin(t * 0.23) * 6;
-    const bpSc = (center ? 1.0 : 0.94) * (1 + 0.03 * sm(t / d));
+    const bxRaw = num(pick(P, ["blueprintX", "blueprint_x", "bpX"]));
+    const zoomK = clamp((SA.s - 1) / 0.1, 0, 1);
+    const bpX0 = bxRaw !== undefined ? (Math.abs(bxRaw) <= 1.5 ? bxRaw * W : bxRaw) : center ? W / 2 : 1385 - 70 * zoomK;
+    const bpScale = clamp(num(pick(P, ["blueprintScale", "blueprint_scale", "bpScale"])) ?? 1, 0.4, 1.8);
+    const bpOx = bpX0 + Math.sin(t * 0.23) * 6;
+    const bpSc = (center ? 1.0 : 0.94 - 0.04 * zoomK) * bpScale * (1 + 0.03 * sm(t / d));
     const bpOy = (center ? 540 : 528) + Math.sin(t * 0.31 + 1) * 8 - 10 * sm(t / d);
     const V = makeView({ yaw, pitch: 8 * DEG, D: 2400, ox: bpOx, oy: bpOy, sc: bpSc, camY: -620 });
-    const bpMul = center ? 0.5 : 0.95;
 
-    // Mechanik: Fahrkorb fährt langsam aufwärts, Gegengewicht abwärts, Treibscheibe + Umlenkrolle drehen mit
-    const v = 160 / Math.max(8, d);
+    // Mechanik: Fahrkorb fährt (Standard aufwärts), Gegengewicht gegenläufig, Treibscheibe + Umlenkrolle drehen mit
+    const v = (160 / Math.max(8, d)) * carSpeed;
     const tMove = breakRope ? Math.min(t, tBreak) + 0.18 * (1 - Math.exp(-Math.max(0, t - tBreak) * 6)) : t;
-    const travel = Math.min(170, v * tMove);
+    const travel = clamp(carDir * v * tMove, -200, 200);
     const tt = t - tBreak;
     const jolt = breakRope && tt > 0 ? 3.5 * Math.sin(tt * 34) * Math.exp(-tt * 5) : 0;
     const carB = -240 - travel + jolt, cT = carB - G.carH;
@@ -365,9 +542,9 @@
     const B = newBatch();
     for (const sgm of STATIC) addSeg(B, V, sgm[0], sgm[1], sgm[2], sgm[3], sgm[4], sgm[5], sgm[6]);
     // Fahrkorb mit Tür, Fahrkorbrahmen, Führungsschuhen, Fangvorrichtung
-    addBox(B, V, "c", -G.carX, G.carX, cT, carB, G.carZ0, G.carZ1);
-    addPoly(B, V, "c", [[-50, carB, G.carZ1], [-50, cT + 14, G.carZ1], [50, cT + 14, G.carZ1], [50, carB, G.carZ1]]);
-    addSeg(B, V, "c", 0, cT + 14, G.carZ1, 0, carB, G.carZ1);
+    addBox(B, V, "k", -G.carX, G.carX, cT, carB, G.carZ0, G.carZ1);
+    addPoly(B, V, "k", [[-50, carB, G.carZ1], [-50, cT + 14, G.carZ1], [50, cT + 14, G.carZ1], [50, carB, G.carZ1]]);
+    addSeg(B, V, "k", 0, cT + 14, G.carZ1, 0, carB, G.carZ1);
     const yCH = cT - 30; // Querhaupt (Seilaufhängung)
     const fx = G.carX + 14;
     for (const sg of [-1, 1]) {
@@ -402,7 +579,7 @@
       path.push([rx, cwT - 8, G.cwZc]);
       addPoly(B, V, "c", path);
       if (breakRope && i === brokenIdx) {
-        if (!broken) { addSeg(B, V, strain > 0.02 ? "r" : "c", rx, G.shY, G.carZc, rx, yCH, G.carZc); breakInfo = { strain }; }
+        if (!broken) { addSeg(B, V, strain > 0.02 ? "r" : "k", rx, G.shY, G.carZc, rx, yCH, G.carZc); breakInfo = { strain }; }
         else {
           const recoil = 70 * (1 - Math.exp(-tt * 3.2));
           const wx = Math.sin(tt * 15) * 16 * Math.exp(-tt * 2), wz = Math.cos(tt * 11) * 8 * Math.exp(-tt * 2);
@@ -424,31 +601,9 @@
         breakPt = proj(V, rx, yBk, G.carZc);
         if (broken) { const ye = yBk - 70 * (1 - Math.exp(-tt * 3.2)); labelPt = proj(V, rx, ye, G.carZc); }
       } else {
-        addSeg(B, V, "c", rx, G.shY, G.carZc, rx, yCH, G.carZc);
+        addSeg(B, V, "k", rx, G.shY, G.carZc, rx, yCH, G.carZc);
       }
     });
-
-    // ---------- Textblock ----------
-    const kSize = 24;
-    const S = TL ? TL.S : 80;
-    const capH = 0.72 * S;
-    const sub = subtitle ? layoutSub(ctx, L, subtitle, center ? 1300 : 1000, center ? 40 : 38) : null;
-    const subLH = sub ? sub.size * 1.34 : 0;
-    const hKick = kicker ? kSize + 0.34 * S + 14 : 0;
-    const hTitle = TL ? capH + (nLines - 1) * TL.lh : 0;
-    const gapRuler = Math.max(26, 0.4 * S);
-    const hSub = sub ? 40 + sub.size * 0.78 + (sub.lines.length - 1) * subLH + sub.size * 0.25 : 10;
-    const total = hKick + hTitle + gapRuler + hSub;
-    const yc = center ? 470 : 480;
-    const top = Math.max(118, Math.min(yc - total / 2, 900 - total));
-    const kBase = top + kSize * 0.78;
-    const tBase0 = top + hKick + capH;
-    const tBottom = tBase0 + (nLines - 1) * (TL ? TL.lh : 0);
-    const rulerY = tBottom + gapRuler;
-    const subBase0 = rulerY + 40 + (sub ? sub.size * 0.78 : 0);
-    const blockBottom = sub ? subBase0 + (sub.lines.length - 1) * subLH + sub.size * 0.3 : rulerY + 10;
-    const blockRight = center ? W / 2 + (TL ? TL.maxLine / 2 : 400) : x0 + Math.max(TL ? TL.maxLine : 400, 700);
-    const avoid = { x0: center ? W / 2 - (TL ? TL.maxLine / 2 : 400) - 40 : 90, x1: blockRight + 40, y0: top - 36, y1: blockBottom + 30 };
 
     // ---------- Szene zeichnen ----------
     ctx.save();
@@ -466,15 +621,30 @@
     const intro = sm(t / (0.35 * ts));
 
     // Blueprint: Basis (während des ersten Scans nur oberhalb der Scanlinie)
+    const breath = (0.7 + 0.3 * intro) * (0.93 + 0.07 * Math.sin(t * 1.7));
     ctx.save();
     if (build < H) { ctx.beginPath(); ctx.rect(0, 0, W, build); ctx.clip(); }
-    drawBatch(ctx, B, bpMul * (0.7 + 0.3 * intro) * (0.93 + 0.07 * Math.sin(t * 1.7)), 1, 1);
+    drawBatch(ctx, B, bpMul * breath, 1, 1, carMul * breath);
     ctx.restore();
-    // Scan-Highlight-Band
+    // Zentrales Layout: weiche Abdunklung hinter dem Textblock (Lesbarkeit auch bei kräftigem Blueprint)
+    if (center) {
+      const ka = clamp((Math.max(bpMul, carMul) - 0.3) * 0.8, 0, 0.55);
+      if (ka > 0.01) {
+        const rx = (avoid.x1 - avoid.x0) / 2 + 60, ry = (avoid.y1 - avoid.y0) / 2 + 40;
+        ctx.save(); ctx.translate(W / 2, (avoid.y0 + avoid.y1) / 2); ctx.scale(1, ry / rx);
+        const g = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
+        g.addColorStop(0, `rgba(3,8,20,${ka})`); g.addColorStop(0.62, `rgba(3,8,20,${ka * 0.82})`); g.addColorStop(1, "rgba(3,8,20,0)");
+        ctx.fillStyle = g; ctx.fillRect(-rx, -rx, 2 * rx, 2 * rx); ctx.restore();
+      }
+    }
+    // Scan-Highlight-Band (im zentralen Layout nie durch den Textblock – keine „Durchstreichung“)
     if (scanY > 0 && scanA > 0.01) {
+      ctx.save();
+      if (center) { ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.rect(avoid.x0, avoid.y0, avoid.x1 - avoid.x0, avoid.y1 - avoid.y0); ctx.clip("evenodd"); }
       ctx.save(); ctx.beginPath(); ctx.rect(bx0, scanY - 60, bx1 - bx0, 62); ctx.clip();
-      drawBatch(ctx, B, bpMul * 1.3 * scanA, 0, 1.2); ctx.restore();
+      drawBatch(ctx, B, bpMul * 1.3 * scanA, 0, 1.2, carMul * 1.3 * scanA); ctx.restore();
       drawScanLine(ctx, bx0, bx1, scanY, scanA * (center ? 0.6 : 1));
+      ctx.restore();
     }
 
     // Seilbruch-Effekte
@@ -497,16 +667,17 @@
     }
 
     // Bauteil-Beschriftungen
-    if (showLabels) drawLabels(ctx, L, p, V, B, { cT, carB, cwT, yCH, t, tScan1, scanTop, scanBot, broken, tt, breakPt: labelPt || breakPt, yBk, avoid });
+    const hudY = Math.min(892, SA.y1 - 14);
+    if (showLabels) drawLabels(ctx, L, p, V, B, { cT, carB, cwT, yCH, t, tScan1, scanTop, scanBot, broken, tt, breakPt: labelPt || breakPt, yBk, avoid, SA, spec: labelSpec, clampT, yMax: hudText ? hudY - 34 : 1e9 });
 
-    // HUD-Zeile (Blueprint-Metadaten)
-    {
-      const a = seg(t, tScan1 * 0.8, 0.6 * ts) * (center ? 0.4 : 0.55);
+    // HUD-Zeile (optional, ohne Zahlenwerte)
+    if (hudText) {
+      const a = seg(t, tScan1 * 0.8, 0.6 * ts) * (center ? 0.45 : 0.6);
       if (a > 0) {
-        const yawDeg = yaw / DEG;
-        const txt = `RÖNTGENANSICHT  ·  DREHUNG ${fmtDe(yawDeg, 1)}°`;
-        L.text(ctx, txt, W - 90, 892, { size: 15, weight: 700, font: "JetBrains Mono", color: "#8fb3d9", align: "right", letterSpacing: 2, alpha: a });
-        ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = C.cyan; ctx.fillRect(W - 90 - L.measure(ctx, txt, { size: 15, weight: 700, font: "JetBrains Mono", letterSpacing: 2 }) - 22, 884, 8, 8); ctx.restore();
+        const ho = { size: 15, weight: 700, font: "JetBrains Mono", letterSpacing: 2 };
+        const hx = SA.x1, hy = hudY;
+        L.text(ctx, hudText, hx, hy, { ...ho, color: "#8fb3d9", align: "right", alpha: a });
+        ctx.save(); ctx.globalAlpha = a * (0.7 + 0.3 * Math.sin(t * 2.6)); ctx.fillStyle = C.cyan; ctx.fillRect(hx - L.measure(ctx, hudText, ho) - 20, hy - 9, 8, 8); ctx.restore();
       }
     }
 
@@ -522,8 +693,8 @@
       TL.lines.forEach((line, i) => {
         const y = tBase0 + i * TL.lh;
         const lx = center ? x0 - line.w / 2 : x0;
-        const st = tTitle + i * stag;
-        const e = eio(seg(t, st, dLine));
+        const st = lineSt[i];
+        const e = eio(seg(t, st, lineDur[i]));
         drawTitleLine(ctx, L, line, lx, y, TL.S, e, t, st, ts, glowPulse, accent, tTitleEnd, TL, center ? x0 - TL.maxLine / 2 : x0);
       });
     }
@@ -542,7 +713,14 @@
         });
       }
     }
+
+    // Stoppuhr + Abonnieren-Button
+    if (sw) drawStopwatch(ctx, L, sw, x0, swY, t, center);
+    if (sb) drawSubscribe(ctx, L, sb, x0, sbY, t, center);
     ctx.restore();
+
+    // Overlay-Box oben links (wie Engine, ohne Kamera)
+    if (overlay) drawOverlayBox(ctx, L, overlay.text, t, overlay.at);
   }
 
   function drawScanLine(ctx, x0, x1, y, a) {
@@ -741,29 +919,65 @@
     ctx.restore();
   }
 
+  const PART_SYN = {
+    triebwerksraum: ["triebwerksraum", "maschinenraum", "triebwerk", "machineroom", "motor"],
+    treibscheibe: ["treibscheibe", "sheave", "traktionsscheibe", "seilscheibe"],
+    bremse: ["bremse", "brake", "haltebremse", "motorbremse"],
+    begrenzer: ["geschwindigkeitsbegrenzer", "begrenzer", "governor", "regler"],
+    seile: ["tragseile", "tragseil", "seile", "seil", "seilbruch", "ropes", "rope"],
+    fahrkorb: ["fahrkorb", "kabine", "car", "cabin"],
+    fang: ["fangvorrichtung", "fangkeile", "fang", "safetygear", "bremsfang"],
+    gegengewicht: ["gegengewicht", "counterweight"],
+    schiene: ["fuehrungsschiene", "fuehrungsschienen", "fuhrungsschiene", "schiene", "schienen", "rail", "rails"],
+  };
+  const normKey = (x) => String(x).toLowerCase().replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss").replace(/[^a-z]/g, "");
+  function partOf(name) {
+    const n = normKey(name); if (n.length < 3) return null;
+    for (const k in PART_SYN) if (PART_SYN[k].includes(n)) return k;
+    for (const k in PART_SYN) if (PART_SYN[k].some((x) => x.length >= 4 && n.length >= 4 && (n.startsWith(x) || x.startsWith(n)))) return k;
+    return null;
+  }
+
   function drawLabels(ctx, L, p, V, B, s) {
     const items = [
-      { txt: "TRIEBWERKSRAUM", w: [G.mrx, G.mrTop + 50, -G.mrz], side: 1 },
-      { txt: "TREIBSCHEIBE", w: wheel(G.shHalf, G.shY, G.shZ, G.shR, 2.2), side: 1 },
-      { txt: "BREMSE", w: [42, G.shY - 44, G.shZ + 10], side: 1 },
-      { txt: "GESCHWINDIGKEITSBEGRENZER", w: [G.govX, G.govY - G.govR, G.govZ], side: -1 },
-      { txt: s.broken ? "SEILBRUCH" : "TRAGSEILE", w: s.broken ? null : [12, G.shY + (s.yCH - G.shY) * 0.55, G.carZc], side: 1, red: s.broken },
-      { txt: "FAHRKORB", w: [G.carX, s.cT + G.carH * 0.35, G.carZ0], side: 1 },
-      { txt: "FANGVORRICHTUNG", w: [G.railCarX + 10, s.carB + 20, G.carZc + 9], side: 1 },
-      { txt: "GEGENGEWICHT", w: [G.cwX, s.cwT + G.cwH * 0.5, G.cwZ0], side: 1 },
-      { txt: "FÜHRUNGSSCHIENE", w: [G.railCarX + 8, 330, G.carZc + 8], side: 1 },
+      { key: "triebwerksraum", txt: "TRIEBWERKSRAUM", w: [G.mrx, G.mrTop + 105, -G.mrz], side: 1 },
+      { key: "treibscheibe", txt: "TREIBSCHEIBE", w: wheel(G.shHalf, G.shY, G.shZ, G.shR, 2.2), side: 1 },
+      { key: "bremse", txt: "BREMSE", w: [42, G.shY - 44, G.shZ + 10], side: 1 },
+      { key: "begrenzer", txt: "GESCHWINDIGKEITSBEGRENZER", w: [G.govX, G.govY - G.govR, G.govZ], side: -1 },
+      { key: "seile", txt: s.broken ? "SEILBRUCH" : "TRAGSEILE", w: s.broken ? null : [12, G.shY + (s.yCH - G.shY) * 0.55, G.carZc], side: 1, red: s.broken },
+      // Fahrkorb: vordere Kante (Türseite), Gegengewicht: hintere Kante nahe Oberkante – Ankerpunkte klar getrennt
+      { key: "fahrkorb", txt: "FAHRKORB", w: [G.carX, s.cT + G.carH * 0.62, G.carZ1], side: 1 },
+      { key: "fang", txt: "FANGVORRICHTUNG", w: [G.railCarX + 10, s.carB + 20, G.carZc + 9], side: 1 },
+      { key: "gegengewicht", txt: "GEGENGEWICHT", w: [G.cwX, s.cwT + 34, G.cwZ0], side: 1 },
+      { key: "schiene", txt: "FÜHRUNGSSCHIENE", w: [G.railCarX + 8, 330, G.carZc + 8], side: 1 },
     ];
+    let list = items;
+    if (s.spec) {
+      list = [];
+      for (const sp of s.spec) {
+        const o = sp && typeof sp === "object" ? sp : { part: sp };
+        const ref = o.part ?? o.key ?? o.name ?? o.id;
+        const k = partOf(ref ?? o.text ?? o.label ?? "");
+        const it = k && items.find((x) => x.key === k);
+        if (!it || list.some((x) => x.key === k)) continue;
+        const own = ref !== undefined ? o.text ?? o.label : undefined;
+        list.push({ ...it, txt: own !== undefined && String(own).trim() && !it.red ? upper(String(own).trim()) : it.txt, at: num(o.at) });
+      }
+    }
     const o = { size: 15, weight: 700, font: "JetBrains Mono", letterSpacing: 2 };
+    const SA = s.SA;
+    const yTopLim = Math.max(176, SA.y0 + 16), yBotLim = Math.min(850, SA.y1 - 18, s.yMax); // oben: Kapitel-Badge frei lassen
     let lab = [];
-    for (const it of items) {
+    for (const it of list) {
       let a;
       if (it.w) a = proj(V, it.w[0], it.w[1], it.w[2]); else if (s.breakPt) a = s.breakPt; else continue;
-      if (!(a[1] > 80 && a[1] < 862)) continue;
+      if (!(a[1] > 70 && a[1] < SA.y1 + 30)) continue;
       lab.push({ ...it, ax: a[0], ay: a[1], y: a[1], tw: L.measure(ctx, it.txt, o) });
     }
     const maxRight = Math.max(0, ...lab.filter((l) => l.side > 0).map((l) => l.tw));
-    const colR = Math.min(B.maxX + 24, 1920 - 90 - maxRight);
-    const colL = Math.max(B.minX - 24, 110);
+    const maxLeft = Math.max(0, ...lab.filter((l) => l.side < 0).map((l) => l.tw));
+    const colR = Math.min(B.maxX + 24, SA.x1 - maxRight);
+    const colL = Math.max(B.minX - 24, SA.x0 + maxLeft);
     const av = s.avoid;
     lab = lab.filter((l) => {
       if (l.side > 0 || !av) return true;
@@ -772,12 +986,12 @@
     });
     for (const side of [1, -1]) {
       const g = lab.filter((l) => l.side === side).sort((a, b) => a.ay - b.ay);
-      for (let i = 1; i < g.length; i++) if (g[i].y < g[i - 1].y + 32) g[i].y = g[i - 1].y + 32;
-      for (let i = g.length - 1; i >= 0; i--) { const lim = 850 - (g.length - 1 - i) * 32; if (g[i].y > lim) g[i].y = lim; }
+      for (let i = 0; i < g.length; i++) { const lo = i ? g[i - 1].y + 32 : yTopLim; if (g[i].y < lo) g[i].y = lo; }
+      for (let i = g.length - 1; i >= 0; i--) { const lim = yBotLim - (g.length - 1 - i) * 32; if (g[i].y > lim) g[i].y = lim; }
     }
     for (const l of lab) {
-      if (l.ay > 900 || l.ay < 70) continue;
-      const tRev = s.tScan1 * invEio(clamp((l.ay - s.scanTop) / (s.scanBot - s.scanTop), 0, 1)) + 0.1;
+      if (l.ay > SA.y1 + 30 || l.ay < 70) continue;
+      const tRev = l.at !== undefined ? s.clampT(l.at) : s.tScan1 * invEio(clamp((l.ay - s.scanTop) / (s.scanBot - s.scanTop), 0, 1)) + 0.1;
       const k = l.red ? seg(s.tt, 0.15, 0.4) : seg(s.t, tRev, 0.5);
       if (k <= 0) continue;
       const col = l.red ? "#ff5a5f" : "#3fd2ff";
@@ -797,6 +1011,153 @@
         L.text(ctx, str, cx, l.y + 5, { ...o, color: l.red ? "#ff7a7e" : "#a9e6ff", align: l.side > 0 ? "left" : "right", alpha: (l.red ? 1 : 0.7) * pulse, stroke: 4, strokeColor: "rgba(4,10,22,0.8)" });
       }
     }
+  }
+
+  // ---------------- Stoppuhr-HUD (eingefroren auf 0 oder laufend) ----------------
+  function drawStopwatch(ctx, L, sw, x, cy, t, center) {
+    const k = seg(t, sw.at, 0.3); if (k <= 0) return;
+    const r = SW_R;
+    const xs = center ? x - sw.w / 2 : x;
+    const cx = xs + r + 2;
+    const running = sw.run && t > sw.runAt;
+    const val = running ? sw.value + (t - sw.runAt) * sw.rate : sw.value;
+    const ringK = eo(seg(t, sw.at, 0.55));
+    const pulse = 0.5 + 0.5 * Math.sin(t * 2.2);
+    ctx.save();
+    L.glowDot(ctx, cx, cy, r * 1.9, "#3fd2ff", (0.1 + 0.06 * pulse) * ringK);
+    ctx.globalAlpha = 0.9 * ringK; ctx.fillStyle = "rgba(4,14,30,0.92)"; ctx.beginPath(); ctx.arc(cx, cy, r, 0, TAU); ctx.fill();
+    // Krone + Drücker
+    const ck = seg(t, sw.at + 0.2, 0.35);
+    if (ck > 0) {
+      ctx.globalAlpha = ck; ctx.fillStyle = "#3fd2ff";
+      ctx.fillRect(cx - 4, cy - r - 8, 8, 8); ctx.fillRect(cx - 9, cy - r - 13, 18, 5);
+      for (const sg of [-1, 1]) { ctx.save(); ctx.translate(cx, cy); ctx.rotate((sg * Math.PI) / 4); ctx.fillRect(-4, -r - 7, 8, 7); ctx.restore(); }
+    }
+    ctx.globalAlpha = 1;
+    L.arc(ctx, cx, cy, r, -Math.PI / 2, -Math.PI / 2 + TAU * ringK, "#3fd2ff", 2.2, 1);
+    // Skala: 60 Striche, Null-Marke in Amber
+    const tk = seg(t, sw.at + 0.15, 0.45);
+    if (tk > 0) {
+      ctx.globalAlpha = 0.6 * tk; ctx.strokeStyle = "#8fd8ff"; ctx.lineWidth = 1.2; ctx.beginPath();
+      for (let i = 1; i < 60; i++) {
+        const a = (i / 60) * TAU - Math.PI / 2, mj = i % 5 === 0, r0 = r - 5, r1 = r - (mj ? 12 : 8), ca = Math.cos(a), sa = Math.sin(a);
+        ctx.moveTo(cx + ca * r0, cy + sa * r0); ctx.lineTo(cx + ca * r1, cy + sa * r1);
+      }
+      ctx.stroke();
+      ctx.globalAlpha = tk * (0.75 + 0.25 * pulse); ctx.fillStyle = "#ffb347"; ctx.fillRect(cx - 1.5, cy - r + 4, 3, 11);
+      ctx.globalAlpha = 1;
+    }
+    // Zeiger: springt beim Erscheinen gegen den Uhrzeigersinn auf Null zurück (leichtes Überschwingen)
+    const hk = seg(t, sw.at + 0.2, 0.75);
+    if (hk > 0) {
+      const target = (((val % 1) + 1) % 1) * TAU;
+      const back = running ? 0 : (1 - L.easeOutBack(hk)) * 0.55 * TAU;
+      const ha = -Math.PI / 2 + target + back, ca = Math.cos(ha), sa = Math.sin(ha);
+      L.line(ctx, cx - ca * 8, cy - sa * 8, cx + ca * (r - 10), cy + sa * (r - 10), "#ffb347", 2.2, 1, { alpha: sm(hk * 3) });
+      L.fillCircle(ctx, cx, cy, 3.5, "#ffb347");
+    }
+    // Digitalanzeige „0,000 s“ (Decode von links nach rechts)
+    const rk = seg(t, sw.at + 0.3, 0.6);
+    if (rk > 0) {
+      const str = fmtDe(val, sw.dec) + (sw.unit ? " " + sw.unit : "");
+      let s2 = str;
+      if (rk < 1) {
+        const fr = Math.floor(t * 24), cut = Math.floor(rk * str.length); s2 = "";
+        for (let i = 0; i < str.length; i++) { const ch = str[i]; s2 += /\d/.test(ch) && i >= cut ? String(Math.floor(h01(i * 7.3 + fr * 1.9) * 10)) : ch; }
+      }
+      const tx = cx + r + 26, ty = sw.label ? cy + 4 : cy + 16;
+      L.text(ctx, s2, tx, ty, { size: 46, weight: 700, font: "JetBrains Mono", color: "#ffb347", glow: 12, glowColor: "rgba(255,179,71,0.6)", alpha: sm(rk * 2.5) });
+      if (sw.label) {
+        const lk = seg(t, sw.at + 0.55, 0.5);
+        if (lk > 0) L.text(ctx, sw.label.slice(0, Math.ceil(sw.label.length * lk)), tx + 2, cy + 34, { size: 15, weight: 700, font: "JetBrains Mono", color: "#8fb3d9", letterSpacing: 3, alpha: 0.9 });
+      }
+    }
+    ctx.restore();
+  }
+
+  // ---------------- Abonnieren-Button (neutral, ohne Markenlogo) ----------------
+  function bellPath(c, s) {
+    c.moveTo(-0.66 * s, 0.42 * s);
+    c.quadraticCurveTo(-0.46 * s, 0.3 * s, -0.46 * s, -0.02 * s);
+    c.bezierCurveTo(-0.46 * s, -0.5 * s, -0.22 * s, -0.7 * s, 0, -0.7 * s);
+    c.bezierCurveTo(0.22 * s, -0.7 * s, 0.46 * s, -0.5 * s, 0.46 * s, -0.02 * s);
+    c.quadraticCurveTo(0.46 * s, 0.3 * s, 0.66 * s, 0.42 * s);
+    c.closePath();
+  }
+  function drawSubscribe(ctx, L, sb, x, cy, t, center) {
+    const k = seg(t, sb.at, 0.25); if (k <= 0) return;
+    const h = SB_H, w = sb.w, xs = center ? x - w / 2 : x, y0 = cy - h / 2, rr = h / 2;
+    const col = sb.color;
+    const e = eo(seg(t, sb.at, 0.55));
+    const pulse = 0.5 + 0.5 * Math.sin(t * 2.4);
+    const tr = t - sb.at - 0.7;
+    ctx.save();
+    // Puls-Ring (wiederkehrend)
+    if (tr > 0) {
+      const per = 2.4, ph = (tr % per) / per, pad = 4 + 24 * eo(ph);
+      ctx.globalAlpha = 0.5 * (1 - ph) * seg(tr, 0, 0.3); ctx.strokeStyle = col; ctx.lineWidth = 1.6;
+      ctx.beginPath(); L.roundRectPath(ctx, xs - pad, y0 - pad, w + 2 * pad, h + 2 * pad, rr + pad); ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+    // Körper: Wischblende von links
+    ctx.save(); ctx.beginPath(); ctx.rect(xs - 40, y0 - 40, (w + 80) * e, h + 80); ctx.clip();
+    const fg = ctx.createLinearGradient(xs, 0, xs + w, 0);
+    fg.addColorStop(0, hexA(col, 0.26)); fg.addColorStop(1, hexA(col, 0.08));
+    ctx.fillStyle = fg; ctx.beginPath(); L.roundRectPath(ctx, xs, y0, w, h, rr); ctx.fill();
+    L.glowPath(ctx, (c) => L.roundRectPath(c, xs, y0, w, h, rr), col, 2.4, 0.8 + 0.5 * pulse);
+    ctx.restore();
+    // Glocke im gefüllten Kreis, läutet beim Erscheinen und danach alle 3,2 s
+    let tx = xs + 36;
+    if (sb.bell) {
+      const bx = xs + rr + 2, by = cy, ik = eo(seg(t, sb.at + 0.12, 0.4));
+      if (ik > 0) {
+        L.glowDot(ctx, bx, by, 46, col, 0.25 * ik * (0.7 + 0.3 * pulse));
+        ctx.globalAlpha = ik; ctx.fillStyle = col; ctx.beginPath(); ctx.arc(bx, by, 26 * (0.6 + 0.4 * ik), 0, TAU); ctx.fill();
+        const tb = t - sb.at - 0.55;
+        const ph = tb > 0 ? tb % 3.2 : -1;
+        const wig = ph >= 0 ? 0.42 * Math.sin(ph * 20) * Math.exp(-ph * 3.2) : 0;
+        ctx.save(); ctx.translate(bx, by - 1); ctx.translate(0, -14); ctx.rotate(wig); ctx.translate(0, 14);
+        ctx.fillStyle = "#061226"; ctx.beginPath(); bellPath(ctx, 20); ctx.fill();
+        ctx.beginPath(); ctx.arc(0, 0.62 * 20, 3.2, 0, TAU); ctx.fill();
+        ctx.fillRect(-1.5, -0.86 * 20, 3, 4);
+        ctx.restore();
+        if (ph >= 0 && ph < 1.2) {
+          const wa = Math.exp(-ph * 2.4) * ik; ctx.strokeStyle = "#061226"; ctx.lineWidth = 2; ctx.lineCap = "round";
+          ctx.globalAlpha = wa;
+          for (const sg of [-1, 1]) {
+            const a0 = sg > 0 ? -0.95 : Math.PI + 0.95;
+            ctx.beginPath(); ctx.arc(bx, by - 2, 17, a0 - 0.28, a0 + 0.28); ctx.stroke();
+          }
+        }
+        ctx.globalAlpha = 1;
+      }
+      tx = xs + h + 6;
+    }
+    // Beschriftung (Decode)
+    const lk = seg(t, sb.at + 0.25, 0.45);
+    if (lk > 0) {
+      const n = sb.label.length, rev = lk * (n + 2), fr = Math.floor(t * 24);
+      let s = "";
+      for (let i = 0; i < n; i++) { if (i < rev - 2) s += sb.label[i]; else if (i < rev) s += sb.label[i] === " " ? " " : SCRAMBLE[Math.floor(h01(i * 11.3 + fr * 2.7) * SCRAMBLE.length)]; else break; }
+      L.text(ctx, s, tx, cy + 11.5, { size: 32, weight: 700, font: "Oxanium", letterSpacing: 3, color: "#eef6ff", glow: 8, glowColor: hexA(col, 0.8) });
+    }
+    ctx.restore();
+  }
+
+  // ---------------- Overlay-Box oben links (optisch wie Engine-Overlay, bleibt bis Szenenende) ----------------
+  function drawOverlayBox(ctx, L, text, t, at) {
+    const a = seg(t, at, 0.45); if (a <= 0) return;
+    const txt = upper(text);
+    const o = (sz) => ({ size: sz, weight: 700, font: "Oxanium", letterSpacing: 2 });
+    let size = 40, tw = L.measure(ctx, txt, o(size));
+    if (tw > 740) { size = Math.max(26, Math.floor((size * 740) / tw)); tw = L.measure(ctx, txt, o(size)); }
+    const x = 90, y = 150, w = tw + 70, bh = size + 34, by = y - 40 - 14;
+    const slide = eo(seg(t, at, 0.5));
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = a;
+    L.fillRect(ctx, x, by, 8, bh, "#ffb347");
+    L.panel(ctx, x + 14, by, w * slide, bh, { fill: "rgba(4,12,26,0.82)", stroke: "rgba(255,179,71,0.35)", r: 4, alpha: a });
+    L.text(ctx, txt, x + 44, by + bh / 2 + size * 0.36, { ...o(size), color: "#eef6ff", alpha: a * seg(t, at + 0.25, 0.35) });
+    ctx.restore();
   }
 
   // Hintergrund (Verlauf + Raster wie L.background, plus Lesbarkeits-Abdunklung) einmalig vorrendern und nur noch blitten.

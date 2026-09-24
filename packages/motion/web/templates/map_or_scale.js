@@ -22,13 +22,17 @@
                          building: { label, value, unit: "m" | "Stockwerke", style?: "dashed", text? }
                          speed:    { label, value, unit: "m/s" | "km/h", note? }
                          bars:     { label, value, unit?, note? }
-                         vruler:   { label, value_cm | value+unit, style?: "band", from_cm?, to_cm? }
+                         vruler:   { label ("Kopf, Unterzeile" – Komma trennt), value_cm | value+unit } bzw. Band
+                                   { label, style: "band", from_cm (20), to_cm (50), notes?: ["…" | {text, at}] }
      diameter_mm       Seildurchmesser (rope, Standard 10)
      then_readout      { value: "3 bis gut 4 t", label: "Bruchkraft …" } – Zahlen im Wert zählen hoch (Alias: readout)
      floors, height_m  Gebäude (Standard 102 Stockwerke / 381 m), name (optional Gebäudename)
      title / kicker    optionale Überschrift / Kennzeile oben im Bild (kicker "" blendet die Kennzeile aus)
      footnote          kleine Fußnote (bars, dots, vruler …)
-     label, scope      (order_of_magnitude) Ergebnis-Text und Geltungsbereich
+     label, scope      (order_of_magnitude) Ergebnis-Text und Geltungsbereich; label "" = keine Kachel;
+                       exponent (9) bzw. total; unit ("Fahrten"), unit_one (Einzahl für die Legende, sonst geraten)
+     ratio             (bar_scale) true | "≈ 60 : 1" | { text, label ("Verhältnis"), items: [iGroß, iKlein], at }
+     stop_cm, zero_label, cabin_label   (vertical_ruler) Haltepunkt der Kabine (Standard Bandmitte), Texte
    Text: p.text wird im Engine-Stil oben links selbst gezeichnet (ownsText) – lange Texte werden verkleinert/umbrochen.
 
    TIMING (Narrations-Sync): params.beats = [Sekunden ab Szenenstart] für die Hauptschritte; einzelne Einträge dürfen
@@ -46,7 +50,7 @@
                              (Endzahlen Stockwerke/Höhe), [3] = Aufzugsschacht leuchtet auf (≥ beats[2]).
                       "at": items[].at = Vergleichsbalken wächst.
      vertical_ruler   BEATS: [0] = Schiene, Lineal, Kabine, [1] = Fangvorrichtung greift – Kabine beginnt zu rutschen,
-                             [2] = Kabine steht (Ende des Rutschens).
+                             [2] = Kabine steht (Ende des Rutschens), [3] = Fußnote.
                       "at": items[].at = Balken bzw. Band erscheint; Band-Notizen items[].notes = [„…“ | {text, at}]
                             (oder note/sub als ein String), footnote_at.
      order_of_magnitude
@@ -503,8 +507,12 @@
       const dRope = clamp(toNum(pick(P, ["diameter_mm", "rope_mm", "rope_diameter_mm", "seil_mm", "size_mm"]), 10), 1, 120);
       items = [scaleItem({ shape: "rope", size_mm: dRope }, P), scaleItem({ shape: "finger" }, P), scaleItem({ shape: "coin" }, P)];
     }
-    const used = new Set(); const spare = [COL.amber, COL.steel, COL.green, COL.white, COL.cyan];
-    for (const it of items) {
+    // Farben: Seil cyan, Münze amber (Messing), Finger stahl, Bleistift amber – bei Doppelung weicht der Nachrangige aus
+    const used = new Set(); const spare = [COL.amber, COL.steel, COL.white, COL.green, COL.cyan];
+    const prio = { rope: 0, coin: 1, finger: 2, pencil: 3, circle: 4 };
+    for (const it of items.filter((i) => i.color)) used.add(it.color);
+    for (const it of [...items].sort((a, b) => prio[a.shape] - prio[b.shape])) {
+      if (it.color) continue;
       let c = it.color || SHAPES[it.shape].color;
       if (!it.color && used.has(c)) c = spare.find((x) => !used.has(x)) || c;
       it.color = c; used.add(c);
@@ -628,14 +636,19 @@
       const na = seg(e, 0.35, 0.5);
       if (na > 0) names.push({ it, cx, top, w, na });
     });
-    for (const { it, cx, top, w, na } of names) {
-      const maxW = clamp(w + gapPx - 24, 150, 400);
+    const centers = items.map((it, i) => X(pos[i]) + (it.wmm * s) / 2);
+    for (const { it, cx, top, na } of names) {
+      const i = items.indexOf(it);
+      const leftB = i === 0 ? x0 - 40 : (centers[i - 1] + cx) / 2, rightB = i === n - 1 ? (ro ? 1335 : 1800) : (cx + centers[i + 1]) / 2;
+      const maxW = clamp(2 * Math.min(cx - leftB, rightB - cx) - 18, 120, 420);
+      const maxLines = it.hmm >= maxH * 0.9 ? 2 : 3;
       const o = { font: F_BODY, weight: 600, size: 28 };
       let lines = [it.name], size = 28;
       if (measure(ctx, it.name, o) > maxW) {
         size = 24; lines = wrap(ctx, it.name, maxW, { ...o, size });
-        if (lines.length > 2) { lines = [lines[0], lines.slice(1).join(" ")]; }
-        for (const l of lines) size = Math.min(size, fitSize(ctx, l, maxW, { ...o, size }, 16));
+        if (lines.length > maxLines) { size = 20; lines = wrap(ctx, it.name, maxW, { ...o, size }); }
+        if (lines.length > maxLines) lines = [...lines.slice(0, maxLines - 1), lines.slice(maxLines - 1).join(" ")];
+        for (const l of lines) size = Math.min(size, fitSize(ctx, l, maxW, { ...o, size }, 18));
       }
       const lh = size * 1.18; const by = top - 22 + (1 - eo(na)) * 10;
       lines.forEach((l, j) => text(ctx, l, cx, by - (lines.length - 1 - j) * lh, { ...o, size, color: COL.white, align: "center", alpha: na, stroke: 5 }));
@@ -890,7 +903,9 @@
     // Verhältnis-Plakette (optional): params.ratio = true | "≈ 59 : 1" | { text, label, at }
     const ratioP = pick(P, ["ratio", "verhaeltnis", "verhältnis"], null);
     if (!speed && n >= 2 && ratioP !== null && ratioP !== false && toBool(ratioP, true)) {
-      const sorted = [...items].sort((a, b) => b.base - a.base); const big = sorted[0], small = sorted[n - 1];
+      const sorted = [...items].sort((a, b) => b.base - a.base); let big = sorted[0], small = sorted[n - 1];
+      const pair = isObj(ratioP) && Array.isArray(ratioP.items) ? ratioP.items.map((x) => Math.round(toNum(x, -1))) : null;
+      if (pair && pair.length >= 2 && items[pair[0]] && items[pair[1]]) { big = items[pair[0]]; small = items[pair[1]]; }
       let rt = typeof ratioP === "string" && !/^(true|1|ja|yes|on)$/i.test(ratioP.trim()) ? ratioP : isObj(ratioP) ? str(pick(ratioP, ["text", "value"], "")) : "";
       if (!rt && small.base > 0) { const r = big.base / small.base; rt = `≈ ${deNum(r, r >= 10 ? 0 : 1)} : 1`; }
       const rl = isObj(ratioP) ? str(pick(ratioP, ["label", "caption"], "Verhältnis")) : "Verhältnis";
@@ -898,7 +913,7 @@
       const tr = atOf(isObj(ratioP) ? ratioP : null, d, beatOf(p, 2, Math.min(tEnd + 0.3, d - 0.9)));
       const k = seg(t, tr, 0.5);
       if (rt && k > 0 && small.geo) {
-        const ro = { font: F_MONO, weight: 700, size: 38 }; const lo = { font: F_MONO, weight: 700, size: 15, letterSpacing: 3 };
+        const ro = { font: F_BODY, weight: 800, size: 38 }; const lo = { font: F_MONO, weight: 700, size: 15, letterSpacing: 3 };
         const pw = Math.max(measure(ctx, rt, ro), measure(ctx, rl.toUpperCase(), lo)) + 56, ph = 92;
         const px = x1 - pw, py = small.geo.cy - ph / 2 + (1 - eo(k)) * 12;
         L.line(ctx, small.geo.tipX + 14, small.geo.cy, lerp(small.geo.tipX + 14, px - 10, eo(k)), small.geo.cy, COL.amber, 1.4, 0.4, { alpha: k * 0.7, dash: [5, 7] });
@@ -1181,11 +1196,12 @@
     let raw = Array.isArray(P.items) && P.items.length ? P.items : [
       { label: "gut 11 cm, volle Erdbeschleunigung (Obergrenze)", value_cm: 11 },
       { label: "knapp 60 cm, ein Fünftel davon", value_cm: 57 },
-      { label: "real: einige Dezimeter", style: "band" },
+      { label: "real: einige Dezimeter", style: "band", notes: ["+ Reaktionszeit", "+ Einrücken der Keile"] },
     ];
     const bars = [], bands = [];
-    raw.slice(0, 5).forEach((it, i) => {
+    raw.slice(0, 5).forEach((it) => {
       if (typeof it === "number") it = { value_cm: it };
+      if (typeof it === "string") it = { label: it, style: "band" };
       if (!isObj(it)) return;
       const label = str(pick(it, ["label", "name", "text"], ""));
       const style = str(pick(it, ["style", "type", "kind"], "")).toLowerCase();
@@ -1194,44 +1210,56 @@
       if (/band|range|bereich|soft/.test(style) || !Number.isFinite(cm)) {
         let a = toNum(pick(it, ["from_cm", "min_cm", "from", "min"]), NaN), b = toNum(pick(it, ["to_cm", "max_cm", "to", "max"]), NaN);
         if (!Number.isFinite(a) || !Number.isFinite(b)) { a = 20; b = 50; }
-        bands.push({ label, a: Math.min(a, b), b: Math.max(a, b), color: colorOf(it.color, COL.amber) });
-      } else bars.push({ label, cm: Math.max(0, cm), color: colorOf(it.color, null) || [COL.cyan, COL.amber, COL.green, COL.steel][bars.length % 4] });
+        let notes = pick(it, ["notes", "note", "sub", "detail", "reasons"], []);
+        if (!Array.isArray(notes)) notes = [notes];
+        notes = notes.map((nt) => (isObj(nt) ? { text: str(pick(nt, ["text", "label"], "")), raw: nt } : { text: str(nt, ""), raw: null })).filter((nt) => nt.text).slice(0, 3);
+        bands.push({ label, a: clamp(Math.min(a, b), 0, 500), b: clamp(Math.max(a, b), 0.5, 500), color: colorOf(it.color, COL.amber), notes, raw: it });
+      } else bars.push({ label, cm: clamp(cm, 0, 500), color: colorOf(it.color, null) || [COL.cyan, COL.amber, COL.green, COL.steel][bars.length % 4], raw: it });
     });
     const maxCm = Math.max(10, ...bars.map((b) => b.cm), ...bands.map((b) => b.b));
-    const stepCm = maxCm > 120 ? 20 : maxCm > 40 ? 10 : 5;
+    const stepCm = maxCm > 240 ? 50 : maxCm > 120 ? 20 : maxCm > 40 ? 10 : 5;
     const rangeCm = Math.ceil((maxCm * 1.1) / stepCm) * stepCm;
-    const y0 = 336, y1 = 852; const pxc = (y1 - y0) / rangeCm; const Y = (cm) => y0 + cm * pxc;
-    const foot = str(pick(P, ["footnote", "fussnote", "note"], ""));
+    const y0 = 484, y1 = 862; const pxc = (y1 - y0) / rangeCm; const Y = (cm) => y0 + cm * pxc;
+    const foot = str(pick(P, ["footnote", "fussnote", "fußnote"], ""));
     const aHead = seg(t, 0, 0.5);
     brackets(ctx, 100, 222, 1720, 676, aHead);
     const kick = P.kicker === "" || P.kicker === false ? "" : str(pick(P, ["kicker"], "BREMSWEG AN DER FÜHRUNGSSCHIENE"));
     header(ctx, p, kick, str(pick(P, ["title", "titel"], "")), aHead);
     dust(ctx, p, 22);
-    const railX = 340, cabX = 366, cabW = 210, rulerX = 660, bx0 = 800, RIGHT = 1765;
-    const aR = seg(t, 0.02 * d, 0.5);
-    // Zeitplan
-    const tSlide0 = 0.1 * d, tSlideD = 0.3 * d;
-    const barStart = (i) => (0.16 + i * 0.13) * d;
-    const bandStart = (i) => (0.16 + bars.length * 0.13 + 0.03 + i * 0.1) * d;
+    const railX = 340, cabX = 366, cabW = 210, cabH = 156, rulerX = 660, bx0 = 800, RIGHT = 1765;
+    // Zeitplan: BEATS [0] Aufbau, [1] Rutschen beginnt, [2] Kabine steht, [3] Fußnote; items[].at
+    const tIn = beatOf(p, 0, 0.02 * d);
+    const aR = seg(t, tIn, 0.5);
+    const tSlide0 = beatOf(p, 1, 0.1 * d), tSlide1 = Math.max(tSlide0 + 0.5, beatOf(p, 2, 0.4 * d)), tSlideD = tSlide1 - tSlide0;
+    const growD = clamp(0.16 * d, 0.5, 1.2), bandD = clamp(0.2 * d, 0.5, 1.2);
+    bars.forEach((b, i) => { b.t0 = atOf(b.raw, d, Math.min((0.16 + i * 0.13) * d, d - 1.0)); });
+    bands.forEach((b, i) => {
+      b.t0 = atOf(b.raw, d, Math.min((0.16 + bars.length * 0.13 + 0.03 + i * 0.1) * d, d - 1.0));
+      b.notes.forEach((nt, j) => { nt.t0 = atOf(nt.raw, d, Math.min(b.t0 + 0.4 + j * 0.35, d - 0.5)); });
+    });
+    const tFoot = atOf(P, d, beatOf(p, 3, Math.min(0.6 * d, d - 0.9)), ["footnote_at", "fussnote_at"]);
 
     // Nulllinie
     L.line(ctx, railX - 40, Y(0), RIGHT, Y(0), COL.white, 1.3, 0.3, { alpha: aR * 0.55, dash: [8, 8] });
-    text(ctx, "Fangvorrichtung greift", RIGHT, Y(0) - 14, { font: F_BODY, weight: 600, size: 22, color: COL.white, align: "right", alpha: aR });
-    text(ctx, "0", rulerX - 14, Y(0) + 7, { font: F_MONO, weight: 700, size: 19, color: COL.white, align: "right", alpha: aR });
+    text(ctx, str(pick(P, ["zero_label", "null_label"], "Fangvorrichtung greift")), RIGHT, Y(0) - 14, { font: F_BODY, weight: 600, size: 22, color: COL.white, align: "right", alpha: aR });
 
     // weiche Bänder (hinter den Balken)
     const bandLabels = [];
-    bands.forEach((bd, i) => {
-      const k = seg(t, bandStart(i), 0.2 * d); if (k <= 0) return;
+    bands.forEach((bd) => {
+      const k = seg(t, bd.t0, bandD);
       const ya = Y(bd.a), yb = Y(bd.b); const x = rulerX + 64, w = RIGHT - x;
+      bandLabels.push({ bd, k, y: (ya + yb) / 2 }); // Notizen dürfen schon vor dem Band erscheinen
+      if (k <= 0) return;
       ctx.save(); ctx.globalAlpha = k * (0.85 + 0.15 * Math.sin(t * 1.6));
       const g = ctx.createLinearGradient(0, ya - 34, 0, yb + 34);
       g.addColorStop(0, rgba(bd.color, 0)); g.addColorStop(0.3, rgba(bd.color, 0.15)); g.addColorStop(0.7, rgba(bd.color, 0.15)); g.addColorStop(1, rgba(bd.color, 0));
       ctx.fillStyle = g; ctx.fillRect(x, ya - 34, w * eo(k), yb - ya + 68);
       const g2 = ctx.createLinearGradient(0, ya - 20, 0, yb + 20); g2.addColorStop(0, rgba(bd.color, 0)); g2.addColorStop(0.25, rgba(bd.color, 0.8)); g2.addColorStop(0.75, rgba(bd.color, 0.8)); g2.addColorStop(1, rgba(bd.color, 0));
       ctx.fillStyle = g2; ctx.fillRect(rulerX + 58, ya - 20, 7, yb - ya + 40);
+      // wandernde Lichtkante: „Unschärfe“ des realen Bereichs
+      const ph = (t * 0.35) % 1; const yl = lerp(ya, yb, sm(ph < 0.5 ? ph * 2 : 2 - ph * 2));
+      ctx.globalAlpha = k * 0.35; ctx.fillStyle = rgba(bd.color, 0.6); ctx.fillRect(x, yl - 1, w * eo(k), 2);
       ctx.restore();
-      bandLabels.push({ bd, k, y: (ya + yb) / 2 });
     });
 
     // Führungsschiene
@@ -1241,76 +1269,86 @@
     text(ctx, "Führungsschiene", railX - 18, y1 + 6, { font: F_BODY, weight: 600, size: 19, color: COL.steel, align: "right", alpha: aR });
 
     // Kabine rutscht bis in den realistischen Bereich und steht
-    const target = bands.length ? (bands[0].a + bands[0].b) / 2 : bars.length ? bars[bars.length - 1].cm : 20;
+    const target = clamp(toNum(pick(P, ["stop_cm", "slide_cm", "halt_cm"]), bands.length ? (bands[0].a + bands[0].b) / 2 : bars.length ? bars[bars.length - 1].cm : 20), 0, rangeCm);
     const slide = eio(seg(t, tSlide0, tSlideD));
-    const settle = slide >= 1 ? Math.sin((t - tSlide0 - tSlideD) * 9) * Math.exp(-(t - tSlide0 - tSlideD) * 5) * 1.5 : 0;
+    const dt = t - tSlide1;
+    const settle = slide >= 1 ? Math.sin(dt * 9) * Math.exp(-dt * 5) * 1.5 : 0;
     const cmNow = target * slide;
-    const floorY = Y(cmNow) + settle; const frameH = 20; const cabBot = floorY - frameH; const cabTop = cabBot - 250;
+    const floorY = Y(cmNow) + settle; const frameH = 20; const cabBot = floorY - frameH; const cabTop = cabBot - cabH;
     // Reibspur
-    if (cmNow > 0.2) L.line(ctx, railX + 5, Y(0), railX + 5, floorY, COL.amber, 2.4, 0.9, { alpha: 0.75 });
-    // Kabinenkörper (oben ausblendend)
-    const fadeTop = Math.max(290, cabTop);
-    ctx.save();
-    const gC = ctx.createLinearGradient(0, fadeTop, 0, cabBot); gC.addColorStop(0, "rgba(63,210,255,0)"); gC.addColorStop(1, "rgba(63,210,255,0.09)");
-    ctx.fillStyle = gC; ctx.fillRect(cabX, fadeTop, cabW, cabBot - fadeTop); ctx.restore();
-    const edge = (() => { const g = ctx.createLinearGradient(0, fadeTop, 0, cabBot); g.addColorStop(0, "rgba(63,210,255,0)"); g.addColorStop(0.5, COL.cyan); g.addColorStop(1, COL.cyan); return g; })();
-    L.glowPath(ctx, (c) => { c.moveTo(cabX, fadeTop); c.lineTo(cabX, cabBot); c.lineTo(cabX + cabW, cabBot); c.lineTo(cabX + cabW, fadeTop); }, edge, 2.4, 1, { alpha: aR });
-    const doorG = (() => { const g = ctx.createLinearGradient(0, fadeTop, 0, cabBot); g.addColorStop(0, "rgba(63,210,255,0)"); g.addColorStop(1, "rgba(63,210,255,0.4)"); return g; })();
-    L.glowPath(ctx, (c) => { c.moveTo(cabX + cabW / 2, fadeTop); c.lineTo(cabX + cabW / 2, cabBot - 10); }, doorG, 1.6, 0, { alpha: aR, dash: [9, 7] });
+    if (cmNow > 0.2) L.line(ctx, railX + 5, Y(0), railX + 5, floorY, COL.amber, 2.4, 0.9, { alpha: 0.75 * aR });
+    // Kabinenkörper
+    ctx.save(); ctx.globalAlpha = aR;
+    const gC = ctx.createLinearGradient(0, cabTop, 0, cabBot); gC.addColorStop(0, "rgba(63,210,255,0.03)"); gC.addColorStop(1, "rgba(63,210,255,0.10)");
+    ctx.fillStyle = "rgba(4,12,26,0.85)"; ctx.fillRect(cabX, cabTop, cabW, cabH); ctx.fillStyle = gC; ctx.fillRect(cabX, cabTop, cabW, cabH); ctx.restore();
+    L.rect(ctx, cabX, cabTop, cabW, cabH, COL.cyan, 2.4, 1, { alpha: aR });
+    L.line(ctx, cabX + cabW / 2, cabTop + 12, cabX + cabW / 2, cabBot - 12, "rgba(63,210,255,0.45)", 1.6, 0, { alpha: aR, dash: [9, 7] });
+    L.rect(ctx, cabX - 14, cabTop - 22, cabW + 28, 22, COL.steel, 2, 0.5, { alpha: aR }); // Tragrahmen oben
+    text(ctx, str(pick(P, ["cabin_label", "car_label", "kabine"], "KABINE")).toUpperCase(), cabX + cabW / 2, cabTop + cabH / 2 + 7, { font: F_MONO, weight: 700, size: 17, color: "rgba(63,210,255,0.7)", align: "center", letterSpacing: 4, alpha: aR, stroke: 4 });
     // Tragrahmen unten + Fangvorrichtung am Schienenkopf
     L.rect(ctx, cabX - 14, cabBot, cabW + 28, frameH, COL.steel, 2, 0.5, { alpha: aR });
     const eng = seg(t, tSlide0, 0.25);
     ctx.save(); ctx.globalAlpha = aR;
-    ctx.fillStyle = "rgba(255,179,71,0.18)"; ctx.fillRect(railX + 5, cabBot - 26, 30, frameH + 30);
+    ctx.fillStyle = eng > 0 ? "rgba(255,179,71,0.22)" : "rgba(255,179,71,0.1)"; ctx.fillRect(railX + 5, cabBot - 26, 30, frameH + 30);
     ctx.strokeStyle = COL.amber; ctx.lineWidth = 2; ctx.strokeRect(railX + 5, cabBot - 26, 30, frameH + 30);
-    ctx.fillStyle = COL.amber; ctx.beginPath(); ctx.moveTo(railX + 5 + 8 * (1 - eng), cabBot - 20); ctx.lineTo(railX + 16, cabBot - 20); ctx.lineTo(railX + 16, cabBot + frameH); ctx.lineTo(railX + 5, cabBot + frameH - 4); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = COL.amber; ctx.beginPath(); ctx.moveTo(railX + 5 + 8 * (1 - eng), cabBot - 20); ctx.lineTo(railX + 16, cabBot - 20); ctx.lineTo(railX + 16, cabBot + frameH); ctx.lineTo(railX + 5 + 4 * (1 - eng), cabBot + frameH - 4); ctx.closePath(); ctx.fill();
     ctx.restore();
+    if (eng > 0 && eng < 1) L.circle(ctx, railX + 12, cabBot, 10 + 30 * eo(eng), COL.amber, 2, 0.8, { alpha: (1 - eng) * 0.8 });
     if (slide > 0.02 && slide < 0.98) L.sparks(ctx, railX + 6, floorY - 2, (t - tSlide0) % 0.5, { seed: 7, count: 16, life: 0.35, window: 0.3, speed: 280, dir: Math.PI * 0.62, spread: 1.0, gravity: 700 });
-    text(ctx, "Fangvorrichtung", railX + 44, floorY + 30, { font: F_BODY, weight: 600, size: 18, color: COL.amber, alpha: aR * seg(t, tSlide0, 0.4), stroke: 4 });
+    text(ctx, "Fangvorrichtung", railX + 44, floorY + 30, { font: F_BODY, weight: 600, size: 18, color: COL.amber, alpha: aR * (0.55 + 0.45 * eng), stroke: 4 });
 
     // Lineal
     const rl = lerp(y0, y1, eo(aR));
     ctx.save(); ctx.globalAlpha = aR; ctx.fillStyle = "rgba(10,28,54,0.72)"; ctx.fillRect(rulerX, y0, 58, rl - y0); ctx.strokeStyle = "rgba(63,210,255,0.35)"; ctx.lineWidth = 1.2; ctx.strokeRect(rulerX + 0.5, y0 + 0.5, 58, rl - y0); ctx.restore();
-    const tickPass = (cond, len, style, lw) => { ctx.save(); ctx.globalAlpha = aR; ctx.strokeStyle = style; ctx.lineWidth = lw; ctx.beginPath(); for (let cm = 0; cm <= rangeCm; cm++) { if (!cond(cm)) continue; const y = Math.round(Y(cm)) + 0.5; if (y > rl) break; ctx.moveTo(rulerX, y); ctx.lineTo(rulerX + len, y); } ctx.stroke(); ctx.restore(); };
-    if (pxc >= 4) tickPass((cm) => cm % 5 !== 0, 10, "rgba(63,210,255,0.55)", 1);
+    const unitStep = pxc >= 4 ? 1 : pxc >= 0.8 ? 5 : 10;
+    const tickPass = (cond, len, style, lw) => { ctx.save(); ctx.globalAlpha = aR; ctx.strokeStyle = style; ctx.lineWidth = lw; ctx.beginPath(); for (let cm = 0; cm <= rangeCm; cm += unitStep) { if (!cond(cm)) continue; const y = Math.round(Y(cm)) + 0.5; if (y > rl) break; ctx.moveTo(rulerX, y); ctx.lineTo(rulerX + len, y); } ctx.stroke(); ctx.restore(); };
+    if (unitStep === 1) tickPass((cm) => cm % 5 !== 0, 10, "rgba(63,210,255,0.55)", 1);
     tickPass((cm) => cm % 5 === 0 && cm % 10 !== 0, 18, "rgba(63,210,255,0.8)", 1.3);
     tickPass((cm) => cm % 10 === 0, 28, COL.cyan, 1.8);
     L.line(ctx, rulerX, y0, rulerX, rl, COL.cyan, 2, 1, { alpha: aR });
-    for (let cm = stepCm; cm <= rangeCm; cm += stepCm) text(ctx, `${cm}`, rulerX - 14, Y(cm) + 7, { font: F_MONO, weight: 400, size: 19, color: COL.muted, align: "right", alpha: aR * (Y(cm) <= rl ? 1 : 0) });
+    for (let cm = 0; cm <= rangeCm; cm += stepCm) {
+      const y = Y(cm); if (y > rl) break;
+      const near = slide > 0 ? clamp(Math.abs(y - floorY) / 16 - 0.4) : 1; // Zahl unter dem Zeiger ausblenden
+      text(ctx, `${cm}`, rulerX - 14, y + 7, { font: F_MONO, weight: cm ? 400 : 700, size: 19, color: cm ? COL.muted : COL.white, align: "right", alpha: aR * near });
+    }
     text(ctx, "cm", rulerX + 29, y1 + 30, { font: F_MONO, weight: 700, size: 17, color: COL.muted, align: "center", alpha: aR });
     // Zeiger: Kabinenboden → Lineal
     if (slide > 0) {
-      L.line(ctx, cabX + cabW + 14, floorY, rulerX + 58, floorY, COL.white, 1.3, 0.5, { alpha: 0.75 });
-      ctx.save(); ctx.fillStyle = COL.white; ctx.beginPath(); ctx.moveTo(rulerX - 2, floorY); ctx.lineTo(rulerX - 14, floorY - 7); ctx.lineTo(rulerX - 14, floorY + 7); ctx.closePath(); ctx.fill(); ctx.restore();
+      L.line(ctx, cabX + cabW + 14, floorY, rulerX + 58, floorY, COL.white, 1.3, 0.5, { alpha: 0.75 * aR });
+      ctx.save(); ctx.globalAlpha = aR; ctx.fillStyle = COL.white; ctx.beginPath(); ctx.moveTo(rulerX - 2, floorY); ctx.lineTo(rulerX - 14, floorY - 7); ctx.lineTo(rulerX - 14, floorY + 7); ctx.closePath(); ctx.fill(); ctx.restore();
     }
 
-    // Balken (Rechenwerte) – Abstand nach Beschriftungsbreite
+    // Balken (Rechenwerte)
     const barW = 58;
     const labs = bars.map((b) => { const parts = b.label ? b.label.split(/,\s*/) : []; return { head: parts[0] || `${deNum(b.cm)} cm`, sub: parts.slice(1).join(", ") }; });
-    const avail = RIGHT - bx0; const nB = Math.max(1, bars.length);
-    const lw = labs.map((l) => Math.max(measure(ctx, l.head, { font: F_MONO, weight: 700, size: 28 }), measure(ctx, l.sub, { font: F_BODY, weight: 400, size: 21 })));
-    const slot = avail / nB;
+    const slot = (RIGHT - bx0) / Math.max(1, bars.length);
     bars.forEach((bb, i) => {
-      const ts = barStart(i); const k = eo(seg(t, ts, 0.16 * d)); if (k <= 0) return;
+      const ts = bb.t0; const k = eo(seg(t, ts, growD)); if (k <= 0) return;
       const x = bx0 + i * slot; const yb = Y(bb.cm * k); const maxLW = slot - barW - 40;
       ctx.save(); const g = ctx.createLinearGradient(0, Y(0), 0, Y(bb.cm)); g.addColorStop(0, rgba(bb.color, 0.08)); g.addColorStop(1, rgba(bb.color, 0.45)); ctx.fillStyle = g; ctx.fillRect(x, Y(0), barW, yb - Y(0)); ctx.restore();
       L.rect(ctx, x, Y(0), barW, yb - Y(0), bb.color, 2, 0.9);
       L.line(ctx, rulerX + 64, yb, x - 6, yb, bb.color, 1.3, 0.4, { alpha: 0.65 * k, dash: [5, 6] });
       L.line(ctx, x - 6, yb, x + barW + 6, yb, bb.color, 3, 1);
-      const ta = seg(t, ts + 0.08 * d, 0.4); const tx = x + barW + 18;
+      if (k >= 1) L.glowDot(ctx, x + barW / 2, yb, 22, bb.color, 0.25 + 0.15 * Math.sin(t * 2.2 + i));
+      const ta = seg(t, ts + growD * 0.5, 0.4); const tx = x + barW + 18;
       const hs = fitSize(ctx, labs[i].head, maxLW, { font: F_MONO, weight: 700, size: 30 }, 16);
       text(ctx, labs[i].head, tx, yb + 10, { font: F_MONO, weight: 700, size: hs, color: bb.color, alpha: ta, stroke: 5 });
       if (labs[i].sub) {
         const sl = wrap(ctx, labs[i].sub, maxLW, { font: F_BODY, weight: 400, size: 21 }).slice(0, 2);
         sl.forEach((l, j) => text(ctx, l, tx, yb + 42 + j * 26, { font: F_BODY, weight: 400, size: 21, color: COL.muted, alpha: ta, stroke: 4 }));
       }
-      void lw;
     });
     bandLabels.forEach(({ bd, k, y }) => {
       const bs = fitSize(ctx, bd.label, 520, { font: F_BODY, weight: 700, size: 32 }, 18);
-      text(ctx, bd.label, RIGHT - 20, y + 11, { font: F_BODY, weight: 700, size: bs, color: bd.color, align: "right", alpha: k, stroke: 6 });
+      const ny = bd.notes.length ? y - bd.notes.length * 14 : y;
+      if (k > 0) text(ctx, bd.label, RIGHT - 20, ny + 11 + (1 - eo(k)) * 8, { font: F_BODY, weight: 700, size: bs, color: bd.color, align: "right", alpha: k, stroke: 6 });
+      bd.notes.forEach((nt, j) => {
+        const na = seg(t, nt.t0, 0.45); if (na <= 0) return;
+        const ns = fitSize(ctx, nt.text, 520, { font: F_BODY, weight: 400, size: 22 }, 15);
+        text(ctx, nt.text, RIGHT - 20 + (1 - eo(na)) * 12, ny + 46 + j * 28, { font: F_BODY, weight: 400, size: ns, color: "rgba(238,246,255,0.85)", align: "right", alpha: na, stroke: 4 });
+      });
     });
-    if (foot) footnote(ctx, foot, RIGHT, 884, seg(t, 0.6 * d, 0.5), "right");
+    if (foot) footnote(ctx, foot, RIGHT, 896, seg(t, tFoot, 0.5), "right");
   }
 
   // ================================================================ MODUS: order_of_magnitude (1 in 1 Milliarde)
@@ -1327,17 +1365,25 @@
     let exp = toNum(pick(P, ["exponent", "power", "zehnerpotenz"]), NaN);
     if (!Number.isFinite(exp)) { const v = toNum(pick(P, ["total", "n", "count", "of"]), NaN); exp = Number.isFinite(v) && v > 1 ? Math.log10(v) : 9; }
     exp = Math.round(clamp(exp, 2, 12));
-    const label = str(pick(P, ["label", "result", "ergebnis", "value"], "≈ 1 Todesfall pro 1 Milliarde Fahrten"));
+    const label = P.label === "" || P.label === false ? "" : str(pick(P, ["label", "result", "ergebnis", "value"], "≈ 1 Todesfall pro 1 Milliarde Fahrten"));
     const scope = str(pick(P, ["scope", "sub", "bereich"], ""));
     const unitWord = str(pick(P, ["unit", "einheit", "what"], "Fahrten"));
+    const ONE = { fahrten: "Fahrt", aufzugsfahrten: "Aufzugsfahrt", menschen: "Mensch", personen: "Person", jahre: "Jahr", tage: "Tag", stunden: "Stunde", fälle: "Fall", faelle: "Fall", unfälle: "Unfall", starts: "Start", flüge: "Flug" };
+    const unitOne = str(pick(P, ["unit_one", "unit_singular", "einheit_einzahl"], "")) || ONE[unitWord.toLowerCase()] || unitWord;
     const foot = str(pick(P, ["footnote", "fussnote", "note"], ""));
-    const aHead = seg(t, 0, 0.5);
+    // Zeitplan: BEATS [0] Feld, [1] Zoom beginnt, [2] Zoom am Ziel, [3] Ergebnis-Kachel, [4] Fußnote
+    const tField = beatOf(p, 0, 0);
+    const tZ0 = beatOf(p, 1, 0.06 * d), tZ1 = Math.max(tZ0 + 0.5, beatOf(p, 2, 0.58 * d));
+    const resD = clamp(0.14 * d, 0.4, 0.8);
+    const tRes = atOf(P, d, beatOf(p, 3, Math.min(Math.max(0.6 * d, tZ1 - 0.3), d - 0.3 - resD)), ["result_at", "label_at"]);
+    const tFoot = atOf(P, d, beatOf(p, 4, Math.min(Math.max(0.7 * d, tRes + 0.4), d - 0.8)), ["footnote_at", "fussnote_at"]);
+    const aHead = seg(t, tField, 0.5);
     brackets(ctx, 100, 222, 1720, 676, aHead);
     const kick = P.kicker === "" || P.kicker === false ? "" : str(pick(P, ["kicker"], "GRÖSSENORDNUNG"));
     header(ctx, p, kick, str(pick(P, ["title", "titel"], "")), aHead);
     // Feld
-    const fx = 160, fy = 290, fw = 860, fh = 560; const cx = Math.round(fx + fw / 2), cy = Math.round(fy + fh / 2);
-    const c = lerp(1, exp, eio(seg(t, 0.06 * d, 0.52 * d))); // angezeigte Zehnerpotenz (stetig)
+    const fx = 160, fy = 290, fw = 860, fh = 540; const cx = Math.round(fx + fw / 2), cy = Math.round(fy + fh / 2);
+    const c = lerp(1, exp, eio(seg(t, tZ0, tZ1 - tZ0))); // angezeigte Zehnerpotenz (stetig)
     const sp = Math.sqrt((fw * fh) / Math.pow(10, c)); // Punktabstand in px: Feld zeigt ≈ 10^c Punkte
     ctx.save(); ctx.beginPath(); ctx.rect(fx, fy, fw, fh); ctx.clip();
     ctx.globalAlpha = aHead; ctx.fillStyle = "rgba(3,10,22,0.7)"; ctx.fillRect(fx, fy, fw, fh);
@@ -1346,7 +1392,7 @@
       const r = Math.min(7, sp * 0.16); ctx.fillStyle = "rgba(63,210,255,0.8)"; ctx.beginPath();
       const i0 = Math.ceil((fx - cx) / sp) - 1, i1 = Math.floor((fx + fw - cx) / sp) + 1, j0 = Math.ceil((fy - cy) / sp) - 1, j1 = Math.floor((fy + fh - cy) / sp) + 1;
       for (let i = i0; i <= i1; i++) for (let j = j0; j <= j1; j++) { if (!i && !j) continue; const x = cx + i * sp, y = cy + j * sp; ctx.moveTo(x + r, y); ctx.arc(x, y, r, 0, TAU); }
-      ctx.globalAlpha = aHead * clamp((t - 0.06 * d) / 0.4 + 0.2); ctx.fill();
+      ctx.globalAlpha = aHead * clamp((t - tField) / 0.6 + 0.2); ctx.fill();
     } else if (sp >= 2.2) {
       const tile = dotTile(); const pat = tile && ctx.createPattern(tile, "repeat");
       if (pat && typeof DOMMatrix !== "undefined") {
@@ -1364,9 +1410,11 @@
     }
     // Blockraster: je 10 × 10 Punkte ein Block, Blöcke wieder zu 10 × 10 …
     ctx.lineWidth = 1;
+    let legK = 0, legA = 0;
     for (let k = 1; k <= 7; k++) {
       const n = Math.pow(10, k); const G = sp * n; if (G < 14) continue; if (G > fh * 2.2) break;
       const a = clamp((G - 14) / 50) * clamp((fh * 2.2 - G) / (fh * 1.2));
+      if (a > legA + 0.05) { legA = a; legK = k; }
       const start = cx - sp / 2 - Math.floor((n - 1) / 2) * sp;
       ctx.globalAlpha = aHead * a * (0.18 + 0.1 * k / 7); ctx.strokeStyle = COL.cyan; ctx.beginPath();
       for (let x = start - Math.ceil((start - fx) / G) * G; x <= fx + fw; x += G) { ctx.moveTo(Math.round(x) + 0.5, fy); ctx.lineTo(Math.round(x) + 0.5, fy + fh); }
@@ -1377,6 +1425,21 @@
     }
     ctx.restore();
     L.rect(ctx, fx, fy, fw, fh, "rgba(63,210,255,0.55)", 1.4, 0.5, { alpha: aHead });
+    // Legende unter dem Feld: was ein Punkt bzw. ein Kästchen bedeutet
+    {
+      const ly = fy + fh + 38; const dotA = clamp((sp - 10) / 14);
+      const lo = { font: F_BODY, weight: 600, size: 22 };
+      let lx = fx;
+      if (dotA > 0.02) {
+        L.fillCircle(ctx, lx + 7, ly - 7, 6, "rgba(63,210,255,0.85)");
+        const s1 = `= 1 ${unitOne}`; text(ctx, s1, lx + 22, ly, { ...lo, color: COL.muted, alpha: aHead * dotA });
+        lx += 22 + measure(ctx, s1, lo) + 34;
+      }
+      if (legK > 0 && legA > 0.02) {
+        const bs = 16; ctx.save(); ctx.globalAlpha = aHead * legA; ctx.strokeStyle = COL.amber; ctx.lineWidth = 1.5; ctx.strokeRect(lx + 0.5, ly - bs + 0.5, bs, bs); ctx.restore();
+        text(ctx, `= ${POW_WORDS[Math.min(POW_WORDS.length - 1, 2 * legK)]} ${unitWord}`, lx + bs + 12, ly, { ...lo, color: COL.white, alpha: aHead * legA });
+      }
+    }
     // der eine Punkt
     const r = clamp(sp * 0.2, 5, 9);
     L.glowDot(ctx, cx, cy, 34 + 6 * Math.sin(t * 3), COL.amber, 0.7 * aHead);
@@ -1385,7 +1448,7 @@
     L.circle(ctx, cx, cy, r + 8 + ph * 34, COL.amber, 1.5, 0.6, { alpha: (1 - ph) * 0.8 * aHead });
     // Zähler + Dekadenleiter
     const rx = 1080, rw = 680;
-    const zi = clamp(Math.round(c), 0, POW_WORDS.length - 1); const word = POW_WORDS[zi];
+    const zi = clamp(Math.floor(c + 0.03), 0, POW_WORDS.length - 1); const word = POW_WORDS[zi]; // Zielwort erst, wenn der Zoom es erreicht
     text(ctx, "1 von", rx, 372, { font: F_BODY, weight: 600, size: 30, color: COL.muted, alpha: aHead });
     const ws = fitSize(ctx, "100 Milliarden", rw, { font: F_MONO, weight: 700, size: 72 }, 30);
     text(ctx, word, rx, 452, { font: F_MONO, weight: 700, size: ws, color: COL.cyan, glow: 14, alpha: aHead });
@@ -1395,13 +1458,16 @@
     for (let e = 1; e <= exp; e++) {
       const x = lerp(lx0, lx1, (e - 1) / Math.max(1, exp - 1)); const on = c >= e - 0.5;
       L.line(ctx, x, ly - (e % 3 === 0 ? 10 : 6), x, ly + (e % 3 === 0 ? 10 : 6), on ? COL.cyan : COL.muted, 1.6, on ? 0.6 : 0, { alpha: aHead });
-      if (e % 3 === 0 || e === 1 || e === exp) text(ctx, `10${String(e).split("").map((ch) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[+ch]).join("")}`, x, ly + 34, { font: F_MONO, weight: 400, size: 18, color: on ? COL.cyan : COL.muted, align: "center", alpha: aHead });
+      if (e % 3 === 0 || e === 1 || e === exp) {
+        text(ctx, "10", x - 4, ly + 38, { font: F_MONO, weight: 700, size: 21, color: on ? COL.cyan : COL.muted, align: "center", alpha: aHead });
+        text(ctx, String(e), x + 10, ly + 26, { font: F_MONO, weight: 700, size: 14, color: on ? COL.cyan : COL.muted, align: "left", alpha: aHead });
+      }
     }
     const mx = lerp(lx0, lx1, clamp((c - 1) / Math.max(1, exp - 1)));
     L.glowDot(ctx, mx, ly, 16, COL.amber, aHead); L.fillCircle(ctx, mx, ly, 4.5, COL.amber);
     // Ergebnis-Kachel
-    const rk = seg(t, 0.6 * d, 0.14 * d);
-    if (rk > 0) {
+    const rk = seg(t, tRes, resD);
+    if (rk > 0 && (label || scope)) {
       const by = 620 + (1 - eo(rk)) * 20, bh = scope ? 150 : 104;
       L.panel(ctx, rx, by, rw, bh, { alpha: rk, fill: "rgba(5,14,30,0.88)", stroke: L.C.amberSoft, r: 10 });
       ctx.save(); ctx.globalAlpha = rk; ctx.fillStyle = COL.amber; ctx.fillRect(rx, by + 14, 5, bh - 28); ctx.restore();
@@ -1409,7 +1475,7 @@
       text(ctx, label, rx + 32, by + 64, { font: F_BODY, weight: 800, size: ls, color: COL.amber, alpha: rk });
       if (scope) { const ss = fitSize(ctx, scope, rw - 60, { font: F_BODY, weight: 400, size: 25 }, 16); text(ctx, scope, rx + 32, by + 110, { font: F_BODY, weight: 400, size: ss, color: "rgba(238,246,255,0.85)", alpha: rk }); }
     }
-    if (foot) { const fl = wrap(ctx, foot, rw, { font: F_BODY, weight: 400, size: 21 }).slice(0, 2); fl.forEach((l, i) => text(ctx, l, rx, 812 + i * 28, { font: F_BODY, weight: 400, size: 21, color: COL.muted, alpha: seg(t, 0.7 * d, 0.5) })); }
+    if (foot) { const fl = wrap(ctx, foot, rw, { font: F_BODY, weight: 400, size: 21 }).slice(0, 2); fl.forEach((l, i) => text(ctx, l, rx, 812 + i * 28, { font: F_BODY, weight: 400, size: 21, color: COL.muted, alpha: seg(t, tFoot, 0.5) })); }
   }
 
   // ================================================================ Dispatcher
@@ -1437,6 +1503,7 @@
     draw(ctx, p) {
       const L = p.L; const P = isObj(p.params) ? p.params : {};
       const q = { ...p, params: P, d: Math.max(0.5, p.d || 8), t: Math.max(0, p.t || 0) };
+      q.beats = Array.isArray(P.beats) ? P.beats : Array.isArray(P.cues) ? P.cues : null;
       const mode = resolveMode(P);
       ctx.save();
       try {

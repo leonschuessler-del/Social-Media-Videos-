@@ -1,18 +1,37 @@
-/* Template "buffer" – Schachtgrube in Nahaufnahme: Puffer unter dem Fahrkorb (Röntgen-/Blueprint-Stil).
-   Der Fahrkorb (Unterholm, Pufferstempel, Anschlagplatte) senkt sich, setzt auf dem Puffer auf und drückt ihn ein.
+/* Template "buffer" – Schachtgrube: Puffer unter dem Fahrkorb (Röntgen-/Blueprint-Stil).
+
+   MODI
+   A) Einzelpuffer (type = ein Typ): Nahaufnahme. Unterholm mit Pufferstempel senkt sich, setzt auf und drückt den Puffer
+      ein (Physik in Zeitlupe). Beschriftungen (1 links, 4 rechts), Hub-Bemaßung, Infotafel rechts (Messwerte, Energiebalken
+      Bewegungsenergie -> Wärme bzw. gespeichert, Kraft-Weg-Kennlinie).
+   B) Vergleich (type = Liste mit 2–4 Typen, "Feder und Öl" oder buffers:[{…}]): Puffer nebeneinander in einer Grube. Je Puffer
+      ein Fahrkorb-Abschnitt, der aufsetzt und einfedert (gemeinsamer mm-Maßstab), Titel + Prinzip-Chip (energiespeichernd /
+      energieverzehrend), optional Hub-Bemaßung, Geschwindigkeits-Tag am Fahrkorb, Beschriftungs-Chip unter dem Puffer.
    Typen:
-     hydraulic     Hydraulikpuffer (energieverzehrend): Kolbenstange drückt Öl durch Drosselbohrungen im Innenrohr,
-                   die der Kolben nacheinander überfährt -> nahezu konstante Verzögerung; Energie wird zu Wärme.
-                   Rückstellfeder schiebt den Kolben nach Entlastung langsam zurück (Öl strömt zurück).
-     spring        Federpuffer (energiespeichernd, lineare Kennlinie): Schraubendruckfeder, deutlicher Rückprall.
-     polyurethane  PU-Puffer (energiespeichernd, nichtlinear): Elastomerblock wölbt sich aus, Rückprall gedämpft.
-   Params:
-     type      "hydraulic" | "spring" | "polyurethane" (Default hydraulic; Aliase: öl, hydraulik, feder, pu, elastomer …)
-     compress  bool (Default true) – Aufprall + Einfedern; false = Normalbetrieb, Puffer entlastet (Pufferabstand)
-     return    bool (nur hydraulic, Default: an bei d >= 7 s) – Fahrkorb wird angehoben, Kolben fährt langsam aus
-     labels    bool (Default true) – Beschriftungen am Puffer
-     panel     bool (Default true) – Infotafel rechts (Messwerte, Energiebilanz, Kraft-Weg-Kennlinie)
-   Physik (Beispielwerte, m = 1.600 kg, simuliert in physikalischer Zeit, Zeitlupe relativ zu d):
+     hydraulic     Hydraulik-/Ölpuffer (energieverzehrend): Kolben presst Öl durch Drosselbohrungen -> Wärme, kein Rückprall;
+                   Rückstellfeder schiebt den Kolben nach Entlastung langsam zurück.
+     spring        Federpuffer (energiespeichernd, linear): Schraubendruckfeder, deutlicher Rückprall.
+     polyurethane  PU-Puffer (energiespeichernd, nichtlinear): Elastomerblock wölbt sich aus, gedämpfter Rückprall.
+     Aliase: öl, hydraulik, feder, stahlfeder, pu, elastomer … (unbekannt -> hydraulic)
+
+   BEATS (params.beats, Sekunden ab Szenenstart, geklemmt auf [0,3; d-0,3]):
+     Einzelmodus:              [0] = Aufsetzen, [1] = max. Einfederung (setzt die Zeitlupe), [2] = Start Rückstellung (hydraulic)
+     Vergleich, sequence:      [i] = Erscheinen von Puffer i (Aufsetzen ca. 0,85 s später)            (Standard)
+     Vergleich, side_by_side:  [i] = Aufsetzen von Puffer i (alle Puffer erscheinen gemeinsam am Anfang)
+   "at" (Sekunden) akzeptieren:
+     Einzelmodus: callouts[i] (Zahl oder {at, title, sub, hide}; 0 = Pufferstempel, 1–4 = rechte Spalte), panel_at, dim_at
+     Vergleich:   buffers[i].at (Erscheinen) / .hit_at (Aufsetzen), hits[i], labels[i].at, dimensions[i].at, context_at, speed_at
+   Ohne beats/at: Standardzeiten relativ zu d. Einmal Gezeigtes bleibt bis Szenenende sichtbar.
+
+   Params: type, compress (bool, Default true; false = Fahrkorb steht über dem Puffer), beats
+   Einzelmodus: return (bool, hydraulic; Default an bei d >= 7 s oder mit beats[2]), labels (bool) bzw. callouts (Liste),
+                panel (bool), use (Text neben dem Prinzip-Chip, z. B. "für jede Nenngeschwindigkeit")
+   Vergleich:   buffers/items [{type, title, label | {text, at, color}, stroke | {stroke, at, note, caption}, at, hit_at}],
+                sequence | side_by_side (bool), labels [Text | {text, at, color}] (Reihenfolge oder per type),
+                dimensions [{type, stroke: "7 cm", at, note, caption}] (per type oder Reihenfolge; Einfederung maßstäblich),
+                show_stroke (bool; Hub nach EN 81-20 aus speed: Öl 0,0674·v², Feder 0,135·v²),
+                speed_label | speed ("1 m/s" | 1), context (Kennzeile oben), compress_duration (s, Default 0,12·d)
+   Physik Einzelmodus (Beispielwerte, m = 1.600 kg, Zeitlupe relativ zu d bzw. beats):
      hydraulic   Aufprall 1,84 m/s (115 % von 1,6 m/s), Hub 250 mm, Verzögerung ca. 0,75 g (kurze Spitze ~1,1 g)
      spring      Aufprall 1,15 m/s (115 % von 1,0 m/s), c = 350 kN/m, Federweg ca. 128 mm, Rückprall
      polyureth.  Aufprall 1,15 m/s, progressive Kennlinie mit Hysterese, Einfederung ca. 103 mm */
@@ -158,17 +177,70 @@
     return undefined;
   }
   function pick(P, keys) { for (const k of keys) { const v = P[k]; if (v !== undefined && v !== null && v !== "") return v; } return undefined; }
-  function config(P) {
+  const TYPE_KEYS = ["type", "typ", "kind", "variant", "art", "buffer", "puffer", "bufferType", "buffer_type"];
+  const LIST_KEYS = ["buffers", "items", "slots", "puffer_liste", "compare", "vergleich"];
+  const AT_KEYS = ["at", "time", "t_at", "start_at", "appear_at", "zeit"];
+  /** Puffertyp aus beliebigem Text/Objekt; null = unbekannt. */
+  function typeOf(v) {
+    if (v && typeof v === "object" && !Array.isArray(v)) v = pick(v, TYPE_KEYS);
+    if (v === undefined || v === null || typeof v === "object") return null;
+    const raw = String(v).trim().toLowerCase(); if (!raw) return null;
+    if (/^pu$|^pur$|\bpu\b|poly|urethan|elastom|gummi|rubber|cellasto|schaum|foam/.test(raw)) return "polyurethane";
+    if (/spring|feder|coil|schrauben|linear|speicher|accum/.test(raw)) return "spring";
+    if (/hydr|öl|oel|oil|dämpf|daempf|verzehr|dissip|damp|kolben|zylinder/.test(raw)) return "hydraulic";
+    return null;
+  }
+  /** Zahl aus Zahl oder Text ("1,5 s") – NaN wenn keine. */
+  function secNum(v) {
+    if (typeof v === "number") return v;
+    if (typeof v === "string") { const m = v.replace(",", ".").match(/-?\d+(\.\d+)?/); return m ? parseFloat(m[0]) : NaN; }
+    return NaN;
+  }
+  const tClamp = (x, d) => clamp(x, Math.min(0.3, d * 0.5), Math.max(d * 0.5, d - 0.3));
+  /** o[keys] -> geklemmte Sekunden, sonst undefined. */
+  function atOf(o, d, keys) {
+    if (o && typeof o === "object") for (const k of keys || AT_KEYS) { const n = secNum(o[k]); if (Number.isFinite(n)) return tClamp(n, d); }
+    return undefined;
+  }
+  /** params.beats[i] -> geklemmte Sekunden, sonst undefined. */
+  function beatOf(P, i, d) {
+    const b = P && P.beats; if (!Array.isArray(b) || i >= b.length) return undefined;
+    const n = secNum(b[i]); return Number.isFinite(n) ? tClamp(n, d) : undefined;
+  }
+  /** Freitext: Dezimalpunkt -> Komma (1–2 Nachkommastellen, Tausenderpunkte bleiben). */
+  const deText = (v) => String(v).replace(/(\d)\.(\d{1,2})(?!\d)/g, "$1,$2");
+  function textOf(v, keys) {
+    if (v === undefined || v === null || v === false) return "";
+    if (typeof v === "number") return deText(v);
+    if (typeof v === "string") return deText(v.trim());
+    if (typeof v === "object" && !Array.isArray(v)) { const x = pick(v, keys || ["text", "label", "title", "name", "value", "wert"]); return typeof x === "string" || typeof x === "number" ? deText(String(x).trim()) : ""; }
+    return "";
+  }
+  function config(P, d) {
     P = P && typeof P === "object" ? P : {};
-    const raw = String(pick(P, ["type", "typ", "kind", "variant", "art", "buffer", "puffer", "bufferType", "buffer_type"]) ?? "hydraulic").toLowerCase();
-    let type = "hydraulic";
-    if (/^pu$|^pur$|\bpu\b|poly|urethan|elastom|gummi|rubber|cellasto|schaum|foam/.test(raw)) type = "polyurethane";
-    else if (/spring|feder|coil|schrauben|linear|speicher|accum/.test(raw)) type = "spring";
+    let tv = pick(P, TYPE_KEYS);
+    if (Array.isArray(tv)) tv = tv.find((e) => typeOf(e)) ?? tv[0];
+    if (tv === undefined) for (const k of LIST_KEYS) if (Array.isArray(P[k]) && P[k].length) { tv = P[k].find((e) => typeOf(e)); break; }
+    const type = typeOf(tv) || "hydraulic";
     const c = bool(pick(P, ["compress", "compressed", "compression", "impact", "aufprall", "einfedern", "active", "animate", "hit"]));
     const r = bool(pick(P, ["return", "rueckstellung", "rückstellung", "reset", "restore", "showReturn", "show_return"]));
     const lb = bool(pick(P, ["labels", "label", "callouts", "beschriftung"]));
     const pn = bool(pick(P, ["panel", "hud", "info", "infotafel"]));
-    return { type, compress: c === undefined ? true : c, ret: r, labels: lb === undefined ? true : lb, panel: pn === undefined ? true : pn };
+    // Beschriftungen einzeln steuern: callouts/labels als Liste [Sekunden | {at, title, sub}]
+    const coL = Array.isArray(P.callouts) ? P.callouts : Array.isArray(P.labels) ? P.labels : null;
+    const co = [];
+    if (coL) for (let i = 0; i < 5; i++) {
+      const e = coL[i]; if (e === undefined || e === null) { co.push(null); continue; }
+      if (typeof e === "number") { co.push({ at: tClamp(e, d) }); continue; }
+      if (typeof e === "string") { co.push({ title: deText(e) }); continue; }
+      co.push({ at: atOf(e, d), title: textOf(e, ["title", "text", "label", "name"]) || undefined, sub: e.sub !== undefined || e.subtitle !== undefined ? textOf(e.sub ?? e.subtitle) : undefined, hide: bool(e.show) === false || bool(e.hide) === true });
+    }
+    const use = textOf(pick(P, ["use", "verdict", "limit", "einsatz", "zulassung"]));
+    return {
+      type, compress: c === undefined ? true : c, ret: r, labels: lb === undefined ? true : lb, panel: pn === undefined ? true : pn,
+      b0: beatOf(P, 0, d), b1: beatOf(P, 1, d), b2: beatOf(P, 2, d), co, use,
+      panelAt: atOf(P, d, ["panel_at", "panelAt", "hud_at"]), dimAt: atOf(P, d, ["dim_at", "dimension_at", "stroke_at", "hub_at"]),
+    };
   }
 
   // ---------- Typ-Daten ----------
@@ -177,6 +249,8 @@
     spring: { m: 1600, vN: 1.0, vi: 1.15, k: 350000, zeta: 0.02 },
     polyurethane: { m: 1600, vN: 1.0, vi: 1.15, k0: 180000, x0: 0.1, beta: 0.03 },
   };
+  // Vergleichsmodus: Feder mit mehr Systemdämpfung (Führungen, Seile), damit der Fahrkorb nach einem Rückprall zur Ruhe kommt
+  const SPEC_M = { spring: { m: 1600, vN: 1.0, vi: 1.15, k: 350000, zeta: 0.12 } };
   const INFO = {
     hydraulic: {
       title: "HYDRAULIKPUFFER", sub: "Ölpuffer – Kolben presst Öl durch Drosselbohrungen",
@@ -231,9 +305,10 @@
 
   // ---------- Physik (physikalische Zeit tau ab Aufprall) ----------
   const PH = {};
-  function physics(type) {
-    if (PH[type]) return PH[type];
-    const sp = SPEC[type], m = sp.m, dt = 0.00005, REC = 20, TEND = 3.2, dts = dt * REC;
+  function physics(type, variant) {
+    const key = type + (variant || "");
+    if (PH[key]) return PH[key];
+    const sp = (variant && SPEC_M[type]) || SPEC[type], m = sp.m, dt = 0.00005, REC = 20, TEND = 3.2, dts = dt * REC;
     const N = Math.round(TEND / dts) + 1;
     const X = new Float32Array(N), V = new Float32Array(N), F = new Float32Array(N), ED = new Float32Array(N), EE = new Float32Array(N), AP = new Float32Array(N);
     let x = 0, v = sp.vi, ed = 0, stop = -1, tauMax = -1, xMax = 0, tauR = -1, tauL2 = -1, aPk = 0, k = 0;
@@ -285,7 +360,7 @@
     ph.W = Math.max(1, type === "hydraulic" ? qm.ed : qm.ed + qm.ee);
     const qr = sampleP(ph, tauR);
     ph.heatR = clamp(qr.ed / ph.W); ph.storR = clamp(qr.ee / ph.W); ph.kinR = clamp(1 - ph.heatR - ph.storR);
-    PH[type] = ph; return ph;
+    PH[key] = ph; return ph;
   }
   function sampleP(ph, tau) {
     const i = clamp(tau / ph.dts, 0, ph.N - 1), i0 = Math.floor(i), i1 = Math.min(ph.N - 1, i0 + 1), f = i - i0;
@@ -295,12 +370,16 @@
   // ---------- Zeitsteuerung ----------
   function timing(d, cfg, ph, g) {
     const FR = 0.3;                                   // Anteil von d für Einfedern (+ erster Rückprall)
-    const k1 = (FR * d) / ph.tauR;                    // Bildschirm-s je physikalische s (Zeitlupe)
+    let k1 = (FR * d) / ph.tauR;                      // Bildschirm-s je physikalische s (Zeitlupe)
+    const b0 = cfg.b0, b1 = cfg.b1;
+    if (b0 !== undefined && b1 !== undefined && b1 > b0 + 0.2) k1 = (b1 - b0) / ph.tauMax;   // BEATS[1] = max. Einfederung
     const vpx = (ph.vi * 1000 * g.S) / k1;            // px/s in der Annäherung
-    const tC = clamp(235 / vpx, 0.14 * d, 0.3 * d);   // Aufprallzeitpunkt
-    const tW = tC + FR * d, w = 0.06 * d, r = cfg.type === "hydraulic" ? 1 : 2.6;
-    const ret = cfg.type === "hydraulic" && (cfg.ret === undefined ? d >= 7 : cfg.ret);
-    const tR0 = Math.max(tW + 0.1 * d, 0.68 * d);
+    let tC = clamp(235 / vpx, 0.14 * d, 0.3 * d);     // Aufprallzeitpunkt
+    if (b0 !== undefined) tC = b0;                    // BEATS[0] = Aufsetzen
+    else if (b1 !== undefined) tC = Math.max(0.3, b1 - k1 * ph.tauMax);
+    const tW = tC + k1 * ph.tauR, w = 0.06 * d, r = cfg.type === "hydraulic" ? 1 : 2.6;
+    const ret = cfg.type === "hydraulic" && (cfg.ret === undefined ? (cfg.b2 !== undefined || d >= 7) : cfg.ret);
+    const tR0 = cfg.b2 !== undefined ? Math.max(cfg.b2, tW + 0.1) : Math.max(tW + 0.1 * d, 0.68 * d);   // BEATS[2] = Rückstellung
     return { k1, vpx, tC, tW, w, r, ret, tR0 };
   }
   function tauAt(tm, t) {
@@ -362,14 +441,16 @@
   const m0 = (ph) => ph.m;
 
   // ---------- Hintergrund-Effekte ----------
-  function drawFX(ctx, s, t) {
+  const FXB = { x0: 150, w: 1040, y0: 250, h: 590, xa: 140, xb: 1200, sy0: 230, sh: 640, n: 30 };
+  function drawFX(ctx, s, t, B) {
+    B = B || FXB;
     // Staubpartikel in der Grube
     ctx.save(); ctx.fillStyle = COL.cyan;
     for (let b = 0; b < 3; b++) {
       ctx.globalAlpha = GA * (0.1 + 0.1 * b); ctx.beginPath();
-      for (let i = b; i < 30; i += 3) {
-        const x = 150 + frac(h01(i * 3.1) + t * 0.006 * (0.4 + h01(i * 1.7))) * 1040;
-        const y = 250 + h01(i * 7.7) * 590 + Math.sin(t * 0.6 + i * 1.3) * 10 - ((t * 5 * h01(i * 2.2)) % 40);
+      for (let i = b; i < B.n; i += 3) {
+        const x = B.x0 + frac(h01(i * 3.1) + t * 0.006 * (0.4 + h01(i * 1.7))) * B.w;
+        const y = B.y0 + h01(i * 7.7) * B.h + Math.sin(t * 0.6 + i * 1.3) * 10 - ((t * 5 * h01(i * 2.2)) % 40);
         const r = (1 + 1.6 * h01(i * 4.3)) * (0.7 + 0.3 * Math.sin(t * 1.3 + i));
         ctx.moveTo(x + r, y); ctx.arc(x, y, r, 0, TAU);
       }
@@ -377,7 +458,7 @@
     }
     ctx.restore();
     // Röntgen-Scan über die Grube
-    const ys = 230 + frac(t / 5.5) * 640, xa = 140, xb = 1200;
+    const ys = B.sy0 + frac(t / 5.5) * B.sh, xa = B.xa, xb = B.xb;
     const gr = ctx.createLinearGradient(xa, 0, xb, 0);
     gr.addColorStop(0, "rgba(63,210,255,0)"); gr.addColorStop(0.25, "rgba(63,210,255,1)"); gr.addColorStop(0.75, "rgba(63,210,255,1)"); gr.addColorStop(1, "rgba(63,210,255,0)");
     for (let k = 0; k < 6; k++) stk(ctx, (c) => { c.moveTo(xa, ys - k * 9); c.lineTo(xb, ys - k * 9); }, gr, k ? 9 : 1.2, 0, k ? (0.016 * (6 - k)) / 5 : 0.12, { cap: "butt" });
@@ -831,10 +912,15 @@
   }
 
   // ---------- Beschriftungen ----------
+  let CO_MAXR = 382;                                   // max. Breite rechte Boxen (ohne Infotafel größer)
   function callout(ctx, L, ax, ay, i, title, sub, prog, color, hot, dy) {
-    const p = clamp(prog); if (p <= 0.001) return;
+    const p = clamp(prog); if (p <= 0.001 || !title) return;
     const left = i === 0, by = CB_Y[i] + (dy || 0);
-    const tw = meas(L, ctx, title, { size: 22, weight: 600 }), sw = sub ? meas(L, ctx, sub, { size: 16, weight: 400 }) : 0;
+    let tsz = 22, ssz = 16;
+    const tw0 = meas(L, ctx, title, { size: 22, weight: 600 }), sw0 = sub ? meas(L, ctx, sub, { size: 16, weight: 400 }) : 0;
+    const maxW = left ? LB_R - 96 : CO_MAXR, f = Math.min(1, (maxW - 40) / Math.max(1, tw0, sw0));
+    if (f < 1) { tsz = Math.max(13, 22 * f); ssz = Math.max(11, 16 * f); }
+    const tw = tw0 * tsz / 22, sw = sw0 * ssz / 16;
     const w = Math.max(tw, sw) + 40, h = sub ? 62 : 44, y = by - h / 2;
     const bx = left ? LB_R - w : CB_X, ex = left ? LB_R : CB_X, kx = left ? ex + 26 : ex - 26, lp = easeOut(inv(0, 0.5, p));
     const l1 = Math.hypot(kx - ax, by - ay), l2 = Math.abs(ex - kx), tot = l1 + l2, dl = lp * tot;
@@ -844,9 +930,9 @@
     fil(ctx, (c) => c.arc(ax, ay, 3.5, 0, TAU), color, p);
     const bp = easeOut(inv(0.3, 0.85, p)); if (bp <= 0) return;
     if (p >= 1) {
-      const hq = Math.round(hotA * 4) / 4, key = `co|${title}|${sub}|${color}|${left}|${hq}`;
+      const hq = Math.round(hotA * 4) / 4, key = `co|${title}|${sub}|${color}|${left}|${hq}|${y}|${tsz}`;
       const x0 = (left ? ex - w : bx) - 12;
-      layer(ctx, key, x0, y - 12, w + 24, h + 24, 1, (g) => boxRaw(g, L, left, ex, bx, y, w, h, title, sub, color, hq));
+      layer(ctx, key, x0, y - 12, w + 24, h + 24, 1, (g) => boxRaw(g, L, left, ex, bx, y, w, h, title, sub, color, hq, tsz, ssz));
       return;
     }
     const bw = w * bp, bx0 = left ? ex - bw : bx;
@@ -855,44 +941,46 @@
     fil(ctx, rect(left ? ex - 3 : bx, y + 8, 3, h - 16), color, bp);
     const ta = inv(0.55, 1, p);
     const tx = left ? ex - 18 : bx + 18, al = left ? "right" : "left";
-    txt(L, ctx, title, tx, y + (sub ? 27 : 29), { size: 22, weight: 600, color: COL.white, alpha: ta, align: al });
-    if (sub) txt(L, ctx, sub, tx, y + 50, { size: 16, weight: 400, color: COL.muted, alpha: ta, align: al });
+    txt(L, ctx, title, tx, y + (sub ? 27 : 29), { size: tsz, weight: 600, color: COL.white, alpha: ta, align: al });
+    if (sub) txt(L, ctx, sub, tx, y + 50, { size: ssz, weight: 400, color: COL.muted, alpha: ta, align: al });
   }
-  function boxRaw(ctx, L, left, ex, bx, y, w, h, title, sub, color, hotA) {
+  function boxRaw(ctx, L, left, ex, bx, y, w, h, title, sub, color, hotA, tsz, ssz) {
     const bx0 = left ? ex - w : bx;
     fil(ctx, (c) => rr(c, bx0, y, w, h, 6), "rgba(5,14,30,0.88)", 1);
     stk(ctx, (c) => rr(c, bx0, y, w, h, 6), rgba(color, 0.45 + 0.4 * hotA), 1.3, 0.4 + hotA, 1);
     fil(ctx, rect(left ? ex - 3 : bx, y + 8, 3, h - 16), color, 1);
     const tx = left ? ex - 18 : bx + 18, al = left ? "right" : "left";
-    L.text(ctx, title, tx, y + (sub ? 27 : 29), { size: 22, weight: 600, color: COL.white, align: al });
-    if (sub) L.text(ctx, sub, tx, y + 50, { size: 16, weight: 400, color: COL.muted, align: al });
+    L.text(ctx, title, tx, y + (sub ? 27 : 29), { size: tsz || 22, weight: 600, color: COL.white, align: al });
+    if (sub) L.text(ctx, sub, tx, y + 50, { size: ssz || 16, weight: 400, color: COL.muted, align: al });
   }
   function drawCallouts(ctx, L, s, t) {
-    const g = s.g, d = s.d, rv = (k) => easeOut(inv(0.03 * d + k * 0.045 * d, 0.03 * d + k * 0.045 * d + Math.max(0.5, 0.1 * d), t));
+    const g = s.g, d = s.d, co = s.cfg.co || [];
+    const rv = (k) => { const o = co[k]; if (o && o.hide) return 0; if (o && o.at !== undefined) return easeOut(inv(o.at, o.at + 0.6, t)); return easeOut(inv(0.03 * d + k * 0.045 * d, 0.03 * d + k * 0.045 * d + Math.max(0.5, 0.1 * d), t)); };
+    const T = (k, title, sub) => { const o = co[k]; return [o && o.title !== undefined ? o.title : title, o && o.sub !== undefined ? o.sub : sub]; };
     const act = s.idle ? 0 : clamp(Math.abs(s.flow) * 1.5);
     const rvP = s.leftBox;
-    callout(ctx, L, BX - 22, s.yS - PLATE_H - (s.idle ? 44 : 84), 0, "Pufferstempel", "mit Anschlagplatte", rvP, COL.cyan, 0, s.idle ? -18 : 0);
+    callout(ctx, L, BX - 22, s.yS - PLATE_H - (s.idle ? 44 : 84), 0, ...T(0, "Pufferstempel", "mit Anschlagplatte"), rvP, COL.cyan, 0, s.idle ? -18 : 0);
     if (s.type === "hydraulic") {
       const plTop = Y_TOP + g.padH + g.plateH + s.xb, pisBot = g.pis0 + s.xb + g.pisH;
-      callout(ctx, L, BX + g.plW / 2, (plTop + g.cylTop) / 2, 1, "Kolbenstange", "taucht in den Zylinder ein", rv(1), COL.cyan, 0);
-      callout(ctx, L, BX + (g.iW + g.oW) / 4 + 2, g.lvl0 + 40, 2, "Hydrauliköl", "nimmt die Energie als Wärme auf", rv(2), COL.amber, s.heatGlow * 0.4);
+      callout(ctx, L, BX + g.plW / 2, (plTop + g.cylTop) / 2, 1, ...T(1, "Kolbenstange", "taucht in den Zylinder ein"), rv(1), COL.cyan, 0);
+      callout(ctx, L, BX + (g.iW + g.oW) / 4 + 2, g.lvl0 + 40, 2, ...T(2, "Hydrauliköl", "nimmt die Energie als Wärme auf"), rv(2), COL.amber, s.heatGlow * 0.4);
       const hy = clamp(pisBot + 22, g.holes[1], g.holes[6]);
-      callout(ctx, L, BX + g.iW / 2, hy, 3, "Drosselbohrungen", s.returning ? "Öl strömt zurück" : "Öl wird hindurchgepresst", rv(3), COL.amber, act);
-      callout(ctx, L, BX + g.pisW / 2 - 7, (pisBot + g.chBot) / 2 + 6, 4, "Rückstellfeder", "schiebt den Kolben zurück", rv(4), COL.steel, s.returning ? 0.6 : 0);
+      callout(ctx, L, BX + g.iW / 2, hy, 3, ...T(3, "Drosselbohrungen", s.returning ? "Öl strömt zurück" : "Öl wird hindurchgepresst"), rv(3), COL.amber, act);
+      callout(ctx, L, BX + g.pisW / 2 - 7, (pisBot + g.chBot) / 2 + 6, 4, ...T(4, "Rückstellfeder", "schiebt den Kolben zurück"), rv(4), COL.steel, s.returning ? 0.6 : 0);
     } else if (s.type === "spring") {
       const capTop = s.capTop ?? Y_TOP + g.padH + s.xb;
-      callout(ctx, L, BX + g.capW / 2, capTop + g.capH / 2, 1, "Aufsetzplatte", "mit Gummiauflage", rv(1), COL.cyan, 0);
-      callout(ctx, L, BX + g.OD / 2 - 2, s.springMidY ?? 620, 2, "Schraubendruckfeder", s.idle ? "speichert Energie beim Einfedern" : "speichert die Energie", rv(2), COL.amber, clamp(s.stored * 1.5));
-      callout(ctx, L, BX + g.spigW / 2, g.baseTop - g.spigH * 0.45, 3, "Zentrierdorn", "führt die Feder", rv(3), COL.steel, 0);
-      callout(ctx, L, BX + 130, g.pedTop + g.ped * 0.55, 4, "Puffersockel", "in der Schachtgrube verankert", rv(4), COL.steel, 0);
+      callout(ctx, L, BX + g.capW / 2, capTop + g.capH / 2, 1, ...T(1, "Aufsetzplatte", "mit Gummiauflage"), rv(1), COL.cyan, 0);
+      callout(ctx, L, BX + g.OD / 2 - 2, s.springMidY ?? 620, 2, ...T(2, "Schraubendruckfeder", s.idle ? "speichert Energie beim Einfedern" : "speichert die Energie"), rv(2), COL.amber, clamp(s.stored * 1.5));
+      callout(ctx, L, BX + g.spigW / 2, g.baseTop - g.spigH * 0.45, 3, ...T(3, "Zentrierdorn", "führt die Feder"), rv(3), COL.steel, 0);
+      callout(ctx, L, BX + 130, g.pedTop + g.ped * 0.55, 4, ...T(4, "Puffersockel", "in der Schachtgrube verankert"), rv(4), COL.steel, 0);
     } else {
       const sh = s.puShape || puShape(s);
       const yA = sh.yt + sh.h * 0.2, yM = sh.yb - sh.h * 0.5;
-      callout(ctx, L, BX + sh.wAt(yA) / 2, yA, 1, "Polyurethan-Puffer", "zelliges Elastomer", rv(1), COL.amber, clamp(s.stored * 1.5));
+      callout(ctx, L, BX + sh.wAt(yA) / 2, yA, 1, ...T(1, "Polyurethan-Puffer", "zelliges Elastomer"), rv(1), COL.amber, clamp(s.stored * 1.5));
       const bq = s.idle ? 1 : smooth(inv(0.02, 0.09, sh.bulge));
-      callout(ctx, L, BX + sh.wAt(yM) / 2, yM, 2, "Ausbauchung", s.idle ? "Block wölbt sich beim Einfedern aus" : "Material weicht seitlich aus", Math.min(rv(2), s.idle ? 1 : Math.max(bq, s.tau > s.ph.tauMax ? 1 : 0)), COL.amber, 0);
-      callout(ctx, L, BX + g.baseW / 2, g.baseTop + 5, 3, "Grundplatte", "mit dem Puffer verschraubt", rv(3), COL.steel, 0);
-      callout(ctx, L, BX + g.colW / 2, 770, 4, "Pufferstütze", "Stahlkonsole auf dem Grubenboden", rv(4), COL.steel, 0);
+      callout(ctx, L, BX + sh.wAt(yM) / 2, yM, 2, ...T(2, "Ausbauchung", s.idle ? "Block wölbt sich beim Einfedern aus" : "Material weicht seitlich aus"), Math.min(rv(2), s.idle ? 1 : Math.max(bq, s.tau > s.ph.tauMax ? 1 : 0)), COL.amber, 0);
+      callout(ctx, L, BX + g.baseW / 2, g.baseTop + 5, 3, ...T(3, "Grundplatte", "mit dem Puffer verschraubt"), rv(3), COL.steel, 0);
+      callout(ctx, L, BX + g.colW / 2, 770, 4, ...T(4, "Pufferstütze", "Stahlkonsole auf dem Grubenboden"), rv(4), COL.steel, 0);
     }
   }
 
@@ -903,7 +991,7 @@
   };
   const BAR = { x: PX0 + PIN, y: 612, w: PW - 2 * PIN, h: 34 };
   const PLOT = { x0: PX0 + 84, x1: PX0 + PW - 34, y0: 732, y1: 842 };
-  function panelStatic(ctx, L, type) {
+  function panelStatic(ctx, L, type, use) {
     const info = INFO[type], ph = physics(type);
     L.panel(ctx, PX0, 206, PW, 342, { fill: "rgba(5,14,30,0.86)", r: 14 });
     L.text(ctx, "PUFFER IN DER SCHACHTGRUBE", PX0 + PIN, 244, { size: 14, weight: 700, font: L.FONT.mono, color: COL.amber, letterSpacing: 3 });
@@ -914,7 +1002,8 @@
     stk(ctx, (c) => rr(c, PX0 + PIN, 338, cw, 34, 17), info.modeCol, 1.5, 0.8, 1);
     fil(ctx, (c) => c.arc(PX0 + PIN + 18, 355, 4.5, 0, TAU), info.modeCol, 1);
     L.text(ctx, info.mode, PX0 + PIN + 32, 361, { size: 15, weight: 700, font: L.FONT.mono, color: info.modeCol, letterSpacing: 2 });
-    L.text(ctx, info.use, PX0 + PW - PIN, 361, { size: 16, weight: 400, color: COL.muted, align: "right" });
+    { const u = use || info.use, avail = PW - 2 * PIN - cw - 16, uw = L.measure(ctx, u, { size: 16, weight: use ? 600 : 400 });
+      L.text(ctx, u, PX0 + PW - PIN, 361, { size: uw > avail ? Math.max(11, 16 * avail / uw) : 16, weight: use ? 600 : 400, color: use ? COL.white : COL.muted, align: "right" }); }
     stk(ctx, (c) => { c.moveTo(PX0 + PIN, 388); c.lineTo(PX0 + PW - PIN, 388); }, COL.cyan, 1, 0, 0.25);
     const bw = (PW - 2 * PIN - 24) / 3, labels = ["GESCHWINDIGKEIT", "EINFEDERUNG", "PUFFERKRAFT"];
     for (let i = 0; i < 3; i++) {
@@ -946,10 +1035,11 @@
 
   function drawPanel(ctx, L, s, t) {
     const type = s.type, info = INFO[type], ph = s.ph, d = s.d;
-    const inA = easeOut(inv(0.05, 0.75, t)); if (inA <= 0) return;
+    const pa = s.cfg.panelAt !== undefined ? s.cfg.panelAt : 0.05;
+    const inA = easeOut(inv(pa, pa + 0.7, t)); if (inA <= 0) return;
     const dx = (1 - inA) * 40;
     ctx.save(); ctx.translate(dx, 0); GA = inA;
-    layer(ctx, "panel|" + type, PX0 - 10, 196, PW + 20, 696, 1, (g) => panelStatic(g, L, type));
+    layer(ctx, "panel|" + type + "|" + s.cfg.use, PX0 - 10, 196, PW + 20, 696, 1, (g) => panelStatic(g, L, type, s.cfg.use));
     // Status
     const [pl, pc] = PHASE[s.phase] || PHASE.idle;
     const cw = meas(L, ctx, pl, { size: 14, weight: 700, font: L.FONT.mono, letterSpacing: 2 }) + 42;
@@ -1086,32 +1176,385 @@
     }
   }
 
+  // =====================================================================
+  // ---------- Vergleichsmodus: 2–4 Puffer nebeneinander ----------
+  // Jeder Puffer wird mit den Einzelmodus-Zeichnern im lokalen Koordinatensystem (BX/FLOOR) gezeichnet und
+  // per Transformation (Maßstab MK) in seine Spalte gesetzt. Einfederung in gemeinsamem Maßstab (px je mm).
+  // =====================================================================
+  const MK = 0.6, MFLOOR = 792, MGAP = 44;                        // Maßstab lokal->Bild, Grubenboden (Bild-y), Anfangsabstand (Bild-px)
+  const M_COL = 100, M_BEAM = 44, M_BEAMW = 470, M_PLAT = 22;      // Stempel / Unterholm-Abschnitt (lokale px)
+  const M_TITLE_Y = 262, M_CHIP_Y = 276, M_LABEL_Y = 855, M_CTX_Y = 214;
+  const M_TITLE = { hydraulic: "ÖLPUFFER", spring: "FEDERPUFFER", polyurethane: "POLYURETHANPUFFER" };
+  const M_MODE = { hydraulic: ["ENERGIEVERZEHREND", COL.red], spring: ["ENERGIESPEICHERND", COL.amber], polyurethane: ["ENERGIESPEICHERND", COL.amber] };
+  const M_DEF_STROKE = { hydraulic: 67.4, spring: 135, polyurethane: 100 };   // mm bei 1 m/s (EN 81-20: 0,0674·v² bzw. 2·0,0674·v²)
+  const COLN = { amber: COL.amber, orange: COL.amber, gelb: COL.amber, cyan: COL.cyan, blau: COL.cyan, blue: COL.cyan, red: COL.red, rot: COL.red, green: COL.green, gruen: COL.green, "grün": COL.green, white: COL.white, weiss: COL.white, "weiß": COL.white, steel: COL.steel, grau: COL.steel };
+  const colorOf = (v, def) => { if (typeof v !== "string") return def; const k = v.trim().toLowerCase(); if (COLN[k]) return COLN[k]; return /^#[0-9a-f]{6}$/.test(k) ? k : def; };
+  const SPLIT_RE = /\s*(?:[,;+&\/|]|\bund\b|\bvs\.?|\bgegen\b)\s*/i;
+  const cmText = (mm) => { const c = mm / 10; return `${fmt(c, Math.abs(c - Math.round(c)) < 0.05 ? 0 : 1)} cm`; };
+  /** Länge in mm aus "13,5 cm" | "70 mm" | "0,07 m" | Zahl (= mm). */
+  function lenMM(v) {
+    if (typeof v === "number") return v > 0 ? v : NaN;
+    if (typeof v !== "string") return NaN;
+    const m = v.replace(/(\d),(\d)/g, "$1.$2").match(/(\d+(?:\.\d+)?)\s*(mm|cm|m)?(?![a-zäöü\/])/i);
+    if (!m) return NaN;
+    const n = parseFloat(m[1]), u = (m[2] || "").toLowerCase();
+    const mm = u === "m" ? n * 1000 : u === "cm" ? n * 10 : u === "mm" ? n : n < 50 ? n * 10 : n;
+    return mm > 0 ? mm : NaN;
+  }
+  const HIT_KEYS = ["hit_at", "compress_at", "impact_at", "contact_at", "aufsetzen_at"];
+
+  function multiConfig(P, d) {
+    let list = null;
+    for (const k of LIST_KEYS) if (Array.isArray(P[k]) && P[k].length) { list = P[k]; break; }
+    const tv = pick(P, TYPE_KEYS);
+    if (!list && Array.isArray(tv)) list = tv;
+    if (!list && typeof tv === "string") { const parts = tv.split(SPLIT_RE).filter((x) => typeOf(x)); if (parts.length >= 2) list = parts; }
+    if (!list) return null;
+    const items = [];
+    for (const e of list) {
+      const o = e && typeof e === "object" && !Array.isArray(e) ? e : { type: e };
+      const ty = typeOf(o) || typeOf(o.title) || typeOf(o.name) || typeOf(o.label);
+      if (!ty) continue;
+      items.push({ o, type: ty, i: items.length });
+      if (items.length >= 4) break;
+    }
+    if (items.length < 2) return null;
+    const n = items.length;
+    const side = bool(pick(P, ["side_by_side", "sideBySide", "side", "parallel", "nebeneinander", "simultan", "together"]));
+    const seqB = bool(pick(P, ["sequence", "sequential", "nacheinander", "stagger"]));
+    const seq = side === true ? false : seqB !== false;
+    const cmp = bool(pick(P, ["compress", "compressed", "compression", "impact", "aufprall", "einfedern", "active", "animate", "hit"]));
+    const Dc = clamp(num(pick(P, ["compress_duration", "compressDuration", "slowmo", "zeitlupe"]), clamp(0.12 * d, 0.55, 1.0)), 0.3, 3);
+    // Geschwindigkeit (Anzeige am Fahrkorb + Standard-Hub)
+    const spv = pick(P, ["speed_label", "speedLabel", "speed", "v", "geschwindigkeit", "velocity", "rated_speed", "nenngeschwindigkeit"]);
+    let speedText = "", vNum = 1;
+    if (spv !== undefined && spv !== false) {
+      if (typeof spv === "number") { vNum = spv; speedText = `${fmt(spv, spv % 1 ? 1 : 0)} m/s`; }
+      else { speedText = textOf(spv); const n0 = secNum(speedText); if (Number.isFinite(n0)) { vNum = /km\/h/i.test(speedText) ? n0 / 3.6 : n0; if (!/[a-z]/i.test(speedText)) speedText += " m/s"; } }
+      vNum = clamp(vNum || 1, 0.2, 10);
+    }
+    const context = textOf(pick(P, ["context", "kontext", "caption", "kicker", "situation"]));
+    const ctxAt = atOf(P, d, ["context_at", "caption_at", "kicker_at"]);
+    const showStroke = bool(pick(P, ["show_stroke", "showStroke", "show_dimensions", "hub_anzeigen"]));
+    const dimNote = textOf(pick(P, ["dimension_note", "dim_note", "stroke_note"]));
+    // Beschriftungen und Bemaßungen zuordnen: Objekte mit type -> passender Puffer, sonst der Reihe nach
+    const labs = [P.labels, P.verdicts, P.limits].find((x) => Array.isArray(x)) || [];
+    const dims = [P.dimensions, P.dims, P.strokes, P.hub, P.stroke].find((x) => Array.isArray(x)) || [];
+    const assign = (arr) => {
+      const res = new Array(n).fill(undefined), used = new Array(arr.length).fill(false);
+      arr.forEach((e, j) => { const ty = e && typeof e === "object" ? typeOf(e) : null; if (!ty) return; const it = items.find((x) => x.type === ty && res[x.i] === undefined); if (it) { res[it.i] = e; used[j] = true; } });
+      let k = 0;
+      for (let i = 0; i < n; i++) { if (res[i] !== undefined) continue; while (k < arr.length && used[k]) k++; if (k < arr.length) { res[i] = arr[k]; used[k] = true; k++; } }
+      return res;
+    };
+    const labA = assign(labs), dimA = assign(dims);
+    const span = n > 1 ? Math.max(0.6, (0.5 * d - 0.3) / (n - 1)) : 0;
+    const hitSpan = n > 1 ? clamp((0.45 * d) / (n - 1), 0.8, 2.5) : 0;
+    const sp = n === 2 ? 640 : n === 3 ? 540 : 410;
+    let Smm = 1.05;
+    const isObj = (x) => x && typeof x === "object" && !Array.isArray(x);
+    items.forEach((it, i) => {
+      const o = it.o;
+      it.cx = 960 + (i - (n - 1) / 2) * sp;
+      // Zeiten: at = Erscheinen, hit_at = Aufsetzen
+      let tA = atOf(o, d), tH = atOf(o, d, HIT_KEYS);
+      if (seq) { if (tA === undefined) tA = beatOf(P, i, d); if (tA === undefined) tA = tClamp(0.3 + i * span, d); }
+      else { if (tA === undefined) tA = Math.min(0.15, 0.1 * d); if (tH === undefined) tH = beatOf(P, i, d); }
+      if (tH === undefined && Array.isArray(P.hits)) { const h = secNum(P.hits[i]); if (Number.isFinite(h)) tH = tClamp(h, d); }
+      if (tH === undefined) tH = seq ? tA + 0.85 : tA + 0.6 + i * hitSpan;
+      it.tA = tA; it.tH = clamp(Math.max(tH, tA), 0.3, Math.max(0.3, d - 0.3));
+      // Kopf
+      it.title = (textOf(pick(o, ["title", "name", "titel"])) || M_TITLE[it.type]).toUpperCase();
+      const md = M_MODE[it.type];
+      it.mode = (textOf(pick(o, ["mode", "modus", "principle", "prinzip"])) || md[0]).toUpperCase(); it.modeCol = md[1];
+      // Beschriftung (Chip unter dem Puffer)
+      const le = pick(o, ["label", "limit", "verdict", "text"]) ?? labA[i];
+      it.label = textOf(le);
+      it.labelCol = colorOf(isObj(le) ? le.color : o.label_color, it.type === "hydraulic" ? COL.green : COL.amber);
+      it.labelAt = atOf(isObj(le) ? le : null, d) ?? atOf(o, d, ["label_at", "text_at"]) ?? tClamp(Math.min(it.tH + Dc + 0.35, d - 0.6), d);
+      // Hub-Bemaßung
+      const de = pick(o, ["stroke", "hub", "dimension", "federweg"]) ?? dimA[i];
+      const VK = ["stroke", "hub", "value", "text", "length", "wert", "label"];
+      const dv = isObj(de) ? pick(de, VK) : de;
+      let mm = lenMM(dv);
+      it.dimShow = Number.isFinite(mm) || showStroke === true;
+      if (!Number.isFinite(mm)) mm = M_DEF_STROKE[it.type] * vNum * vNum;
+      it.mm = clamp(mm, 10, 600);
+      it.dimText = typeof dv === "string" && dv.trim() ? deText(dv.trim()) : cmText(it.mm);
+      let cap = ""; if (isObj(de)) for (const k of ["caption", "label", "title"]) if (typeof de[k] === "string" && de[k] !== dv) { cap = de[k]; break; }
+      it.dimCap = cap || "Hub";
+      it.dimNote = (isObj(de) ? textOf(pick(de, ["note", "sub", "hinweis"])) : "") || dimNote;
+      it.dimAt = atOf(isObj(de) ? de : null, d) ?? atOf(o, d, ["stroke_at", "dim_at", "hub_at"]) ?? tClamp(Math.min(it.tH + Dc + 0.15, d - 0.6), d);
+      // Zeichnungs-Kapazität (lokale px) -> gemeinsamer Maßstab für alle Puffer
+      const g = geo(it.type);
+      const capPx = it.type === "hydraulic" ? 0.92 * g.strokePx : it.type === "spring" ? g.Ls - (g.turns * g.wire + 10) : 0.55 * g.H0;
+      Smm = Math.min(Smm, (capPx * MK) / it.mm);
+    });
+    const speedAt = atOf(P, d, ["speed_at", "speed_label_at", "v_at"]);
+    return { items, n, sp, seq, compress: cmp !== false, Dc, speedText, vNum, speedAt, context, ctxAt: ctxAt ?? tClamp(0.3, d), Smm, d };
+  }
+
+  function slotState(it, M, t) {
+    const type = it.type, g = geo(type), ph = physics(type, "m"), hyd = type === "hydraulic";
+    const s = { t, d: M.d, g, ph, type, hyd, idle: !M.compress, cfg: { type, co: [] }, contactT: -1, shake: 0, returning: false, tau: -1, v: 0, F: 0 };
+    const sc = it.mm / Math.max(1, ph.xMax * 1000);     // Physik -> Ziel-Hub
+    const k1 = M.Dc / ph.tauMax;                         // Zeitlupe (Einfedern dauert Dc)
+    const pxmm = M.Smm / MK, gapMM = MGAP / M.Smm;
+    const vApp = (ph.vi * 1000 * sc) / k1;               // mm/s (Bildzeit) beim Aufsetzen
+    let xmm = -gapMM, v = 0, q = null, tau = -1;
+    if (!s.idle) {
+      tau = tauAt({ tC: it.tH, k1, tW: it.tH + ph.tauR * k1, w: 0.5, r: hyd ? 1 : 3.2 }, t);
+      if (tau < 0) {
+        const Ta = (2 * gapMM) / vApp, t0 = it.tH - Ta;
+        if (t0 >= it.tA) { const u = clamp((t - t0) / Ta); xmm = -gapMM + gapMM * u * u; v = ph.vi * u; }   // aus dem Stand beschleunigen
+        else { xmm = -vApp * (it.tH - t); v = ph.vi; }
+      } else { q = sampleP(ph, tau); xmm = q.x * 1000 * sc; v = q.v; s.F = q.F; }
+    }
+    s.tau = tau; s.v = v; s.pxmm = pxmm;
+    s.xbMM = Math.max(0, xmm); s.yS = Y_TOP + xmm * pxmm; s.xb = s.xbMM * pxmm;
+    s.vb = xmm > 0 ? v : 0; s.flow = clamp(s.vb / ph.vi);
+    if (tau < 0 || !q) { s.heat = 0; s.stored = 0; s.heatGlow = 0; }
+    else {
+      const qq = tau < ph.tauR ? q : sampleP(ph, ph.tauR);
+      s.heat = clamp(qq.ed / ph.W); s.stored = hyd ? 0 : clamp(q.ee / ph.W);
+      const tS = it.tH + M.Dc;
+      s.heatGlow = hyd ? s.heat * (1 - 0.4 * smooth(inv(tS, tS + 5, t))) : s.heat * 0.9;
+      s.contactT = t - it.tH;
+      s.shake = s.contactT < 1.2 ? (hyd ? 1.6 : type === "spring" ? 3.2 : 2.6) * Math.exp(-s.contactT * 9) : 0;
+    }
+    return s;
+  }
+
+  // Fahrkorb-Abschnitt (Unterholm + Pufferstempel + Anschlagplatte), lokale Koordinaten
+  function drawStriker(ctx, L, s, t) {
+    const ph = s.g.plateHalf, y = s.yS, iw = 1 / MK, P = pats(ctx);
+    const colTop = y - PLATE_H - M_COL, bTop = colTop - M_BEAM, pTop = bTop - M_PLAT - 6, x0 = BX - M_BEAMW / 2, x1 = BX + M_BEAMW / 2;
+    const hg = (c, a) => { const gr = ctx.createLinearGradient(x0, 0, x1, 0); gr.addColorStop(0, rgba(c, 0)); gr.addColorStop(0.2, rgba(c, a)); gr.addColorStop(0.8, rgba(c, a)); gr.addColorStop(1, rgba(c, 0)); return gr; };
+    fil(ctx, rect(x0, pTop, M_BEAMW, M_PLAT), hg("#10263f", 0.9), 1);
+    stk(ctx, (c) => { c.moveTo(x0, pTop); c.lineTo(x1, pTop); c.moveTo(x0, pTop + M_PLAT); c.lineTo(x1, pTop + M_PLAT); }, hg(COL.cyan, 1), 1.5 * iw, 0.6, 0.85, { cap: "butt" });
+    fil(ctx, rect(x0, bTop, M_BEAMW, M_BEAM), hg("#0e223a", 0.97), 1);
+    stk(ctx, (c) => { c.moveTo(x0, bTop); c.lineTo(x1, bTop); c.moveTo(x0, bTop + M_BEAM); c.lineTo(x1, bTop + M_BEAM); }, hg(COL.steel, 1), 1.5 * iw, 0.4, 1, { cap: "butt" });
+    stk(ctx, (c) => { c.moveTo(x0, bTop + 9); c.lineTo(x1, bTop + 9); c.moveTo(x0, bTop + M_BEAM - 9); c.lineTo(x1, bTop + M_BEAM - 9); }, hg(COL.steel, 1), iw, 0, 0.4, { cap: "butt" });
+    txt(L, ctx, "FAHRKORB", BX, bTop + M_BEAM / 2 + 7, { size: 19, weight: 700, font: L.FONT.mono, color: COL.muted, align: "center", letterSpacing: 6, alpha: 0.85 });
+    part(ctx, rect(BX - 56, colTop - 2, 112, 10), "rgba(20,44,72,0.97)", COL.steel, 1.3 * iw, 0.3, 1);
+    const col = rect(BX - 22, colTop + 8, 44, M_COL - 8);
+    fil(ctx, col, "rgba(16,38,64,0.97)", 1); hatch(ctx, col, P.steel, 0.3); stk(ctx, col, COL.steel, 1.4 * iw, 0.4, 1);
+    part(ctx, (c) => rr(c, BX - ph, y - PLATE_H, ph * 2, PLATE_H, 3), "rgba(22,50,80,0.98)", COL.cyan, 1.7 * iw, 0.8, 1);
+    stk(ctx, (c) => { c.moveTo(BX - ph + 6, y - 4); c.lineTo(BX + ph - 6, y - 4); }, COL.white, iw, 0, 0.3);
+    // Bewegungswinkel links neben dem Stempel
+    const sp = clamp(Math.abs(s.v) / s.ph.vi);
+    if (sp > 0.03) {
+      const dir = s.v >= 0 ? 1 : -1, x = BX - 50, span = M_COL - 34;
+      for (let k = 0; k < 3; k++) {
+        const f = frac(k / 3 + t * 0.9 * dir), yy = colTop + 16 + (dir > 0 ? f : 1 - f) * span;
+        stk(ctx, (c) => { c.moveTo(x - 11, yy - 7 * dir); c.lineTo(x, yy + 5 * dir); c.lineTo(x + 11, yy - 7 * dir); }, COL.cyan, 2.4 * iw, 0.8, sp * Math.sin(Math.PI * f) * 0.9);
+      }
+    }
+  }
+
+  function drawSlotHeader(ctx, L, it, M, t) {
+    const a = easeOut(inv(it.tA + 0.05, it.tA + 0.55, t)); if (a <= 0.004) return;
+    const maxW = M.sp - 44, tw = meas(L, ctx, it.title, { size: 30, weight: 700, font: L.FONT.head, letterSpacing: 2 });
+    const tsz = tw > maxW ? Math.max(17, (30 * maxW) / tw) : 30;
+    const cw0 = meas(L, ctx, it.mode, { size: 14, weight: 700, font: L.FONT.mono, letterSpacing: 2 }), csz = cw0 + 44 > maxW ? Math.max(10, (14 * (maxW - 44)) / cw0) : 14, cw = (cw0 * csz) / 14 + 44;
+    const x0 = it.cx - M.sp / 2, y0 = M_TITLE_Y - 46;
+    layer(ctx, `mh|${it.title}|${it.mode}|${it.modeCol}|${it.cx}|${M.sp}`, x0, y0, M.sp, 96, a, (g) => {
+      L.text(g, it.title, it.cx, M_TITLE_Y, { size: tsz, weight: 700, font: L.FONT.head, color: COL.white, letterSpacing: 2, align: "center", glow: 14, glowColor: COL.cyan });
+      const c0 = it.cx - cw / 2;
+      fil(g, (c) => rr(c, c0, M_CHIP_Y, cw, 28, 14), rgba(it.modeCol, 0.14), 1);
+      stk(g, (c) => rr(c, c0, M_CHIP_Y, cw, 28, 14), it.modeCol, 1.4, 0.8, 1);
+      fil(g, (c) => c.arc(c0 + 16, M_CHIP_Y + 14, 4, 0, TAU), it.modeCol, 1);
+      L.text(g, it.mode, c0 + 28, M_CHIP_Y + 19, { size: csz, weight: 700, font: L.FONT.mono, color: it.modeCol, letterSpacing: 2 });
+    }, 0, (1 - a) * 10);
+  }
+
+  function dimValue(g, L, it, tx, ym, col, vsz) {
+    L.text(g, it.dimCap.toUpperCase(), tx, ym - 24, { size: 14, weight: 700, font: L.FONT.mono, color: COL.muted, align: "right", letterSpacing: 2 });
+    L.text(g, it.dimText, tx, ym + 13, { size: vsz, weight: 700, font: L.FONT.mono, color: col, align: "right", glow: 14, glowColor: col });
+    if (it.dimNote) L.text(g, it.dimNote, tx, ym + 38, { size: 16, weight: 500, color: COL.muted, align: "right" });
+  }
+  function drawSlotDim(ctx, L, it, M, s, t, toX, toY) {
+    if (!it.dimShow) return;
+    const p = clamp((t - it.dimAt) / 0.7); if (p <= 0) return;
+    const col = COL.amber, x = toX(s.g.dimX) - 4, y0 = toY(Y_TOP), y1 = y0 + it.mm * M.Smm;
+    const lp = easeOut(inv(0, 0.5, p)), tp = easeOut(inv(0.2, 0.85, p)), pulse = p >= 1 ? 0.85 + 0.15 * Math.sin(t * 3 + it.i) : 1;
+    stk(ctx, (c) => { c.moveTo(x - 12, y0); c.lineTo(x + 26, y0); c.moveTo(x - 12, y1); c.lineTo(x + 26, y1); }, col, 1.3, 0.4, 0.8 * lp);
+    const ye = lerp(y0, y1, lp);
+    stk(ctx, (c) => { c.moveTo(x, y0 + 4); c.lineTo(x, Math.max(y0 + 4, ye - 4)); }, col, 2.2, 1 + 0.4 * pulse, 0.95 * pulse);
+    arrowHead(ctx, x, y0, -Math.PI / 2, 10, col, lp);
+    if (lp > 0.9) arrowHead(ctx, x, y1, Math.PI / 2, 10, col, inv(0.9, 1, lp));
+    // Höchstmarke über dem Puffer
+    const hx1 = toX(BX + Math.max(s.g.plateHalf, s.g.halfMax) + 10);
+    stk(ctx, (c) => { c.moveTo(x + 26, y1); c.lineTo(hx1, y1); }, col, 1.2, 0.3, 0.6 * tp, { dash: [6, 5] });
+    stk(ctx, (c) => { c.moveTo(x + 26, y0); c.lineTo(hx1, y0); }, COL.steel, 1, 0, 0.35 * tp, { dash: [3, 5] });
+    const tx = x - 18, ym = (y0 + y1) / 2;
+    const vw36 = meas(L, ctx, it.dimText, { size: 36, weight: 700, font: L.FONT.mono }), vsz = clamp((36 * (tx - (it.cx - M.sp / 2 + 8))) / Math.max(1, vw36), 18, 36);
+    if (tp >= 1) {
+      const vw = (vw36 * vsz) / 36 + 40;
+      layer(ctx, `md|${it.dimText}|${it.dimCap}|${it.dimNote}|${tx}|${ym}|${vsz}`, tx - Math.max(vw, 240), ym - 50, Math.max(vw, 240) + 24, 100, 1, (g) => dimValue(g, L, it, tx, ym, col, vsz));
+    } else {
+      ctx.save(); ctx.translate((1 - tp) * 14, 0); const sG = GA; GA = tp;
+      txt(L, ctx, it.dimCap.toUpperCase(), tx, ym - 24, { size: 14, weight: 700, font: L.FONT.mono, color: COL.muted, align: "right", letterSpacing: 2 });
+      txt(L, ctx, it.dimText, tx, ym + 13, { size: vsz, weight: 700, font: L.FONT.mono, color: col, align: "right", glow: 14, glowColor: col });
+      if (it.dimNote) txt(L, ctx, it.dimNote, tx, ym + 38, { size: 16, weight: 500, color: COL.muted, align: "right" });
+      GA = sG; ctx.restore();
+    }
+  }
+
+  function drawSlotSpeed(ctx, L, it, M, s, t, toX, toY, a) {
+    if (!M.speedText || a <= 0.004) return;
+    const x = toX(BX + Math.max(s.g.plateHalf, 60) + 24), y = toY(s.yS - PLATE_H - M_COL * 0.5);
+    const mv = clamp(Math.abs(s.v) / s.ph.vi), sG = GA; GA = a;
+    const aa = 0.45 + 0.55 * mv, sh = mv > 0.03 ? frac(t * 1.6) * 6 * mv : 0;
+    stk(ctx, (c) => { c.moveTo(x + 8, y - 22 + sh); c.lineTo(x + 8, y + 12 + sh); }, COL.cyan, 2.4, 1, aa);
+    arrowHead(ctx, x + 8, y + 22 + sh, Math.PI / 2, 12, COL.cyan, aa);
+    const w24 = meas(L, ctx, M.speedText, { size: 24, weight: 700, font: L.FONT.mono }), ssz = clamp((24 * (it.cx + M.sp / 2 - 8 - (x + 26))) / Math.max(1, w24), 14, 24);
+    txt(L, ctx, M.speedText, x + 26, y + 8, { size: ssz, weight: 700, font: L.FONT.mono, color: COL.cyan, alpha: 0.95 });
+    GA = sG;
+  }
+
+  /** Chip-Layout: 26 px -> 22 px -> zwei Zeilen (22 px) -> kleiner (min. 14 px). */
+  function labelLayout(L, ctx, text, maxW) {
+    const inner = maxW - 66, o = (sz) => ({ size: sz, weight: 600 }), w26 = meas(L, ctx, text, o(26));
+    if (w26 <= inner) return { lines: [text], sz: 26, tw: w26 };
+    const w22 = meas(L, ctx, text, o(22));
+    if (w22 <= inner) return { lines: [text], sz: 22, tw: w22 };
+    const words = text.split(/\s+/); let best = null;
+    for (let k = 1; k < words.length; k++) {
+      const a = words.slice(0, k).join(" "), b = words.slice(k).join(" "), m = Math.max(meas(L, ctx, a, o(22)), meas(L, ctx, b, o(22)));
+      if (!best || m < best.m) best = { a, b, m };
+    }
+    if (best) { const sz = best.m > inner ? Math.max(14, (22 * inner) / best.m) : 22; return { lines: [best.a, best.b], sz, tw: (best.m * sz) / 22 }; }
+    const sz = Math.max(14, (22 * inner) / w22); return { lines: [text], sz, tw: (w22 * sz) / 22 };
+  }
+  function chipRaw(g, L, x0, y0, w, h, lay, col, bp, ta) {
+    const bw = w * bp, bx = x0 + (w - bw) / 2;
+    fil(g, (c) => rr(c, bx, y0, bw, h, 10), "rgba(5,14,30,0.92)", bp);
+    stk(g, (c) => rr(c, bx, y0, bw, h, 10), rgba(col, 0.8), 1.6, 0.9, bp);
+    if (ta <= 0) return;
+    const sG = GA; GA = ta;
+    const lh = lay.sz * 1.22, n = lay.lines.length, dy0 = lay.lines.length > 1 ? -lh / 2 : 0;
+    dot(g, x0 + 28, y0 + h / 2 + dy0, 16, col, 0.9); fil(g, (c) => c.arc(x0 + 28, y0 + h / 2 + dy0, 5.5, 0, TAU), col, 1);
+    lay.lines.forEach((ln, i) => txt(L, g, ln, x0 + 46, y0 + h / 2 + (i - (n - 1) / 2) * lh + lay.sz * 0.36, { size: lay.sz, weight: 600, color: COL.white }));
+    GA = sG;
+  }
+  function drawSlotLabel(ctx, L, it, M, t) {
+    if (!it.label) return;
+    const p = clamp((t - it.labelAt) / 0.6); if (p <= 0) return;
+    const lay = it._lay || (it._lay = labelLayout(L, ctx, it.label, M.sp - 28));
+    const two = lay.lines.length > 1, w = lay.tw + 66, h = two ? Math.round(lay.sz * 2.44 + 22) : 50, cy = two ? M_LABEL_Y - 6 : M_LABEL_Y;
+    const x0 = it.cx - w / 2, y0 = cy - h / 2;
+    if (p >= 1) {
+      layer(ctx, `ml|${it.label}|${it.labelCol}|${it.cx}|${lay.sz}|${h}`, x0 - 16, y0 - 16, w + 32, h + 32, 1, (g) => chipRaw(g, L, x0, y0, w, h, lay, it.labelCol, 1, 1));
+      stk(ctx, (c) => rr(c, x0, y0, w, h, 10), it.labelCol, 1.2, 1.2, 0.18 + 0.14 * Math.sin(t * 2.6 + it.i));
+    } else {
+      const sG = GA; GA = 1; chipRaw(ctx, L, x0, y0, w, h, lay, it.labelCol, easeOut(inv(0, 0.4, p)), smooth(inv(0.18, 0.65, p))); GA = sG;
+      stk(ctx, (c) => rr(c, x0, y0, w, h, 10), it.labelCol, 1.2, 1.2, (0.18 + 0.14 * Math.sin(t * 2.6 + it.i)) * smooth(inv(0.5, 1, p)));
+      if (p > 0.2) dot(ctx, it.cx, cy, 90, it.labelCol, 0.25 * Math.sin(Math.PI * inv(0.2, 1, p)));
+    }
+  }
+
+  function drawSlot(ctx, L, it, M, t) {
+    const a = easeOut(inv(it.tA, it.tA + 0.45, t)); if (a <= 0.004) return;
+    const s = slotState(it, M, t), cx = it.cx;
+    const toX = (lx) => cx + (lx - BX) * MK, toY = (ly) => MFLOOR + (ly - FLOOR) * MK;
+    const rv = inv(it.tA, it.tA + 0.75, t), topY = toY(s.yS - PLATE_H - M_COL - M_BEAM - M_PLAT - 14);
+    const scanY = lerp(MFLOOR + 6, topY, easeInOut(rv));
+    GA = a;
+    ctx.save();
+    if (rv < 1) { ctx.beginPath(); ctx.rect(cx - M.sp / 2, scanY, M.sp, MFLOOR + 80 - scanY); ctx.clip(); }
+    ctx.translate(cx, MFLOOR); ctx.scale(MK, MK); ctx.translate(-BX, -FLOOR);
+    if (s.shake > 0.05) ctx.translate(Math.sin(t * 97 + it.i * 3) * s.shake, Math.cos(t * 83 + it.i * 5) * s.shake * 0.7);
+    if (s.hyd) drawHydraulic(ctx, L, s, t); else if (s.type === "spring") drawSpringBuf(ctx, L, s, t); else drawPU(ctx, L, s, t);
+    drawStriker(ctx, L, s, t);
+    drawImpact(ctx, s);
+    ctx.restore();
+    if (rv > 0 && rv < 1) {
+      const w = M.sp * 0.44, ga = Math.sin(Math.PI * rv);
+      const gr = ctx.createLinearGradient(cx - w, 0, cx + w, 0); gr.addColorStop(0, rgba(COL.cyan, 0)); gr.addColorStop(0.5, rgba(COL.cyan, 1)); gr.addColorStop(1, rgba(COL.cyan, 0));
+      stk(ctx, (c) => { c.moveTo(cx - w, scanY); c.lineTo(cx + w, scanY); }, gr, 2, 1.4, 0.9 * ga, { cap: "butt" });
+      dot(ctx, cx, scanY, 70, COL.cyan, 0.22 * ga);
+    }
+    GA = 1;
+    drawSlotHeader(ctx, L, it, M, t);
+    drawSlotDim(ctx, L, it, M, s, t, toX, toY);
+    drawSlotSpeed(ctx, L, it, M, s, t, toX, toY, a * easeOut(inv(0.6, 1, rv)) * (M.speedAt !== undefined ? easeOut(inv(M.speedAt, M.speedAt + 0.5, t)) : 1));
+    drawSlotLabel(ctx, L, it, M, t);
+  }
+
+  function drawFloorM(ctx, L, M) {
+    const xL = Math.max(96, M.items[0].cx - M.sp / 2 + 10), xR = Math.min(1824, M.items[M.n - 1].cx + M.sp / 2 - 10);
+    layer(ctx, `mfloor|${xL}|${xR}`, xL - 4, MFLOOR - 8, xR - xL + 8, 70, 1, (g) => {
+      const P = pats(g), fl = rect(xL, MFLOOR, xR - xL, 58);
+      fil(g, fl, "rgba(10,24,44,0.95)", 1); hatch(g, fl, P.concrete, 0.9);
+      stk(g, (c) => { c.moveTo(xL, MFLOOR); c.lineTo(xR, MFLOOR); }, COL.steel, 2, 0.7, 0.95);
+      L.text(g, "SCHACHTGRUBE", xR - 70, MFLOOR + 22, { size: 14, weight: 700, font: L.FONT.mono, color: COL.muted, letterSpacing: 4, alpha: 0.8, align: "right" });
+      fadeMask(g, 0, MFLOOR + 4, 0, MFLOOR + 58, [[0, 1], [1, 0]]);
+      fadeMask(g, xL, 0, xR, 0, [[0, 0], [0.06, 1], [0.94, 1], [1, 0]]);
+    });
+    for (let i = 1; i < M.n; i++) {
+      const x = (M.items[i - 1].cx + M.items[i].cx) / 2;
+      stk(ctx, (c) => { c.moveTo(x, 350); c.lineTo(x, MFLOOR - 8); }, COL.cyan, 1, 0, 0.16, { dash: [3, 8], cap: "butt" });
+    }
+  }
+  function drawContextM(ctx, L, M, t) {
+    const a = easeOut(inv(M.ctxAt, M.ctxAt + 0.6, t)); if (a <= 0.004) return;
+    const s = M.context.toUpperCase(), o = { size: 17, weight: 700, font: L.FONT.mono, letterSpacing: 4 }, w = meas(L, ctx, s, o);
+    txt(L, ctx, s, 960 + 2, M_CTX_Y, Object.assign({ color: COL.amber, align: "center", alpha: a }, o));
+    const lw = 64 * easeOut(a), yl = M_CTX_Y - 6;
+    stk(ctx, (c) => { c.moveTo(960 - w / 2 - 18, yl); c.lineTo(960 - w / 2 - 18 - lw, yl); c.moveTo(960 + w / 2 + 18, yl); c.lineTo(960 + w / 2 + 18 + lw, yl); }, COL.amber, 1.4, 0.6, 0.7 * a);
+  }
+  const FXM = { x0: 110, w: 1700, y0: 320, h: 460, xa: 100, xb: 1820, sy0: 330, sh: 460, n: 42 };
+  function drawMulti(ctx, L, M, t) {
+    GA = 1;
+    drawFX(ctx, null, t, FXM);
+    drawFloorM(ctx, L, M);
+    if (M.context) drawContextM(ctx, L, M, t);
+    for (const it of M.items) drawSlot(ctx, L, it, M, t);
+    GA = 1;
+  }
+
+  // Konfiguration je Szene zwischenspeichern (params-Objekt bleibt über die Frames gleich)
+  const CFG = new WeakMap();
+  function sceneConfig(P, d) {
+    const key = P && typeof P === "object" ? P : null;
+    const c = key && CFG.get(key);
+    if (c && c.d === d) return c;
+    const M = multiConfig(key || {}, d);
+    const r = { d, M, cfg: M ? null : config(key || {}, d) };
+    if (key) CFG.set(key, r);
+    return r;
+  }
+
   // ---------- Registrierung ----------
   CE.register("buffer", {
     ownsText: false,
     draw(ctx, p) {
       const L = p.L || CE.lib;
-      const cfg = config(p.params);
       const d = Math.max(0.5, num(p.d, 8)), t = clamp(num(p.t, 0), 0, d + 5);
       GA = 1;
-      const s = computeState(t, d, cfg);
-      s.leftBox = !cfg.labels ? 0 : s.idle ? easeOut(inv(0.03 * d, 0.03 * d + Math.max(0.5, 0.1 * d), t)) : easeOut(inv(s.tm.tC - 0.06 * d, s.tm.tC - 0.06 * d + Math.max(0.5, 0.1 * d), t));
-      const SK = (window.__BUF_SKIP || "");
-      if (!SK.includes("fx")) drawFX(ctx, s, t);
+      const SC = sceneConfig(p.params, d);
+      if (SC.M) { drawMulti(ctx, L, SC.M, t); GA = 1; return; }
+      const cfg = SC.cfg;
+      CO_MAXR = cfg.panel ? 382 : 960;
+      const s = computeState(t, d, cfg), c0 = cfg.co[0];
+      s.leftBox = !cfg.labels || (c0 && c0.hide) ? 0 : c0 && c0.at !== undefined ? easeOut(inv(c0.at, c0.at + 0.6, t)) : s.idle ? easeOut(inv(0.03 * d, 0.03 * d + Math.max(0.5, 0.1 * d), t)) : easeOut(inv(s.tm.tC - 0.06 * d, s.tm.tC - 0.06 * d + Math.max(0.5, 0.1 * d), t));
+      drawFX(ctx, s, t);
       ctx.save();
       if (s.shake > 0.05) ctx.translate(Math.sin(t * 97) * s.shake, Math.cos(t * 83) * s.shake * 0.7);
-      if (!SK.includes("pit")) drawPit(ctx, L);
-      if (!SK.includes("gov")) drawGovRope(ctx, s);
-      if (!SK.includes("buf")) { if (s.type === "hydraulic") drawHydraulic(ctx, L, s, t);
+      drawPit(ctx, L);
+      drawGovRope(ctx, s);
+      if (s.type === "hydraulic") drawHydraulic(ctx, L, s, t);
       else if (s.type === "spring") drawSpringBuf(ctx, L, s, t);
-      else drawPU(ctx, L, s, t); }
-      if (!SK.includes("car")) drawCar(ctx, L, s);
-      if (!SK.includes("cue")) drawMotionCues(ctx, s, t);
-      if (!SK.includes("imp")) drawImpact(ctx, s);
-      if (!SK.includes("dim")) drawDimension(ctx, L, s, t, easeOut(inv(0.04 * d, 0.04 * d + 0.6, t)));
+      else drawPU(ctx, L, s, t);
+      drawCar(ctx, L, s);
+      drawMotionCues(ctx, s, t);
+      drawImpact(ctx, s);
+      const da = cfg.dimAt !== undefined ? cfg.dimAt : 0.04 * d;
+      drawDimension(ctx, L, s, t, easeOut(inv(da, da + 0.6, t)));
       ctx.restore();
-      if (cfg.labels && !SK.includes("cal")) drawCallouts(ctx, L, s, t);
-      if (cfg.panel && !SK.includes("pan")) drawPanel(ctx, L, s, t);
+      if (cfg.labels) drawCallouts(ctx, L, s, t);
+      if (cfg.panel) drawPanel(ctx, L, s, t);
       GA = 1;
     },
   });

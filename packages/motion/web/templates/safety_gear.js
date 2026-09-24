@@ -1,15 +1,36 @@
 /* Template "safety_gear" – Fangvorrichtung in Nahaufnahme, Schnitt durch den Steg der Führungsschiene (T-Profil).
-   Die Kamera fährt mit dem Fahrkorb mit: die Führungsschiene läuft nach oben durchs Bild.
+   Die Kamera fährt mit dem Fahrkorb mit: die Führungsschiene läuft durchs Bild.
    Bremsfangvorrichtung (progressiv): zwei Fangkeile auf Rollenbahnen, Druckstücke, Tellerfederpakete (begrenzen die
      Klemmkraft), fester Keilanschlag; Hubtraverse mit Langlöchern, Auslösehebel, Begrenzerseil mit Seilklemme.
+   Bidirektional: Doppelkeile in V-förmiger Bahn – dieselbe Fangvorrichtung greift abwärts UND aufwärts.
    Sperrfangvorrichtung (sofort wirkend): gerändelte Klemmrolle auf schräger Laufbahn, feste Gegenbacke, schwimmendes
      starres Gehäuse ohne Federpaket – Stopp auf wenigen Zentimetern.
    Anzeigen: Maßband am Steg (Fangbeginn -> Bremsweg), Messwerte v / Verzögerung / Bremsweg, a(t)-Diagramm mit
-     zulässigem Bereich 0,2–1,0 g, Draufsicht auf das T-Profil, Einbaulage am Fahrkorbrahmen.
-   Params:
-     type      "progressive" | "instantaneous" (Default progressive; Aliase: bremsfang, progressiv, sperrfang, sofort …)
-     engaging  bool (Default true) – Auslösung, Keile greifen, Bremsen bis Stillstand; false = Normalfahrt, Keile offen
-     sparks    bool (Default true) – Funken/Glut an der Reibstelle (Wärmeglühen bleibt)
+     zulässigem Bereich 0,2–1,0 g; unten rechts Draufsicht/Einbaulage, Energie-Balken oder Hinweis-Karte.
+
+   PARAMS (alle optional)
+     type          "progressive" | "instantaneous" (Default progressive; Aliase bremsfang, sperrfang, sofort …)
+     engaging      bool (true) – Auslösung + Fangen; false = Normalfahrt, Keile offen (Luftspalt)
+     sparks        bool (true) – Funken an der Reibstelle (Wärmeglühen bleibt immer)
+     bidirectional bool (false) – V-Bahn/Doppelkeil + Doppelpfeil AUF/AB; Fangvorgang dann aufwärts (Schiene läuft nach unten)
+     direction     "down" | "up" – Fahrtrichtung (Default down, bei bidirectional up; up erzwingt bidirectional)
+     then          "lift_release" – Szene beginnt gefangen: Pfeil + Anheben, Keile fallen zurück, Checkliste bis Freigabe
+     label         Text oder {text, at, head} – Hinweis-Karte unten rechts; labelAt (s); labelHead (Kopfzeile)
+     panel2        "topview" | "energy" | "label" | "none" (Default: label wenn gesetzt, sonst topview); energy:true = "energy"
+     panel         bool (true) – Messwerte-Panel (bzw. Checkliste); panelAt (s), panel2At (s)
+     tape          bool (true) – Maßband + Bremsweg am Steg (nur beim Abwärts-Fangen)
+     arrowsAt      s – Einblendung Doppelpfeil (bidirectional)
+     callouts      Array [{id, at, text, sub}] (NUR diese, in dieser Reihenfolge) | Objekt {id: at | false | {at,text,sub}}
+                   (Standard-Satz mit Overrides) | false (keine). ids: rail, wedge (Sperrfang: Klemmrolle), spring
+                   (Sperrfang: Laufbahn), housing, jaw (nur Sperrfang), trace (Bremsspur), lever, rope, gap (nur engaging:false)
+     steps         (then=lift_release) Array [{text, sub, at}] | Strings – Checklisten-Schritte (Default 4)
+   BEATS  params.beats = Sekunden ab Szenenstart (auf [0,3 ; d-0,3] geklemmt), fehlende Einträge = Default:
+     Fangen:        [0] = Auslösung (Begrenzer stoppt Seil, Hebel zieht Keile), [1] = Fangbeginn (Keile berühren Steg),
+                    [2] = Stillstand (Bremsdauer [1]->[2] bestimmt die Zeitlupe), [3] = Ergebnis (Ø-Verzögerung + Haken)
+     lift_release:  [0] = Pfeil + Anheben beginnt, [1] = Keile lösen sich und fallen zurück, [2] = Prüfung + Hinweis-Karte,
+                    [3] = Freigabe (Checkliste komplett)
+   "at" (s) akzeptieren: callouts[i].at, steps[i].at, label.at / labelAt, panelAt, panel2At, arrowsAt.
+   Ohne beats/at: Default-Timing proportional zu d (Auslösung 0,12·d, Fangbeginn 0,22·d, Bremsen 0,3·d; Beschriftungen gestaffelt ab 0,3 s).
    Physik (Beispielwerte, Zeitlupe): progressiv v = 1,30 m/s bei Fangbeginn, ca. 0,6 g, Bremsweg ca. 15 cm;
      sofort wirkend v = 0,80 m/s, Spitze ca. 2,3 g, Bremsweg ca. 3 cm. */
 (function () {
@@ -53,6 +74,21 @@
   // Panels
   const PX = 1270, PW = 560, P1Y = 205, P1H = 420, P2Y = 645, P2H = 260;
   const LBX = 452, RBX = 1010; // Kante der Beschriftungsboxen links / rechts
+  // Bidirektional (V-Bahn, Doppelkeil): Keil mittig, Bahn wird nach oben UND nach unten enger
+  const WHV = 104, WHH = WHV / 2, WY0V = CY - WHH, SLOT_V = 2 * SLOT, ROD_V = 156, BI_S0 = 0.08;
+  // Geometrie des Bremsfangs: S = Standard (greift abwärts), V = bidirektional
+  const GS = {
+    id: "S", bi: false, WY0, WH, T: BLK_T, B: BLK_B, rod: ROD_P, slot: SLOT, attX: 22, attY: 11, pinR: 5,
+    face: (y) => 44 + (y - WY0) * TANA,
+    wedge: (X) => [[X(20), WY0], [X(20 + WT0), WY0], [X(20 + WT0 + WH * TANA), WY0 + WH], [X(20), WY0 + WH]],
+  };
+  GS.blk = (X) => [[X(GS.face(BLK_T)), BLK_T], [X(BLK_O), BLK_T], [X(BLK_O), BLK_B], [X(GS.face(BLK_B)), BLK_B]];
+  const GV = {
+    id: "V", bi: true, WY0: WY0V, WH: WHV, T: CY - 112, B: CY + 112, rod: ROD_V, slot: SLOT_V, attX: 9, attY: 10, pinR: 4,
+    face: (y) => 44 + (WHH - Math.abs(y - CY)) * TANA,
+    wedge: (X) => [[X(20), WY0V], [X(20 + WT0), WY0V], [X(20 + WT0 + WHH * TANA), CY], [X(20 + WT0), WY0V + WHV], [X(20), WY0V + WHV]],
+  };
+  GV.blk = (X) => [[X(GV.face(GV.T)), GV.T], [X(BLK_O), GV.T], [X(BLK_O), GV.B], [X(GV.face(GV.B)), GV.B], [X(GV.face(CY)), CY]];
 
   // ---------- Zeichen-Helfer (Gruppen-Alpha GA) ----------
   let GA = 1;
@@ -173,13 +209,88 @@
     return undefined;
   }
   function pick(P, keys) { for (const k of keys) { const v = P[k]; if (v !== undefined && v !== null && v !== "") return v; } return undefined; }
-  function config(P) {
-    P = P && typeof P === "object" ? P : {};
-    const ty = String(pick(P, ["type", "typ", "kind", "variant", "art", "mode", "gear_type", "gearType"]) ?? "progressive").toLowerCase();
-    const inst = /inst|sofort|sperr|sudden|immediate|rolle|roller|block|abrupt/.test(ty);
+  const ALIAS = {
+    rail: ["schiene", "fuehrungsschiene", "führungsschiene", "guide_rail", "guiderail", "steg"],
+    wedge: ["keil", "keile", "fangkeil", "fangkeile", "doppelkeil", "wedges", "roller", "rolle", "klemmrolle"],
+    spring: ["springs", "feder", "federn", "federpaket", "tellerfeder", "tellerfederpaket", "track", "laufbahn", "bahn"],
+    housing: ["gehaeuse", "gehäuse", "fanggehaeuse", "fanggehäuse", "body"],
+    jaw: ["backe", "gegenbacke"],
+    trace: ["spur", "bremsspur", "marks", "eindruecke", "eindrücke", "trail"],
+    lever: ["hebel", "ausloesehebel", "auslösehebel", "linkage", "gestaenge", "gestänge"],
+    rope: ["seil", "begrenzerseil", "governor_rope", "governor"],
+    gap: ["luftspalt", "spalt", "clearance"],
+  };
+  function calloutId(k) { k = String(k == null ? "" : k).toLowerCase().trim(); if (!k) return null; for (const id in ALIAS) if (id === k || ALIAS[id].includes(k)) return id; return null; }
+  function parseCallouts(v, tNum) {
+    const out = { only: false, map: {} };
+    if (v === undefined) return out;
+    if (v === false || v === "none" || v === "off") { out.only = true; return out; }
+    const txt = (x) => (x == null ? undefined : String(x));
+    if (Array.isArray(v)) {
+      out.only = true;
+      v.forEach((it, i) => {
+        let id = null, o = {};
+        if (typeof it === "string") id = calloutId(it);
+        else if (it && typeof it === "object") { id = calloutId(it.id ?? it.part ?? it.key ?? it.name ?? it.target); o = it; }
+        if (id && !out.map[id]) out.map[id] = { at: tNum(o.at ?? o.t), text: txt(o.text ?? o.title ?? o.label), sub: txt(o.sub ?? o.subtitle ?? o.note), idx: i };
+      });
+    } else if (v && typeof v === "object") {
+      for (const k in v) {
+        const id = calloutId(k), o = v[k]; if (!id) continue;
+        if (o === false || o === null) out.map[id] = { hide: true };
+        else if (typeof o === "number") out.map[id] = { at: tNum(o) };
+        else if (typeof o === "string") out.map[id] = Number.isFinite(num(o, NaN)) ? { at: tNum(o) } : { text: o };
+        else if (typeof o === "object") out.map[id] = { at: tNum(o.at ?? o.t), text: txt(o.text ?? o.title ?? o.label), sub: txt(o.sub ?? o.subtitle ?? o.note), hide: o.show === false || o.hide === true };
+      }
+    }
+    return out;
+  }
+  function config(P, d) {
+    const ty = String(pick(P, ["type", "typ", "kind", "variant", "art", "gear_type", "gearType"]) ?? "progressive").toLowerCase();
+    let inst = /inst|sofort|sperr|sudden|immediate|rolle|roller|block|abrupt/.test(ty);
     const e = bool(pick(P, ["engaging", "engaged", "engage", "active", "triggered", "tripped", "ausgeloest", "ausgelöst", "fangen", "greift"]));
     const sp = bool(pick(P, ["sparks", "spark", "funken", "sparks_on"]));
-    return { type: inst ? "instantaneous" : "progressive", engaging: e === undefined ? true : e, sparks: sp === undefined ? true : sp };
+    const thenS = String(pick(P, ["then", "after", "danach", "next", "sequence", "action", "mode", "state"]) ?? "").toLowerCase();
+    const lift = /lift|releas|lös|loes|anheb|reset|freigab|unlock/.test(thenS) || bool(pick(P, ["lift_release", "liftRelease", "release"])) === true;
+    const normal = e === false || /normal|idle|ruhe|offen|open|fahrt/.test(thenS);
+    let bi = bool(pick(P, ["bidirectional", "bidirektional", "bi_directional", "both_directions", "bothDirections", "up_and_down", "beide_richtungen"])) === true;
+    const dS = String(pick(P, ["direction", "richtung", "dir", "travel", "fahrtrichtung"]) ?? "").toLowerCase();
+    let dir = /up|auf|hoch|oben/.test(dS) ? -1 : /down|ab|unten|runter/.test(dS) ? 1 : bi ? -1 : 1;
+    if (lift) dir = 1;
+    if (dir < 0) bi = true;
+    if (bi) inst = false;
+    const mode = lift ? "lift" : normal ? "normal" : "fall";
+    const lo = Math.min(0.3, d / 2), hi = Math.max(d - 0.3, d / 2);
+    const tNum = (v) => { if (v === undefined || v === null || v === "" || typeof v === "boolean") return null; const n = num(v, NaN); return Number.isFinite(n) ? clamp(n, lo, hi) : null; };
+    const bRaw = pick(P, ["beats", "beat", "takte"]);
+    const beats = (Array.isArray(bRaw) ? bRaw : typeof bRaw === "number" ? [bRaw] : typeof bRaw === "string" ? bRaw.split(/[;\s|]+/) : []).map(tNum);
+    let lab = pick(P, ["label", "caption", "hinweis", "note", "banner", "text_label"]), labAt = pick(P, ["labelAt", "label_at", "labelTime"]), labHead = pick(P, ["labelHead", "label_head", "labelTitle"]);
+    if (lab && typeof lab === "object") { labAt = lab.at ?? labAt; labHead = lab.head ?? lab.title ?? labHead; lab = lab.text ?? lab.label ?? ""; }
+    lab = lab == null || lab === false ? "" : String(lab).trim();
+    const p2S = String(pick(P, ["panel2", "lower_panel", "inset", "panel_2"]) ?? "").toLowerCase();
+    let panel2 = /energ/.test(p2S) ? "energy" : /top|drauf|profil|einbau/.test(p2S) ? "topview" : /label|hinweis|card|karte/.test(p2S) ? "label" : /none|off|aus|false|no/.test(p2S) ? "none" : "";
+    if (!panel2) panel2 = lab ? "label" : bool(pick(P, ["energy", "energie", "show_energy"])) === true ? "energy" : "topview";
+    if (panel2 === "energy" && mode !== "fall") panel2 = lab ? "label" : "topview";
+    if (panel2 === "label" && !lab) panel2 = "topview";
+    const stRaw = pick(P, ["steps", "checklist", "schritte"]);
+    const steps = Array.isArray(stRaw) ? stRaw.map((it) => (typeof it === "string" ? { text: it } : it && typeof it === "object" ? { text: it.text ?? it.title ?? it.label, sub: it.sub ?? it.note, at: tNum(it.at ?? it.t) } : {})).filter((q) => q.text) : [];
+    return {
+      type: inst ? "instantaneous" : "progressive", engaging: mode !== "normal", sparks: sp === undefined ? true : sp, mode, bi, dir, beats,
+      label: lab, labelAt: tNum(labAt), labelHead: labHead ? String(labHead) : "", panel2,
+      panel: bool(pick(P, ["panel", "readouts", "messwerte", "show_panel"])) !== false,
+      panelAt: tNum(pick(P, ["panelAt", "panel_at", "readoutsAt"])), panel2At: tNum(pick(P, ["panel2At", "panel2_at"])),
+      tape: bool(pick(P, ["tape", "ruler", "massband", "maßband"])) !== false, arrowsAt: tNum(pick(P, ["arrowsAt", "arrows_at", "arrowAt"])),
+      callouts: parseCallouts(pick(P, ["callouts", "labels", "parts", "beschriftungen"]), tNum), steps,
+    };
+  }
+  const CFGC = new WeakMap(), EMPTY = {};
+  function hashStr(str) { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0).toString(36); }
+  function getCfg(P, d) {
+    const key = P && typeof P === "object" ? P : EMPTY;
+    let c = CFGC.get(key); if (c && c.d === d) return c;
+    let js = ""; try { js = JSON.stringify(key); } catch (e) { js = "x"; }
+    c = config(key, d); c.d = d; c.sig = hashStr(js + "|" + d); c.plan = makePlan(c, d);
+    CFGC.set(key, c); return c;
   }
 
   // ---------- Physik (physikalische Zeit tau ab Fangbeginn) ----------
@@ -209,20 +320,66 @@
     const n = pr.V.length - 1, i = clamp(tau / pr.dt, 0, n), i0 = Math.floor(i), i1 = Math.min(n, i0 + 1), f = i - i0;
     return { v: lerp(pr.V[i0], pr.V[i1], f), x: lerp(pr.X[i0], pr.X[i1], f), a: lerp(pr.A[i0], pr.A[i1], f) };
   }
-  function timing(d, type) {
-    const ref = profile("progressive");
-    const tTrip = 0.12 * d, tCon = 0.22 * d, k = (0.3 * d) / ref.tauStop; // k: Bildschirm-s je physikalische s (Zeitlupe)
-    const pr = profile(type);
-    return { tTrip, tCon, k, tStop: tCon + pr.tauStop * k, pr };
+  function timing(d, cfg) {
+    const B = cfg.beats, bt = (i) => (B[i] != null ? B[i] : null);
+    const pr = profile(cfg.type), ref = profile("progressive");
+    if (cfg.mode === "lift") {
+      const b0 = bt(0) ?? 0.18 * d;
+      const b1 = Math.max(bt(1) ?? Math.max(b0 + 0.6, 0.34 * d), b0 + 0.35);
+      const b2 = Math.max(bt(2) ?? Math.max(b1 + 0.6, 0.52 * d), b1 + 0.2);
+      const b3 = Math.max(bt(3) ?? Math.max(b2 + 0.8, 0.78 * d), b2 + 0.2);
+      return { pr, k: 10, lift: [b0, b1, b2, b3], tTrip: -3, tCon: -2, tStop: -1, tRes: -1 };
+    }
+    const tTrip = bt(0) ?? 0.12 * d;
+    const tCon = Math.max(bt(1) ?? (bt(0) != null ? tTrip + Math.max(0.35, 0.1 * d) : 0.22 * d), tTrip + 0.12);
+    let k;
+    if (bt(2) != null) k = Math.max(bt(2) - tCon, 0.15) / pr.tauStop; // Bildschirm-s je physikalische s (Zeitlupe)
+    else { k = (0.3 * d) / ref.tauStop; if (tCon + pr.tauStop * k > d - 0.35) k = Math.max(0.15, d - 0.35 - tCon) / pr.tauStop; }
+    const tStop = tCon + pr.tauStop * k;
+    return { tTrip, tCon, k, tStop, tRes: Math.max(bt(3) ?? tStop + 0.15, tStop), pr };
+  }
+  const STEPS_DEF = [["Fahrkorb anheben", "entlastet die Keile"], ["Keile fallen zurück", "Fangvorrichtung gelöst"], ["Prüfung", "Schiene, Keile, Begrenzer"], ["Freigabe", "erst dann fährt der Aufzug wieder"]];
+  // Zeitplan einer Szene (einmal je Parametersatz): Beats, Einblendzeiten, ab wann alles steht (Standbild-Cache)
+  function makePlan(cfg, d) {
+    const tm = timing(d, cfg), sc = clamp(d / 8, 0.55, 1.4);
+    const panelAt = cfg.panelAt ?? 0.1, p2At = cfg.panel2At ?? Math.min(d - 0.3, panelAt + 0.2);
+    const labelAt = cfg.labelAt ?? (cfg.mode === "lift" ? tm.lift[2] : clamp(0.4 * d, 0.3, Math.max(0.3, d - 0.3)));
+    const arrowsAt = cfg.arrowsAt ?? Math.min(0.6, 0.2 * d);
+    let steps = null;
+    if (cfg.mode === "lift") {
+      const src = cfg.steps.length ? cfg.steps : STEPS_DEF.map((q) => ({ text: q[0], sub: q[1] }));
+      const b = tm.lift;
+      steps = src.slice(0, 6).map((q, i) => ({ text: String(q.text), sub: q.sub == null ? "" : String(q.sub), at: q.at ?? (b[i] != null ? b[i] : b[3] + (i - 3) * 0.8) }));
+      steps.forEach((q, i) => { const nx = steps[i + 1]; q.done = nx ? Math.max(q.at + 0.3, nx.at) : q.at + 0.6; });
+    }
+    let rc = 0.3 + 6 * 0.17 * sc + 0.6;
+    for (const id in cfg.callouts.map) { const o = cfg.callouts.map[id]; if (o.at != null) rc = Math.max(rc, o.at + 0.6); }
+    let mech = Infinity;
+    if (cfg.mode === "fall") mech = Math.max(tm.tStop + 1.0, tm.tCon + 0.3 * tm.k + 0.1, tm.tRes + 0.7);
+    else if (cfg.mode === "lift") mech = Math.max(tm.lift[1] + 1.4, tm.lift[3] + 0.7);
+    const ready = Math.max(mech, rc, panelAt + 0.9, p2At + 0.9, labelAt + 0.9, arrowsAt + 0.9, steps ? steps[steps.length - 1].done + 0.7 : 0, 1.1);
+    return { tm, panelAt, p2At, labelAt, arrowsAt, steps, ready };
   }
 
   // ---------- Zustand pro Frame ----------
   function computeState(t, d, cfg) {
-    const inst = cfg.type === "instantaneous";
-    const tm = timing(d, cfg.type), pr = tm.pr;
-    const s = { inst, t, d, tm, pr, eng: cfg.engaging, cfg };
-    if (!cfg.engaging) { s.phase = "normal"; s.v = inst ? 0.63 : 1.0; s.xmm = (s.v * 1000 * t) / tm.k; s.a = 0; s.tau = -1; }
-    else {
+    const inst = cfg.type === "instantaneous", dir = cfg.dir, G = inst ? null : cfg.bi ? GV : GS;
+    const tm = cfg.plan.tm, pr = tm.pr, hC = inst ? HC_I : HC_P;
+    const s = { inst, t, d, tm, pr, eng: cfg.mode !== "normal", cfg, G, dir, bi: cfg.bi, mode: cfg.mode, lp: 0, trace: null, jaw: null, power: 0 };
+    if (cfg.mode === "normal") {
+      s.phase = "normal"; s.v = inst ? 0.63 : 1.0; s.xmm = (s.v * 1000 * t) / tm.k; s.a = 0; s.tau = -1; s.h = 0; s.L = 0;
+    } else if (cfg.mode === "lift") {
+      // gefangen -> Anheben: die geklemmten Keile wandern mit der Schiene nach unten, bis sie frei sind, dann fallen sie zurück
+      const b0 = tm.lift[0], b1 = tm.lift[1], h0 = inst ? HC_I + H2_I : HMAX_P, L0 = inst ? HC_I + LEAD_I : HC_P + LEAD_P, rat = inst ? 0.5 : 1;
+      const lift1 = (h0 - hC + 2) / rat, hr = hC - 2;
+      const lp = lift1 * smooth(inv(b0 + 0.15, b1, t)) + 14 * easeOut(inv(b1, b1 + 0.9, t));
+      let h;
+      if (t < b1) h = h0 - lp * rat;
+      else { const f = inv(b1, b1 + 0.22, t); if (f < 1) h = hr * (1 - f * f); else { const ta = t - b1 - 0.22; h = 2.5 * Math.abs(Math.sin(ta * 22)) * Math.exp(-ta * 9); } }
+      s.lp = lp; s.h = Math.max(0, h); s.L = Math.min(L0, s.h);
+      s.v = 0; s.a = 0; s.tau = 99; s.xmm = pr.sStop - lp / S;
+      s.phase = t < b0 ? "caught" : t < b1 ? "lift" : t < b1 + 0.9 ? "release" : "released";
+    } else {
       const tau = (t - tm.tCon) / tm.k; s.tau = tau;
       if (tau < 0) {
         const tau0 = -tm.tCon / tm.k, vS = pr.vC - (inst ? 0.15 : 0.2), aPre = (pr.vC - vS) / Math.max(1e-6, -tau0);
@@ -230,30 +387,44 @@
         s.phase = t < tm.tTrip ? "over" : "trip";
       } else if (tau < pr.tauStop) { const q = sampleP(pr, tau); s.v = q.v; s.xmm = q.x; s.a = q.a; s.phase = "brake"; }
       else { s.v = 0; s.xmm = pr.sStop; s.a = 0; s.phase = "stop"; }
+      const Dp0 = Math.max(0, s.xmm * S);
+      if (s.phase === "over") { s.h = 0; s.L = 0; }
+      else if (s.phase === "trip") { s.h = hC * smooth(inv(tm.tTrip, tm.tCon, t)); s.L = s.h; }
+      else if (inst) { s.h = hC + Math.min(Dp0 / 2, H2_I); s.L = hC + Math.min(Dp0 / 2, LEAD_I); }
+      else { s.h = hC + Math.min(Dp0, HMAX_P - HC_P); s.L = hC + Math.min(Dp0, LEAD_P); }
+      s.h *= dir; s.L *= dir;
     }
-    s.D = s.xmm * S; s.Dp = Math.max(0, s.D);
+    s.D = dir * s.xmm * S; s.Dp = Math.max(0, s.xmm * S); // D: Bildschirmweg der Schiene (+ = nach oben)
     s.speedPx = (s.v * 1000 * S) / tm.k;
-    const hC = inst ? HC_I : HC_P;
-    if (!cfg.engaging || s.phase === "over") { s.h = 0; s.L = 0; }
-    else if (s.phase === "trip") { s.h = hC * smooth(inv(tm.tTrip, tm.tCon, t)); s.L = s.h; }
-    else if (inst) { s.h = hC + Math.min(s.Dp / 2, H2_I); s.L = hC + Math.min(s.Dp / 2, LEAD_I); }
-    else { s.h = hC + Math.min(s.Dp, HMAX_P - HC_P); s.L = hC + Math.min(s.Dp, LEAD_P); }
-    s.delta = inst ? 0 : clamp((s.h - HC_P) * TANA, 0, DMAX);
+    const ah = Math.abs(s.h);
+    s.delta = inst ? 0 : clamp((ah - HC_P) * TANA, 0, DMAX);
     s.shift = inst ? clamp((s.h - HC_I) * TANB, 0, GL) : 0;
     s.ox = -s.shift;
     s.cf = inst ? s.shift / GL : s.delta / DMAX;
-    s.contact = cfg.engaging && t >= tm.tCon;
-    s.theta = Math.asin(clamp(s.L / PIN_R, 0, 0.8));
-    s.ropeRise = ROPE_R * Math.sin(s.theta);
-    const tb = Math.max(0.05, tm.tStop - tm.tCon);
-    if (s.contact) {
+    s.contact = cfg.mode === "fall" ? t >= tm.tCon : cfg.mode === "lift" ? ah > hC - 0.5 : false;
+    const S0 = cfg.bi ? BI_S0 : 0;
+    s.theta = Math.asin(clamp(S0 + s.L / PIN_R, -0.8, 0.8));
+    s.ropeRise = ROPE_R * (Math.sin(s.theta) - S0);
+    // Spuren auf dem Steg (fest auf der Schiene -> wandern mit ihr)
+    if (cfg.mode === "lift") {
+      const Dq = pr.sStop * S, lp = s.lp;
+      if (inst) { s.trace = [YR0 - HC_I - Dq + lp, YR0 - (HC_I + H2_I) + lp]; s.jaw = [CY - 100 - Dq * 0.4 + lp, CY + 100 + lp]; }
+      else s.trace = [G.WY0 - HC_P - Dq + lp, G.WY0 - HMAX_P + G.WH + lp];
+    } else if (cfg.mode === "fall" && s.contact && s.Dp >= 0.5) {
+      if (inst) { s.trace = [YR0 - HC_I - s.Dp, YR0 - s.h]; s.jaw = [CY - 100 - s.Dp * 0.4, CY + 100]; }
+      else if (dir > 0) s.trace = [G.WY0 - HC_P - s.Dp, G.WY0 - s.h + G.WH];
+      else s.trace = [G.WY0 - s.h, G.WY0 + HC_P + G.WH + s.Dp];
+    }
+    if (cfg.mode === "fall" && s.contact) {
+      const tb = Math.max(0.05, tm.tStop - tm.tCon);
       const hin = smooth(inv(tm.tCon, tm.tCon + (inst ? 1 : 0.6) * tb, t));
       const cool = smooth(inv(tm.tStop, d + 1, t));
       s.heat = hin * (1 - 0.5 * cool) * (inst ? 0.8 : 1);
-    } else s.heat = 0;
+    } else if (cfg.mode === "lift") s.heat = 0.3 * (1 - smooth(inv(0, tm.lift[1] + 0.6, t)));
+    else s.heat = 0;
     s.power = s.phase === "brake" ? clamp((s.v / pr.vC) * (s.a / pr.aRef) * 1.4) : 0;
     let amp = 0;
-    if (s.contact) {
+    if (cfg.mode === "fall" && s.contact) {
       if (inst) amp = (s.phase === "brake" ? 6 * (s.a / pr.aRef) : 0) + (t >= tm.tStop ? 7 * Math.exp(-(t - tm.tStop) * 10) : 0);
       else amp = 2.4 * Math.exp(-(t - tm.tCon) * 6);
     }
@@ -291,15 +462,41 @@
     stk(ctx, (c) => { c.moveTo(xa, ys - 14); c.lineTo(xb, ys - 14); }, g, 26, 0, 0.022, { cap: "butt" });
   }
 
-  // Fahrtrichtung: laufende Winkel neben dem Gehäuse (Fahrkorb fährt abwärts)
+  // Fahrtrichtung: laufende Winkel neben dem Gehäuse (abwärts bzw. aufwärts)
   function drawDirection(ctx, L, s) {
+    if (s.bi) drawBiArrow(ctx, L, s);
+    if (s.mode === "lift") { drawLiftArrow(ctx, L, s); return; }
     const a = clamp(s.v / 0.25) * (s.phase === "stop" ? 0 : 1); if (a <= 0.01) return;
     const col = s.phase === "normal" ? COL.cyan : s.phase === "brake" ? COL.amber : COL.red;
-    const x = RX + HW + 62, yA = HT + 44, span = 150, rate = clamp(s.speedPx * 0.004, 0.25, 1.4);
-    stxt(L, ctx, "Fahrt", x, yA - 16, { size: 14, weight: 600, color: col, align: "center", alpha: 0.85 * a });
+    const up = s.dir < 0, e = up ? -1 : 1;
+    const x = RX + HW + (s.bi ? 76 : 62), yA = HT + 44, span = 150, rate = clamp(s.speedPx * 0.004, 0.25, 1.4);
+    if (!s.bi) stxt(L, ctx, "Fahrt", x, yA - 16, { size: 14, weight: 600, color: col, align: "center", alpha: 0.85 * a });
     for (const mid of [true, false]) {
-      stk(ctx, (c) => { for (let k = 0; k < 4; k++) { const f = (k / 4 + s.t * rate) % 1; if ((f > 0.2 && f < 0.8) !== mid) continue; const y = yA + f * span; c.moveTo(x - 11, y - 6); c.lineTo(x, y + 5); c.lineTo(x + 11, y - 6); } }, col, 2.6, 0.8, a * (mid ? 0.95 : 0.35));
+      stk(ctx, (c) => { for (let k = 0; k < 4; k++) { const f = (k / 4 + s.t * rate) % 1; if ((f > 0.2 && f < 0.8) !== mid) continue; const y = yA + (up ? 1 - f : f) * span; c.moveTo(x - 11, y - 6 * e); c.lineTo(x, y + 5 * e); c.lineTo(x + 11, y - 6 * e); } }, col, 2.6, 0.8, a * (mid ? 0.95 : 0.35));
     }
+  }
+  // Doppelpfeil AUF/AB (bidirektionale Fangvorrichtung); die aktive Fahrtrichtung leuchtet
+  function drawBiArrow(ctx, L, s) {
+    const at = s.cfg.plan.arrowsAt, p = inv(at, at + 0.6, s.t); if (p <= 0) return;
+    const x = RX + HW + 36, yT = HT - 6, yB = HB + 6, ym = (yT + yB) / 2, hl = ((yB - yT) / 2) * easeOut(p);
+    const act = s.phase === "over" || s.phase === "trip" || s.phase === "brake" || s.phase === "normal" ? s.dir : 0;
+    const pu = 0.65 + 0.35 * Math.abs(Math.sin(s.t * 4.2));
+    stk(ctx, (c) => { c.moveTo(x, ym - hl + 16); c.lineTo(x, ym + hl - 16); }, COL.cyan, 3, 1, 0.85 * p, { cap: "butt" });
+    for (const sg of [-1, 1]) {
+      const on = act === sg, col = on ? (s.phase === "normal" ? COL.cyan : s.phase === "brake" ? COL.amber : COL.red) : COL.cyan, y = ym + sg * hl;
+      arrowHead(ctx, x, y, sg < 0 ? -Math.PI / 2 : Math.PI / 2, 22, col, p * (on ? pu : 0.9));
+      stxt(L, ctx, sg < 0 ? "AUF" : "AB", x + 15, sg < 0 ? y + 17 : y - 7, { size: 14, weight: 700, font: L.FONT.mono, color: on ? col : COL.muted, letterSpacing: 1.5, alpha: inv(0.5, 1, p) });
+    }
+  }
+  // Anheben (then = lift_release): großer Pfeil nach oben neben dem Gehäuse
+  function drawLiftArrow(ctx, L, s) {
+    const b = s.tm.lift, p = inv(b[0] - 0.05, b[0] + 0.5, s.t); if (p <= 0) return;
+    const x = RX + HW + 60, yB = HB + 6, yT = HT - 14, ytip = lerp(yB - 40, yT, easeOut(p));
+    const moving = s.t < b[1] + 0.9, a = p * (moving ? 1 : 0.6 + 0.12 * Math.sin(s.t * 3));
+    stk(ctx, (c) => { c.moveTo(x, yB); c.lineTo(x, ytip + 30); }, COL.amber, 10, 1, a, { cap: "butt" });
+    arrowHead(ctx, x, ytip, -Math.PI / 2, 40, COL.amber, a);
+    if (moving && s.t > b[0]) stk(ctx, (c) => { for (let k = 0; k < 5; k++) { const y = yB - 12 - ((k / 5 + s.t * 0.9) % 1) * (yB - ytip - 56); c.moveTo(x - 4, y + 3); c.lineTo(x, y - 2); c.lineTo(x + 4, y + 3); } }, "#241705", 2, 0, 0.85 * a);
+    stxt(L, ctx, "ANHEBEN", x, yT - 22, { size: 14, weight: 700, font: L.FONT.mono, color: COL.amber, letterSpacing: 1.5, align: "center", alpha: a * inv(0.4, 1, p) });
   }
 
   // ---------- Führungsschiene (Steg im Schnitt) ----------
@@ -315,27 +512,27 @@
     stk(ctx, (c) => { c.moveTo(RX, y0); c.lineTo(RX, y1); }, cgrad(ctx, "railC", () => vGrad(ctx, COL.cyan, 0.55, y0, y1)), 1.2, 0, 1, { dash: [26, 6, 4, 6], off: s.D, cap: "butt" });
   }
 
-  // Bremsspur am Steg (fest auf der Schiene -> wandert mit nach oben): Grundspur + additive Glut
-  function traceSpan(s) { return s.inst ? [YR0 - HC_I - s.Dp, YR0 - s.h] : [WY0 - HC_P - s.Dp, WY0 - s.h + WH]; }
+  // Bremsspur am Steg (fest auf der Schiene -> wandert mit): Grundspur + additive Glut
   function drawTraceBase(ctx, s) {
-    if (!s.contact || s.Dp < 0.5) return;
-    const [yTop, yBot] = traceSpan(s);
+    const tr = s.trace; if (!tr || tr[1] - tr[0] < 0.5) return;
+    const yTop = tr[0], yBot = tr[1], dn = s.dir < 0;
     if (!s.inst) {
-      const g = ctx.createLinearGradient(0, yTop, 0, yBot);
-      g.addColorStop(0, rgba(COL.red, 0.35)); g.addColorStop(1, mix(COL.red, COL.amber, 0.55, 0.8));
+      const g = ctx.createLinearGradient(0, yTop, 0, yBot), cOld = rgba(COL.red, 0.35), cNew = mix(COL.red, COL.amber, 0.55, 0.8);
+      g.addColorStop(0, dn ? cNew : cOld); g.addColorStop(1, dn ? cOld : cNew);
       stk(ctx, (c) => { c.moveTo(RX - BH + 2, yTop); c.lineTo(RX - BH + 2, yBot); c.moveTo(RX + BH - 2, yTop); c.lineTo(RX + BH - 2, yBot); }, g, 3, 1.2, 1, { cap: "butt" });
-      // feine Riefen (Schleifspuren)
-      stk(ctx, (c) => { for (let y = yTop + 4; y < Math.min(yBot, HT); y += 9) { const q = h01(Math.round(y + s.Dp) * 0.37); c.moveTo(RX - BH + 3, y); c.lineTo(RX - BH + 6 + q * 7, y + 1.5); c.moveTo(RX + BH - 3, y + 3); c.lineTo(RX + BH - 6 - q * 7, y + 4.5); } }, COL.amber, 1, 0, 0.4);
+      // feine Riefen (Schleifspuren) außerhalb des Gehäuses – an die Schiene gebunden
+      const scr = (c, y) => { const q = h01(Math.round(y + s.D) * 0.37); c.moveTo(RX - BH + 3, y); c.lineTo(RX - BH + 6 + q * 7, y + 1.5); c.moveTo(RX + BH - 3, y + 3); c.lineTo(RX + BH - 6 - q * 7, y + 4.5); };
+      stk(ctx, (c) => { if (!dn) { for (let y = yTop + 4; y < Math.min(yBot, HT); y += 9) scr(c, y); } else { for (let y = yBot - 8; y > Math.max(yTop, HB); y -= 9) scr(c, y); } }, COL.amber, 1, 0, 0.4);
     } else {
       stk(ctx, (c) => { for (let y = yTop; y < yBot; y += 4) { c.moveTo(RX - BH + 1, y); c.lineTo(RX - BH + 7, y - 2); } }, mix(COL.red, COL.amber, 0.5), 1.6, 0.8, 0.9);
-      stk(ctx, (c) => { c.moveTo(RX + BH - 2, CY - 100 - s.Dp * 0.4); c.lineTo(RX + BH - 2, CY + 100); }, mix(COL.red, COL.amber, 0.4), 2.4, 1, 0.6 * s.cf + 0.2);
+      if (s.jaw) stk(ctx, (c) => { c.moveTo(RX + BH - 2, s.jaw[0]); c.lineTo(RX + BH - 2, s.jaw[1]); }, mix(COL.red, COL.amber, 0.4), 2.4, 1, 0.6 * s.cf + 0.2);
     }
   }
   function drawTraceHeat(ctx, s) {
-    if (!s.contact || s.Dp < 0.5 || s.heat < 0.02) return;
-    const [yTop, yBot] = traceSpan(s), h = clamp(s.heat * 1.1);
+    const tr = s.trace; if (!tr || tr[1] - tr[0] < 0.5 || s.heat < 0.02) return;
+    const yTop = tr[0], yBot = tr[1], h = clamp(s.heat * 1.1), dn = s.dir < 0;
     ctx.save(); ctx.globalCompositeOperation = "lighter";
-    const g = ctx.createLinearGradient(0, yTop, 0, yBot);
+    const g = ctx.createLinearGradient(0, dn ? yBot : yTop, 0, dn ? yTop : yBot);
     g.addColorStop(0, rgba(COL.red, 0.12 * h)); g.addColorStop(0.6, rgba(COL.amber, 0.45 * h)); g.addColorStop(1, rgba(COL.hot, 0.9 * h));
     if (!s.inst) stk(ctx, (c) => { c.moveTo(RX - BH + 2, yTop); c.lineTo(RX - BH + 2, yBot); c.moveTo(RX + BH - 2, yTop); c.lineTo(RX + BH - 2, yBot); }, g, 2.4, 1.4, 1, { cap: "butt" });
     else stk(ctx, (c) => { c.moveTo(RX - BH + 3, yTop); c.lineTo(RX - BH + 3, yBot); }, g, 2.4, 1.4, 1, { cap: "butt" });
@@ -345,17 +542,20 @@
   // ---------- Fanggehäuse ----------
   function drawHousingBack(ctx, s) { fil(ctx, (c) => c.rect(RX - HW + s.ox, HT, HW * 2, HB - HT), "rgba(4,12,26,0.84)", 1); }
   function drawShell(ctx, P, s) {
-    const x0 = PIV[0] - 24, y0 = HT - 8, w = RX + HW + 44 - x0, h = PIV[1] + 16 - y0;
+    const x0 = PIV[0] - 24, y0 = HT - 8, w = RX + HW + 44 - x0, h = PIV[1] + 16 - y0, gid = s.inst ? "I" : s.G.id;
     ctx.save(); ctx.translate(s.ox, 0);
-    layer(ctx, "shell|" + s.inst, x0, y0, w, h, 1, (g) => drawShellRaw(g, pats(g), s.inst));
+    layer(ctx, "shell|" + gid, x0, y0, w, h, 1, (g) => drawShellRaw(g, pats(g), gid));
     ctx.restore();
   }
-  function drawShellRaw(ctx, P, inst) {
-    const ox = 0;
-    if (!inst) for (const sg of [-1, 1]) { // Keilanschläge (fest am Gehäuse)
+  function drawShellRaw(ctx, P, gid) {
+    const ox = 0, inst = gid === "I", V = gid === "V", ob = V ? 20 : 54;
+    if (!inst) for (const sg of [-1, 1]) { // Keilanschläge (fest am Gehäuse); V-Bahn: oben und unten
       const X = (dx) => RX + sg * dx;
-      const stp = polyB([[X(16), HT + PL], [X(100), HT + PL], [X(100), STOP_Y], [X(16), STOP_Y]], true);
-      fil(ctx, stp, "rgba(12,34,62,0.96)", 1); hatch(ctx, stp, P.cyan, 0, 0, 0.55); stk(ctx, stp, COL.cyan, 1.5, 0.4, 0.8);
+      const spans = V ? [[HT + PL, CY - WHH - HMAX_P], [CY + WHH + HMAX_P, HB - PL]] : [[HT + PL, STOP_Y]];
+      for (const sp of spans) {
+        const stp = polyB([[X(16), sp[0]], [X(100), sp[0]], [X(100), sp[1]], [X(16), sp[1]]], true);
+        fil(ctx, stp, "rgba(12,34,62,0.96)", 1); hatch(ctx, stp, P.cyan, 0, 0, 0.55); stk(ctx, stp, COL.cyan, 1.5, 0.4, 0.8);
+      }
     }
     if (!inst) for (const yc of SPR_Y) stk(ctx, (c) => { c.moveTo(RX - HW - 40, yc); c.lineTo(RX - BLK_O + 20, yc); c.moveTo(RX + BLK_O - 20, yc); c.lineTo(RX + HW + 40, yc); }, COL.cyan, 1, 0, 0.35, { dash: [14, 4, 3, 4], cap: "butt" });
     // Lagerbock des Auslösehebels
@@ -364,24 +564,24 @@
     const R = [
       [RX - HW, HT, WALL, HB - HT], [RX + HW - WALL, HT, WALL, HB - HT],
       [RX - HW + WALL, HT, HW - WALL - 20, PL], [RX + 20, HT, HW - WALL - 20, PL],
-      [RX - HW + WALL, HB - PL, HW - WALL - 54, PL], [RX + 54, HB - PL, HW - WALL - 54, PL],
+      [RX - HW + WALL, HB - PL, HW - WALL - ob, PL], [RX + ob, HB - PL, HW - WALL - ob, PL],
     ];
     const b = (c) => { for (const r of R) c.rect(r[0] + ox, r[1], r[2], r[3]); };
     fil(ctx, b, "rgba(12,34,62,0.96)", 1);
     hatch(ctx, b, P.cyan, ox, 0, 0.6);
     stk(ctx, b, COL.cyan, 1.2, 0, 0.55);
     stk(ctx, (c) => {
-      c.moveTo(RX - 20 + ox, HT); c.lineTo(RX - HW + ox, HT); c.lineTo(RX - HW + ox, HB); c.lineTo(RX - 54 + ox, HB);
-      c.moveTo(RX + 54 + ox, HB); c.lineTo(RX + HW + ox, HB); c.lineTo(RX + HW + ox, HT); c.lineTo(RX + 20 + ox, HT);
+      c.moveTo(RX - 20 + ox, HT); c.lineTo(RX - HW + ox, HT); c.lineTo(RX - HW + ox, HB); c.lineTo(RX - ob + ox, HB);
+      c.moveTo(RX + ob + ox, HB); c.lineTo(RX + HW + ox, HB); c.lineTo(RX + HW + ox, HT); c.lineTo(RX + 20 + ox, HT);
     }, COL.cyan, 2.6, 1, 1);
   }
 
   // Bremsfang: Anschläge, Druckstücke, Tellerfedern, Rollen, Keile
   function progGeom(s) {
-    const dl = s.delta, h = s.h;
-    const dxIn = Math.max(BH, 20 + dl - TANA * h);
-    const yWt = WY0 - h, yWb = yWt + WH;
-    return { dl, h, dxIn, yWt, yWb, face: (y) => 44 + dl + (y - WY0) * TANA };
+    const G = s.G, dl = s.delta, h = s.h;
+    const dxIn = Math.max(BH, 20 + dl - TANA * Math.abs(h));
+    const yWt = G.WY0 - h, yWb = yWt + G.WH;
+    return { dl, h, dxIn, yWt, yWb, face: (y) => G.face(y) + dl };
   }
   // Starre Teile als Sprite in Bezugslage, per Verschiebung gezeichnet (Schraffur wandert mit dem Teil)
   function rigid(ctx, key, pts, pad, dx, dy, drawFn) {
@@ -391,15 +591,14 @@
     layer(ctx, key, x0 - pad, y0 - pad, x1 - x0 + 2 * pad, y1 - y0 + 2 * pad, 1, drawFn);
     ctx.restore();
   }
-  const faceP = (y) => 44 + (y - WY0) * TANA; // Laufbahn des Druckstücks in Bezugslage (δ = 0)
   function drawProg(ctx, P, s) {
-    const G = progGeom(s), { dl, dxIn, yWt, yWb, face } = G, load = s.cf;
+    const GG = s.G, G = progGeom(s), { dl, dxIn, yWt, yWb, face } = G, load = s.cf;
     const springCol = mix(COL.cyan, COL.amber, load);
     for (const sg of [-1, 1]) {
       const X = (dx) => RX + sg * dx;
-      // Druckstück mit schräger Laufbahn (starr, verschiebt sich um δ nach außen)
-      const bp = [[X(faceP(BLK_T)), BLK_T], [X(BLK_O), BLK_T], [X(BLK_O), BLK_B], [X(faceP(BLK_B)), BLK_B]];
-      rigid(ctx, "blk|" + sg, bp, 6, sg * dl, 0, (g) => { const bb = polyB(bp, true); fil(g, bb, "rgba(18,40,68,0.96)", 1); hatch(g, bb, pats(g).steel, 0, 0, 0.7); stk(g, bb, COL.steel, 1.8, 0.5, 0.95); });
+      // Druckstück mit schräger (V: doppelt schräger) Laufbahn – starr, verschiebt sich um δ nach außen
+      const bp = GG.blk(X);
+      rigid(ctx, "blk|" + GG.id + sg, bp, 6, sg * dl, 0, (g) => { const bb = polyB(bp, true); fil(g, bb, "rgba(18,40,68,0.96)", 1); hatch(g, bb, pats(g).steel, 0, 0, 0.7); stk(g, bb, COL.steel, 1.8, 0.5, 0.95); });
     }
     // Tellerfederpakete (verformen sich -> live, beide Seiten in einem Pfad)
     const c0 = BLK_O + dl + 6, c1 = HW - WALL - 6, pitch = (c1 - c0) / NDISC, th = 5.4, hc = Math.max(0.6, pitch - th);
@@ -415,16 +614,15 @@
     fil(ctx, discs, springCol, 0.9);
     stk(ctx, discs, "#06101f", 1.1, 0, 0.9);
     // Nadelrollen im Käfig (laufen mit halber Keilgeschwindigkeit)
-    const y0r = Math.max(yWt, BLK_T) + 6, y1r = Math.min(yWb, BLK_B) - 6, cage = WY0 + 6 - s.h / 2;
+    const y0r = Math.max(yWt, GG.T) + 6, y1r = Math.min(yWb, GG.B) - 6, cage = GG.WY0 + 6 - s.h / 2;
     stk(ctx, (c) => { for (const sg of [-1, 1]) for (let k = -4; k < 14; k++) { const y = cage + k * 14; if (y < y0r || y > y1r) continue; const x = RX + sg * (face(y) - 5); c.moveTo(x + 4, y); c.arc(x, y, 4, 0, TAU); } }, COL.steel, 1.4, 0, 0.9);
     // Fangkeile (starr; Bezugslage h = 0, Stegabstand 20)
     for (const sg of [-1, 1]) {
-      const X = (dx) => RX + sg * dx, yb = WY0 + WH;
-      const wp = [[X(20), WY0], [X(20 + WT0), WY0], [X(20 + WT0 + WH * TANA), yb], [X(20), yb]];
-      rigid(ctx, "wedge|" + sg, wp, 8, sg * (dxIn - 20), -s.h, (g) => {
+      const X = (dx) => RX + sg * dx, yb = GG.WY0 + GG.WH, wp = GG.wedge(X), px = X(20 + GG.attX), py = yb - GG.attY;
+      rigid(ctx, "wedge|" + GG.id + sg, wp, 8, sg * (dxIn - 20), -s.h, (g) => {
         const wb = polyB(wp, true);
         fil(g, wb, "#3a2a10", 0.95); hatch(g, wb, pats(g).amber, 0, 0, 0.75); stk(g, wb, COL.amber, 2.2, 1, 1);
-        fil(g, (c) => c.arc(X(42), yb - 11, 5, 0, TAU), "#0a1426", 1); stk(g, (c) => c.arc(X(42), yb - 11, 5, 0, TAU), COL.amber, 1.5, 0, 1);
+        fil(g, (c) => c.arc(px, py, GG.pinR, 0, TAU), "#0a1426", 1); stk(g, (c) => c.arc(px, py, GG.pinR, 0, TAU), COL.amber, 1.5, 0, 1);
       });
     }
   }
@@ -479,17 +677,17 @@
   // Wärmeglühen an der Reibstelle (additiv)
   function drawHeat(ctx, s) {
     if (s.heat <= 0.01) return;
-    const hh = s.heat * (0.86 + 0.14 * Math.sin(s.t * 13.1) * Math.sin(s.t * 7.3 + 1));
+    const hh = s.heat * (0.86 + 0.14 * Math.sin(s.t * 13.1) * Math.sin(s.t * 7.3 + 1)), dn = s.dir < 0;
     ctx.save(); ctx.globalCompositeOperation = "lighter";
     if (!s.inst) {
-      const G = progGeom(s);
-      const wg = (c) => { for (const sg of [-1, 1]) { const X = (dx) => RX + sg * dx; c.moveTo(X(G.dxIn), G.yWt); c.lineTo(X(G.dxIn + WT0), G.yWt); c.lineTo(X(G.dxIn + WT0 + WH * TANA), G.yWb); c.lineTo(X(G.dxIn), G.yWb); c.closePath(); } };
+      const G = progGeom(s), GG = s.G;
+      const wg = (c) => { for (const sg of [-1, 1]) { GG.wedge((dx) => RX + sg * (dx + G.dxIn - 20)).forEach((q, i) => (i ? c.lineTo(q[0], q[1] - G.h) : c.moveTo(q[0], q[1] - G.h))); c.closePath(); } };
       fil(ctx, wg, "#ff7a1a", 0.32 * hh);
-      const g = ctx.createLinearGradient(0, G.yWt, 0, G.yWb);
+      const g = ctx.createLinearGradient(0, dn ? G.yWb : G.yWt, 0, dn ? G.yWt : G.yWb);
       g.addColorStop(0, rgba(COL.hot, 0.95)); g.addColorStop(0.45, rgba(COL.amber, 0.8)); g.addColorStop(1, rgba(COL.red, 0.25));
       stk(ctx, (c) => { c.moveTo(RX - BH, G.yWt); c.lineTo(RX - BH, G.yWb); c.moveTo(RX + BH, G.yWt); c.lineTo(RX + BH, G.yWb); }, g, 3, 2.2, hh, { cap: "butt" });
-      dot(ctx, RX, G.yWt + 26, 60, COL.amber, 0.55 * hh);
-      dot(ctx, RX, HT, 42, COL.amber, 0.5 * hh * (0.35 + s.power));
+      dot(ctx, RX, dn ? G.yWb - 26 : G.yWt + 26, 60, COL.amber, 0.55 * hh);
+      dot(ctx, RX, dn ? HB : HT, 42, COL.amber, 0.5 * hh * (0.35 + s.power));
     } else {
       const G = instGeom(s);
       fil(ctx, (c) => c.arc(G.xR, G.yR, RR, 0, TAU), "#ff7a1a", 0.3 * hh);
@@ -506,9 +704,10 @@
 
   // Mechanik (Teile, Gehäuse, Gestänge) – in Ruhe- und Endlage als Sprite, sonst live
   function mechKey(s) {
-    if (s.h <= 1e-9 && s.L <= 1e-9) return "mech|" + s.inst + "|0";
-    if (!s.inst && s.h >= HMAX_P - 1e-9 && s.L >= HC_P + LEAD_P - 1e-9) return "mech|p|1";
-    if (s.inst && s.h >= HC_I + H2_I - 1e-9 && s.L >= HC_I + LEAD_I - 1e-9) return "mech|i|1";
+    const gid = s.inst ? "I" : s.G.id, ah = Math.abs(s.h), aL = Math.abs(s.L);
+    if (ah <= 1e-9 && aL <= 1e-9) return "mech|" + gid + "|0";
+    if (!s.inst && ah >= HMAX_P - 1e-9 && aL >= HC_P + LEAD_P - 1e-9) return "mech|" + gid + "|" + (s.h > 0 ? 1 : -1);
+    if (s.inst && s.h >= HC_I + H2_I - 1e-9 && s.L >= HC_I + LEAD_I - 1e-9) return "mech|I|1";
     return null;
   }
   function drawMechRaw(ctx, P, s) {
@@ -526,24 +725,24 @@
   // ---------- Gestänge, Auslösehebel, Begrenzerseil ----------
   const leverPt = (s, r) => [PIV[0] + r * Math.cos(s.theta), PIV[1] - r * Math.sin(s.theta)];
   function drawLinkage(ctx, P, s) {
-    const yTr = TR_Y0 - s.L;
+    const yTr = TR_Y0 - s.L, SL = s.inst ? SLOT : s.G.slot, gid = s.inst ? "I" : s.G.id;
     // Rückstellfeder (Druckfeder zwischen Gehäuse und Hebel)
-    const pS = leverPt(s, 400);
+    const pS = leverPt(s, s.bi ? 330 : 400);
     stk(ctx, springB(pS[0], HB + 2, pS[0], pS[1] - 9, 6, 8), COL.steel, 1.8, 0.4, 0.8);
-    // Hubtraverse mit Langloch-Laschen (starr, hebt sich um L)
+    // Hubtraverse mit Langloch-Laschen (starr, bewegt sich um L)
     const slots = s.inst ? [RX - 40] : [RX - 45, RX + 45];
-    rigid(ctx, "trav|" + s.inst, [[RX - 64, TR_Y0 - SLOT - 5], [RX + 64, TR_Y0 + TR_H]], 8, 0, -s.L, (g) => {
+    rigid(ctx, "trav|" + gid, [[RX - 64, TR_Y0 - SL - 5], [RX + 64, TR_Y0 + TR_H]], 8, 0, -s.L, (g) => {
       fil(g, (c) => rr(c, RX - 64, TR_Y0, 128, TR_H, 3), "#152c4a", 1);
       stk(g, (c) => rr(c, RX - 64, TR_Y0, 128, TR_H, 3), COL.steel, 1.8, 0.5, 1);
       for (const xs of slots) {
-        fil(g, (c) => rr(c, xs - 8, TR_Y0 - SLOT - 5, 16, SLOT + 7, 3), "#152c4a", 1);
-        stk(g, (c) => rr(c, xs - 8, TR_Y0 - SLOT - 5, 16, SLOT + 7, 3), COL.steel, 1.5, 0.3, 1);
-        fil(g, (c) => rr(c, xs - 2.5, TR_Y0 - SLOT - 1, 5, SLOT, 2.5), "#050d1c", 1);
+        fil(g, (c) => rr(c, xs - 8, TR_Y0 - SL - 5, 16, SL + 7, 3), "#152c4a", 1);
+        stk(g, (c) => rr(c, xs - 8, TR_Y0 - SL - 5, 16, SL + 7, 3), COL.steel, 1.5, 0.3, 1);
+        fil(g, (c) => rr(c, xs - 2.5, TR_Y0 - SL - 1, 5, SL, 2.5), "#050d1c", 1);
       }
     });
     // Zugstangen (Keil -> Langloch der Traverse)
     const rods = [];
-    if (!s.inst) { const G = progGeom(s); for (const sg of [-1, 1]) rods.push([RX + sg * (G.dxIn + 22), G.yWb - 11, RX + sg * 45, G.yWb - 11 + ROD_P]); }
+    if (!s.inst) { const G = progGeom(s), GG = s.G; for (const sg of [-1, 1]) rods.push([RX + sg * (G.dxIn + GG.attX), G.yWb - GG.attY, RX + sg * 45, G.yWb - GG.attY + GG.rod]); }
     else { const G = instGeom(s); rods.push([G.xR, G.yR, RX - 40, G.yR + ROD_I]); }
     const pPin = leverPt(s, PIN_R);
     stk(ctx, (c) => { for (const r of rods) { c.moveTo(r[0], r[1]); c.lineTo(r[2], r[3]); } c.moveTo(RX, yTr + TR_H - 2); c.lineTo(pPin[0], pPin[1]); }, COL.steel, 4.5, 0.5, 1);
@@ -575,15 +774,16 @@
       stk(g, (c) => rr(c, x - 15, -28, 30, 56, 4), ccol, 1.8, 0.6, 1);
       stk(g, (c) => { c.moveTo(x - 19, -15); c.lineTo(x + 19, -15); c.moveTo(x - 19, 15); c.lineTo(x + 19, 15); }, COL.white, 2.5, 0.3, 0.85, { cap: "butt" });
     });
-    if (s.phase === "trip" || (s.contact && s.t - s.tm.tCon < 0.3)) {
-      const a = s.phase === "trip" ? 1 : 1 - (s.t - s.tm.tCon) / 0.3;
-      for (let i = 0; i < 3; i++) { const yy = ye - 70 - i * 26 - ((s.t * 60) % 26); arrowHead(ctx, x + 22, yy, -Math.PI / 2, 12, COL.amber, a * (0.9 - i * 0.25)); }
+    // Seil läuft relativ zum Fahrkorb weiter (Begrenzer hat es gestoppt): Pfeile in Seilrichtung
+    if (s.mode === "fall" && (s.phase === "trip" || (s.contact && s.t - s.tm.tCon < 0.3))) {
+      const a = s.phase === "trip" ? 1 : 1 - (s.t - s.tm.tCon) / 0.3, dn = s.dir < 0, m = (s.t * 60) % 26;
+      for (let i = 0; i < 3; i++) { const yy = dn ? ye - 54 - i * 26 + m : ye - 70 - i * 26 - m; arrowHead(ctx, x + 22, yy, dn ? Math.PI / 2 : -Math.PI / 2, 12, COL.amber, a * (0.9 - i * 0.25)); }
     }
   }
 
   // ---------- Maßband: Fangbeginn -> Bremsweg ----------
   function drawTape(ctx, L, s) {
-    if (!s.contact || s.Dp < 1) return;
+    if (s.mode !== "fall" || s.dir < 0 || !s.cfg.tape || !s.contact || s.Dp < 1) return;
     const yM = HT - s.Dp, tx = RX + BH + 5, tw = 20, lab = s.inst ? 2 : 10;
     // Band mit Teilung + Fangbeginn-Marke: ein hohes Sprite (Nullpunkt oben), davon wird der sichtbare Teil gezeichnet
     const SX = RX - 180, SW = 300, TOP = 14, LEN = 420;
@@ -592,12 +792,13 @@
       fil(g, (c) => c.rect(tx, 0, tw, LEN), "rgba(40,28,8,0.85)", 1);
       stk(g, (c) => { c.moveTo(tx, LEN); c.lineTo(tx, 0); c.lineTo(tx + tw, 0); c.lineTo(tx + tw, LEN); }, COL.amber, 1.2, 0.3, 0.8);
       stk(g, (c) => { for (let j = 0; j * 7.5 < LEN; j++) { const y = j * 7.5, l = j % 10 === 0 ? 17 : j % 2 === 0 ? 11 : 6; c.moveTo(tx, y); c.lineTo(tx + l, y); } }, COL.amber, 1.2, 0, 0.95, { cap: "butt" });
-      for (let j = lab; j * 7.5 < LEN; j += lab) txt(L, g, `${j / 2} cm`, tx + tw + 5, j * 7.5 + 5, { size: 14, weight: 700, font: L.FONT.mono, color: COL.amber, alpha: 0.9 });
       stk(g, (c) => { c.moveTo(RX - BH - 26, 0); c.lineTo(tx + tw + 2, 0); }, COL.amber, 2, 1, 1, { cap: "butt" });
       txt(L, g, "Fangbeginn", RX - BH - 32, 6, { size: 18, weight: 600, color: COL.amber, align: "right" });
     });
-    const hVis = Math.min(LEN, s.Dp) + TOP;
+    const vis = Math.min(LEN, s.Dp), hVis = vis + TOP;
     if (cv) { ctx.save(); ctx.globalAlpha = GA; ctx.drawImage(cv, 0, 0, SW, hVis, SX, yM - TOP, SW, hVis); ctx.restore(); }
+    // cm-Beschriftung nur, wenn sie vollständig über dem Gehäuse liegt
+    for (let j = lab; j * 7.5 + 11 < vis; j += lab) stxt(L, ctx, `${j / 2} cm`, tx + tw + 5, yM + j * 7.5 + 5, { size: 14, weight: 700, font: L.FONT.mono, color: COL.amber, alpha: 0.9 });
     // Maßlinie mit Pfeilen + Wert
     const xd = RX + 104;
     stk(ctx, (c) => { c.moveTo(tx + tw + 2, yM); c.lineTo(xd + 8, yM); c.moveTo(RX + HW * 0.3, HT); c.lineTo(xd + 8, HT); c.moveTo(xd, yM + 2); c.lineTo(xd, HT - 2); }, COL.amber, 1.2, 0.6, 0.85, { cap: "butt" });
@@ -609,8 +810,8 @@
 
   // ---------- Funken + Glut ----------
   function drawSparks(ctx, s) {
-    if (!s.eng || !s.cfg.sparks || !s.contact) return;
-    const tm = s.tm, pr = s.pr, t = s.t, tb = Math.max(0.1, tm.tStop - tm.tCon);
+    if (s.mode !== "fall" || !s.cfg.sparks || !s.contact) return;
+    const tm = s.tm, pr = s.pr, t = s.t, tb = Math.max(0.1, tm.tStop - tm.tCon), dn = s.dir < 0, yEx = dn ? HB + 1 : HT - 1;
     const N = s.inst ? 190 : 300;
     const G = s.inst ? instGeom(s) : progGeom(s);
     const B = [[], [], [], []]; // 2 Helligkeitsstufen × 2 Farben
@@ -622,12 +823,13 @@
       if (h01(i * 7.7 + 0.2) > 0.1 + 0.95 * pw) continue;
       const inner = h01(i * 4.4) < 0.22, side = inner && s.inst ? -1 : i % 2 ? 1 : -1, r5 = h01(i * 5.1);
       let x0, y0, ang, sp = (s.inst ? 520 : 400) + 640 * h01(i * 2.3);
-      if (inner) { x0 = RX + side * (BH + 1); y0 = s.inst ? G.yR - 10 : G.yWt + 2; ang = -Math.PI / 2 + side * (0.05 + 0.3 * r5); sp *= 0.55; if (age > 0.16) continue; }
-      else { x0 = RX + side * (BH + 3); y0 = HT - 1; ang = -Math.PI / 2 + side * (r5 < 0.7 ? 0.03 + 0.36 * r5 : 0.28 + 0.75 * (r5 - 0.7)); if (r5 >= 0.7) sp *= 0.7; }
+      if (inner) { x0 = RX + side * (BH + 1); y0 = s.inst ? G.yR - 10 : dn ? G.yWb - 2 : G.yWt + 2; ang = -Math.PI / 2 + side * (0.05 + 0.3 * r5); sp *= 0.55; if (age > 0.16) continue; }
+      else { x0 = RX + side * (BH + 3); y0 = yEx; ang = -Math.PI / 2 + side * (r5 < 0.7 ? 0.03 + 0.36 * r5 : 0.28 + 0.75 * (r5 - 0.7)); if (r5 >= 0.7) sp *= 0.7; }
+      if (dn) ang = -ang; // aufwärts fahrend: Funken treten unten aus
       const g = 1500;
       const vx = Math.cos(ang) * sp, vy = Math.sin(ang) * sp + g * age;
       const x = x0 + vx * age, y = y0 + Math.sin(ang) * sp * age + 0.5 * g * age * age;
-      if (y > HB + 120) continue;
+      if (y > (dn ? 880 : HB + 120)) continue;
       const a = (1 - age / life) * (0.6 + 0.4 * pw);
       if (a < 0.03) continue;
       const k = 0.03 + 0.035 * h01(i * 8.3);
@@ -645,7 +847,7 @@
       }
     }
     ctx.restore();
-    if (s.phase === "brake") { ctx.save(); ctx.globalCompositeOperation = "lighter"; dot(ctx, RX, HT - 4, 70, COL.amber, 0.45 * s.power); dot(ctx, RX, HT - 2, 22, COL.hot, 0.8 * s.power); ctx.restore(); }
+    if (s.phase === "brake") { ctx.save(); ctx.globalCompositeOperation = "lighter"; dot(ctx, RX, dn ? HB + 4 : HT - 4, 70, COL.amber, 0.45 * s.power); dot(ctx, RX, dn ? HB + 2 : HT - 2, 22, COL.hot, 0.8 * s.power); ctx.restore(); }
     // Glut nach dem Stillstand: einzelne glühende Partikel sinken langsam
     if (t > tm.tStop - 0.2) {
       const E = [];
@@ -653,7 +855,7 @@
         const born = tm.tStop - 0.2 + i * 0.3, life = 1.9 + 0.6 * h01(i * 3.3), age = t - born, per = life + 0.9;
         const ageM = ((age % per) + per) % per; if (age < 0 || ageM > life) continue;
         const side = i % 2 ? 1 : -1;
-        E.push(RX + side * (BH + 6 + 28 * h01(i * 2.1)) + Math.sin(ageM * 3 + i) * 5, HT - 8 - 40 * h01(i * 1.7) + ageM * ageM * 38, (1 - ageM / life) * 0.8 * (0.4 + 0.6 * s.heat));
+        E.push(RX + side * (BH + 6 + 28 * h01(i * 2.1)) + Math.sin(ageM * 3 + i) * 5, (dn ? HB + 8 + 20 * h01(i * 1.7) : HT - 8 - 40 * h01(i * 1.7)) + ageM * ageM * 38, (1 - ageM / life) * 0.8 * (0.4 + 0.6 * s.heat));
       }
       if (E.length) {
         ctx.save(); ctx.globalCompositeOperation = "lighter";
@@ -722,60 +924,84 @@
     for (const f of BQ) f();
     BQ = [];
   }
-  function queueCallouts(ctx, L, s) {
-    const t = s.t, sc = clamp(s.d / 8, 0.55, 1.4);
-    const ap = (i) => inv(0.3 + i * 0.17 * sc, 0.3 + i * 0.17 * sc + 0.55, t);
-    const trPos = (dp) => clamp((dp - 70) / 60);
+  // Beschriftungs-Definitionen je Zustand (Zielpunkt folgt dem Bauteil); ids siehe Kopfkommentar
+  function calloutDefs(s) {
+    const D = [], dn = s.dir < 0, lift = s.mode === "lift", rel = lift && s.t >= s.tm.lift[1];
     if (!s.inst) {
-      const G = progGeom(s), dl = s.delta;
-      tag(ctx, L, RX - BH, 300, LBX, 292, "Führungsschiene", "T-Profil, Steg 16 mm", ap(0));
-      tag(ctx, L, RX - G.dxIn - 18, G.yWt + 62, LBX, 492, "Fangkeil (2×)", "wird hochgezogen, klemmt", ap(1), { color: COL.amber });
-      tag(ctx, L, RX - (BLK_O + dl + (HW - WALL - BLK_O - dl) / 2), SPR_Y[0] - SPR_RO + 4, LBX, 592, "Tellerfederpaket", "begrenzt die Klemmkraft", ap(2), { color: s.cf > 0.5 ? COL.amber : COL.cyan });
-      tag(ctx, L, RX - HW + 9, CY + 128, LBX, 692, "Fanggehäuse", "am Fahrkorbrahmen", ap(3));
-      if (s.contact) tag(ctx, L, RX - BH + 2, HT - s.Dp * 0.55, LBX, 392, "Bremsspur", "Reibung wird zu Wärme", trPos(s.Dp), { color: COL.amber });
+      const G = progGeom(s), dl = s.delta, GG = s.G;
+      D.push({ id: "rail", tx: RX - BH, ty: 300, by: 292, title: "Führungsschiene", sub: "T-Profil, Steg 16 mm", o: 0 });
+      D.push({ id: "wedge", tx: RX - G.dxIn - (GG.bi ? 14 : 18), ty: GG.bi ? (G.yWt + G.yWb) / 2 : G.yWt + 62, by: 492, title: GG.bi ? "Doppelkeil (2×)" : "Fangkeil (2×)",
+        sub: lift ? (rel ? "gelöst, fällt zurück" : "klemmt am Steg") : GG.bi ? "greift aufwärts und abwärts" : "wird hochgezogen, klemmt", color: COL.amber, o: 1 });
+      D.push({ id: "spring", tx: RX - (BLK_O + dl + (HW - WALL - BLK_O - dl) / 2), ty: SPR_Y[0] - SPR_RO + 4, by: 592, title: "Tellerfederpaket", sub: "begrenzt die Klemmkraft", color: s.cf > 0.5 ? COL.amber : COL.cyan, o: 2 });
+      D.push({ id: "housing", tx: RX - HW + 9, ty: CY + 128, by: 692, title: "Fanggehäuse", sub: "am Fahrkorbrahmen", o: 3 });
     } else {
       const G = instGeom(s);
-      tag(ctx, L, RX - BH, 300, LBX, 292, "Führungsschiene", "T-Profil, Steg 16 mm", ap(0));
-      tag(ctx, L, G.xR - 12, G.yR - 10, LBX, 492, "Klemmrolle", "gerändelt, rollt hoch, verkeilt", ap(1), { color: COL.amber });
-      tag(ctx, L, RX - G.trk(CY + 70) + s.ox - 2, CY + 70, LBX, 592, "Schräge Laufbahn", "starr, ohne Federpaket", ap(2));
-      tag(ctx, L, RX - HW + 9 + s.ox, CY + 128, LBX, 692, "Fanggehäuse", "schwimmend gelagert", ap(3));
-      tag(ctx, L, RX + BH + GL + 16 + s.ox, CY + 40, RBX, 640, "Gegenbacke", "fest, gezahnt", ap(4.5), { side: "right", ex: 930, color: COL.amber });
-      if (s.contact) tag(ctx, L, RX - BH + 3, Math.min(HT - 6, G.yR - s.Dp * 0.5), LBX, 392, "Eindrücke im Steg", "Rolle beißt sich fest", clamp((s.Dp - 16) / 20), { color: COL.amber });
+      D.push({ id: "rail", tx: RX - BH, ty: 300, by: 292, title: "Führungsschiene", sub: "T-Profil, Steg 16 mm", o: 0 });
+      D.push({ id: "wedge", tx: G.xR - 12, ty: G.yR - 10, by: 492, title: "Klemmrolle", sub: lift ? (rel ? "gelöst, rollt zurück" : "verkeilt am Steg") : "gerändelt, rollt hoch, verkeilt", color: COL.amber, o: 1 });
+      D.push({ id: "spring", tx: RX - G.trk(CY + 70) + s.ox - 2, ty: CY + 70, by: 592, title: "Schräge Laufbahn", sub: "starr, ohne Federpaket", o: 2 });
+      D.push({ id: "housing", tx: RX - HW + 9 + s.ox, ty: CY + 128, by: 692, title: "Fanggehäuse", sub: "schwimmend gelagert", o: 3 });
+      D.push({ id: "jaw", tx: RX + BH + GL + 16 + s.ox, ty: CY + 40, bx: RBX, by: 640, title: "Gegenbacke", sub: "fest, gezahnt", side: "right", ex: 930, color: COL.amber, o: 4.5 });
     }
-    const pL = leverPt(s, 70);
-    tag(ctx, L, pL[0], pL[1], LBX, 848, "Auslösehebel", s.inst ? "hebt die Klemmrolle" : "zieht die Keile hoch", ap(4), { color: s.phase === "trip" ? COL.amber : COL.cyan });
-    tag(ctx, L, ROPE_X + 6, 400, RBX, 360, "Begrenzerseil", s.eng ? "wird bei Auslösung gestoppt" : "läuft mit dem Fahrkorb", ap(5), { side: "right", color: s.phase === "trip" ? COL.amber : COL.cyan });
-    if (!s.eng) {
-      const yg = s.inst ? YR0 - 10 : WY0 + 30, xg = s.inst ? RX - BH - 3 : RX + BH + 4;
-      tag(ctx, L, xg, yg, RBX, 520, "Luftspalt", s.inst ? "Rolle berührt den Steg nicht" : "Keile berühren den Steg nicht", ap(6), { side: "right", ex: 930 });
+    if (s.trace) {
+      const tr = s.trace; let ty, gate;
+      if (s.inst) { ty = lift ? (tr[0] + tr[1]) / 2 : Math.min(HT - 6, instGeom(s).yR - s.Dp * 0.5); gate = lift ? 1 : clamp((s.Dp - 16) / 20); }
+      else if (!dn) { const a = tr[0], b = Math.min(tr[1], HT); ty = lerp(a, b, 0.45); gate = lift ? 1 : clamp((b - a - 70) / 60); }
+      else { const a = Math.max(tr[0], HB), b = tr[1]; ty = lerp(a, b, 0.55); gate = clamp((b - a - 50) / 50); }
+      D.push({ id: "trace", tx: RX - BH + (s.inst ? 3 : 2), ty, by: dn ? 770 : 392, title: s.inst ? "Eindrücke im Steg" : "Bremsspur",
+        sub: lift ? "wird geprüft" : s.inst ? "Rolle beißt sich fest" : "Reibung wird zu Wärme", color: COL.amber, o: 3.5, gate });
+    }
+    const pL = leverPt(s, 70), trip = s.phase === "trip";
+    D.push({ id: "lever", tx: pL[0], ty: pL[1], by: 848, title: "Auslösehebel", sub: lift ? "wird zurückgestellt" : s.inst ? "hebt die Klemmrolle" : dn ? "drückt die Keile nach unten" : "zieht die Keile hoch", color: trip ? COL.amber : COL.cyan, o: 4 });
+    D.push({ id: "rope", tx: ROPE_X + 6, ty: 400, bx: RBX, by: 360, side: "right", title: "Begrenzerseil", sub: lift ? "Begrenzer zurückstellen" : s.eng ? "wird bei Auslösung gestoppt" : "läuft mit dem Fahrkorb", color: trip ? COL.amber : COL.cyan, o: 5 });
+    if (s.mode === "normal") {
+      const yg = s.inst ? YR0 - 10 : s.G.WY0 + 30, xg = s.inst ? RX - BH - 3 : RX + BH + 4;
+      D.push({ id: "gap", tx: xg, ty: yg, bx: RBX, by: 520, side: "right", ex: 930, title: "Luftspalt", sub: s.inst ? "Rolle berührt den Steg nicht" : "Keile berühren den Steg nicht", o: 6 });
+    }
+    return D;
+  }
+  function queueCallouts(ctx, L, s) {
+    const t = s.t, cc = s.cfg.callouts, sc = clamp(s.d / 8, 0.55, 1.4);
+    for (const q of calloutDefs(s)) {
+      const ov = cc.map[q.id];
+      if ((cc.only && !ov) || (ov && ov.hide)) continue;
+      const hasAt = ov && ov.at != null, order = cc.only ? ov.idx : q.o;
+      const t0 = hasAt ? ov.at : 0.3 + order * 0.17 * sc;
+      let p = inv(t0, t0 + 0.55, t);
+      if (q.gate != null) p = Math.min(p, q.gate);
+      if (p <= 0) continue;
+      const title = ov && ov.text ? ov.text : q.title, sub = ov && ov.sub != null ? ov.sub : q.sub;
+      tag(ctx, L, q.tx, q.ty, q.bx == null ? LBX : q.bx, q.by, title, sub, p, { color: q.color, side: q.side, ex: q.ex });
     }
   }
 
   // ---------- Messwerte-Panel ----------
   function statusOf(s) {
+    const dn = s.dir < 0;
     switch (s.phase) {
-      case "normal": return ["NORMALFAHRT", COL.cyan];
-      case "over": return ["ÜBERGESCHWINDIGKEIT", COL.red];
+      case "normal": return [dn ? "NORMALFAHRT AUFWÄRTS" : "NORMALFAHRT", COL.cyan];
+      case "over": return [dn ? "ÜBERGESCHW. AUFWÄRTS" : "ÜBERGESCHWINDIGKEIT", COL.red];
       case "trip": return ["BEGRENZER LÖST AUS", COL.amber];
       case "brake": return [s.inst ? "SPERRFANG GREIFT" : "FANGEN – BREMSEN", s.inst ? COL.red : COL.amber];
       default: return ["STILLSTAND", COL.green];
     }
   }
   function checkMark(ctx, x, y, sz, color, a) { stk(ctx, (c) => { c.moveTo(x, y); c.lineTo(x + sz * 0.38, y + sz * 0.38); c.lineTo(x + sz, y - sz * 0.45); }, color, 2.6, 0.6, a); }
-  function crossMark(ctx, x, y, sz, color, a) { stk(ctx, (c) => { c.moveTo(x, y - sz / 2); c.lineTo(x + sz, y + sz / 2); c.moveTo(x + sz, y - sz / 2); c.lineTo(x, y + sz / 2); }, color, 2.6, 0.6, a); }
   function drawPanel1(ctx, L, s) {
-    const t = s.t, ap = smooth(inv(0.1, 0.1 + Math.min(0.7, 0.09 * s.d), t)); if (ap <= 0.01) return;
+    if (!s.cfg.panel) return;
+    if (s.mode === "lift") { drawChecklist(ctx, L, s); return; }
+    const t = s.t, pa = s.cfg.plan.panelAt, ap = smooth(inv(pa, pa + Math.min(0.7, 0.09 * s.d), t)); if (ap <= 0.01) return;
     const sG = GA; GA = sG * ap;
-    const x0 = PX + (1 - easeOut(ap)) * 40, y0 = P1Y, w = PW, h = P1H;
+    const x0 = PX + (1 - easeOut(ap)) * 40, y0 = P1Y, w = PW, h = P1H, dn = s.dir < 0;
     const TWS = [176, 170, 142], TXS = [x0 + 24, x0 + 24 + 176 + 12, x0 + 24 + 176 + 12 + 170 + 12], tyT = y0 + 140, tH = 100;
     const cx0 = x0 + 64, cx1 = x0 + w - 28, cy0 = y0 + 294, cy1 = y0 + 384;
     const yMax = s.inst ? 2.5 : 1.5, xMax = 0.3;
     const Yc = (g) => cy1 - (clamp(g, 0, yMax) / yMax) * (cy1 - cy0), Xc = (tau) => cx0 + (clamp(tau, 0, xMax) / xMax) * (cx1 - cx0);
+    const res = s.phase === "stop" && t >= s.tm.tRes;
     const stat = (g) => {
       fil(g, (c) => rr(c, x0, y0, w, h, 14), "rgba(6,16,34,0.9)", 1);
       stk(g, (c) => rr(c, x0, y0, w, h, 14), COL.cyan, 1.4, 0.5, 0.55);
       txt(L, g, s.inst ? "SPERRFANGVORRICHTUNG" : "BREMSFANGVORRICHTUNG", x0 + 24, y0 + 46, { size: 30, weight: 700, font: L.FONT.head, color: COL.white, letterSpacing: 1.5 });
-      txt(L, g, s.inst ? "sofort wirkend – nur bis 0,63 m/s Nenngeschwindigkeit" : "progressiv – Federpaket begrenzt die Klemmkraft", x0 + 24, y0 + 76, { size: 18, weight: 400, color: COL.muted });
+      txt(L, g, s.inst ? "sofort wirkend – nur bis 0,63 m/s Nenngeschwindigkeit" : s.bi ? "bidirektional – greift abwärts und aufwärts" : "progressiv – Federpaket begrenzt die Klemmkraft", x0 + 24, y0 + 76, { size: 18, weight: 400, color: COL.muted });
       stk(g, (c) => { c.moveTo(x0 + 24, y0 + 94); c.lineTo(x0 + w - 24, y0 + 94); }, COL.cyan, 1, 0, 0.3);
       const labs = ["GESCHWINDIGKEIT", "VERZÖGERUNG", "BREMSWEG"];
       for (let i = 0; i < 3; i++) {
@@ -785,10 +1011,10 @@
         txt(L, g, labs[i], tx + 14, tyT + 24, { size: 13, weight: 700, font: L.FONT.mono, color: COL.muted, letterSpacing: 1.5 });
       }
       txt(L, g, "VERZÖGERUNG a(t) AB FANGBEGINN", x0 + 24, y0 + 274, { size: 13, weight: 700, font: L.FONT.mono, color: COL.muted, letterSpacing: 1.5 });
-      // zulässiger Bereich 0,2–1,0 g
+      // zulässiger Bereich (Bremsfangvorrichtung): Ø 0,2–1,0 g
       fil(g, (c) => c.rect(cx0, Yc(1.0), cx1 - cx0, Yc(0.2) - Yc(1.0)), "rgba(91,228,155,0.10)", 1);
       stk(g, (c) => { c.moveTo(cx0, Yc(1.0)); c.lineTo(cx1, Yc(1.0)); c.moveTo(cx0, Yc(0.2)); c.lineTo(cx1, Yc(0.2)); }, COL.green, 1, 0, 0.55, { dash: [5, 4], cap: "butt" });
-      const lg = "zulässig Ø 0,2–1,0 g", lw = meas(L, g, lg, { size: 13, weight: 600 });
+      const lg = s.inst ? "Bremsfang: Ø 0,2–1,0 g" : "zulässig Ø 0,2–1,0 g", lw = meas(L, g, lg, { size: 13, weight: 600 });
       fil(g, (c) => c.rect(cx1 - lw - 26, y0 + 263, 16, 10), "rgba(91,228,155,0.25)", 1);
       stk(g, (c) => c.rect(cx1 - lw - 26, y0 + 263, 16, 10), COL.green, 1, 0, 0.7);
       txt(L, g, lg, cx1, y0 + 273, { size: 13, weight: 600, color: COL.green, align: "right" });
@@ -800,10 +1026,10 @@
       for (const v of [0, 0.1, 0.2, 0.3]) txt(L, g, v === 0.3 ? "0,3 s" : fmt(v, v ? 1 : 0), Xc(v), cy1 + 20, { size: 13, weight: 700, font: L.FONT.mono, color: COL.muted, align: v === 0.3 ? "right" : v ? "center" : "left" });
       stk(g, (c) => { c.moveTo(cx0, cy0 - 4); c.lineTo(cx0, cy1); }, COL.muted, 1, 0, 0.5);
     };
-    const chev = (ctx) => { // laufende Pfeile = Bewegung
-      const tx = TXS[0] + TWS[0] - 16;
+    const chev = (ctx) => { // laufende Pfeile = Bewegung (Richtung wie der Fahrkorb)
+      const tx = TXS[0] + TWS[0] - 16, e = dn ? -1 : 1;
       const col = s.phase === "normal" ? COL.cyan : s.phase === "brake" ? COL.amber : COL.red, rate = clamp(s.speedPx * 0.006, 0.3, 1.6);
-      for (const mid of [true, false]) fil(ctx, (c) => { for (let k = 0; k < 3; k++) { const f = (k / 3 + t * rate) % 1; if ((f > 0.2 && f < 0.8) !== mid) continue; const y = tyT + 44 + f * 34; c.moveTo(tx, y + 5); c.lineTo(tx - 5, y - 5); c.lineTo(tx + 5, y - 5); c.closePath(); } }, col, mid ? 0.9 : 0.35);
+      for (const mid of [true, false]) fil(ctx, (c) => { for (let k = 0; k < 3; k++) { const f = (k / 3 + t * rate) % 1; if ((f > 0.2 && f < 0.8) !== mid) continue; const y = tyT + 44 + (dn ? 1 - f : f) * 34; c.moveTo(tx, y + 5 * e); c.lineTo(tx - 5, y - 5 * e); c.lineTo(tx + 5, y - 5 * e); c.closePath(); } }, col, mid ? 0.9 : 0.35);
     };
     const live = (ctx, withAnim) => {
       // Status + Zeitlupe
@@ -831,16 +1057,17 @@
       };
       const moving = s.v > 0.005;
       tile(0, fmt(s.v, 2), "m/s", s.phase === "over" || s.phase === "trip" ? COL.red : moving ? COL.white : COL.green,
-        s.phase === "normal" ? "Normalfahrt abwärts" : s.phase === "stop" ? "Stillstand" : s.phase === "brake" ? "bremst" : "abwärts, zu schnell",
+        s.phase === "normal" ? (dn ? "Normalfahrt aufwärts" : "Normalfahrt abwärts") : s.phase === "stop" ? "Stillstand" : s.phase === "brake" ? "bremst" : dn ? "aufwärts, zu schnell" : "abwärts, zu schnell",
         s.phase === "stop" ? COL.green : null);
       if (moving && withAnim) chev(ctx);
       let aVal = "–", aCol = COL.muted, aSub = s.eng ? "Fangvorrichtung offen" : "keine Bremsung", aSubCol = null;
       if (s.phase === "brake") { aVal = fmt(s.a, 2); aCol = s.a > 1.0 ? COL.red : COL.amber; aSub = s.inst ? "harter Stoß" : "im zulässigen Bereich"; aSubCol = s.inst ? COL.red : COL.green; }
-      else if (s.phase === "stop") { aVal = fmt(pr.aAvg, 2); aCol = pr.aAvg > 1.0 ? COL.red : COL.amber; aSub = s.inst ? `Ø, Spitze ${fmt(pr.aMax, 1)} g` : "Mittelwert Ø, zulässig"; aSubCol = s.inst ? COL.red : COL.green; }
+      else if (s.phase === "stop" && res) { aVal = fmt(pr.aAvg, 2); aCol = pr.aAvg > 1.0 ? COL.red : COL.amber; aSub = s.inst ? `Ø, Spitze ${fmt(pr.aMax, 1)} g` : "Mittelwert Ø, zulässig"; aSubCol = s.inst ? COL.red : COL.green; }
+      else if (s.phase === "stop") { aVal = "0,00"; aCol = COL.white; aSub = "Stillstand"; }
       else if (s.phase === "normal") { aVal = "0,00"; }
       tile(1, aVal, aVal === "–" ? "" : "g", aCol, aSub, aSubCol);
-      if (s.phase === "stop") { const tx = TXS[1] + TWS[1] - 30; if (pr.aAvg <= 1.0) checkMark(ctx, tx, tyT + 22, 16, COL.green, 1); else crossMark(ctx, tx, tyT + 22, 14, COL.red, 1); }
-      tile(2, s.contact ? String(Math.round(s.xmm)) : "–", s.contact ? "mm" : "", s.contact ? COL.amber : COL.muted, s.contact ? (s.phase === "stop" ? `= ${fmt(s.xmm / 10, 1)} cm` : "ab Fangbeginn") : s.eng ? "noch kein Fangen" : "kein Fangvorgang", null);
+      if (res && !s.inst && pr.aAvg <= 1.0) checkMark(ctx, TXS[1] + TWS[1] - 30, tyT + 22, 16, COL.green, 1);
+      tile(2, s.contact ? String(Math.round(s.xmm)) : "–", s.contact ? "mm" : "", s.contact ? COL.amber : COL.muted, s.contact ? (res ? `= ${fmt(s.xmm / 10, 1)} cm` : "ab Fangbeginn") : s.eng ? "noch kein Fangen" : "kein Fangvorgang", null);
       if (!s.eng) stxt(L, ctx, "kein Fangvorgang – Keile in Ruhelage", (cx0 + cx1) / 2, (cy0 + cy1) / 2 + 6, { size: 16, weight: 600, color: COL.muted, align: "center", alpha: 0.8 });
       // Kurve a(t)
       if (s.contact) {
@@ -855,24 +1082,147 @@
         stk(ctx, build, col, 2.6, 1, 1);
         const cur = tauC > pr.tauStop ? [Xc(tauC), Yc(0)] : [Xc(tauS), Yc(sampleP(pr, tauS).a)];
         dot(ctx, cur[0], cur[1], 14, col, 0.9); fil(ctx, (c) => c.arc(cur[0], cur[1], 3.5, 0, TAU), COL.white, 1);
-        if (s.phase === "stop") {
-          const ya = Yc(pr.aAvg), ap2 = inv(s.tm.tStop, s.tm.tStop + 0.5, t);
+        if (res) {
+          const ya = Yc(pr.aAvg), ap2 = inv(s.tm.tRes, s.tm.tRes + 0.5, t);
           stk(ctx, (c) => { c.moveTo(Xc(0), ya); c.lineTo(Xc(pr.tauStop), ya); }, COL.white, 1.4, 0, 0.8 * ap2, { dash: [6, 4], cap: "butt" });
           stxt(L, ctx, `Ø ${fmt(pr.aAvg, 2)} g`, Xc(pr.tauStop) + 8, ya + (s.inst ? 5 : -6), { size: 14, weight: 700, font: L.FONT.mono, color: COL.white, alpha: ap2 });
         }
       }
     };
-    const still = ap >= 1 && (s.phase === "normal" || (s.phase === "stop" && s.tau >= xMax && t > s.tm.tStop + 0.6));
+    const still = ap >= 1 && (s.phase === "normal" || (s.phase === "stop" && s.tau >= xMax && t > s.tm.tStop + 0.6 && t > s.tm.tRes + 0.6));
     if (still) {
-      layer(ctx, "p1live|" + s.inst + "|" + s.eng + "|" + s.phase + "|" + Math.round(s.tm.k), x0 - 14, y0 - 14, w + 28, h + 28, 1, (g) => { stat(g); live(g, false); });
+      layer(ctx, "p1live|" + s.cfg.sig + "|" + s.phase, x0 - 14, y0 - 14, w + 28, h + 28, 1, (g) => { stat(g); live(g, false); });
       if (s.phase === "normal") chev(ctx);
-    } else { layer(ctx, "p1|" + s.inst + "|" + s.eng, x0 - 14, y0 - 14, w + 28, h + 28, 1, stat); live(ctx, true); }
+    } else { layer(ctx, "p1|" + s.cfg.sig, x0 - 14, y0 - 14, w + 28, h + 28, 1, stat); live(ctx, true); }
+    GA = sG;
+  }
+
+  // ---------- Checkliste nach dem Fangen (then = lift_release) ----------
+  function p1Height(s) { if (s.mode !== "lift") return P1H; const n = s.cfg.plan.steps.length; return 176 + Math.max(0, n - 1) * ckGap(n) + 40; }
+  const ckGap = (n) => (n <= 4 ? 60 : n === 5 ? 56 : 50);
+  function drawChecklist(ctx, L, s) {
+    const t = s.t, pl = s.cfg.plan, pa = pl.panelAt, ap = smooth(inv(pa, pa + Math.min(0.7, 0.09 * s.d), t)); if (ap <= 0.01) return;
+    const sG = GA; GA = sG * ap;
+    const x0 = PX + (1 - easeOut(ap)) * 40, y0 = P1Y, w = PW, h = p1Height(s), b = s.tm.lift, st = pl.steps, n = st.length;
+    const gap = ckGap(n), ry = (i) => y0 + 176 + i * gap, cxC = x0 + 46;
+    layer(ctx, "ck|" + s.cfg.sig, x0 - 14, y0 - 14, w + 28, h + 28, 1, (g) => {
+      fil(g, (c) => rr(c, x0, y0, w, h, 14), "rgba(6,16,34,0.9)", 1);
+      stk(g, (c) => rr(c, x0, y0, w, h, 14), COL.cyan, 1.4, 0.5, 0.55);
+      txt(L, g, "NACH DEM FANGEN", x0 + 24, y0 + 46, { size: 30, weight: 700, font: L.FONT.head, color: COL.white, letterSpacing: 1.5 });
+      txt(L, g, "Wiederinbetriebnahme – Schritt für Schritt", x0 + 24, y0 + 76, { size: 18, weight: 400, color: COL.muted });
+      stk(g, (c) => { c.moveTo(x0 + 24, y0 + 94); c.lineTo(x0 + w - 24, y0 + 94); }, COL.cyan, 1, 0, 0.3);
+      if (n > 1) stk(g, (c) => { c.moveTo(cxC, ry(0) + 9); c.lineTo(cxC, ry(n - 1) - 25); }, COL.muted, 1.2, 0, 0.35, { dash: [3, 5], cap: "butt" });
+      for (let i = 0; i < n; i++) {
+        fil(g, (c) => c.arc(cxC, ry(i) - 8, 15, 0, TAU), "#07142a", 1);
+        stk(g, (c) => c.arc(cxC, ry(i) - 8, 15, 0, TAU), COL.muted, 1.4, 0, 0.35);
+        txt(L, g, String(i + 1), cxC, ry(i) - 2, { size: 16, weight: 700, font: L.FONT.mono, color: COL.muted, align: "center", alpha: 0.45 });
+      }
+    });
+    const [stS, stC] = t < b[0] ? ["STILLSTAND – KEILE KLEMMEN", COL.amber] : t < b[1] ? ["FAHRKORB WIRD ANGEHOBEN", COL.amber] : t < b[2] ? ["FANGVORRICHTUNG GELÖST", COL.cyan] : t < b[3] ? ["PRÜFUNG", COL.amber] : ["FREIGEGEBEN", COL.green];
+    const sw = meas(L, ctx, stS, { size: 14, weight: 700, font: L.FONT.mono, letterSpacing: 2 }) + 34, px0 = x0 + 24, py0 = y0 + 108;
+    rigid(ctx, "pill|" + stS, [[px0, py0], [px0 + sw, py0 + 26]], 8, 0, 0, (g) => {
+      fil(g, (c) => rr(c, px0, py0, sw, 26, 13), rgba(stC, 0.12), 1);
+      stk(g, (c) => rr(c, px0, py0, sw, 26, 13), stC, 1.4, 0.6, 0.9);
+      fil(g, (c) => c.arc(px0 + 14, py0 + 13, 4, 0, TAU), stC, 1);
+      txt(L, g, stS, px0 + 26, py0 + 18, { size: 14, weight: 700, font: L.FONT.mono, color: stC, letterSpacing: 2 });
+    });
+    for (let i = 0; i < n; i++) {
+      const it = st[i], y = ry(i), rp = easeOut(inv(it.at, it.at + 0.45, t)); if (rp <= 0) continue;
+      const done = t >= it.done, col = done ? COL.green : COL.amber, pu = done ? 1 : 0.55 + 0.45 * Math.abs(Math.sin(t * 4));
+      fil(ctx, (c) => c.arc(cxC, y - 8, 15, 0, TAU), "#07142a", rp);
+      fil(ctx, (c) => c.arc(cxC, y - 8, 15, 0, TAU), done ? "rgba(91,228,155,0.18)" : "rgba(255,179,71,0.16)", rp);
+      stk(ctx, (c) => c.arc(cxC, y - 8, 15, 0, TAU), col, 2, 0.8, rp * pu);
+      if (done) checkMark(ctx, cxC - 7, y - 7, 14, COL.green, 1);
+      else stxt(L, ctx, String(i + 1), cxC, y - 2, { size: 16, weight: 700, font: L.FONT.mono, color: COL.amber, align: "center", alpha: rp });
+      const dx = (1 - rp) * 24;
+      stxt(L, ctx, it.text, x0 + 78 + dx, y - 3, { size: 24, weight: 600, color: COL.white, alpha: rp });
+      if (it.sub) stxt(L, ctx, it.sub, x0 + 78 + dx, y + 20, { size: 16, weight: 400, color: done ? COL.green : COL.muted, alpha: rp * 0.95 });
+    }
+    GA = sG;
+  }
+
+  // ---------- Hinweis-Karte (label) ----------
+  const LAYC = new Map();
+  function labelLayout(L, ctx, cfg) {
+    let r = LAYC.get(cfg.sig); if (r) return r;
+    let size = 34, lines = [];
+    for (const sz of [34, 30, 26, 22]) { size = sz; lines = L.wrap(ctx, cfg.label, PW - 196, { size, weight: 700 }); if (lines.length <= 3) break; }
+    lines = lines.slice(0, 5);
+    const lh = size * 1.22, h = clamp(56 + lines.length * lh + 34, 170, P2H);
+    r = { size, lines, lh, h }; if (LAYC.size > 50) LAYC.clear(); LAYC.set(cfg.sig, r); return r;
+  }
+  function drawLabelCard(ctx, L, s, ST, LV) {
+    const t = s.t, at = s.cfg.plan.labelAt, ap = smooth(inv(at, at + 0.6, t)); if (ap <= 0.01) return;
+    const sG = GA; GA = sG * ap;
+    const x0 = PX + (1 - easeOut(ap)) * 40, y0 = s.cfg.panel ? P1Y + p1Height(s) + 18 : P2Y, w = PW;
+    const kind = s.mode === "lift" ? "person" : s.bi ? "updown" : "info", col = kind === "info" ? COL.cyan : COL.amber;
+    const lay = labelLayout(L, ctx, s.cfg), h = lay.h;
+    const head = s.cfg.labelHead || (kind === "person" ? "WICHTIG" : kind === "updown" ? "EN 81-20" : "HINWEIS");
+    if (ST) layer(ctx, "lab|" + s.cfg.sig, x0 - 14, y0 - 14, w + 28, h + 28, 1, (g) => {
+      fil(g, (c) => rr(c, x0, y0, w, h, 14), "rgba(6,16,34,0.92)", 1);
+      stk(g, (c) => rr(c, x0, y0, w, h, 14), col, 1.6, 0.8, 0.8);
+      fil(g, (c) => rr(c, x0 + 14, y0 + 20, 5, h - 40, 2.5), col, 0.95);
+      txt(L, g, head, x0 + 36, y0 + 42, { size: 14, weight: 700, font: L.FONT.mono, color: col, letterSpacing: 2.5 });
+      const ix = x0 + 96, iy = y0 + 26 + (h - 26) / 2, k = clamp((h - 60) / 170, 0.6, 1);
+      if (kind === "person") {
+        L.person(g, ix - 6, iy + 78 * k, 160 * k, COL.steel, 0.9);
+        fil(g, (c) => c.arc(ix + 32 * k, iy - 44 * k, 18, 0, TAU), "#0b2a1c", 1);
+        stk(g, (c) => c.arc(ix + 32 * k, iy - 44 * k, 18, 0, TAU), COL.green, 2, 0.8, 1);
+        checkMark(g, ix + 32 * k - 8, iy - 44 * k + 1, 16, COL.green, 1);
+      } else if (kind === "updown") {
+        const hl = 78 * k;
+        stk(g, (c) => { c.moveTo(ix, iy - hl + 24); c.lineTo(ix, iy + hl - 24); }, col, 5, 1, 1, { cap: "butt" });
+        arrowHead(g, ix, iy - hl, -Math.PI / 2, 30, col, 1); arrowHead(g, ix, iy + hl, Math.PI / 2, 30, col, 1);
+      } else {
+        stk(g, (c) => c.arc(ix, iy, 36, 0, TAU), col, 3, 1, 1);
+        txt(L, g, "i", ix, iy + 15, { size: 42, weight: 700, font: L.FONT.head, color: col, align: "center" });
+      }
+      const top = y0 + 54 + (h - 54 - 20 - lay.lines.length * lay.lh) / 2 + lay.size * 0.86;
+      lay.lines.forEach((ln, i) => txt(L, g, ln, x0 + 172, top + i * lay.lh, { size: lay.size, weight: 700, color: COL.white }));
+    });
+    if (LV) { const pu = 0.5 + 0.5 * Math.sin(t * 2.6); stk(ctx, (c) => rr(c, x0 + 14, y0 + 20, 5, h - 40, 2.5), col, 2, 1.4, 0.15 + 0.3 * pu); }
+    GA = sG;
+  }
+
+  // ---------- Energie: Bewegungsenergie -> Wärme (panel2 = "energy") ----------
+  function drawEnergy(ctx, L, s, ST) {
+    if (!ST) return;
+    const t = s.t, pa = s.cfg.plan.p2At, ap = smooth(inv(pa, pa + Math.min(0.7, 0.09 * s.d), t)); if (ap <= 0.01) return;
+    const sG = GA; GA = sG * ap;
+    const x0 = PX + (1 - easeOut(ap)) * 40, y0 = P2Y, w = PW, h = P2H, pr = s.pr, bx = x0 + 24, bw = w - 48, y1 = y0 + 94, y2 = y0 + 192, bh = 20;
+    layer(ctx, "en|" + s.cfg.sig, x0 - 14, y0 - 14, w + 28, h + 28, 1, (g) => {
+      fil(g, (c) => rr(c, x0, y0, w, h, 14), "rgba(6,16,34,0.9)", 1);
+      stk(g, (c) => rr(c, x0, y0, w, h, 14), COL.cyan, 1.4, 0.5, 0.55);
+      txt(L, g, "ENERGIE BEIM FANGEN", x0 + 24, y0 + 34, { size: 13, weight: 700, font: L.FONT.mono, color: COL.muted, letterSpacing: 1.5 });
+      txt(L, g, "Bewegungsenergie", bx, y1 - 12, { size: 21, weight: 600, color: COL.white });
+      txt(L, g, "Wärme in Keilen und Schiene", bx, y2 - 12, { size: 21, weight: 600, color: COL.white });
+      for (const yy of [y1, y2]) { fil(g, (c) => rr(c, bx, yy, bw, bh, 5), "rgba(63,210,255,0.05)", 1); stk(g, (c) => rr(c, bx, yy, bw, bh, 5), COL.cyan, 1, 0, 0.3); }
+      txt(L, g, "Wärme = Bewegungs- + Lageenergie der Bremsstrecke", x0 + w - 24, y0 + h - 16, { size: 14, weight: 400, color: COL.muted, align: "right" });
+    });
+    const ek0 = (pr.vC * pr.vC) / 2, eTot = ek0 + (GN * pr.sStop) / 1000, ekv = (s.v * s.v) / 2;
+    const fk = clamp(ekv / ek0), fq = s.contact ? clamp((ek0 - ekv + (GN * Math.max(0, s.xmm)) / 1000) / eTot) : 0;
+    if (fk > 0.003) { fil(ctx, (c) => rr(c, bx + 2, y1 + 2, (bw - 4) * fk, bh - 4, 3), COL.cyan, 0.9); dot(ctx, bx + 2 + (bw - 4) * fk, y1 + bh / 2, 22, COL.cyan, 0.5); }
+    if (fq > 0.003) {
+      const g = ctx.createLinearGradient(bx, 0, bx + bw, 0); g.addColorStop(0, COL.red); g.addColorStop(0.55, COL.amber); g.addColorStop(1, COL.hot);
+      fil(ctx, (c) => rr(c, bx + 2, y2 + 2, (bw - 4) * fq, bh - 4, 3), g, 0.95);
+      dot(ctx, bx + 2 + (bw - 4) * fq, y2 + bh / 2, 26, COL.amber, 0.35 + 0.5 * s.heat);
+    }
+    // Umwandlung durch Reibung: laufende Pfeile zwischen den Balken
+    const fa = s.phase === "brake" ? clamp(0.45 + s.power) : s.contact ? 0.3 : 0.12, xm = bx + bw * 0.5;
+    stxt(L, ctx, "Reibung", xm + 20, y1 + bh + 34, { size: 16, weight: 600, color: COL.amber, alpha: 0.4 + 0.6 * fa });
+    fil(ctx, (c) => { for (let k = 0; k < 3; k++) { const f = s.phase === "brake" ? (k / 3 + t * 1.4) % 1 : k / 3 + 0.12, y = y1 + bh + 12 + f * 30; c.moveTo(xm, y + 7); c.lineTo(xm - 7, y - 3); c.lineTo(xm + 7, y - 3); c.closePath(); } }, COL.amber, fa);
     GA = sG;
   }
 
   // ---------- Draufsicht T-Profil + Einbaulage ----------
   function drawPanel2(ctx, L, s, ST, LV) {
-    const t = s.t, ap = smooth(inv(0.3, 0.3 + Math.min(0.7, 0.09 * s.d), t)); if (ap <= 0.01) return;
+    const m = s.cfg.panel2;
+    if (m === "label") drawLabelCard(ctx, L, s, ST, LV);
+    else if (m === "energy") drawEnergy(ctx, L, s, ST);
+    else if (m === "topview") drawTopview(ctx, L, s, ST, LV);
+  }
+  function drawTopview(ctx, L, s, ST, LV) {
+    const t = s.t, pa = s.cfg.plan.p2At, ap = smooth(inv(pa, pa + Math.min(0.7, 0.09 * s.d), t)); if (ap <= 0.01) return;
     const sG = GA; GA = sG * ap;
     const x0 = PX + (1 - easeOut(ap)) * 40, y0 = P2Y, w = PW, h = P2H;
     const m = 1.5, yc = y0 + 140;
@@ -915,7 +1265,9 @@
       for (const xr of [rx1, rx2]) stk(g, (c) => { c.moveTo(xr, y0 + 46); c.lineTo(xr, y0 + h - 18); }, "#cfe6fa", 2, 0.5, 0.9);
     });
     // Draufsicht: Keile/Backen schließen sich um den Steg
-    const cf = s.eng ? (s.contact ? 0.55 + 0.45 * s.cf : smooth(inv(s.tm.tTrip, s.tm.tCon, t)) * 0.55) : 0;
+    let cf = 0;
+    if (s.mode === "fall") cf = s.contact ? 0.55 + 0.45 * s.cf : smooth(inv(s.tm.tTrip, s.tm.tCon, t)) * 0.55;
+    else if (s.mode === "lift") cf = s.contact ? 0.55 + 0.45 * s.cf : 0.55 * clamp(Math.abs(s.h) / (s.inst ? HC_I : HC_P));
     const gap = 5 * (1 - Math.min(1, cf / 0.55));
     const kx0 = hx0 + 8, kx1 = hx1 - 22, fy1 = y0 + 214;
     const jb = (c) => { for (const sg of [-1, 1]) { const yin = yc + sg * (bh + gap), yout = yc + sg * 29; c.rect(kx0, Math.min(yin, yout), kx1 - kx0, Math.abs(yout - yin)); } };
@@ -923,7 +1275,7 @@
     fil(ctx, jb, "#3a2a10", 1); stk(ctx, jb, COL.amber, 1.6, 0.8, 1);
 
     if (s.contact) {
-      const a = smooth(inv(s.tm.tCon, s.tm.tCon + 0.3, t));
+      const a = s.mode === "lift" ? 1 : smooth(inv(s.tm.tCon, s.tm.tCon + 0.3, t));
       const xa = (kx0 + kx1) / 2;
       layer(ctx, "p2arr", xa - 16, yc - 84, 130, 168, a, (g) => {
         for (const sg of [-1, 1]) { stk(g, (c) => { c.moveTo(xa, yc + sg * 76); c.lineTo(xa, yc + sg * 58); }, COL.amber, 3, 1, 1); arrowHead(g, xa, yc + sg * 48, sg > 0 ? -Math.PI / 2 : Math.PI / 2, 12, COL.amber, 1); }
@@ -953,11 +1305,9 @@
   // ---------- Hauptfunktion ----------
   // Standphase: alles Unbewegte als ein Sprite, darüber nur Glut, Scan, Puls
   function holdKey(s) {
-    if (s.phase !== "stop" || s.tau < 0.3) return null;
-    const tm = s.tm, sc = clamp(s.d / 8, 0.55, 1.4);
-    const ready = Math.max(tm.tStop + 1.0, 0.3 + 6.5 * 0.17 * sc + 0.6, tm.tCon + 0.4, 1.1);
-    if (s.t < ready) return null;
-    return "hold|" + s.inst + "|" + Math.round(s.tm.k);
+    if (s.mode === "normal" || s.t < s.cfg.plan.ready) return null;
+    if (s.mode === "fall" && (s.phase !== "stop" || s.tau < 0.3)) return null;
+    return "hold|" + s.cfg.sig;
   }
   function renderScene(ctx, P, L, s, ST, LV) {
     const t = s.t;
@@ -991,16 +1341,14 @@
   }
   function render(ctx, p) {
     const L = p.L || CE.lib; if (!L) return;
-    const cfg = config(p.params);
     const d = Math.max(1, num(p.d, 8)), t = clamp(num(p.t, 0), 0, d);
-    const s = computeState(t, d, cfg);
-    const hk = holdKey(s);
+    const cfg = getCfg(p.params, d), s = computeState(t, d, cfg), hk = holdKey(s);
     if (hk) {
-      const HX = 140, HY = 16;
-      const cv = sprite(hk, 1720, 1048, (g) => { g.translate(-HX, -HY); renderScene(g, pats(g), L, s, true, false); });
+      const HX = 80, HY = 16;
+      const cv = sprite(hk, 1780, 1048, (g) => { g.translate(-HX, -HY); renderScene(g, pats(g), L, s, true, false); });
       if (cv) {
         // nur Bereiche mit Inhalt kopieren (spart Füllrate)
-        const R = [[168, 246, 298, 648], [400, 176, 612, 730], [644, 16, 72, 160], [956, 16, 48, 160], [644, 906, 72, 158], [956, 906, 48, 158], [1004, 300, 270, 400], [1250, 186, 600, 728]];
+        const R = [[80, 176, 940, 740], [640, 16, 80, 160], [952, 16, 56, 160], [640, 916, 80, 148], [952, 916, 56, 148], [1020, 180, 840, 740]];
         ctx.save(); ctx.globalAlpha = 1;
         for (const r of R) ctx.drawImage(cv, r[0] - HX, r[1] - HY, r[2], r[3], r[0], r[1], r[2], r[3]);
         ctx.restore();
@@ -1015,7 +1363,7 @@
     draw(ctx, p) {
       GA = 1;
       ctx.save();
-      try { render(ctx, p || {}); } catch (e) { ctx.setTransform(1,0,0,1,0,0); ctx.fillStyle="red"; ctx.font="30px sans-serif"; ctx.fillText("DBG " + e.message + " " + (e.stack||"").split("\n")[1], 40, 1040); }
+      try { render(ctx, p || {}); } catch (e) { /* nie werfen – Szene bleibt leer statt Absturz */ }
       finally { ctx.restore(); GA = 1; }
     },
   });
