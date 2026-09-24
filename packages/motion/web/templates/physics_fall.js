@@ -15,9 +15,15 @@
      g                   optional: Fallbeschleunigung in m/s² (Default 9,81)
      title               optional: Panel-Überschrift (Default „Freier Fall“; wird gegen Badge gemessen, ggf. ohne
                          Zusatz „ENERGIEERHALTUNG“, verkleinert oder mit „…“ gekürzt)
-     markers             optional: [{h, label?, at?}] (oder [10, 100]) – Zwischenmarken bei Fallstrecke h in m:
+     markers             optional: [{h, label?, at?, hold?}] (oder [10, 100]) – Zwischenmarken bei Fallstrecke h in m:
                          Strich am Lineal + gestrichelte Ziellinie; passiert die Kabine h, friert ein Chip
                          „h = 10 m / ≈ 50 km/h“ an der Zeitspur ein (Default-Label automatisch gerundet) und bleibt stehen.
+                         hold (s): STANDBILD – beim Passieren von h friert der Fallzustand (Kabine, h/t/v/km/h, Stroboskop,
+                         Balken) für hold Sekunden ein (Badge zeigt „❚❚ STANDBILD“, Klammern um die Kabine), dann geht der
+                         Fall weiter. Die Haltezeiten werden vor der Berechnung des Zeitfaktors aus den Beats herausgerechnet
+                         (Badge ZEITLUPE/ZEITRAFFER bleibt ehrlich).
+     primary_unit        optional: "ms" (Default: große Zahl in m/s, km/h klein daneben) | "kmh" (große Zahl in km/h,
+                         result_label/Rundung ersetzt die große Zahl; m/s wird die kleine Zweitanzeige)
      kmh_round           optional: Rundungsschritt in km/h (z. B. 10, true = automatisch) – ab BEAT [2] zeigt die
                          km/h-Anzeige „≈ 160“ statt „159“; gilt auch für die automatischen Marken-Labels.
      result_label        optional: Text statt km/h-Wert ab BEAT [2], z. B. „≈ 160 km/h“ oder „über 250 km/h“.
@@ -29,6 +35,7 @@
           [2] = Ergebnis (eingesetzte Rechnung + gerundeter km/h-Wert; Default Aufprall + 0,3 s),
           [3] = end_label (Default Aufprall + 0,8 s).
    "at": markers[i].at = frühester Zeitpunkt für das Label-Chip der Marke (erscheint nie, bevor die Kabine h passiert).
+   Durchgangszeit: t_pass(h) = [0] + √(2h/g)·N + Summe der hold-Zeiten früherer Marken; N = ([1]−[0]−Σhold) / √(2·height_m/g).
    Ohne beats: Aufbau ≈ 13 % der Dauer, Fall endet bei ≈ 60 % der Dauer, danach hält das Ergebnis.
    Text: p.text wird selbst als Overlay oben links im Engine-Stil gezeichnet (ownsText: true), lange Texte
          werden zweizeilig umbrochen bzw. verkleinert, damit sie nicht ins Bild ragen. */
@@ -212,32 +219,86 @@
       keys.forEach((ks, i) => { const v = num(pick(rawB, ks), NaN); if (isFinite(v)) bt[i] = clampT(v, d); });
     }
 
-    // Zeitplan: Intro (Aufbau, Seil gespannt) -> Fall -> Aufprall -> Halten
+    // Zwischenmarken (Fallstrecke in m) – zuerst einlesen, weil ihre Haltezeiten (hold) den Zeitplan beeinflussen
+    let rawM = pick(P, ["markers", "marker", "marks", "height_markers", "checkpoints", "milestones"]);
+    if (rawM !== undefined && !Array.isArray(rawM)) rawM = [rawM];
+    const mk0 = [];
+    for (const it of rawM || []) {
+      let hm = NaN, lab = "", at = NaN, hold = 0;
+      if (typeof it === "number" || typeof it === "string") hm = num(it, NaN);
+      else if (it && typeof it === "object") {
+        hm = num(pick(it, ["h", "height", "height_m", "m", "s", "distance", "fall", "meters"]), NaN);
+        const l = pick(it, ["label", "text", "title", "value"]); if (typeof l === "string" || typeof l === "number") lab = String(l).trim();
+        at = num(pick(it, ["at", "show_at"]), NaN);
+        hold = num(pick(it, ["hold", "freeze", "pause", "standbild", "hold_s"]), 0);
+      }
+      if (!(hm > 0) || hm > h * 1.0001) continue;
+      hm = Math.min(hm, h);
+      // Standbild nur oberhalb des Bodens (am Boden ist der Aufprall)
+      hold = hm < h - 1e-6 && hold > 0 && isFinite(hold) ? Math.min(hold, 0.6 * d) : 0;
+      mk0.push({ s: hm, lab, at, hold });
+      if (mk0.length >= 6) break;
+    }
+    mk0.sort((a, b) => a.s - b.s);
+    let holdTot = 0; for (const m of mk0) holdTot += m.hold;
+    const scaleHolds = (maxH) => {
+      maxH = Math.max(0, maxH);
+      if (holdTot <= maxH + 1e-9) return;
+      const k = holdTot > 0 ? maxH / holdTot : 0;
+      holdTot = 0; for (const m of mk0) { m.hold *= k; if (m.hold < 0.02) m.hold = 0; holdTot += m.hold; }
+    };
+
+    // Zeitplan: Intro (Aufbau, Seil gespannt) -> Fall (inkl. Standbilder) -> Aufprall -> Halten
     let I = clamp(0.13 * d, 0.45, 1.8);
     if (isFinite(bt[0])) I = bt[0];
     const slowP = num(pick(P, ["slowmo", "slow_motion", "zeitlupe", "time_scale", "slowmo_factor"]), NaN);
-    let N, Ts;
+    let N, Ts; // Ts = Bildschirmdauer des Falls inkl. Standbilder
     if (isFinite(bt[1])) {
-      // Aufprall-Beat: Zeitfaktor so, dass die echte Kinematik genau zwischen Fallbeginn und Aufprall passt
-      if (!isFinite(bt[0]) && slowP > 0) I = Math.max(0.3, bt[1] - Tf * slowP);
+      // Aufprall-Beat: Zeitfaktor so, dass die echte Kinematik (ohne Standbilder) genau zwischen Fallbeginn und Aufprall passt
+      if (!isFinite(bt[0]) && slowP > 0) I = Math.max(0.3, bt[1] - Tf * slowP - holdTot);
       if (bt[1] - I < 0.2) I = Math.max(0.05, bt[1] - 0.2);
-      Ts = Math.max(0.2, bt[1] - I); N = Ts / Tf;
+      Ts = Math.max(0.2, bt[1] - I);
+      scaleHolds(Ts - Math.max(0.2, 0.2 * Ts));
+      N = (Ts - holdTot) / Tf;
     } else {
-      const target = Math.max(0.35, 0.6 * d - I - 0.1);
+      scaleHolds(0.4 * d);
+      const target = Math.max(0.35, 0.6 * d - I - 0.1 - holdTot);
       N = slowP;
       if (!(N > 0)) {
         const Nid = target / Tf;
         if (Nid >= 1) { N = 1; for (const c of NICE_SLOW) if (c <= Nid * 1.12) N = c; }
-        else if (I + Tf <= 0.8 * d) N = 1;
+        else if (I + Tf + holdTot <= 0.8 * d) N = 1;
         else { const need = Tf / target; let M = NICE_SLOW[NICE_SLOW.length - 1]; for (let i = NICE_SLOW.length - 1; i >= 0; i--) if (NICE_SLOW[i] >= need) M = NICE_SLOW[i]; N = 1 / M; }
       }
       N = clamp(N, 0.005, 1000);
-      Ts = Tf * N;
+      let Tfall = Tf * N;
       const maxTs = Math.max(0.3, d - I - Math.min(1.0, 0.25 * d));
-      if (Ts > maxTs) { Ts = maxTs; N = Ts / Tf; }
+      if (Tfall + holdTot > maxTs) {
+        scaleHolds(maxTs - Math.max(0.3, 0.5 * maxTs));
+        if (Tfall + holdTot > maxTs) { Tfall = Math.max(0.05, maxTs - holdTot); N = Tfall / Tf; }
+      }
+      Ts = Tf * N + holdTot;
     }
     N = clamp(N, 0.005, 1000);
+    Ts = Tf * N + holdTot;
     const t0 = I, t1 = I + Ts;
+    // Standbilder (reale Fallzeit tau, Dauer) + Zeitabbildungen real <-> Bildschirm
+    const holds = [];
+    for (const m of mk0) if (m.hold > 0) holds.push({ tau: Math.sqrt((2 * m.s) / g), hold: m.hold });
+    /** Bildschirmzeit, zu der die reale Fallzeit tau erreicht wird (Beginn eines Standbilds bei tau). */
+    const scr = (tau) => { let x = t0 + tau * N; for (const hd of holds) { if (hd.tau < tau - 1e-9) x += hd.hold; else break; } return x; };
+    /** Reale Fallzeit zur Bildschirmzeit t (+ Standbild-Info, verstrichene Haltezeit). */
+    const real = (t) => {
+      let te = t - t0; let el = 0;
+      if (te <= 0) return { tr: 0, frozen: false, el: 0, hk: 0, hl: 0 };
+      for (const hd of holds) {
+        const tp = hd.tau * N;
+        if (te <= tp) break;
+        if (te < tp + hd.hold) return { tr: Math.min(hd.tau, Tf), frozen: true, el: el + (te - tp), hk: te - tp, hl: tp + hd.hold - te };
+        te -= hd.hold; el += hd.hold;
+      }
+      return { tr: clamp(te / N, 0, Tf), frozen: false, el, hk: 0, hl: 0 };
+    };
     // Ergebnis- und Schlusstext-Zeitpunkte
     const late = Math.max(t1, d - 0.3);
     let tRes = isFinite(bt[2]) ? Math.max(bt[2], t1) : t1 + 0.3;
@@ -255,6 +316,9 @@
     const rl = pick(P, ["result_label", "result", "ergebnis_label", "result_text"]);
     if (typeof rl === "string" && rl.trim()) result = parseResult(rl);
     else if (kStep !== 0) result = { pre: "≈", num: fmtKmh(kmhEnd, kStep), unit: "km/h", text: "" };
+    // Hauptanzeige: m/s (Default) oder km/h
+    const pu = String(pick(P, ["primary_unit", "hero_unit", "primary", "main_unit", "unit"]) || "").toLowerCase().replace(/[\s_\-]/g, "");
+    const primary = ["kmh", "km/h", "kmproh", "kph", "kmstd"].includes(pu) ? "kmh" : "ms";
 
     // Hinweis Luftwiderstand
     let airText = "ohne Luftwiderstand";
@@ -267,27 +331,15 @@
     const endLabel = typeof elRaw === "string" && elRaw.trim() ? elRaw.trim() : "";
     const endPos = String(pick(P, ["end_label_pos", "end_label_position"]) || "shaft").toLowerCase() === "panel" ? "panel" : "shaft";
 
-    // Zwischenmarken (Fallstrecke in m)
-    let rawM = pick(P, ["markers", "marker", "marks", "height_markers", "checkpoints", "milestones"]);
-    if (rawM !== undefined && !Array.isArray(rawM)) rawM = [rawM];
+    // Zwischenmarken: Durchgangszeiten (inkl. Standbilder früherer Marken) und Labels
     const markers = [];
-    for (const it of rawM || []) {
-      let hm = NaN, lab = "", at = NaN;
-      if (typeof it === "number" || typeof it === "string") hm = num(it, NaN);
-      else if (it && typeof it === "object") {
-        hm = num(pick(it, ["h", "height", "height_m", "m", "s", "distance", "fall", "meters"]), NaN);
-        const l = pick(it, ["label", "text", "title", "value"]); if (typeof l === "string" || typeof l === "number") lab = String(l).trim();
-        at = num(pick(it, ["at", "show_at"]), NaN);
-      }
-      if (!(hm > 0) || hm > h * 1.0001) continue;
-      hm = Math.min(hm, h);
-      const tPass = I + Math.sqrt((2 * hm) / g) * N;
+    for (const m0 of mk0) {
+      const hm = m0.s;
+      const tPass = scr(Math.sqrt((2 * hm) / g));
       const vm = Math.sqrt(2 * g * hm);
-      if (!lab) lab = "≈ " + fmtKmh(vm * 3.6, kStep) + " km/h";
-      markers.push({ s: hm, label: lab, tPass, tShow: isFinite(at) ? Math.max(tPass, clampT(at, d)) : tPass, v: vm });
-      if (markers.length >= 6) break;
+      const lab = m0.lab || "≈ " + fmtKmh(vm * 3.6, kStep) + " km/h";
+      markers.push({ s: hm, label: lab, tPass, tShow: isFinite(m0.at) ? Math.max(tPass, clampT(m0.at, d)) : tPass, v: vm, hold: m0.hold });
     }
-    markers.sort((a, b) => a.s - b.s);
     let mode, badge;
     if (Math.abs(N - 1) < 0.03) { mode = "real"; badge = "ECHTZEIT"; }
     else if (N > 1) { mode = "slow"; badge = "ZEITLUPE ×" + fmtFactor(N); }
@@ -318,7 +370,7 @@
     let lastY = marks[0].y; marks[0].showLabel = true; fin.showLabel = true;
     for (let i = 1; i < marks.length - 1; i++) { const m = marks[i]; m.showLabel = m.y - lastY >= 27 && fin.y - m.y >= 27; if (m.showLabel) lastY = m.y; }
 
-    MOD = { h, g, air: airOn, airText, title, Tf, vEnd, I, Ts, N, t0, t1, tRes, tEnd, result, endLabel, endPos, markers, mode, badge, step, R, pxm, minor, stepDec, dt, dtDec, ghosts, marks, yOfS, kmh: kmhEnd, d };
+    MOD = { h, g, air: airOn, airText, title, Tf, vEnd, I, Ts, N, t0, t1, tRes, tEnd, result, endLabel, endPos, markers, mode, badge, step, R, pxm, minor, stepDec, dt, dtDec, ghosts, marks, yOfS, kmh: kmhEnd, d, primary, holds, holdTot, scr, real };
     MKEY = key;
     return MOD;
   }
@@ -391,14 +443,18 @@
 
   // ---------------- Zustand zum Zeitpunkt t ----------------
   function state(M, t) {
-    const tr = clamp((t - M.t0) / M.N, 0, M.Tf); // reale Fallzeit
+    const R = M.real(t); // reale Fallzeit (Standbilder herausgerechnet)
+    const tr = R.tr;
     const falling = t >= M.t0 && t < M.t1;
     const impacted = t >= M.t1;
     const s = impacted ? M.h : 0.5 * M.g * tr * tr;
     const v = impacted ? M.vEnd : M.g * tr;
     const ti = impacted ? t - M.t1 : -1; // Zeit seit Aufprall (Bildschirmzeit)
     const tb = t * Math.max(1, 1.04 / M.I); // Aufbau-Zeit: in kurzen Szenen schneller
-    return { tr: impacted ? M.Tf : tr, falling, impacted, s, v, ti, vf: M.vEnd > 0 ? v / M.vEnd : 0, tb };
+    const frozen = falling && R.frozen;
+    // Standbild-Hüllkurve (0..1) und „Filmzeit“ (steht während eines Standbilds still)
+    const fz = frozen ? Math.min(seg(R.hk, 0, 0.15), seg(R.hl, 0, 0.15)) : 0;
+    return { tr: impacted ? M.Tf : tr, falling, impacted, s, v, ti, vf: M.vEnd > 0 ? v / M.vEnd : 0, tb, frozen, fz, tf: t - R.el };
   }
 
   // ---------------- Hintergrund-Staub ----------------
