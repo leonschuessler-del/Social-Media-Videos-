@@ -1,0 +1,12 @@
+{
+  "name": "@content-os/productions",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Einzelne Video-Produktionen (Skript, Storyboard, Build) auf Basis von motion/render",
+  "dependencies": {
+    "@content-os/motion": "workspace:*",
+    "@content-os/render": "workspace:*",
+    "execa": "^9.6.0"
+  }
+}
