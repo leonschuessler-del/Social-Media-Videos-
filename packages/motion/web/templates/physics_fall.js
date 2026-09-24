@@ -10,9 +10,26 @@
    Params:
      height_m            Fallhöhe in m (Default 30; Aliase: height, hoehe, höhe, h, fallhoehe, fall_height)
      show_air_resistance bool (Default false) – true: Hinweis „ohne Luftwiderstand“
+     air_label           optional: eigener Hinweistext (z. B. „rechnerisch, ohne Luftwiderstand“; blendet den Hinweis ein)
      slowmo              optional: fester Zeitlupenfaktor (>1 Zeitlupe, <1 Zeitraffer, 1 Echtzeit)
      g                   optional: Fallbeschleunigung in m/s² (Default 9,81)
-     title               optional: Panel-Überschrift (Default „Freier Fall“)
+     title               optional: Panel-Überschrift (Default „Freier Fall“; wird gegen Badge gemessen, ggf. ohne
+                         Zusatz „ENERGIEERHALTUNG“, verkleinert oder mit „…“ gekürzt)
+     markers             optional: [{h, label?, at?}] (oder [10, 100]) – Zwischenmarken bei Fallstrecke h in m:
+                         Strich am Lineal + gestrichelte Ziellinie; passiert die Kabine h, friert ein Chip
+                         „h = 10 m / ≈ 50 km/h“ an der Zeitspur ein (Default-Label automatisch gerundet) und bleibt stehen.
+     kmh_round           optional: Rundungsschritt in km/h (z. B. 10, true = automatisch) – ab BEAT [2] zeigt die
+                         km/h-Anzeige „≈ 160“ statt „159“; gilt auch für die automatischen Marken-Labels.
+     result_label        optional: Text statt km/h-Wert ab BEAT [2], z. B. „≈ 160 km/h“ oder „über 250 km/h“.
+     end_label           optional: leiser Schlusstext nach dem Aufprall (z. B. „sie überlebte“)
+     end_label_pos       "shaft" (Default: im Schacht über der Kabine) | "panel" (unter der Aufprallgeschwindigkeit)
+     beats               optional: Zeitpunkte in s ab Szenenstart (null = Default), geklemmt auf [0,3; d−0,3]
+   BEATS: [0] = Seilriss / Fallbeginn, [1] = Aufprall (mit [0] zusammen bestimmt es den Zeitfaktor:
+          N = ([1] − [0]) / echte Fallzeit, Badge zeigt ihn an; nur [1] + slowmo → Fallbeginn wird zurückgerechnet),
+          [2] = Ergebnis (eingesetzte Rechnung + gerundeter km/h-Wert; Default Aufprall + 0,3 s),
+          [3] = end_label (Default Aufprall + 0,8 s).
+   "at": markers[i].at = frühester Zeitpunkt für das Label-Chip der Marke (erscheint nie, bevor die Kabine h passiert).
+   Ohne beats: Aufbau ≈ 13 % der Dauer, Fall endet bei ≈ 60 % der Dauer, danach hält das Ergebnis.
    Text: p.text wird selbst als Overlay oben links im Engine-Stil gezeichnet (ownsText: true), lange Texte
          werden zweizeilig umbrochen bzw. verkleinert, damit sie nicht ins Bild ragen. */
 (function () {
@@ -49,6 +66,22 @@
   const fmtH = (h) => (Math.abs(h - Math.round(h)) < 0.05 ? fmt(Math.round(h), 0) : fmt(h, 1));
   const fmtFactor = (f) => (Math.abs(f - Math.round(f)) < 0.05 ? fmt(Math.round(f), 0) : fmt(f, 1));
 
+  const clampT = (v, d) => clamp(v, Math.min(0.3, d / 2), Math.max(d - 0.3, d / 2));
+  const autoStep = (k) => (k >= 100 ? 10 : k >= 20 ? 5 : 1);
+  /** Gerundeter km/h-Wert als deutscher String (step −1/0 = automatisch). */
+  function fmtKmh(k, step) {
+    const st = step > 0 ? step : autoStep(k);
+    const v = Math.round(k / st) * st;
+    const dec = st >= 1 ? 0 : Math.min(2, Math.ceil(-Math.log10(st) - 1e-9));
+    return fmt(v, dec);
+  }
+  /** „≈ 160 km/h“ -> { pre: "≈", num: "160", unit: "km/h" }; sonst freier Text. */
+  function parseResult(str) {
+    const s = String(str).trim().replace(/\s+/g, " ");
+    const m = s.match(/^(.*?)(\d[\d.,]*)\s*(km\/h|m\/s|kmh)?$/i);
+    if (m) return { pre: m[1].trim(), num: m[2], unit: m[3] ? (m[3].toLowerCase() === "kmh" ? "km/h" : m[3]) : "", text: s };
+    return { pre: "", num: "", unit: "", text: s };
+  }
   function pick(P, keys) { for (const k of keys) if (P && P[k] !== undefined && P[k] !== null && P[k] !== "") return P[k]; return undefined; }
   function num(v, def) {
     if (typeof v === "number") return isFinite(v) ? v : def;
@@ -170,21 +203,91 @@
     const title = (typeof titleRaw === "string" && titleRaw.trim()) ? titleRaw.trim() : "Freier Fall";
     const Tf = Math.sqrt((2 * h) / g), vEnd = g * Tf;
 
+    // Beats (Sekunden ab Szenenstart, geklemmt auf [0,3; d−0,3])
+    const bt = [NaN, NaN, NaN, NaN];
+    const rawB = P.beats;
+    if (Array.isArray(rawB)) for (let i = 0; i < 4 && i < rawB.length; i++) { const v = num(rawB[i], NaN); if (isFinite(v)) bt[i] = clampT(v, d); }
+    else if (rawB && typeof rawB === "object") { // tolerant: {snap, impact, result, end}
+      const keys = [["snap", "fall", "start"], ["impact", "aufprall"], ["result", "ergebnis"], ["end", "end_label"]];
+      keys.forEach((ks, i) => { const v = num(pick(rawB, ks), NaN); if (isFinite(v)) bt[i] = clampT(v, d); });
+    }
+
     // Zeitplan: Intro (Aufbau, Seil gespannt) -> Fall -> Aufprall -> Halten
-    const I = clamp(0.13 * d, 0.45, 1.8);
-    const target = Math.max(0.35, 0.6 * d - I - 0.1);
-    let N = num(pick(P, ["slowmo", "slow_motion", "zeitlupe", "time_scale", "slowmo_factor"]), NaN);
-    if (!(N > 0)) {
-      const Nid = target / Tf;
-      if (Nid >= 1) { N = 1; for (const c of NICE_SLOW) if (c <= Nid * 1.12) N = c; }
-      else if (I + Tf <= 0.8 * d) N = 1;
-      else { const need = Tf / target; let M = NICE_SLOW[NICE_SLOW.length - 1]; for (let i = NICE_SLOW.length - 1; i >= 0; i--) if (NICE_SLOW[i] >= need) M = NICE_SLOW[i]; N = 1 / M; }
+    let I = clamp(0.13 * d, 0.45, 1.8);
+    if (isFinite(bt[0])) I = bt[0];
+    const slowP = num(pick(P, ["slowmo", "slow_motion", "zeitlupe", "time_scale", "slowmo_factor"]), NaN);
+    let N, Ts;
+    if (isFinite(bt[1])) {
+      // Aufprall-Beat: Zeitfaktor so, dass die echte Kinematik genau zwischen Fallbeginn und Aufprall passt
+      if (!isFinite(bt[0]) && slowP > 0) I = Math.max(0.3, bt[1] - Tf * slowP);
+      if (bt[1] - I < 0.2) I = Math.max(0.05, bt[1] - 0.2);
+      Ts = Math.max(0.2, bt[1] - I); N = Ts / Tf;
+    } else {
+      const target = Math.max(0.35, 0.6 * d - I - 0.1);
+      N = slowP;
+      if (!(N > 0)) {
+        const Nid = target / Tf;
+        if (Nid >= 1) { N = 1; for (const c of NICE_SLOW) if (c <= Nid * 1.12) N = c; }
+        else if (I + Tf <= 0.8 * d) N = 1;
+        else { const need = Tf / target; let M = NICE_SLOW[NICE_SLOW.length - 1]; for (let i = NICE_SLOW.length - 1; i >= 0; i--) if (NICE_SLOW[i] >= need) M = NICE_SLOW[i]; N = 1 / M; }
+      }
+      N = clamp(N, 0.005, 1000);
+      Ts = Tf * N;
+      const maxTs = Math.max(0.3, d - I - Math.min(1.0, 0.25 * d));
+      if (Ts > maxTs) { Ts = maxTs; N = Ts / Tf; }
     }
     N = clamp(N, 0.005, 1000);
-    let Ts = Tf * N;
-    const maxTs = Math.max(0.3, d - I - Math.min(1.0, 0.25 * d));
-    if (Ts > maxTs) { Ts = maxTs; N = Ts / Tf; }
     const t0 = I, t1 = I + Ts;
+    // Ergebnis- und Schlusstext-Zeitpunkte
+    const late = Math.max(t1, d - 0.3);
+    let tRes = isFinite(bt[2]) ? Math.max(bt[2], t1) : t1 + 0.3;
+    tRes = Math.min(tRes, late);
+    const endAtP = num(pick(P, ["end_label_at", "end_at"]), NaN);
+    const bEnd = isFinite(bt[3]) ? bt[3] : isFinite(endAtP) ? clampT(endAtP, d) : NaN;
+    let tEnd = isFinite(bEnd) ? Math.max(bEnd, t1 + 0.1) : clamp(t1 + 0.8, t1 + 0.2, Math.max(t1 + 0.2, d - 0.7));
+    tEnd = Math.min(tEnd, late);
+
+    // km/h-Rundung / Ergebnislabel
+    const kr = pick(P, ["kmh_round", "round_kmh", "kmh_rounding", "rounding"]);
+    const kStep = kr === true ? -1 : Math.max(0, num(kr, 0)); // -1 = automatisch
+    const kmhEnd = vEnd * 3.6;
+    let result = null;
+    const rl = pick(P, ["result_label", "result", "ergebnis_label", "result_text"]);
+    if (typeof rl === "string" && rl.trim()) result = parseResult(rl);
+    else if (kStep !== 0) result = { pre: "≈", num: fmtKmh(kmhEnd, kStep), unit: "km/h", text: "" };
+
+    // Hinweis Luftwiderstand
+    let airText = "ohne Luftwiderstand";
+    const al = pick(P, ["air_label", "air_note_text", "air_text", "air_note"]);
+    let airOn = air;
+    if (typeof al === "string" && al.trim() && bool(al, null) === null) { airText = al.trim(); airOn = true; }
+
+    // Schlusstext
+    const elRaw = pick(P, ["end_label", "endlabel", "end_text", "outro_label", "epilog"]);
+    const endLabel = typeof elRaw === "string" && elRaw.trim() ? elRaw.trim() : "";
+    const endPos = String(pick(P, ["end_label_pos", "end_label_position"]) || "shaft").toLowerCase() === "panel" ? "panel" : "shaft";
+
+    // Zwischenmarken (Fallstrecke in m)
+    let rawM = pick(P, ["markers", "marker", "marks", "height_markers", "checkpoints", "milestones"]);
+    if (rawM !== undefined && !Array.isArray(rawM)) rawM = [rawM];
+    const markers = [];
+    for (const it of rawM || []) {
+      let hm = NaN, lab = "", at = NaN;
+      if (typeof it === "number" || typeof it === "string") hm = num(it, NaN);
+      else if (it && typeof it === "object") {
+        hm = num(pick(it, ["h", "height", "height_m", "m", "s", "distance", "fall", "meters"]), NaN);
+        const l = pick(it, ["label", "text", "title", "value"]); if (typeof l === "string" || typeof l === "number") lab = String(l).trim();
+        at = num(pick(it, ["at", "show_at"]), NaN);
+      }
+      if (!(hm > 0) || hm > h * 1.0001) continue;
+      hm = Math.min(hm, h);
+      const tPass = I + Math.sqrt((2 * hm) / g) * N;
+      const vm = Math.sqrt(2 * g * hm);
+      if (!lab) lab = "≈ " + fmtKmh(vm * 3.6, kStep) + " km/h";
+      markers.push({ s: hm, label: lab, tPass, tShow: isFinite(at) ? Math.max(tPass, clampT(at, d)) : tPass, v: vm });
+      if (markers.length >= 6) break;
+    }
+    markers.sort((a, b) => a.s - b.s);
     let mode, badge;
     if (Math.abs(N - 1) < 0.03) { mode = "real"; badge = "ECHTZEIT"; }
     else if (N > 1) { mode = "slow"; badge = "ZEITLUPE ×" + fmtFactor(N); }
@@ -215,7 +318,7 @@
     let lastY = marks[0].y; marks[0].showLabel = true; fin.showLabel = true;
     for (let i = 1; i < marks.length - 1; i++) { const m = marks[i]; m.showLabel = m.y - lastY >= 27 && fin.y - m.y >= 27; if (m.showLabel) lastY = m.y; }
 
-    MOD = { h, g, air, title, Tf, vEnd, I, Ts, N, t0, t1, mode, badge, step, R, pxm, minor, stepDec, dt, dtDec, ghosts, marks, yOfS, kmh: vEnd * 3.6 };
+    MOD = { h, g, air: airOn, airText, title, Tf, vEnd, I, Ts, N, t0, t1, tRes, tEnd, result, endLabel, endPos, markers, mode, badge, step, R, pxm, minor, stepDec, dt, dtDec, ghosts, marks, yOfS, kmh: kmhEnd, d };
     MKEY = key;
     return MOD;
   }
