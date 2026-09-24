@@ -29,7 +29,29 @@
      title / kicker    optionale Überschrift / Kennzeile oben im Bild (kicker "" blendet die Kennzeile aus)
      footnote          kleine Fußnote (bars, dots, vruler …)
      label, scope      (order_of_magnitude) Ergebnis-Text und Geltungsbereich
-   Text: p.text wird im Engine-Stil oben links selbst gezeichnet (ownsText) – lange Texte werden verkleinert/umbrochen. */
+   Text: p.text wird im Engine-Stil oben links selbst gezeichnet (ownsText) – lange Texte werden verkleinert/umbrochen.
+
+   TIMING (Narrations-Sync): params.beats = [Sekunden ab Szenenstart] für die Hauptschritte; einzelne Einträge dürfen
+   null sein (→ Standard). Listen-Einträge akzeptieren "at" (Sekunden). Alle Zeiten werden auf [0,3; d − 0,3] geklemmt.
+   Ohne beats/at skaliert der Standard-Zeitplan mit p.d. Einmal Sichtbares bleibt bis Szenenende stehen.
+     rope_vs_finger   BEATS: [0] = Lineal zeichnet sich ein (0), [1] = Kennwert-Kachel mit Last erscheint,
+                             [2] = Kennwert-Zahl erscheint/zählt hoch (spät möglich).
+                      "at": items[].at = Objekt wird eingescannt; items[].dim_at = Bemaßung („Ø 8 mm“) klappt auf;
+                            then_readout.at = Kachel (wie beats[1]), then_readout.value_at = Zahl (wie beats[2]).
+     speed_comparison / bar_scale
+                      BEATS: [0] = Achse + Raster, [1] = Fußnote, [2] = Verhältnis-Plakette (nur mit params.ratio).
+                      "at": items[].at = Balken beginnt zu wachsen (Wert zählt mit); items[].label_at = Beschriftung
+                            vorab (Standard at − 0,25 s). footnote_at = Fußnote (wie beats[1]).
+     building_floors  BEATS: [0] = Boden + Höhenachse, [1] = Gebäude beginnt zu wachsen, [2] = Gebäude fertig
+                             (Endzahlen Stockwerke/Höhe), [3] = Aufzugsschacht leuchtet auf (≥ beats[2]).
+                      "at": items[].at = Vergleichsbalken wächst.
+     vertical_ruler   BEATS: [0] = Schiene, Lineal, Kabine, [1] = Fangvorrichtung greift – Kabine beginnt zu rutschen,
+                             [2] = Kabine steht (Ende des Rutschens).
+                      "at": items[].at = Balken bzw. Band erscheint; Band-Notizen items[].notes = [„…“ | {text, at}]
+                            (oder note/sub als ein String), footnote_at.
+     order_of_magnitude
+                      BEATS: [0] = Punktefeld + amber Punkt, [1] = Herauszoomen beginnt, [2] = Zoom erreicht 10^exp,
+                             [3] = Ergebnis-Kachel (label + scope), [4] = Fußnote.  (keine Listen) */
 (function () {
   "use strict";
   const CEX = window.CE;
@@ -113,6 +135,27 @@
     if (a >= 1e6) return deNum(x / 1e6, decimalsOf(Math.round((x / 1e6) * 10) / 10) > 0 ? 1 : 0) + " Mio.";
     return deNum(x, a >= 100 ? 0 : undefined);
   };
+  // ---------------------------------------------------------------- Timing (Narrations-Sync)
+  /** Sekunden aus Zahl oder String („3,2“, „3.2 s“); sonst NaN. */
+  const secNum = (v) => {
+    if (typeof v === "number") return v;
+    if (typeof v === "string") { const m = v.replace(",", ".").match(/-?\d+(\.\d+)?/); return m ? parseFloat(m[0]) : NaN; }
+    return NaN;
+  };
+  const tClamp = (x, d) => clamp(x, Math.min(0.3, d * 0.5), Math.max(d * 0.5, d - 0.3));
+  const AT_KEYS = ["at", "time", "t_at", "start_at"];
+  const hasAt = (o, keys = AT_KEYS) => isObj(o) && keys.some((k) => Number.isFinite(secNum(o[k])));
+  /** o.at (bzw. andere Schlüssel) → geklemmte Sekunden; sonst Default. */
+  const atOf = (o, d, def, keys = AT_KEYS) => {
+    if (isObj(o)) for (const k of keys) { const n = secNum(o[k]); if (Number.isFinite(n)) return tClamp(n, d); }
+    return def;
+  };
+  /** params.beats[i] → geklemmte Sekunden; sonst Default. */
+  const beatOf = (p, i, def) => {
+    const b = p.beats; if (!b || i >= b.length) return def;
+    const n = secNum(b[i]); return Number.isFinite(n) ? tClamp(n, p.d) : def;
+  };
+
   const niceStep = (raw) => {
     if (!(raw > 0)) return 1;
     const e = Math.pow(10, Math.floor(Math.log10(raw)));
@@ -305,7 +348,7 @@
     mm = clamp(mm, 1, 120);
     const showDim = toBool(pick(it, ["show_dimension", "dimension", "show_dim", "bemassung"]), true);
     const dimText = str(pick(it, ["dim_label", "dimension_label", "value_label", "size_label"], "")) || def.prefix + deNum(mm) + " mm";
-    return { shape, name: label || def.name, mm, showDim, dimText, color: colorOf(pick(it, ["color", "farbe"]), null) };
+    return { shape, name: label || def.name, mm, showDim, dimText, color: colorOf(pick(it, ["color", "farbe"]), null), raw: it };
   }
   function parseReadout(P, items) {
     let r = pick(P, ["then_readout", "readout", "stat", "result", "kennwert"], null);
@@ -316,7 +359,7 @@
     if (!value) return null;
     const rope = items.find((i) => i.shape === "rope");
     const kick = str(pick(r, ["kicker", "title", "headline"], "")) || (rope ? `${rope.name.length > 16 ? SHAPES.rope.name : rope.name} ${rope.dimText}` : "");
-    return { value, label: str(pick(r, ["label", "caption", "note", "sub"], "")), kick, unitTon: /\bt\b|tonne/i.test(value + " " + str(r.unit, "")) };
+    return { value, label: str(pick(r, ["label", "caption", "note", "sub"], "")), kick, unitTon: /\bt\b|tonne/i.test(value + " " + str(r.unit, "")), raw: r };
   }
 
   /** Seilquerschnitt 8 × 19 mit Fasereinlage (Röntgen-Stil). */
@@ -489,12 +532,19 @@
     }
     const x0 = areaL + (areaR - areaL - Rmm * s) / 2; const X = (mm) => x0 + mm * s;
 
-    // ---- Zeitplan
-    const tR0 = 0.0, tR1 = Math.max(0.5, 0.16 * d);
+    // ---- Zeitplan: BEATS [0] Lineal; items[].at Einscannen, items[].dim_at Bemaßung
+    const tR0 = beatOf(p, 0, 0), tR1 = Math.max(0.5, Math.min(0.16 * d, 1.6));
     const span = 0.36 / n, dur = Math.max(0.16, span * 1.45);
-    const appear = (i) => seg(t, (0.06 + i * span) * d, dur * d);
-    const dimsK = (i) => seg(t, (0.06 + i * span + dur * 0.7) * d, 0.14 * d);
-    const tAll = (0.06 + (n - 1) * span + dur + 0.1) * d;
+    items.forEach((it, i) => {
+      const own = hasAt(it.raw);
+      it.t0 = own ? atOf(it.raw, d, 0) : (0.06 + i * span) * d;
+      it.dur = own ? clamp(0.13 * d, 0.6, 1.4) : dur * d;
+      it.dimDur = clamp(0.14 * d, 0.4, 0.9);
+      it.tDim = atOf(it.raw, d, Math.min(it.t0 + it.dur * 0.7, d - 0.3 - it.dimDur * 0.5), ["dim_at", "dimension_at", "value_at"]);
+    });
+    const appear = (i) => seg(t, items[i].t0, items[i].dur);
+    const dimsK = (i) => seg(t, items[i].tDim, items[i].dimDur);
+    const tAll = Math.max(...items.map((it) => Math.max(it.t0 + it.dur, it.showDim ? it.tDim + it.dimDur : 0))) + Math.min(0.1 * d, 0.6);
 
     // ---- Rahmen & Kennzeile
     const aHead = seg(t, 0, 0.5);
@@ -605,7 +655,10 @@
     if (ro) {
       const nl = ro.label ? Math.min(3, wrap(ctx, ro.label, 360, { font: F_BODY, weight: 400, size: 25 }).length) : 0;
       const ph = 290 + nl * 32; const py = clamp(yc - ph / 2, 290, 740 - ph);
-      const k = seg(t, Math.max(tAll - 0.05 * d, 0.5 * d), 0.14 * d); if (k > 0) drawReadout(ctx, L, p, ro, 1350, py, 420, ph, k, seg(t, Math.max(tAll, 0.52 * d), 0.22 * d));
+      const tileDur = clamp(0.14 * d, 0.4, 0.8), valDur = clamp(0.22 * d, 0.6, 1.3);
+      const tTile = atOf(ro.raw, d, beatOf(p, 1, Math.min(Math.max(tAll - 0.05 * d, 0.5 * d), d - 0.3 - tileDur)));
+      const tVal = atOf(ro.raw, d, beatOf(p, 2, Math.min(Math.max(tTile + 0.35, tAll, 0.52 * d), d - 0.3 - valDur * 0.6)), ["value_at", "count_at", "number_at"]);
+      const k = seg(t, tTile, tileDur); if (k > 0) drawReadout(ctx, L, p, ro, 1350, py, 420, ph, k, seg(t, tVal, valDur));
     }
   }
 
@@ -637,13 +690,31 @@
     ctx.save(); ctx.translate(ax, ay); ctx.rotate(ang);
     text(ctx, ro.unitTon ? "t" : "F", 0, ropeLen + 16 + 45, { font: F_HEAD, weight: 700, size: 32, color: COL.amber, align: "center", alpha: a });
     ctx.restore();
-    // Wert
-    const val = countText(ro.value, cnt);
-    const vsize = fitSize(ctx, ro.value, w - 60, { font: F_MONO, weight: 700, size: 56 }, 26);
-    text(ctx, val, ix, yy + 262, { font: F_MONO, weight: 700, size: vsize, color: COL.amber, glow: 18, glowColor: COL.amber, alpha: a * clamp(cnt * 3) });
+    // Wert – erst zum Beat; vorher gestrichelter Platzhalter mit blinkendem Cursor
+    const vo = { font: F_MONO, weight: 700, size: fitSize(ctx, ro.value, w - 60, { font: F_MONO, weight: 700, size: 56 }, 26) };
+    const vy = yy + 262;
+    if (cnt <= 0) {
+      const pw = Math.min(w - 68, measure(ctx, ro.value, vo));
+      ctx.save(); ctx.globalAlpha = a * 0.4; ctx.strokeStyle = COL.amber; ctx.lineWidth = 2; ctx.setLineDash([10, 9]);
+      ctx.beginPath(); ctx.moveTo(ix, vy + 10); ctx.lineTo(ix + pw, vy + 10); ctx.stroke(); ctx.restore();
+      if (Math.sin(t * 7) > -0.2) { ctx.save(); ctx.globalAlpha = a * 0.75; ctx.fillStyle = COL.amber; ctx.fillRect(ix, vy - vo.size * 0.72, 4, vo.size * 0.8); ctx.restore(); }
+    } else drawValue(ctx, ro.value, cnt, ix, vy, { ...vo, color: COL.amber, glow: 18, glowColor: COL.amber }, a);
     if (ro.label) {
       const lines = wrap(ctx, ro.label, w - 60, { font: F_BODY, weight: 400, size: 25 }).slice(0, 3);
-      lines.forEach((l, i) => text(ctx, l, ix, yy + 304 + i * 32, { font: F_BODY, weight: 400, size: 25, color: "rgba(238,246,255,0.86)", alpha: a * seg(cnt, 0.3, 0.4) }));
+      lines.forEach((l, i) => text(ctx, l, ix, yy + 304 + i * 32, { font: F_BODY, weight: 400, size: 25, color: "rgba(238,246,255,0.86)", alpha: a * seg(k, 0.45, 0.55) }));
+    }
+  }
+  /** Kennwert zeichnen: eine Zahl zählt hoch; mehrere Zahlen („3 bis gut 4 t“) werden Wort für Wort aufgedeckt. */
+  function drawValue(ctx, s, k, x, y, o, alpha) {
+    const nums = s.match(/\d+(?:[.,]\d+)?/g) || [];
+    if (nums.length <= 1 || k >= 1) { text(ctx, countText(s, k), x, y, { ...o, alpha: alpha * clamp(k * 3) }); return; }
+    const words = s.split(/\s+/).filter(Boolean); const n = words.length;
+    const pos = k * n; const m = Math.min(n, Math.floor(pos) + 1); const frac = clamp(pos - (m - 1));
+    let xx = x;
+    for (let i = 0; i < m; i++) {
+      const wa = i < m - 1 ? 1 : eo(clamp(frac * 2.2));
+      text(ctx, words[i], xx, y + (1 - wa) * 10, { ...o, alpha: alpha * wa });
+      xx += measure(ctx, words[i] + " ", o);
     }
   }
 
@@ -661,8 +732,8 @@
   function autoColor(label, i) {
     const s = String(label).toLowerCase();
     if (/fall\b|freier fall|absturz|sturz|aufprall|crash|\btod|unfall|gefahr/.test(s)) return COL.red;
+    if (/aufzug|aufzüg|lift|elevator|kabine|fahrtreppe|rolltreppe|escalator/.test(s)) return COL.cyan;
     if (/auslös|begrenzer|fang|grenz|max|treppe|stair/.test(s)) return COL.amber;
-    if (/aufzug|aufzüg|lift|elevator|fahrtreppe|kabine/.test(s)) return COL.cyan;
     if (/\bauto|\bpkw|\bstadt|fahrrad|fußg|fussg|mensch|\bzug\b|\bbahn|läufer|laeufer|sprinter|gehen|radfahr/.test(s)) return COL.steel;
     return [COL.cyan, COL.amber, COL.steel, COL.green, COL.cyan, COL.amber, COL.steel][i % 7];
   }
@@ -686,7 +757,7 @@
         else if (!u) unit = "m/s";
       }
       out.push({ label: label || deNum(v), value: v, base: Math.max(0, base), unit, note: str(pick(it, ["note", "sub", "hint", "hinweis", "detail"], "")),
-        color: colorOf(pick(it, ["color", "farbe"]), null) || autoColor(label, i), valueText: str(pick(it, ["value_label", "value_text", "display"], "")) });
+        color: colorOf(pick(it, ["color", "farbe"]), null) || autoColor(label, i), valueText: str(pick(it, ["value_label", "value_text", "display"], "")), raw: it });
     });
     if (!out.length) return barItems({}, kind);
     return out;
@@ -725,12 +796,18 @@
     const x1 = clamp(1770 - tW - 36, 900, 1540);
     const XV = (v) => x0 + (v / niceMax) * (x1 - x0);
 
-    // Zeitplan: Balken wachsen nacheinander
+    // Zeitplan: Balken wachsen nacheinander (BEATS [0] Achse, [1] Fußnote, [2] Verhältnis; items[].at Wachstum)
     const spanU = 0.5 / n, growU = Math.max(0.14, spanU * 1.25);
-    const start = (i) => (0.1 + i * spanU) * d;
+    items.forEach((it, i) => {
+      const own = hasAt(it.raw);
+      it.tg = own ? atOf(it.raw, d, 0) : (0.1 + i * spanU) * d + 0.1;
+      it.gd = own ? clamp(0.14 * d, 0.5, 1.2) : Math.min(growU * d, 2.2);
+      it.tl = Math.min(it.tg - 0.1, atOf(it.raw, d, it.tg - 0.25, ["label_at"]));
+    });
+    const start = (i) => items[i].tg - 0.1;
 
     // Raster + Achse
-    const ga = seg(t, 0.05 * d, 0.4);
+    const ga = seg(t, beatOf(p, 0, 0.05 * d), 0.4);
     if (ga > 0) {
       ctx.save(); ctx.globalAlpha = ga; ctx.strokeStyle = "rgba(143,179,217,0.16)"; ctx.lineWidth = 1; ctx.setLineDash([4, 7]);
       ctx.beginPath(); for (let v = step; v <= niceMax + 1e-9; v += step) { const x = Math.round(XV(v)) + 0.5; ctx.moveTo(x, top - 6); ctx.lineTo(x, axisY); } ctx.stroke(); ctx.restore();
@@ -750,12 +827,12 @@
         if (unit) text(ctx, unit, x1 + 26, axisY + 34, { font: F_MONO, weight: 700, size: 18, color: COL.muted, alpha: ga });
       }
     }
-    if (foot) footnote(ctx, foot, x0, axisY + (speed ? 92 : 72), seg(t, 0.6 * d, 0.5));
+    if (foot) footnote(ctx, foot, x0, axisY + (speed ? 92 : 72), seg(t, atOf(P, d, beatOf(p, 1, Math.min(0.6 * d, d - 0.9)), ["footnote_at", "fussnote_at"]), 0.5));
 
     // Zeilen
     items.forEach((it, i) => {
-      const ts = start(i); const la = seg(t, ts - 0.15, 0.45); if (la <= 0) return;
-      const g = eo(seg(t, ts + 0.1, growU * d));
+      const ts = start(i); const la = seg(t, it.tl, 0.45); if (la <= 0) return;
+      const g = eo(seg(t, it.tg, it.gd));
       const cy = top + rowH * (i + 0.5) + rowH * 0.16; const by = cy - barH / 2;
       const col = it.color;
       // Label + Hinweis
@@ -802,12 +879,34 @@
         if (v1s) text(ctx, v1s, vx, cy + vSize * 0.36, { font: F_MONO, weight: 700, size: vSize, color: col === COL.steel ? COL.white : col, alpha: va, glow: col === COL.red ? 14 : 0, glowColor: col });
         if (v2) text(ctx, v2, vx + measure(ctx, v1, { font: F_MONO, weight: 700, size: vSize }) + 18, cy + vSize * 0.36, { font: F_BODY, weight: 600, size: vSize * 0.72, color: COL.muted, alpha: va * seg(g, 0.5, 0.5) });
         // Blitz beim Erreichen des Endwerts
-        const fl = seg(t, ts + 0.1 + growU * d, 0.5);
+        const fl = seg(t, it.tg + it.gd, 0.5);
         if (fl > 0 && fl < 1) L.circle(ctx, tipX, cy, 10 + 40 * eo(fl), col, 2, 0.8, { alpha: (1 - fl) * 0.8 });
         // winzige Balken: dauerhaft pulsierender Markierungsring, damit sie nicht übersehen werden
         if (g >= 1 && wv < 44) { const ph = ((t - ts) * 0.8) % 1; L.circle(ctx, x0 + wv / 2, cy, barH * 0.75 + ph * 30, col, 1.6, 0.6, { alpha: (1 - ph) * 0.8 }); }
       }
+      it.geo = { cy, tipX: x0 + Math.max(4, (XV(it.base) - x0)), barH };
     });
+
+    // Verhältnis-Plakette (optional): params.ratio = true | "≈ 59 : 1" | { text, label, at }
+    const ratioP = pick(P, ["ratio", "verhaeltnis", "verhältnis"], null);
+    if (!speed && n >= 2 && ratioP !== null && ratioP !== false && toBool(ratioP, true)) {
+      const sorted = [...items].sort((a, b) => b.base - a.base); const big = sorted[0], small = sorted[n - 1];
+      let rt = typeof ratioP === "string" && !/^(true|1|ja|yes|on)$/i.test(ratioP.trim()) ? ratioP : isObj(ratioP) ? str(pick(ratioP, ["text", "value"], "")) : "";
+      if (!rt && small.base > 0) { const r = big.base / small.base; rt = `≈ ${deNum(r, r >= 10 ? 0 : 1)} : 1`; }
+      const rl = isObj(ratioP) ? str(pick(ratioP, ["label", "caption"], "Verhältnis")) : "Verhältnis";
+      const tEnd = Math.max(...items.map((i) => i.tg + i.gd));
+      const tr = atOf(isObj(ratioP) ? ratioP : null, d, beatOf(p, 2, Math.min(tEnd + 0.3, d - 0.9)));
+      const k = seg(t, tr, 0.5);
+      if (rt && k > 0 && small.geo) {
+        const ro = { font: F_MONO, weight: 700, size: 38 }; const lo = { font: F_MONO, weight: 700, size: 15, letterSpacing: 3 };
+        const pw = Math.max(measure(ctx, rt, ro), measure(ctx, rl.toUpperCase(), lo)) + 56, ph = 92;
+        const px = x1 - pw, py = small.geo.cy - ph / 2 + (1 - eo(k)) * 12;
+        L.line(ctx, small.geo.tipX + 14, small.geo.cy, lerp(small.geo.tipX + 14, px - 10, eo(k)), small.geo.cy, COL.amber, 1.4, 0.4, { alpha: k * 0.7, dash: [5, 7] });
+        L.panel(ctx, px, py, pw, ph, { alpha: k, fill: "rgba(5,14,30,0.9)", stroke: L.C.amberSoft, r: 8 });
+        text(ctx, rl.toUpperCase(), px + 28, py + 30, { ...lo, color: COL.amber, alpha: k * 0.9 });
+        text(ctx, rt, px + 28, py + 74, { ...ro, color: COL.white, alpha: k, glow: 10, glowColor: COL.amber });
+      }
+    }
   }
 
   // ================================================================ MODUS: building_floors
@@ -835,7 +934,7 @@
       const txt = str(pick(it, ["text", "value_label", "display"], "")) || (isFloors ? `${deNum(v)} Stockwerke` : `${deNum(v)} m`);
       const fall = /fall|absturz|sturz/.test(label.toLowerCase());
       comps.push({ label, vm, txt, isFloors, floorsN: isFloors ? v : vm / fH, color: colorOf(pick(it, ["color", "farbe"]), null) || (fall ? COL.red : [COL.amber, COL.green, COL.steel][i % 3]),
-        dashed: /dash|gestrichelt|strich/.test(str(pick(it, ["style", "stil"], ""))) || toBool(it.dashed, false), fall });
+        dashed: /dash|gestrichelt|strich/.test(str(pick(it, ["style", "stil"], ""))) || toBool(it.dashed, false), fall, raw: it });
     });
 
     const groundY = 856, topLim = name ? 318 : 300;
@@ -858,11 +957,16 @@
     const axisX = gx + 100, bl = axisX + leftGap, br = bl + bw, bcx = (bl + br) / 2;
     const floorAxisX = br + 26; const barsX = floorAxisX + floorGap;
 
-    // Zeitplan
-    const tG = seg(t, 0, 0.5);
-    const rise = eio(seg(t, 0.06 * d, 0.34 * d));
-    const shaftK = seg(t, 0.36 * d, 0.12 * d);
-    const compStart = (i) => (0.44 + i * 0.07) * d;
+    // Zeitplan: BEATS [0] Boden/Achse, [1] Wachstum beginnt, [2] Gebäude fertig, [3] Schacht; items[].at Vergleichsbalken
+    const tG0 = beatOf(p, 0, 0);
+    const tG = seg(t, tG0, 0.5);
+    const tRise0 = beatOf(p, 1, 0.06 * d), tRise1 = Math.max(tRise0 + 0.4, beatOf(p, 2, 0.4 * d));
+    const rise = eio(seg(t, tRise0, tRise1 - tRise0));
+    const tShaft = Math.max(tRise1, beatOf(p, 3, tRise1));
+    const shaftK = seg(t, tShaft, clamp(0.12 * d, 0.4, 0.8));
+    comps.forEach((c, i) => { c.t0 = atOf(c.raw, d, Math.min((0.44 + i * 0.07) * d, d - 1.2)); });
+    const compStart = (i) => comps[i].t0;
+    const cGrow = clamp(0.16 * d, 0.5, 1.4);
 
     const aHead = tG;
     brackets(ctx, 100, 222, 1720, 676, aHead);
@@ -878,7 +982,7 @@
 
     // Höhenachse (m)
     const step = niceStep(heightM / 4.5);
-    const aA = seg(t, 0.04 * d, 0.5);
+    const aA = seg(t, tG0 + 0.04 * d, 0.5);
     if (aA > 0) {
       L.line(ctx, axisX, groundY, axisX, groundY - (groundY - topLim + 10) * eo(aA), COL.muted, 1.6, 0.3, { alpha: aA });
       for (let v = 0; v <= maxM + 1e-9; v += step) {
@@ -953,7 +1057,7 @@
       // Live-Zähler an der Kante bzw. Endmarken
       const curF = Math.round(floors * rise), curM = heightM * rise;
       const labY = rise < 1 ? revealTop : roofY;
-      const aL = seg(t, 0.08 * d, 0.3);
+      const aL = seg(t, tRise0 + 0.02 * d, 0.3);
       const hLabel = `${deNum(rise < 1 ? Math.round(curM) : heightM, rise < 1 ? 0 : undefined)} m`;
       const fLabel = `${curF}`;
       if (rise >= 1) L.line(ctx, axisX, roofY, bcx - (bw * profile[profile.length - 1][2]) / 2 - 6, roofY, COL.amber, 1.4, 0.4, { alpha: 0.8, dash: [6, 6] });
@@ -997,7 +1101,7 @@
       ctx.beginPath(); ctx.moveTo(sx + sw / 2, sTop); ctx.lineTo(sx + sw / 2, sBot); ctx.stroke(); ctx.restore();
       // Fall-Hervorhebung
       const fallC = comps.find((c) => c.fall);
-      const fk = fallC ? seg(t, compStart(comps.indexOf(fallC)) + 0.1 * d, 0.14 * d) : 0;
+      const fk = fallC ? seg(t, compStart(comps.indexOf(fallC)) + Math.min(0.1 * d, 0.7), clamp(0.14 * d, 0.5, 1.0)) : 0;
       if (fallC && fk > 0) {
         const yF = groundY - Math.min(fallC.floorsN, floors) * floorPx; const yB = sBot;
         const yCur = lerp(yF, yB, eo(fk));
@@ -1029,7 +1133,7 @@
     }
     // Person als Maßstab (nur wenn sinnvoll groß)
     if (showPerson && rise >= 1) {
-      const pa = seg(t, 0.4 * d, 0.5); const px = bl - leftGap / 2 + 10;
+      const pa = seg(t, tRise1, 0.5); const px = bl - leftGap / 2 + 10;
       L.person(ctx, px, groundY, personPx, COL.steel, 0.8 * pa);
       if (personPx > 60) {
         L.line(ctx, px + personPx * 0.2, groundY, px + personPx * 0.2, groundY - personPx, COL.muted, 1, 0, { alpha: pa * 0.6 });
@@ -1041,7 +1145,7 @@
 
     // Vergleichsbalken
     comps.forEach((c, i) => {
-      const ts = compStart(i); const k = eo(seg(t, ts, 0.16 * d)); if (k <= 0) return;
+      const ts = compStart(i); const k = eo(seg(t, ts, cGrow)); if (k <= 0) return;
       const x = barsX + i * (barW + barGap); const hpx = c.vm * pxm * k; const y = groundY - hpx;
       const col = c.color;
       ctx.save();
@@ -1052,12 +1156,12 @@
       L.rect(ctx, x, y, barW, hpx, col, 2, 1, { dash: c.dashed ? [10, 7] : null });
       L.line(ctx, x - 6, y, x + barW + 6, y, col, 3, 1);
       // Leitlinie zum Gebäude
-      const la = seg(t, ts + 0.12 * d, 0.4);
+      const la = seg(t, ts + cGrow * 0.75, 0.4);
       const yTop = (j) => groundY - comps[j].vm * pxm;
       let freePath = true; for (let j = 0; j < i; j++) if (!(y < yTop(j) - 70)) freePath = false;
       if (la > 0 && freePath) L.line(ctx, x - 8, y, lerp(x - 8, floorAxisX + 4, eo(la)), y, col, 1.4, 0.5, { alpha: 0.75 * la, dash: [5, 6] });
       // Beschriftung rechts oben am Balken (nur beim letzten Balken rechts, sonst über dem Balken)
-      const lx = x + barW + 18; const ta = seg(t, ts + 0.08 * d, 0.4);
+      const lx = x + barW + 18; const ta = seg(t, ts + cGrow * 0.5, 0.4);
       const isLast = i === comps.length - 1;
       const maxLW = isLast ? 1775 - lx : barW + barGap;
       const ls = fitSize(ctx, c.label, maxLW, { font: F_BODY, weight: 600, size: 32 }, 16);
