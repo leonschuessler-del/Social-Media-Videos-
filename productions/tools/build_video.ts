@@ -6,6 +6,7 @@
  *                  final.mp4 (ohne eingebrannte Untertitel, SRT separat für YouTube), final_untertitelt.mp4, metadata.json, description.txt, qa.json
  */
 import { readFile, writeFile, mkdir, access } from "node:fs/promises";
+import { readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { execa } from "execa";
 import { renderTimeline, type Timeline, type TimelineScene } from "../../packages/motion/src/render.ts";
@@ -33,6 +34,7 @@ const timings = JSON.parse(await readFile(join(out, "voice/timings.json"), "utf8
 const MOOD: Record<string, string> = { HOOK: "tension", SETUP: "wonder", EXPLANATION: "drive", STORY: "wonder", PATTERN_INTERRUPT: "tension", PAYOFF: "resolve", RECAP: "resolve", CTA: "calm", OUTRO: "calm" };
 const SFX_OFFSET: Record<string, number> = { riser: -2.4, whoosh: -0.35, impact: 0.0, rope_snap: 0.6, metal_creak: 0.2, ratchet: 0.5, sparks_screech: 0.8, hydraulic_hiss: 0.6, click: 0.2, rumble: 0 };
 
+const TEMPLATES_PRESENT = new Set(readdirSync(join(TOOLS, "../../packages/motion/web/templates")).map((f) => f.replace(/\.js$/, "")));
 // ---------------------------------------------------------------- 1. Timeline
 function buildTimeline(): { timeline: Timeline; sfxCues: { t: number; name: string }[] } {
   const scenes: TimelineScene[] = []; const sfxCues: { t: number; name: string }[] = [];
@@ -44,10 +46,24 @@ function buildTimeline(): { timeline: Timeline; sfxCues: { t: number; name: stri
     const segDur = seg.end - seg.start; const minDur = 2.8;
     let items = list.slice(); while (items.length > 1 && segDur / items.length < minDur) items = items.slice(0, -1);
     const wsum = items.reduce((a, s) => a + Math.max(0.2, s.weight || 1), 0);
+    // Szenenwechsel auf Satz- (bevorzugt) bzw. Wortgrenzen legen, damit Bild und gesprochener Satz zusammenpassen
+    const sentB = seg.sentences.slice(1).map((x) => x.start - Math.min(0.25, (x.start - seg.sentences[0].start) * 0.5));
+    const wordB = seg.sentences.flatMap((x) => x.words.slice(1).map((w) => w.s));
+    const cuts: number[] = []; let acc = 0;
+    items.slice(0, -1).forEach((s, i) => {
+      acc += (segDur * Math.max(0.2, s.weight || 1)) / wsum;
+      const target = seg.start + acc; const lo = (cuts.at(-1) ?? seg.start) + minDur; const hi = seg.end - minDur * (items.length - 1 - i);
+      const pick = (arr: number[], tol: number) => arr.filter((b) => b >= lo && b <= hi && Math.abs(b - target) <= tol).sort((a, b) => Math.abs(a - target) - Math.abs(b - target))[0];
+      const b = pick(sentB, Math.max(2.5, segDur * 0.22)) ?? pick(wordB, 1.5) ?? Math.min(Math.max(target, lo), hi);
+      cuts.push(b);
+    });
+    const bounds = [seg.start, ...cuts, seg.end];
     let t = seg.start;
-    items.forEach((s, i) => {
-      const d = i === items.length - 1 ? seg.end - t : (segDur * Math.max(0.2, s.weight || 1)) / wsum;
+    items.forEach((s0, i) => {
+      let s = s0; const d = bounds[i + 1] - bounds[i];
       let params: Record<string, unknown> = {}; try { params = JSON.parse(s.params_json || "{}"); } catch { params = {}; }
+      // Vorschau-Modus: noch nicht gebaute Vorlagen durch Titeltafel ersetzen (nie im finalen Render)
+      if (arg("substitute") && !TEMPLATES_PRESENT.has(s.template)) { params = { title: s0.on_screen_text || seg.chapter, subtitle: seg.chapter }; s = { ...s0, template: "title_card", on_screen_text: "", camera: "slow_push_in" }; }
       const prev = scenes.at(-1);
       const transition = s.sfx === "impact" || s.sfx === "rope_snap" ? "flash" : prev && prev.template === s.template ? "fade" : "fade";
       scenes.push({ id: s.id, start: +t.toFixed(3), end: +(t + d).toFixed(3), template: s.template, params, text: s.on_screen_text || "", camera: s.camera || "static", chapter: seg.chapter, transition });
@@ -96,6 +112,10 @@ if (stage === "all" || stage === "timeline") {
   await writeFile(join(out, "captions.ass"), buildAss(words, { fontFamily: "Inter", fontSize: 50, primaryColor: "#FFFFFF", highlightColor: "#FFB347", outlineColor: "#000000", marginV: 60, playResX: 1920, playResY: 1080, bold: true }, { mode: "line", maxWordsPerLine: 9, maxCharsPerLine: 52 }));
   await writeFile(join(out, "captions.srt"), buildSrt(words, 9));
   await writeFile(join(out, "music_plan.json"), JSON.stringify(musicPlan(timeline.chapters!), null, 1));
+  // Pro Szene: exakt gesprochener Text + Wortzeiten relativ zum Szenenstart (für Szenen-Abnahme und Timing von Einblendungen)
+  const allW = timings.segments.flatMap((sg) => sg.sentences.flatMap((x) => x.words));
+  const sceneNarr = timeline.scenes.map((sc) => { const ws = allW.filter((w) => w.s >= sc.start - 0.05 && w.s < sc.end - 0.05); return { id: sc.id, template: sc.template, start: sc.start, end: sc.end, duration: +(sc.end - sc.start).toFixed(3), narration: ws.map((w) => w.w).join(" "), words: ws.map((w) => ({ w: w.w, t: +(w.s - sc.start).toFixed(2) })) }; });
+  await writeFile(join(out, "scene_narration.json"), JSON.stringify(sceneNarr, null, 1));
   console.log(`timeline: ${timeline.scenes.length} Szenen, ${timeline.chapters!.length} Kapitel, ${timings.duration.toFixed(1)} s, ${sfxCues.length} SFX`);
 }
 

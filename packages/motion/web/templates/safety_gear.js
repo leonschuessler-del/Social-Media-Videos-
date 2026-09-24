@@ -262,7 +262,12 @@
   }
 
   // ---------- Hintergrund-Bewegung ----------
-  function drawFX(ctx, s, t) {
+  function drawFX(ctx, s, t, ST, LV) {
+    if (ST) drawStreaks(ctx, s);
+    if (LV) drawScan(ctx, t);
+  }
+  function drawStreaks(ctx, s) {
+    if (s.v < 0.005) return;
     const len = clamp(s.speedPx * 0.11, 1.5, 70);
     ctx.save(); ctx.lineCap = "round"; ctx.strokeStyle = COL.cyan; ctx.lineWidth = 1.6;
     for (let b = 0; b < 3; b++) {
@@ -273,10 +278,12 @@
         if (y < 90 || y > 960) continue;
         ctx.moveTo(x, y); ctx.lineTo(x, y + len); any = true;
       }
-      if (any) { ctx.globalAlpha = GA * (0.12 + 0.08 * b); ctx.stroke(); }
+      if (any) { ctx.globalAlpha = GA * (0.12 + 0.08 * b) * clamp(0.15 + s.v / 0.35); ctx.stroke(); }
     }
     ctx.restore();
-    // Röntgen-Scan: weiches Band, das langsam über die Baugruppe läuft
+  }
+  // Röntgen-Scan: weiches Band, das langsam über die Baugruppe läuft
+  function drawScan(ctx, t) {
     const ys = 250 + ((t * 95) % 660), xa = RX - HW - 60, xb = RX + HW + 360;
     const g = ctx.createLinearGradient(xa, 0, xb, 0);
     g.addColorStop(0, "rgba(63,210,255,0)"); g.addColorStop(0.2, "rgba(63,210,255,1)"); g.addColorStop(0.75, "rgba(63,210,255,1)"); g.addColorStop(1, "rgba(63,210,255,0)");
@@ -290,9 +297,8 @@
     const col = s.phase === "normal" ? COL.cyan : s.phase === "brake" ? COL.amber : COL.red;
     const x = RX + HW + 62, yA = HT + 44, span = 150, rate = clamp(s.speedPx * 0.004, 0.25, 1.4);
     stxt(L, ctx, "Fahrt", x, yA - 16, { size: 14, weight: 600, color: col, align: "center", alpha: 0.85 * a });
-    for (let k = 0; k < 4; k++) {
-      const f = (k / 4 + s.t * rate) % 1, y = yA + f * span, al = a * Math.sin(Math.PI * f);
-      stk(ctx, (c) => { c.moveTo(x - 11, y - 6); c.lineTo(x, y + 5); c.lineTo(x + 11, y - 6); }, col, 2.6, 0.8, al);
+    for (const mid of [true, false]) {
+      stk(ctx, (c) => { for (let k = 0; k < 4; k++) { const f = (k / 4 + s.t * rate) % 1; if ((f > 0.2 && f < 0.8) !== mid) continue; const y = yA + f * span; c.moveTo(x - 11, y - 6); c.lineTo(x, y + 5); c.lineTo(x + 11, y - 6); } }, col, 2.6, 0.8, a * (mid ? 0.95 : 0.35));
     }
   }
 
@@ -309,31 +315,37 @@
     stk(ctx, (c) => { c.moveTo(RX, y0); c.lineTo(RX, y1); }, cgrad(ctx, "railC", () => vGrad(ctx, COL.cyan, 0.55, y0, y1)), 1.2, 0, 1, { dash: [26, 6, 4, 6], off: s.D, cap: "butt" });
   }
 
-  // Bremsspur am Steg (fest auf der Schiene -> wandert mit nach oben)
-  function drawTrace(ctx, s) {
+  // Bremsspur am Steg (fest auf der Schiene -> wandert mit nach oben): Grundspur + additive Glut
+  function traceSpan(s) { return s.inst ? [YR0 - HC_I - s.Dp, YR0 - s.h] : [WY0 - HC_P - s.Dp, WY0 - s.h + WH]; }
+  function drawTraceBase(ctx, s) {
     if (!s.contact || s.Dp < 0.5) return;
-    const hotQ = clamp(s.heat * 1.1);
+    const [yTop, yBot] = traceSpan(s);
     if (!s.inst) {
-      const yTop = WY0 - HC_P - s.Dp, yBot = WY0 - s.h + WH;
       const g = ctx.createLinearGradient(0, yTop, 0, yBot);
-      g.addColorStop(0, heatCol(0.1 * hotQ, 0.35 + 0.2 * hotQ)); g.addColorStop(0.55, heatCol(0.45 * hotQ + 0.1, 0.55 + 0.35 * hotQ)); g.addColorStop(1, heatCol(0.3 + 0.7 * hotQ, 0.9));
-      for (const sg of [-1, 1]) {
-        const x = RX + sg * (BH - 2);
-        stk(ctx, (c) => { c.moveTo(x, yTop); c.lineTo(x, yBot); }, g, 3, 1.2, 1, { cap: "butt" });
-      }
-      // feine Riefen quer zur Laufrichtung (Schleifspuren)
-      stk(ctx, (c) => { for (let y = yTop + 4; y < Math.min(yBot, HT); y += 9) { const q = h01(Math.round(y + s.Dp) * 0.37); c.moveTo(RX - BH + 3, y); c.lineTo(RX - BH + 6 + q * 7, y + 1.5); c.moveTo(RX + BH - 3, y + 3); c.lineTo(RX + BH - 6 - q * 7, y + 4.5); } }, COL.amber, 1, 0, 0.35 + 0.3 * hotQ);
+      g.addColorStop(0, rgba(COL.red, 0.35)); g.addColorStop(1, mix(COL.red, COL.amber, 0.55, 0.8));
+      stk(ctx, (c) => { c.moveTo(RX - BH + 2, yTop); c.lineTo(RX - BH + 2, yBot); c.moveTo(RX + BH - 2, yTop); c.lineTo(RX + BH - 2, yBot); }, g, 3, 1.2, 1, { cap: "butt" });
+      // feine Riefen (Schleifspuren)
+      stk(ctx, (c) => { for (let y = yTop + 4; y < Math.min(yBot, HT); y += 9) { const q = h01(Math.round(y + s.Dp) * 0.37); c.moveTo(RX - BH + 3, y); c.lineTo(RX - BH + 6 + q * 7, y + 1.5); c.moveTo(RX + BH - 3, y + 3); c.lineTo(RX + BH - 6 - q * 7, y + 4.5); } }, COL.amber, 1, 0, 0.4);
     } else {
-      const yTop = YR0 - HC_I - s.Dp, yR = YR0 - s.h;
-      stk(ctx, (c) => { for (let y = yTop; y < yR; y += 4) { c.moveTo(RX - BH + 1, y); c.lineTo(RX - BH + 7, y - 2); } }, heatCol(0.3 + 0.6 * hotQ, 1), 1.6, 0.8, 0.9);
-      stk(ctx, (c) => { c.moveTo(RX + BH - 2, CY - 100 - s.Dp * 0.4); c.lineTo(RX + BH - 2, CY + 100); }, heatCol(0.2 + 0.5 * hotQ, 1), 2.4, 1, 0.6 * s.cf + 0.2);
+      stk(ctx, (c) => { for (let y = yTop; y < yBot; y += 4) { c.moveTo(RX - BH + 1, y); c.lineTo(RX - BH + 7, y - 2); } }, mix(COL.red, COL.amber, 0.5), 1.6, 0.8, 0.9);
+      stk(ctx, (c) => { c.moveTo(RX + BH - 2, CY - 100 - s.Dp * 0.4); c.lineTo(RX + BH - 2, CY + 100); }, mix(COL.red, COL.amber, 0.4), 2.4, 1, 0.6 * s.cf + 0.2);
     }
+  }
+  function drawTraceHeat(ctx, s) {
+    if (!s.contact || s.Dp < 0.5 || s.heat < 0.02) return;
+    const [yTop, yBot] = traceSpan(s), h = clamp(s.heat * 1.1);
+    ctx.save(); ctx.globalCompositeOperation = "lighter";
+    const g = ctx.createLinearGradient(0, yTop, 0, yBot);
+    g.addColorStop(0, rgba(COL.red, 0.12 * h)); g.addColorStop(0.6, rgba(COL.amber, 0.45 * h)); g.addColorStop(1, rgba(COL.hot, 0.9 * h));
+    if (!s.inst) stk(ctx, (c) => { c.moveTo(RX - BH + 2, yTop); c.lineTo(RX - BH + 2, yBot); c.moveTo(RX + BH - 2, yTop); c.lineTo(RX + BH - 2, yBot); }, g, 2.4, 1.4, 1, { cap: "butt" });
+    else stk(ctx, (c) => { c.moveTo(RX - BH + 3, yTop); c.lineTo(RX - BH + 3, yBot); }, g, 2.4, 1.4, 1, { cap: "butt" });
+    ctx.restore();
   }
 
   // ---------- Fanggehäuse ----------
   function drawHousingBack(ctx, s) { fil(ctx, (c) => c.rect(RX - HW + s.ox, HT, HW * 2, HB - HT), "rgba(4,12,26,0.84)", 1); }
   function drawShell(ctx, P, s) {
-    const x0 = PIV[0] - 24, y0 = HT - 8, w = RX + HW + 8 - x0, h = PIV[1] + 16 - y0;
+    const x0 = PIV[0] - 24, y0 = HT - 8, w = RX + HW + 44 - x0, h = PIV[1] + 16 - y0;
     ctx.save(); ctx.translate(s.ox, 0);
     layer(ctx, "shell|" + s.inst, x0, y0, w, h, 1, (g) => drawShellRaw(g, pats(g), s.inst));
     ctx.restore();
@@ -345,6 +357,7 @@
       const stp = polyB([[X(16), HT + PL], [X(100), HT + PL], [X(100), STOP_Y], [X(16), STOP_Y]], true);
       fil(ctx, stp, "rgba(12,34,62,0.96)", 1); hatch(ctx, stp, P.cyan, 0, 0, 0.55); stk(ctx, stp, COL.cyan, 1.5, 0.4, 0.8);
     }
+    if (!inst) for (const yc of SPR_Y) stk(ctx, (c) => { c.moveTo(RX - HW - 40, yc); c.lineTo(RX - BLK_O + 20, yc); c.moveTo(RX + BLK_O - 20, yc); c.lineTo(RX + HW + 40, yc); }, COL.cyan, 1, 0, 0.35, { dash: [14, 4, 3, 4], cap: "butt" });
     // Lagerbock des Auslösehebels
     const brk = polyB([[RX - HW + 8, HB], [RX - HW + 62, HB], [PIV[0] + 17, PIV[1] + 4], [PIV[0] - 17, PIV[1] + 4]], true);
     fil(ctx, brk, "rgba(16,36,62,0.95)", 1); hatch(ctx, brk, P.steel, 0, 0, 0.45); stk(ctx, brk, COL.steel, 1.6, 0.4, 0.9);
@@ -370,53 +383,62 @@
     const yWt = WY0 - h, yWb = yWt + WH;
     return { dl, h, dxIn, yWt, yWb, face: (y) => 44 + dl + (y - WY0) * TANA };
   }
+  // Starre Teile als Sprite in Bezugslage, per Verschiebung gezeichnet (Schraffur wandert mit dem Teil)
+  function rigid(ctx, key, pts, pad, dx, dy, drawFn) {
+    let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+    for (const q of pts) { x0 = Math.min(x0, q[0]); y0 = Math.min(y0, q[1]); x1 = Math.max(x1, q[0]); y1 = Math.max(y1, q[1]); }
+    ctx.save(); ctx.translate(dx, dy);
+    layer(ctx, key, x0 - pad, y0 - pad, x1 - x0 + 2 * pad, y1 - y0 + 2 * pad, 1, drawFn);
+    ctx.restore();
+  }
+  const faceP = (y) => 44 + (y - WY0) * TANA; // Laufbahn des Druckstücks in Bezugslage (δ = 0)
   function drawProg(ctx, P, s) {
     const G = progGeom(s), { dl, dxIn, yWt, yWb, face } = G, load = s.cf;
     const springCol = mix(COL.cyan, COL.amber, load);
     for (const sg of [-1, 1]) {
       const X = (dx) => RX + sg * dx;
-      // Druckstück mit schräger Laufbahn
-      const blk = polyB([[X(face(BLK_T)), BLK_T], [X(BLK_O + dl), BLK_T], [X(BLK_O + dl), BLK_B], [X(face(BLK_B)), BLK_B]], true);
-      fil(ctx, blk, "rgba(18,40,68,0.96)", 1); hatch(ctx, blk, P.steel, sg * dl, 0, 0.7); stk(ctx, blk, COL.steel, 1.8, 0.5, 0.95);
-      // Tellerfederpakete (Reihenschaltung, im Schnitt als Zickzack)
-      // Druckscheiben an beiden Enden, dazwischen wechselsinnig geschichtete Tellerfedern ( > < > < )
-      const c0 = BLK_O + dl + 6, c1 = HW - WALL - 6, pitch = (c1 - c0) / NDISC, th = 5.4, hc = Math.max(0.6, pitch - th);
-      for (const yc of SPR_Y) {
-        fil(ctx, (c) => c.rect(Math.min(X(c0), X(c1)), yc - SPR_RO - 3, Math.abs(X(c1) - X(c0)), SPR_RO * 2 + 6), rgba(COL.amber, 0.03 + 0.1 * load), 1);
-        for (const xe of [c0 - 3, c1 + 3]) { fil(ctx, (c) => c.rect(X(xe) - 2.5, yc - SPR_RO - 4, 5, SPR_RO * 2 + 8), "#1a3350", 1); stk(ctx, (c) => c.rect(X(xe) - 2.5, yc - SPR_RO - 4, 5, SPR_RO * 2 + 8), COL.steel, 1.2, 0, 0.9); }
-        const discs = (c) => {
-          for (let i = 0; i < NDISC; i++) {
-            const a = c0 + i * pitch, xo = i % 2 ? a + hc : a, xi = i % 2 ? a : a + hc;
-            for (const sn of [-1, 1]) { c.moveTo(X(xo), yc + sn * SPR_RO); c.lineTo(X(xi), yc + sn * SPR_RI); c.lineTo(X(xi + th), yc + sn * SPR_RI); c.lineTo(X(xo + th), yc + sn * SPR_RO); c.closePath(); }
-          }
-        };
-        stk(ctx, discs, springCol, 1.2, 1.2 + 1.0 * load, 0.8);
-        fil(ctx, discs, springCol, 0.9);
-        stk(ctx, discs, "#06101f", 1.1, 0, 0.9);
-      }
-      // Nadelrollen im Käfig (laufen mit halber Keilgeschwindigkeit)
-      const y0r = Math.max(yWt, BLK_T) + 6, y1r = Math.min(yWb, BLK_B) - 6, cage = WY0 + 6 - s.h / 2;
-      stk(ctx, (c) => { for (let k = -4; k < 14; k++) { const y = cage + k * 14; if (y < y0r || y > y1r) continue; const x = X(face(y) - 5); c.moveTo(x + 4, y); c.arc(x, y, 4, 0, TAU); } }, COL.steel, 1.4, 0, 0.9);
-      // Fangkeil
-      const wg = polyB([[X(dxIn), yWt], [X(dxIn + WT0), yWt], [X(dxIn + WT0 + WH * TANA), yWb], [X(dxIn), yWb]], true);
-      fil(ctx, wg, "#3a2a10", 0.95); hatch(ctx, wg, P.amber, 0, -s.h, 0.75);
-      stk(ctx, wg, COL.amber, 2.2, 1, 1);
-      fil(ctx, (c) => { c.arc(X(dxIn + 22), yWb - 11, 5, 0, TAU); }, "#0a1426", 1);
-      stk(ctx, (c) => { c.arc(X(dxIn + 22), yWb - 11, 5, 0, TAU); }, COL.amber, 1.5, 0, 1);
+      // Druckstück mit schräger Laufbahn (starr, verschiebt sich um δ nach außen)
+      const bp = [[X(faceP(BLK_T)), BLK_T], [X(BLK_O), BLK_T], [X(BLK_O), BLK_B], [X(faceP(BLK_B)), BLK_B]];
+      rigid(ctx, "blk|" + sg, bp, 6, sg * dl, 0, (g) => { const bb = polyB(bp, true); fil(g, bb, "rgba(18,40,68,0.96)", 1); hatch(g, bb, pats(g).steel, 0, 0, 0.7); stk(g, bb, COL.steel, 1.8, 0.5, 0.95); });
+    }
+    // Tellerfederpakete (verformen sich -> live, beide Seiten in einem Pfad)
+    const c0 = BLK_O + dl + 6, c1 = HW - WALL - 6, pitch = (c1 - c0) / NDISC, th = 5.4, hc = Math.max(0.6, pitch - th);
+    const discs = (c) => {
+      for (const sg of [-1, 1]) { const X = (dx) => RX + sg * dx; for (const yc of SPR_Y) for (let i = 0; i < NDISC; i++) {
+        const a = c0 + i * pitch, xo = i % 2 ? a + hc : a, xi = i % 2 ? a : a + hc;
+        for (const sn of [-1, 1]) { c.moveTo(X(xo), yc + sn * SPR_RO); c.lineTo(X(xi), yc + sn * SPR_RI); c.lineTo(X(xi + th), yc + sn * SPR_RI); c.lineTo(X(xo + th), yc + sn * SPR_RO); c.closePath(); }
+      } }
+    };
+    const ends = (c) => { for (const sg of [-1, 1]) for (const yc of SPR_Y) for (const xe of [c0 - 3, c1 + 3]) c.rect(RX + sg * xe - 2.5, yc - SPR_RO - 4, 5, SPR_RO * 2 + 8); };
+    fil(ctx, ends, "#1a3350", 1); stk(ctx, ends, COL.steel, 1.2, 0, 0.9);
+    stk(ctx, discs, springCol, 1.2, 1.2 + 1.0 * load, 0.8);
+    fil(ctx, discs, springCol, 0.9);
+    stk(ctx, discs, "#06101f", 1.1, 0, 0.9);
+    // Nadelrollen im Käfig (laufen mit halber Keilgeschwindigkeit)
+    const y0r = Math.max(yWt, BLK_T) + 6, y1r = Math.min(yWb, BLK_B) - 6, cage = WY0 + 6 - s.h / 2;
+    stk(ctx, (c) => { for (const sg of [-1, 1]) for (let k = -4; k < 14; k++) { const y = cage + k * 14; if (y < y0r || y > y1r) continue; const x = RX + sg * (face(y) - 5); c.moveTo(x + 4, y); c.arc(x, y, 4, 0, TAU); } }, COL.steel, 1.4, 0, 0.9);
+    // Fangkeile (starr; Bezugslage h = 0, Stegabstand 20)
+    for (const sg of [-1, 1]) {
+      const X = (dx) => RX + sg * dx, yb = WY0 + WH;
+      const wp = [[X(20), WY0], [X(20 + WT0), WY0], [X(20 + WT0 + WH * TANA), yb], [X(20), yb]];
+      rigid(ctx, "wedge|" + sg, wp, 8, sg * (dxIn - 20), -s.h, (g) => {
+        const wb = polyB(wp, true);
+        fil(g, wb, "#3a2a10", 0.95); hatch(g, wb, pats(g).amber, 0, 0, 0.75); stk(g, wb, COL.amber, 2.2, 1, 1);
+        fil(g, (c) => c.arc(X(42), yb - 11, 5, 0, TAU), "#0a1426", 1); stk(g, (c) => c.arc(X(42), yb - 11, 5, 0, TAU), COL.amber, 1.5, 0, 1);
+      });
     }
   }
-  function drawProgFront(ctx, s) { // Federbolzen + Einstellmuttern (liegen über der Gehäusewand)
+  function drawProgFront(ctx, s) { // Federbolzen + Einstellmuttern (starr mit dem Druckstück)
     const dl = s.delta;
     for (const sg of [-1, 1]) {
-      const X = (dx) => RX + sg * dx;
-      for (const yc of SPR_Y) {
-        stk(ctx, (c) => { c.moveTo(X(BLK_O + dl - 10), yc); c.lineTo(X(HW + 17 + dl), yc); }, COL.steel, 4, 0.3, 0.9, { cap: "butt" });
-        const xa = Math.min(X(HW + dl), X(HW + 12 + dl));
-        fil(ctx, (c) => c.rect(xa, yc - 12, 12, 24), "#1a3350", 1);
-        stk(ctx, (c) => { c.rect(xa, yc - 12, 12, 24); c.moveTo(xa, yc - 4); c.lineTo(xa + 12, yc - 4); c.moveTo(xa, yc + 4); c.lineTo(xa + 12, yc + 4); }, COL.steel, 1.4, 0.3, 0.95);
-        // Mittellinie der Federachse
-        stk(ctx, (c) => { c.moveTo(X(BLK_O - 20), yc); c.lineTo(X(HW + 40), yc); }, COL.cyan, 1, 0, 0.35, { dash: [14, 4, 3, 4], cap: "butt" });
-      }
+      const X = (dx) => RX + sg * dx, yc = SPR_Y[0];
+      const pts = [[X(BLK_O - 10), yc - 14], [X(HW + 17), yc + 14]];
+      rigid(ctx, "bolt|" + sg, pts, 6, sg * dl, 0, (g) => {
+        stk(g, (c) => { c.moveTo(X(BLK_O - 10), yc); c.lineTo(X(HW + 17), yc); }, COL.steel, 4, 0.3, 0.9, { cap: "butt" });
+        const xa = Math.min(X(HW), X(HW + 12));
+        fil(g, (c) => c.rect(xa, yc - 12, 12, 24), "#1a3350", 1);
+        stk(g, (c) => { c.rect(xa, yc - 12, 12, 24); c.moveTo(xa, yc - 4); c.lineTo(xa + 12, yc - 4); c.moveTo(xa, yc + 4); c.lineTo(xa + 12, yc + 4); }, COL.steel, 1.4, 0.3, 0.95);
+      });
     }
   }
 
@@ -428,26 +450,30 @@
     return { trk, yR, xR, phi: -s.h / RR };
   }
   function drawInst(ctx, P, s) {
-    const G = instGeom(s), ox = s.ox;
-    const yT = CY - 118, yB = CY + 112;
-    const X = (dx) => RX - dx + ox;
-    // schräge Laufbahn (Keilblock)
-    const blk = polyB([[X(G.trk(yT)), yT], [X(HW - WALL), yT], [X(HW - WALL), yB], [X(G.trk(yB)), yB]], true);
-    fil(ctx, blk, "rgba(18,40,68,0.96)", 1); hatch(ctx, blk, P.steel, ox, 0, 0.7); stk(ctx, blk, COL.steel, 1.8, 0.5, 0.95);
-    // Gegenbacke (fest, gezahnt) + Träger
-    const jx = RX + BH + GL + ox, jT = CY - 100, jB = CY + 100;
-    const hold = polyB([[jx + 30, CY - 118], [RX + HW - WALL + ox, CY - 118], [RX + HW - WALL + ox, CY + 112], [jx + 30, CY + 112]], true);
-    fil(ctx, hold, "rgba(18,40,68,0.96)", 1); hatch(ctx, hold, P.steel, ox, 0, 0.7); stk(ctx, hold, COL.steel, 1.8, 0.5, 0.95);
-    const jaw = (c) => { c.moveTo(jx + 30, jT); c.lineTo(jx + 3, jT); for (let y = jT; y < jB - 1; y += 10) { c.lineTo(jx, y + 5); c.lineTo(jx + 3, y + 10); } c.lineTo(jx + 30, jB); c.closePath(); };
-    fil(ctx, jaw, "#3a2a10", 0.95); hatch(ctx, jaw, P.amber, ox, 0, 0.7); stk(ctx, jaw, COL.amber, 2, 1, 1);
-    // Klemmrolle (gerändelt)
-    const { xR, yR, phi } = G;
-    fil(ctx, (c) => c.arc(xR, yR, RR, 0, TAU), "#3a2a10", 0.95);
-    stk(ctx, (c) => c.arc(xR, yR, RR, 0, TAU), COL.amber, 2.4, 1, 1);
-    stk(ctx, (c) => { for (let i = 0; i < 30; i++) { const a = phi + (i * TAU) / 30; c.moveTo(xR + Math.cos(a) * (RR - 6), yR + Math.sin(a) * (RR - 6)); c.lineTo(xR + Math.cos(a + 0.08) * (RR - 1), yR + Math.sin(a + 0.08) * (RR - 1)); } }, COL.amber, 1.3, 0, 0.8);
-    stk(ctx, (c) => { for (let i = 0; i < 3; i++) { const a = phi + (i * TAU) / 3; c.moveTo(xR + Math.cos(a) * 8, yR + Math.sin(a) * 8); c.lineTo(xR + Math.cos(a) * (RR - 9), yR + Math.sin(a) * (RR - 9)); } }, COL.amber, 2, 0.4, 0.8);
-    fil(ctx, (c) => c.arc(xR, yR, 7, 0, TAU), "#0a1426", 1);
-    stk(ctx, (c) => c.arc(xR, yR, 7, 0, TAU), COL.amber, 1.6, 0, 1);
+    const G = instGeom(s);
+    // Laufbahn (Keilblock), Backenträger und gezahnte Gegenbacke: starr im schwimmenden Gehäuse (Verschiebung ox)
+    const yT = CY - 118, yB = CY + 112, X = (dx) => RX - dx, jx = RX + BH + GL, jT = CY - 100, jB = CY + 100;
+    rigid(ctx, "instBody", [[X(HW - WALL), yT], [RX + HW - WALL, yB]], 8, s.ox, 0, (g) => {
+      const PP = pats(g);
+      const blk = polyB([[X(G.trk(yT)), yT], [X(HW - WALL), yT], [X(HW - WALL), yB], [X(G.trk(yB)), yB]], true);
+      fil(g, blk, "rgba(18,40,68,0.96)", 1); hatch(g, blk, PP.steel, 0, 0, 0.7); stk(g, blk, COL.steel, 1.8, 0.5, 0.95);
+      const hold = polyB([[jx + 30, CY - 118], [RX + HW - WALL, CY - 118], [RX + HW - WALL, CY + 112], [jx + 30, CY + 112]], true);
+      fil(g, hold, "rgba(18,40,68,0.96)", 1); hatch(g, hold, PP.steel, 0, 0, 0.7); stk(g, hold, COL.steel, 1.8, 0.5, 0.95);
+      const jaw = (c) => { c.moveTo(jx + 30, jT); c.lineTo(jx + 3, jT); for (let y = jT; y < jB - 1; y += 10) { c.lineTo(jx, y + 5); c.lineTo(jx + 3, y + 10); } c.lineTo(jx + 30, jB); c.closePath(); };
+      fil(g, jaw, "#3a2a10", 0.95); hatch(g, jaw, PP.amber, 0, 0, 0.7); stk(g, jaw, COL.amber, 2, 1, 1);
+    });
+    // Klemmrolle (gerändelt) – starres Sprite, gedreht
+    const { xR, yR, phi } = G, R0 = RR + 10;
+    ctx.save(); ctx.translate(xR, yR); ctx.rotate(phi);
+    layer(ctx, "roller", -R0, -R0, 2 * R0, 2 * R0, 1, (g) => {
+      fil(g, (c) => c.arc(0, 0, RR, 0, TAU), "#3a2a10", 0.95);
+      stk(g, (c) => c.arc(0, 0, RR, 0, TAU), COL.amber, 2.4, 1, 1);
+      stk(g, (c) => { for (let i = 0; i < 30; i++) { const a = (i * TAU) / 30; c.moveTo(Math.cos(a) * (RR - 6), Math.sin(a) * (RR - 6)); c.lineTo(Math.cos(a + 0.08) * (RR - 1), Math.sin(a + 0.08) * (RR - 1)); } }, COL.amber, 1.3, 0, 0.8);
+      stk(g, (c) => { for (let i = 0; i < 3; i++) { const a = (i * TAU) / 3; c.moveTo(Math.cos(a) * 8, Math.sin(a) * 8); c.lineTo(Math.cos(a) * (RR - 9), Math.sin(a) * (RR - 9)); } }, COL.amber, 2, 0.4, 0.8);
+      fil(g, (c) => c.arc(0, 0, 7, 0, TAU), "#0a1426", 1);
+      stk(g, (c) => c.arc(0, 0, 7, 0, TAU), COL.amber, 1.6, 0, 1);
+    });
+    ctx.restore();
   }
 
   // Wärmeglühen an der Reibstelle (additiv)
@@ -489,12 +515,12 @@
     if (s.inst) drawInst(ctx, P, s); else drawProg(ctx, P, s);
     drawShell(ctx, P, s);
     if (!s.inst) drawProgFront(ctx, s);
-    drawLinkage(ctx, P, s);
   }
   function drawMech(ctx, P, s) {
     const key = mechKey(s);
-    if (key) layer(ctx, key, PIV[0] - 40, HT - 12, ROPE_X + 60 - (PIV[0] - 40), PIV[1] + 40 - (HT - 12), 1, (g) => drawMechRaw(g, pats(g), s));
+    if (key) layer(ctx, key, PIV[0] - 30, HT - 12, RX + HW + 50 - (PIV[0] - 30), PIV[1] + 22 - (HT - 12), 1, (g) => drawMechRaw(g, pats(g), s));
     else drawMechRaw(ctx, P, s);
+    drawLinkage(ctx, P, s);
   }
 
   // ---------- Gestänge, Auslösehebel, Begrenzerseil ----------
@@ -504,32 +530,34 @@
     // Rückstellfeder (Druckfeder zwischen Gehäuse und Hebel)
     const pS = leverPt(s, 400);
     stk(ctx, springB(pS[0], HB + 2, pS[0], pS[1] - 9, 6, 8), COL.steel, 1.8, 0.4, 0.8);
-    // Hubtraverse (vor dem Steg)
-    fil(ctx, (c) => rr(c, RX - 64, yTr, 128, TR_H, 3), "#152c4a", 1);
-    stk(ctx, (c) => rr(c, RX - 64, yTr, 128, TR_H, 3), COL.steel, 1.8, 0.5, 1);
+    // Hubtraverse mit Langloch-Laschen (starr, hebt sich um L)
     const slots = s.inst ? [RX - 40] : [RX - 45, RX + 45];
-    for (const xs of slots) {
-      fil(ctx, (c) => rr(c, xs - 8, yTr - SLOT - 5, 16, SLOT + 7, 3), "#152c4a", 1);
-      stk(ctx, (c) => rr(c, xs - 8, yTr - SLOT - 5, 16, SLOT + 7, 3), COL.steel, 1.5, 0.3, 1);
-      fil(ctx, (c) => rr(c, xs - 2.5, yTr - SLOT - 1, 5, SLOT, 2.5), "#050d1c", 1);
-    }
+    rigid(ctx, "trav|" + s.inst, [[RX - 64, TR_Y0 - SLOT - 5], [RX + 64, TR_Y0 + TR_H]], 8, 0, -s.L, (g) => {
+      fil(g, (c) => rr(c, RX - 64, TR_Y0, 128, TR_H, 3), "#152c4a", 1);
+      stk(g, (c) => rr(c, RX - 64, TR_Y0, 128, TR_H, 3), COL.steel, 1.8, 0.5, 1);
+      for (const xs of slots) {
+        fil(g, (c) => rr(c, xs - 8, TR_Y0 - SLOT - 5, 16, SLOT + 7, 3), "#152c4a", 1);
+        stk(g, (c) => rr(c, xs - 8, TR_Y0 - SLOT - 5, 16, SLOT + 7, 3), COL.steel, 1.5, 0.3, 1);
+        fil(g, (c) => rr(c, xs - 2.5, TR_Y0 - SLOT - 1, 5, SLOT, 2.5), "#050d1c", 1);
+      }
+    });
     // Zugstangen (Keil -> Langloch der Traverse)
     const rods = [];
     if (!s.inst) { const G = progGeom(s); for (const sg of [-1, 1]) rods.push([RX + sg * (G.dxIn + 22), G.yWb - 11, RX + sg * 45, G.yWb - 11 + ROD_P]); }
     else { const G = instGeom(s); rods.push([G.xR, G.yR, RX - 40, G.yR + ROD_I]); }
-    for (const r of rods) {
-      stk(ctx, (c) => { c.moveTo(r[0], r[1]); c.lineTo(r[2], r[3]); }, COL.steel, 4.5, 0.5, 1);
-      fil(ctx, (c) => c.arc(r[2], r[3], 4, 0, TAU), COL.white, 0.95);
-    }
-    // Auslösehebel
-    const a0 = leverPt(s, -24), a1 = leverPt(s, ROPE_R + 26), nx = Math.sin(s.theta) * 9, ny = Math.cos(s.theta) * 9;
-    const lev = polyB([[a0[0] + nx, a0[1] + ny], [a1[0] + nx, a1[1] + ny], [a1[0] - nx, a1[1] - ny], [a0[0] - nx, a0[1] - ny]], true);
-    fil(ctx, lev, "#132a48", 1);
-    stk(ctx, lev, s.phase === "trip" ? COL.amber : COL.steel, 2, 0.9, 1);
-    const pPin = leverPt(s, PIN_R), pEnd = leverPt(s, ROPE_R);
-    stk(ctx, (c) => { c.moveTo(RX, yTr + TR_H - 2); c.lineTo(pPin[0], pPin[1]); }, COL.steel, 5, 0.3, 1);
-    for (const q of [PIV, pPin, pEnd]) { fil(ctx, (c) => c.arc(q[0], q[1], 5.5, 0, TAU), "#050d1c", 1); stk(ctx, (c) => c.arc(q[0], q[1], 5.5, 0, TAU), COL.white, 1.5, 0, 0.9); }
-    stk(ctx, (c) => c.arc(PIV[0], PIV[1], 13, 0, TAU), COL.steel, 1.6, 0.3, 0.9);
+    const pPin = leverPt(s, PIN_R);
+    stk(ctx, (c) => { for (const r of rods) { c.moveTo(r[0], r[1]); c.lineTo(r[2], r[3]); } c.moveTo(RX, yTr + TR_H - 2); c.lineTo(pPin[0], pPin[1]); }, COL.steel, 4.5, 0.5, 1);
+    fil(ctx, (c) => { for (const r of rods) { c.moveTo(r[2] + 4, r[3]); c.arc(r[2], r[3], 4, 0, TAU); } }, COL.white, 0.95);
+    // Auslösehebel (starr, dreht um den Lagerpunkt)
+    const lcol = s.phase === "trip" ? COL.amber : COL.steel;
+    ctx.save(); ctx.translate(PIV[0], PIV[1]); ctx.rotate(-s.theta);
+    layer(ctx, "lever|" + lcol, -40, -26, ROPE_R + 80, 52, 1, (g) => {
+      const lev = (c) => c.rect(-24, -9, ROPE_R + 50, 18);
+      fil(g, lev, "#132a48", 1); stk(g, lev, lcol, 2, 0.9, 1);
+      for (const r of [0, PIN_R, ROPE_R]) { fil(g, (c) => c.arc(r, 0, 5.5, 0, TAU), "#050d1c", 1); stk(g, (c) => c.arc(r, 0, 5.5, 0, TAU), COL.white, 1.5, 0, 0.9); }
+      stk(g, (c) => c.arc(0, 0, 13, 0, TAU), COL.steel, 1.6, 0.3, 0.9);
+    });
+    ctx.restore();
   }
   function drawRope(ctx, s) {
     const x = ROPE_X, y0 = 30, y1 = 1050, off = s.ropeRise;
@@ -541,9 +569,12 @@
     stk(ctx, (c) => { for (let y = y0 + 9 - ph; y < y1; y += 9) { c.moveTo(x - 5, y + 3); c.lineTo(x + 5, y - 3); } }, cgrad(ctx, "ropeL", () => vGrad(ctx, COL.rope, 0.75, y0, y1)), 1.3, 0, 1, { cap: "butt" });
     // Seilklemme am Hebelende
     const pE = leverPt(s, ROPE_R), ye = pE[1];
-    fil(ctx, (c) => rr(c, x - 15, ye - 28, 30, 56, 4), "#132a48", 1);
-    stk(ctx, (c) => rr(c, x - 15, ye - 28, 30, 56, 4), s.phase === "trip" ? COL.amber : COL.steel, 1.8, 0.6, 1);
-    stk(ctx, (c) => { c.moveTo(x - 19, ye - 15); c.lineTo(x + 19, ye - 15); c.moveTo(x - 19, ye + 15); c.lineTo(x + 19, ye + 15); }, COL.white, 2.5, 0.3, 0.85, { cap: "butt" });
+    const ccol = s.phase === "trip" ? COL.amber : COL.steel;
+    rigid(ctx, "clamp|" + ccol, [[x - 19, -28], [x + 19, 28]], 8, 0, ye, (g) => {
+      fil(g, (c) => rr(c, x - 15, -28, 30, 56, 4), "#132a48", 1);
+      stk(g, (c) => rr(c, x - 15, -28, 30, 56, 4), ccol, 1.8, 0.6, 1);
+      stk(g, (c) => { c.moveTo(x - 19, -15); c.lineTo(x + 19, -15); c.moveTo(x - 19, 15); c.lineTo(x + 19, 15); }, COL.white, 2.5, 0.3, 0.85, { cap: "butt" });
+    });
     if (s.phase === "trip" || (s.contact && s.t - s.tm.tCon < 0.3)) {
       const a = s.phase === "trip" ? 1 : 1 - (s.t - s.tm.tCon) / 0.3;
       for (let i = 0; i < 3; i++) { const yy = ye - 70 - i * 26 - ((s.t * 60) % 26); arrowHead(ctx, x + 22, yy, -Math.PI / 2, 12, COL.amber, a * (0.9 - i * 0.25)); }
@@ -553,20 +584,24 @@
   // ---------- Maßband: Fangbeginn -> Bremsweg ----------
   function drawTape(ctx, L, s) {
     if (!s.contact || s.Dp < 1) return;
-    const yM = HT - s.Dp, tx = RX + BH + 5, tw = 20;
-    fil(ctx, (c) => c.rect(tx, yM, tw, HT - yM), "rgba(40,28,8,0.85)", 1);
-    stk(ctx, (c) => c.rect(tx, yM, tw, HT - yM), COL.amber, 1.2, 0.3, 0.8);
-    const lab = s.Dp < 55 ? 2 : 10; // Beschriftung alle 1 cm oder 5 cm
-    stk(ctx, (c) => { for (let j = 0; ; j++) { const y = yM + j * 7.5; if (y > HT - 0.5) break; const l = j % 10 === 0 ? 17 : j % 2 === 0 ? 11 : 6; c.moveTo(tx, y); c.lineTo(tx + l, y); } }, COL.amber, 1.2, 0, 0.95, { cap: "butt" });
-    for (let j = lab; ; j += lab) { const y = yM + j * 7.5; if (y > HT - 8) break; stxt(L, ctx, `${j / 2} cm`, tx + tw + 5, y + 5, { size: 14, weight: 700, font: L.FONT.mono, color: COL.amber, alpha: 0.9 }); }
-    // Fangbeginn-Markierung quer über den Steg
-    stk(ctx, (c) => { c.moveTo(RX - BH - 26, yM); c.lineTo(tx + tw + 2, yM); }, COL.amber, 2, 1, 1, { cap: "butt" });
-    stxt(L, ctx, "Fangbeginn", RX - BH - 32, yM + 6, { size: 18, weight: 600, color: COL.amber, align: "right" });
-    // Maßlinie
+    const yM = HT - s.Dp, tx = RX + BH + 5, tw = 20, lab = s.inst ? 2 : 10;
+    // Band mit Teilung + Fangbeginn-Marke: ein hohes Sprite (Nullpunkt oben), davon wird der sichtbare Teil gezeichnet
+    const SX = RX - 180, SW = 300, TOP = 14, LEN = 420;
+    const cv = sprite("tape|" + s.inst, SW, TOP + LEN, (g) => {
+      g.translate(-SX, TOP);
+      fil(g, (c) => c.rect(tx, 0, tw, LEN), "rgba(40,28,8,0.85)", 1);
+      stk(g, (c) => { c.moveTo(tx, LEN); c.lineTo(tx, 0); c.lineTo(tx + tw, 0); c.lineTo(tx + tw, LEN); }, COL.amber, 1.2, 0.3, 0.8);
+      stk(g, (c) => { for (let j = 0; j * 7.5 < LEN; j++) { const y = j * 7.5, l = j % 10 === 0 ? 17 : j % 2 === 0 ? 11 : 6; c.moveTo(tx, y); c.lineTo(tx + l, y); } }, COL.amber, 1.2, 0, 0.95, { cap: "butt" });
+      for (let j = lab; j * 7.5 < LEN; j += lab) txt(L, g, `${j / 2} cm`, tx + tw + 5, j * 7.5 + 5, { size: 14, weight: 700, font: L.FONT.mono, color: COL.amber, alpha: 0.9 });
+      stk(g, (c) => { c.moveTo(RX - BH - 26, 0); c.lineTo(tx + tw + 2, 0); }, COL.amber, 2, 1, 1, { cap: "butt" });
+      txt(L, g, "Fangbeginn", RX - BH - 32, 6, { size: 18, weight: 600, color: COL.amber, align: "right" });
+    });
+    const hVis = Math.min(LEN, s.Dp) + TOP;
+    if (cv) { ctx.save(); ctx.globalAlpha = GA; ctx.drawImage(cv, 0, 0, SW, hVis, SX, yM - TOP, SW, hVis); ctx.restore(); }
+    // Maßlinie mit Pfeilen + Wert
     const xd = RX + 104;
-    stk(ctx, (c) => { c.moveTo(tx + tw + 2, yM); c.lineTo(xd + 8, yM); c.moveTo(RX + HW * 0.3, HT); c.lineTo(xd + 8, HT); }, COL.amber, 1, 0, 0.55, { cap: "butt" });
-    stk(ctx, (c) => { c.moveTo(xd, yM + 2); c.lineTo(xd, HT - 2); }, COL.amber, 1.6, 0.6, 1);
-    if (s.Dp > 18) { arrowHead(ctx, xd, yM, -Math.PI / 2, 10, COL.amber, 1); arrowHead(ctx, xd, HT, Math.PI / 2, 10, COL.amber, 1); }
+    stk(ctx, (c) => { c.moveTo(tx + tw + 2, yM); c.lineTo(xd + 8, yM); c.moveTo(RX + HW * 0.3, HT); c.lineTo(xd + 8, HT); c.moveTo(xd, yM + 2); c.lineTo(xd, HT - 2); }, COL.amber, 1.2, 0.6, 0.85, { cap: "butt" });
+    if (s.Dp > 18) fil(ctx, (c) => { for (const [y, sg] of [[yM, 1], [HT, -1]]) { c.moveTo(xd, y); c.lineTo(xd - 5, y + sg * 10); c.lineTo(xd + 5, y + sg * 10); c.closePath(); } }, COL.amber, 1);
     const yl = s.Dp > 96 ? (yM + HT) / 2 : Math.min(yM, HT - 48) - 24;
     stxt(L, ctx, "BREMSWEG", xd + 16, yl - 12, { size: 14, weight: 700, font: L.FONT.mono, color: COL.muted, letterSpacing: 2 });
     txt(L, ctx, `${Math.round(s.xmm)} mm`, xd + 14, yl + 22, { size: 32, weight: 700, font: L.FONT.mono, color: COL.amber });
@@ -578,7 +613,7 @@
     const tm = s.tm, pr = s.pr, t = s.t, tb = Math.max(0.1, tm.tStop - tm.tCon);
     const N = s.inst ? 190 : 300;
     const G = s.inst ? instGeom(s) : progGeom(s);
-    const B = [[], [], [], [], [], [], [], []]; // 4 Helligkeitsstufen × 2 Farben
+    const B = [[], [], [], []]; // 2 Helligkeitsstufen × 2 Farben
     for (let i = 0; i < N; i++) {
       const born = tm.tCon + (tb + 0.04) * h01(i * 3.17 + 0.5);
       const life = (s.inst ? 0.32 : 0.42) + 0.45 * h01(i * 1.9 + 2), age = t - born;
@@ -596,12 +631,12 @@
       const a = (1 - age / life) * (0.6 + 0.4 * pw);
       if (a < 0.03) continue;
       const k = 0.03 + 0.035 * h01(i * 8.3);
-      const hot = age < life * 0.4 || i % 3 === 0 ? 1 : 0, lv = Math.min(3, Math.floor(a * 4));
+      const hot = age < life * 0.4 || i % 3 === 0 ? 1 : 0, lv = a > 0.5 ? 1 : 0;
       B[lv * 2 + hot].push(x, y, x - vx * k, y - vy * k);
     }
     ctx.save(); ctx.globalCompositeOperation = "lighter"; ctx.lineCap = "round";
-    for (let lv = 0; lv < 4; lv++) {
-      const al = GA * (lv + 0.6) / 4;
+    for (let lv = 0; lv < 2; lv++) {
+      const al = GA * (lv ? 0.9 : 0.45);
       for (let hot = 0; hot < 2; hot++) {
         const q = B[lv * 2 + hot]; if (!q.length) continue;
         ctx.beginPath(); for (let j = 0; j < q.length; j += 4) { ctx.moveTo(q[j], q[j + 1]); ctx.lineTo(q[j + 2], q[j + 3]); }
@@ -613,16 +648,19 @@
     if (s.phase === "brake") { ctx.save(); ctx.globalCompositeOperation = "lighter"; dot(ctx, RX, HT - 4, 70, COL.amber, 0.45 * s.power); dot(ctx, RX, HT - 2, 22, COL.hot, 0.8 * s.power); ctx.restore(); }
     // Glut nach dem Stillstand: einzelne glühende Partikel sinken langsam
     if (t > tm.tStop - 0.2) {
-      ctx.save(); ctx.globalCompositeOperation = "lighter";
-      for (let i = 0; i < 12; i++) {
-        const born = tm.tStop - 0.2 + i * 0.22, life = 1.9 + 0.6 * h01(i * 3.3), age = t - born;
-        const ageM = ((age % (life + 0.9)) + (life + 0.9)) % (life + 0.9); if (age < 0 || ageM > life) continue;
+      const E = [];
+      for (let i = 0; i < 7; i++) {
+        const born = tm.tStop - 0.2 + i * 0.3, life = 1.9 + 0.6 * h01(i * 3.3), age = t - born, per = life + 0.9;
+        const ageM = ((age % per) + per) % per; if (age < 0 || ageM > life) continue;
         const side = i % 2 ? 1 : -1;
-        const x = RX + side * (BH + 6 + 28 * h01(i * 2.1)) + Math.sin(ageM * 3 + i) * 5, y = HT - 8 - 40 * h01(i * 1.7) + ageM * ageM * 38;
-        const a = (1 - ageM / life) * 0.8 * (0.4 + 0.6 * s.heat);
-        dot(ctx, x, y, 9, COL.amber, a); fil(ctx, (c) => c.arc(x, y, 1.6, 0, TAU), COL.hot, a);
+        E.push(RX + side * (BH + 6 + 28 * h01(i * 2.1)) + Math.sin(ageM * 3 + i) * 5, HT - 8 - 40 * h01(i * 1.7) + ageM * ageM * 38, (1 - ageM / life) * 0.8 * (0.4 + 0.6 * s.heat));
       }
-      ctx.restore();
+      if (E.length) {
+        ctx.save(); ctx.globalCompositeOperation = "lighter";
+        for (let j = 0; j < E.length; j += 3) dot(ctx, E[j], E[j + 1], 9, COL.amber, E[j + 2]);
+        fil(ctx, (c) => { for (let j = 0; j < E.length; j += 3) { c.moveTo(E[j] + 1.6, E[j + 1]); c.arc(E[j], E[j + 1], 1.6, 0, TAU); } }, COL.hot, 0.8 * (0.4 + 0.6 * s.heat));
+        ctx.restore();
+      }
     }
   }
 
@@ -764,17 +802,22 @@
     };
     const chev = (ctx) => { // laufende Pfeile = Bewegung
       const tx = TXS[0] + TWS[0] - 16;
-      for (let k = 0; k < 3; k++) { const f = ((k / 3 + t * clamp(s.speedPx * 0.006, 0.3, 1.6)) % 1); arrowHead(ctx, tx, tyT + 44 + f * 34, Math.PI / 2, 10, s.phase === "normal" ? COL.cyan : s.phase === "brake" ? COL.amber : COL.red, 0.9 * Math.sin(Math.PI * f)); }
+      const col = s.phase === "normal" ? COL.cyan : s.phase === "brake" ? COL.amber : COL.red, rate = clamp(s.speedPx * 0.006, 0.3, 1.6);
+      for (const mid of [true, false]) fil(ctx, (c) => { for (let k = 0; k < 3; k++) { const f = (k / 3 + t * rate) % 1; if ((f > 0.2 && f < 0.8) !== mid) continue; const y = tyT + 44 + f * 34; c.moveTo(tx, y + 5); c.lineTo(tx - 5, y - 5); c.lineTo(tx + 5, y - 5); c.closePath(); } }, col, mid ? 0.9 : 0.35);
     };
     const live = (ctx, withAnim) => {
       // Status + Zeitlupe
       const [st, sc] = statusOf(s);
       const sw = meas(L, ctx, st, { size: 14, weight: 700, font: L.FONT.mono, letterSpacing: 2 }) + 34;
-      const pulse = s.phase === "stop" || s.phase === "normal" ? 0.75 : 0.55 + 0.45 * Math.abs(Math.sin(t * 5));
-      fil(ctx, (c) => rr(c, x0 + 24, y0 + 104, sw, 26, 13), rgba(sc, 0.12), 1);
-      stk(ctx, (c) => rr(c, x0 + 24, y0 + 104, sw, 26, 13), sc, 1.4, 0.6, pulse);
-      fil(ctx, (c) => c.arc(x0 + 38, y0 + 117, 4, 0, TAU), sc, pulse);
-      stxt(L, ctx, st, x0 + 50, y0 + 122, { size: 14, weight: 700, font: L.FONT.mono, color: sc, letterSpacing: 2 });
+      const pulse = s.phase === "stop" || s.phase === "normal" ? 1 : 0.6 + 0.4 * Math.abs(Math.sin(t * 5));
+      const px0 = x0 + 24, py0 = y0 + 104;
+      rigid(ctx, "pill|" + st, [[px0, py0], [px0 + sw, py0 + 26]], 8, 0, 0, (g) => {
+        fil(g, (c) => rr(c, px0, py0, sw, 26, 13), rgba(sc, 0.12), 1);
+        stk(g, (c) => rr(c, px0, py0, sw, 26, 13), sc, 1.4, 0.6, 0.9);
+        fil(g, (c) => c.arc(px0 + 14, py0 + 13, 4, 0, TAU), sc, 1);
+        txt(L, g, st, px0 + 26, py0 + 18, { size: 14, weight: 700, font: L.FONT.mono, color: sc, letterSpacing: 2 });
+      });
+      if (pulse < 1) fil(ctx, (c) => c.arc(px0 + 14, py0 + 13, 5, 0, TAU), "#07142a", 1 - pulse);
       if (s.eng) stxt(L, ctx, `ZEITLUPE ×${Math.max(2, Math.round(s.tm.k))} · BEISPIELWERTE`, x0 + w - 24, y0 + 122, { size: 13, weight: 700, font: L.FONT.mono, color: COL.muted, letterSpacing: 1.2, align: "right" });
       else stxt(L, ctx, "BEISPIELWERTE", x0 + w - 24, y0 + 122, { size: 13, weight: 700, font: L.FONT.mono, color: COL.muted, letterSpacing: 1.2, align: "right" });
       // Kacheln
@@ -828,7 +871,7 @@
   }
 
   // ---------- Draufsicht T-Profil + Einbaulage ----------
-  function drawPanel2(ctx, L, s) {
+  function drawPanel2(ctx, L, s, ST, LV) {
     const t = s.t, ap = smooth(inv(0.3, 0.3 + Math.min(0.7, 0.09 * s.d), t)); if (ap <= 0.01) return;
     const sG = GA; GA = sG * ap;
     const x0 = PX + (1 - easeOut(ap)) * 40, y0 = P2Y, w = PW, h = P2H;
@@ -836,7 +879,7 @@
     const fx0 = x0 + 44, fx1 = fx0 + 10 * m, bx1 = fx0 + 62 * m, bh = 8 * m, fh = 44.5 * m; // Fuß, Steg
     const hx0 = fx0 + 50, hx1 = bx1 + 26, hy = 44;
     const rx1 = x0 + 330, rx2 = x0 + 520; // Einbaulage: Schienen
-    layer(ctx, "p2|" + s.inst, x0 - 14, y0 - 14, w + 28, h + 28, 1, (g) => {
+    if (ST) layer(ctx, "p2|" + s.inst, x0 - 14, y0 - 14, w + 28, h + 28, 1, (g) => {
       const P = pats(g);
       fil(g, (c) => rr(c, x0, y0, w, h, 14), "rgba(6,16,34,0.9)", 1);
       stk(g, (c) => rr(c, x0, y0, w, h, 14), COL.cyan, 1.4, 0.5, 0.55);
@@ -876,6 +919,7 @@
     const gap = 5 * (1 - Math.min(1, cf / 0.55));
     const kx0 = hx0 + 8, kx1 = hx1 - 22, fy1 = y0 + 214;
     const jb = (c) => { for (const sg of [-1, 1]) { const yin = yc + sg * (bh + gap), yout = yc + sg * 29; c.rect(kx0, Math.min(yin, yout), kx1 - kx0, Math.abs(yout - yin)); } };
+    if (ST) {
     fil(ctx, jb, "#3a2a10", 1); stk(ctx, jb, COL.amber, 1.6, 0.8, 1);
 
     if (s.contact) {
@@ -892,6 +936,8 @@
     const gb = (c) => { for (const xr of [rx1, rx2]) c.rect(xr - 9, fy1 - 4, 18, 16); };
     fil(ctx, gb, rgba(COL.amber, 0.25 + 0.4 * s.heat), 1);
     stk(ctx, gb, s.contact ? COL.amber : mix(COL.steel, COL.amber, 0.5), 1.6, 0.8, 1);
+    }
+    if (!LV) { GA = sG; return; }
     const pu = 0.5 + 0.5 * Math.sin(t * 3.2);
     stk(ctx, (c) => c.arc(rx1, fy1 + 4, 20 + 3 * pu, 0, TAU), COL.amber, 1.6, 0.8, 0.55 + 0.35 * pu);
     if (s.heat > 0.05) {
@@ -905,31 +951,63 @@
   }
 
   // ---------- Hauptfunktion ----------
+  // Standphase: alles Unbewegte als ein Sprite, darüber nur Glut, Scan, Puls
+  function holdKey(s) {
+    if (s.phase !== "stop" || s.tau < 0.3) return null;
+    const tm = s.tm, sc = clamp(s.d / 8, 0.55, 1.4);
+    const ready = Math.max(tm.tStop + 1.0, 0.3 + 6.5 * 0.17 * sc + 0.6, tm.tCon + 0.4, 1.1);
+    if (s.t < ready) return null;
+    return "hold|" + s.inst + "|" + Math.round(s.tm.k);
+  }
+  function renderScene(ctx, P, L, s, ST, LV) {
+    const t = s.t;
+    GA = smooth(inv(0, Math.min(0.55, 0.1 * s.d), t));
+    drawFX(ctx, s, t, ST, false);
+    ctx.save(); ctx.translate(s.shx, s.shy);
+    if (ST) {
+      drawHousingBack(ctx, s);
+      drawRail(ctx, P, s);
+      drawTraceBase(ctx, s);
+      drawMech(ctx, P, s);
+      drawRope(ctx, s);
+      drawTape(ctx, L, s);
+      drawDirection(ctx, L, s);
+    }
+    ctx.restore();
+    GA = 1;
+    if (ST) { drawCallouts(ctx, L, s); drawPanel1(ctx, L, s); }
+    drawPanel2(ctx, L, s, ST, false);
+    if (LV) {
+      GA = smooth(inv(0, Math.min(0.55, 0.1 * s.d), t));
+      drawScan(ctx, t);
+      ctx.save(); ctx.translate(s.shx, s.shy);
+      drawTraceHeat(ctx, s);
+      drawHeat(ctx, s);
+      drawSparks(ctx, s);
+      ctx.restore();
+      GA = 1;
+      drawPanel2(ctx, L, s, false, true);
+    }
+  }
   function render(ctx, p) {
     const L = p.L || CE.lib; if (!L) return;
     const cfg = config(p.params);
     const d = Math.max(1, num(p.d, 8)), t = clamp(num(p.t, 0), 0, d);
     const s = computeState(t, d, cfg);
-    const P = pats(ctx);
-    const intro = smooth(inv(0, Math.min(0.55, 0.1 * d), t));
-    GA = intro;
-    const SK = window.__SGSKIP || {};
-    if (!SK.fx) drawFX(ctx, s, t);
-    ctx.save(); ctx.translate(s.shx, s.shy);
-    if (!SK.back) drawHousingBack(ctx, s);
-    if (!SK.rail) drawRail(ctx, P, s);
-    if (!SK.trace) drawTrace(ctx, s);
-    if (!SK.parts) drawMech(ctx, P, s);
-    if (!SK.heat) drawHeat(ctx, s);
-    if (!SK.rope) drawRope(ctx, s);
-    if (!SK.tape) drawTape(ctx, L, s);
-    if (!SK.fx) drawDirection(ctx, L, s);
-    if (!SK.sparks) drawSparks(ctx, s);
-    ctx.restore();
+    const hk = holdKey(s);
+    if (hk) {
+      const HX = 140, HY = 16;
+      const cv = sprite(hk, 1720, 1048, (g) => { g.translate(-HX, -HY); renderScene(g, pats(g), L, s, true, false); });
+      if (cv) {
+        // nur Bereiche mit Inhalt kopieren (spart Füllrate)
+        const R = [[168, 246, 298, 648], [400, 176, 612, 730], [644, 16, 72, 160], [956, 16, 48, 160], [644, 906, 72, 158], [956, 906, 48, 158], [1004, 300, 270, 400], [1250, 186, 600, 728]];
+        ctx.save(); ctx.globalAlpha = 1;
+        for (const r of R) ctx.drawImage(cv, r[0] - HX, r[1] - HY, r[2], r[3], r[0], r[1], r[2], r[3]);
+        ctx.restore();
+      } else renderScene(ctx, pats(ctx), L, s, true, false);
+      renderScene(ctx, pats(ctx), L, s, false, true);
+    } else renderScene(ctx, pats(ctx), L, s, true, true);
     GA = 1;
-    if (!SK.tags) drawCallouts(ctx, L, s);
-    if (!SK.p1) drawPanel1(ctx, L, s);
-    if (!SK.p2) drawPanel2(ctx, L, s);
   }
 
   CE.register("safety_gear", {

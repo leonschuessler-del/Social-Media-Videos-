@@ -115,6 +115,7 @@
     if (v === false) return VERDICTS.FALSCH;
     const s = str(v).trim().toLowerCase();
     if (!s) return VERDICTS.FALSCH;
+    if (/(nicht ganz|nicht immer|nur teil|nur bedingt)/.test(s)) return VERDICTS.TEILWEISE;
     if (/(nicht|falsch|false|wrong|nein|^no$|^0$|mythos|myth|unwahr|widerlegt|busted|irrtum)/.test(s)) return VERDICTS.FALSCH;
     if (/(teil|partial|halb|bedingt|jein|mixed|half|plausib|eher|manchmal|kommt drauf)/.test(s)) return VERDICTS.TEILWEISE;
     if (/(stimmt|richtig|wahr|true|^ja$|^yes$|^1$|korrekt|bestätigt|bestaetigt|correct|right|confirmed|fakt)/.test(s)) return VERDICTS.STIMMT;
@@ -149,7 +150,16 @@
         merged.push({ w: a.w + "\u00a0" + b.w, accent: a.accent || b.accent }); i++;
       } else merged.push(a);
     }
-    return merged;
+    // „ca.“ / „etwa“ nicht vom folgenden Zahlenwert trennen
+    const out2 = [];
+    for (let i = 0; i < merged.length; i++) {
+      const a = merged[i], b = merged[i + 1];
+      if (b && /^(ca\.|ca|~|≈|je|rund|etwa)$/i.test(a.w) && /^[~≈<>+−-]?\d/.test(b.w)) {
+        if (!a.accent === !b.accent) { out2.push({ w: a.w + "\u00a0" + b.w, accent: a.accent }); i++; }
+        else out2.push({ ...a, glue: true }); // beim Umbruch mit dem Folgewort zusammenhalten
+      } else out2.push(a);
+    }
+    return out2;
   }
 
   // ---------------- Layout (gecacht, rein aus Text + Schriften) ----------------
@@ -223,14 +233,16 @@
       return ls;
     };
     const fit = (maxW) => {
-      const sizes = hasExpl ? [74, 68, 62, 56, 52, 48, 44, 40, 36] : [84, 78, 72, 66, 60, 56, 52, 48, 44, 40, 36];
+      const sizes = [84, 78, 74, 68, 62, 56, 52, 48, 44, 40, 36];
       let size = 74, lines = [];
       for (let i = 0; i < sizes.length; i++) {
         size = sizes[i];
         setFont(ctx, MYTH_FONT.weight, size, MYTH_FONT.family, 0);
         lines = wrapQ(maxW, size);
         const bh = (lines.length - 1) * size * 1.2 + size * 0.98;
-        if (lines.length <= (size <= 48 ? 5 : 4) && bh <= regH - 10) break;
+        // sehr große Schrift nur für kurze Behauptungen (mit Erklärung: max. 2 Zeilen)
+        const maxL = size > 74 ? (hasExpl ? 2 : 3) : (size <= 48 ? 5 : 4);
+        if (lines.length <= maxL && bh <= regH - 10) break;
       }
       setFont(ctx, MYTH_FONT.weight, size, MYTH_FONT.family, 0);
       if (lines.length > 1) lines = balance(lines.length, (w) => wrapQ(w, size), maxW) || lines;
@@ -281,10 +293,12 @@
   }
   function wrapTokens(ctx, tokens, maxW) {
     const lines = []; let cur = []; let curW = 0; const sp = ctx.measureText(" ").width;
-    for (const tk of tokens) {
+    for (let i = 0; i < tokens.length; i++) {
+      const tk = tokens[i];
       const w = ctx.measureText(tk.w).width;
       const nw = cur.length ? curW + sp + w : w;
-      if (cur.length && nw > maxW) { lines.push(cur); cur = [tk]; curW = w; } else { cur.push(tk); curW = nw; }
+      const need = tk.glue && tokens[i + 1] ? nw + sp + ctx.measureText(tokens[i + 1].w).width : nw;
+      if (cur.length && need > maxW) { lines.push(cur); cur = [tk]; curW = w; } else { cur.push(tk); curW = nw; }
     }
     if (cur.length) lines.push(cur);
     return lines;
@@ -383,7 +397,18 @@
     sc.setTransform(RES, 0, 0, RES, cw / 2, ch / 2); sc.fillStyle = "rgba(0,0,0,0.9)";
     sc.beginPath(); rrPath(sc, -g.w / 2, -g.h / 2, g.w, g.h, g.F * 0.16); sc.fill();
     try { sc.filter = "none"; } catch (e) { /* */ }
-    return { cv, gv, sv, cw, ch, g };
+    // Ruhezustand: vorgedrehte Sprites (Schatten+Stempel, Glow) -> pro Frame nur zwei Blits ohne Resampling
+    const rot0 = V.rot * DEG, cs = Math.abs(Math.cos(rot0)), sn = Math.abs(Math.sin(rot0));
+    const bw = cw / RES, bh = ch / RES;
+    const hw = Math.ceil(bw * cs + bh * sn) + 16, hh = Math.ceil(bw * sn + bh * cs) + 16;
+    const mk = () => { const c2 = document.createElement("canvas"); c2.width = hw; c2.height = hh; return c2; };
+    const hb = mk(), hg = mk();
+    const hbc = hb.getContext("2d");
+    hbc.save(); hbc.translate(hw / 2 + 6, hh / 2 + 8); hbc.rotate(rot0); hbc.scale(1 / RES, 1 / RES); hbc.globalAlpha = 0.55; hbc.drawImage(sv, -cw / 2, -ch / 2); hbc.restore();
+    hbc.save(); hbc.translate(hw / 2, hh / 2); hbc.rotate(rot0); hbc.scale(1 / RES, 1 / RES); hbc.globalAlpha = 0.96; hbc.drawImage(cv, -cw / 2, -ch / 2); hbc.restore();
+    const hgc = hg.getContext("2d");
+    hgc.translate(hw / 2, hh / 2); hgc.rotate(rot0); hgc.scale(1 / RES, 1 / RES); hgc.drawImage(gv, -cw / 2, -ch / 2);
+    return { cv, gv, sv, cw, ch, g, hb, hg, hw, hh };
   }
   function getStamp(mctx, V, maxW, L) {
     const ok = fontsReady();
@@ -431,9 +456,7 @@
     // Fläche
     ctx.save();
     ctx.globalAlpha = 0.9 * a;
-    const gr = ctx.createLinearGradient(0, card.y, 0, card.y + card.h);
-    gr.addColorStop(0, "rgba(9,26,52,0.88)"); gr.addColorStop(1, "rgba(5,15,32,0.9)");
-    ctx.fillStyle = gr; ctx.beginPath(); rrPath(ctx, card.x, card.y, card.w, card.h, 18); ctx.fill();
+    ctx.fillStyle = "rgba(7,20,42,0.88)"; ctx.beginPath(); rrPath(ctx, card.x, card.y, card.w, card.h, 18); ctx.fill();
     ctx.restore();
     // Rahmen (zeichnet sich ein)
     const per = 2 * (card.w + card.h);
@@ -520,8 +543,32 @@
     }
   }
 
+  /** Weicher Text-Glow der Behauptung als einmal gerendertes Sprite (statt shadowBlur pro Frame). */
+  const GLOWS = new WeakMap();
+  function mythGlow(M) {
+    let G = GLOWS.get(M);
+    if (G !== undefined) return G;
+    G = null;
+    try {
+      const pad = 28;
+      const maxW = Math.max(...M.lines.map((l) => l.w));
+      const ox = M.x - pad, oy = Math.floor(M.top - pad);
+      const w = Math.ceil(maxW + 2 * pad + 8), h = Math.ceil(M.bottom - M.top + 2 * pad + M.size * 0.1);
+      const cv = document.createElement("canvas"); cv.width = w; cv.height = h;
+      const c = cv.getContext("2d");
+      c.filter = "blur(9px)";
+      setFont(c, MYTH_FONT.weight, M.size, MYTH_FONT.family, 0);
+      c.fillStyle = "rgba(63,210,255,0.42)";
+      for (const ln of M.lines) c.fillText(ln.text, M.x - ox, ln.y - oy);
+      c.filter = "none";
+      G = { cv, ox, oy, pad, w, h };
+    } catch (e) { G = null; }
+    if (fontsReady()) GLOWS.set(M, G);
+    return G;
+  }
   function drawMyth(ctx, L, Lo, t, V, tim, T) {
     const { M } = Lo;
+    const GL = mythGlow(M);
     const typeP = seg(t, tim.tType0, tim.typeDur);
     const n = Math.floor(M.total * typeP + 1e-6);
     const impK = seg(t, tim.tImp, 0.3);
@@ -560,12 +607,23 @@
       const vis = clamp(n - ln.start, 0, ln.len);
       if (vis <= 0) { if (n <= ln.start && i > 0 && curLine === i - 1 && n === ln.start) { /* Cursor bleibt am Ende der Vorzeile */ } continue; }
       const s = vis >= ln.len ? ln.text : ln.text.slice(0, vis);
-      L.text(ctx, s, M.x, ln.y, { font: MYTH_FONT.family, weight: MYTH_FONT.weight, size: M.size, color: COL.white, alpha: textA, glow: 10, glowColor: "rgba(63,210,255,0.28)" });
+      if (GL) {
+        // Glow-Band dieser Zeile (bis zum zuletzt getippten Zeichen) aus dem Sprite
+        const top = i === 0 ? 0 : Math.round(ln.y - M.lh * 0.8 - GL.oy);
+        const bot = i === M.lines.length - 1 ? GL.h : Math.round(ln.y + M.lh * 0.2 - GL.oy);
+        const sw = Math.min(GL.w, Math.round(M.x - GL.ox + ln.px[vis] + (vis >= ln.len ? GL.pad : 8)));
+        if (sw > 0 && bot > top) {
+          ctx.save(); ctx.globalAlpha = textA;
+          ctx.drawImage(GL.cv, 0, top, sw, bot - top, GL.ox, GL.oy + top, sw, bot - top);
+          ctx.restore();
+        }
+      }
+      L.text(ctx, s, M.x, ln.y, { font: MYTH_FONT.family, weight: MYTH_FONT.weight, size: M.size, color: COL.white, alpha: textA });
       // frisch getippte Zeichen leuchten cyan
       if (typeP < 1 && vis < ln.len + 1 && n - ln.start <= ln.len) {
         const k0 = Math.max(0, vis - 3);
         const frag = ln.text.slice(k0, vis);
-        if (frag.trim()) L.text(ctx, frag, M.x + ln.px[k0], ln.y, { font: MYTH_FONT.family, weight: MYTH_FONT.weight, size: M.size, color: COL.cyan, alpha: 0.85, glow: 14, glowColor: COL.cyan });
+        if (frag.trim()) L.text(ctx, frag, M.x + ln.px[k0], ln.y, { font: MYTH_FONT.family, weight: MYTH_FONT.weight, size: M.size, color: COL.cyan, alpha: 0.9 });
       }
       cursorX = M.x + ln.px[vis]; cursorY = ln.y; curLine = i;
     }
@@ -638,11 +696,11 @@
     ctx.translate(x, y);
     // äußerer Strichring, rotierend
     ctx.rotate(T * lerp(0.25, 0.9, active));
-    gpath(ctx, (c) => c.arc(0, 0, R, 0, TAU), COL.cyan, 2, 0.6, { alpha: alpha * 0.8, dash: [18, 14] });
+    gpath(ctx, (c) => c.arc(0, 0, R, 0, TAU), COL.cyan, 2, 0, { alpha: alpha * 0.8, dash: [18, 14] });
     ctx.rotate(-T * lerp(0.25, 0.9, active) * 2.2);
     for (let i = 0; i < 3; i++) {
       const a0 = (i / 3) * TAU;
-      L.arc(ctx, 0, 0, R * 0.78, a0, a0 + 0.9, COL.cyan, 3, 0.9, { alpha: alpha * 0.7 });
+      L.arc(ctx, 0, 0, R * 0.78, a0, a0 + 0.9, COL.cyan, 3, 0.5, { alpha: alpha * 0.7 });
     }
     ctx.restore();
     // Fadenkreuz-Ticks
@@ -701,7 +759,7 @@
     const w = g ? g.w : 480, h = g ? g.h : 180;
     // Schatten (Höhe: groß + versetzt, wird beim Aufprall klein & scharf)
     const lift = dt < 0 ? sc - 1 : 0;
-    if (ST) {
+    if (ST && !(ST.hb && dt > 0.65)) {
       ctx.save();
       ctx.translate(x + 18 * lift + 6, y + 30 * lift + 8); ctx.rotate(rot); ctx.scale(lerp(1, 1.25, lift / 1.5) / RES, lerp(1, 1.25, lift / 1.5) / RES);
       ctx.globalAlpha = dt < 0 ? 0.55 * alpha * (1 - lift / 2) : 0.55;
@@ -718,6 +776,16 @@
       }
     }
     // Stempel
+    if (ST && ST.hb && dt > 0.65) {
+      // Ruhezustand: vorgedrehte Sprites pixelgenau blitten
+      const bx = Math.round(x - ST.hw / 2), by = Math.round(y - ST.hh / 2);
+      ctx.save();
+      ctx.drawImage(ST.hb, bx, by);
+      const glowA = 0.34 + 0.9 * Math.exp(-dt * 5) + 0.12 * Math.sin(t * 2.6);
+      ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = clamp(glowA, 0, 1);
+      ctx.drawImage(ST.hg, bx, by);
+      ctx.restore();
+    } else {
     ctx.save();
     ctx.translate(x, y); ctx.rotate(rot);
     if (ST) {
@@ -734,6 +802,7 @@
       paintStamp(ctx, V, gg);
     }
     ctx.restore();
+    }
 
     // Aufprall-Effekte
     if (dt >= 0 && dt < 1.0) {
@@ -800,11 +869,6 @@
   }
 
   function drawAmbient(ctx, L, Lo, t, tim, V, T, W, H) {
-    // weiches Licht hinter der Karte (nach dem Urteil in Urteilsfarbe)
-    const { stamp } = Lo;
-    const impK = seg(t, tim.tImp, 0.5);
-    const pul = 0.5 + 0.5 * Math.sin(T * 1.7);
-    L.glowDot(ctx, stamp.cx, stamp.cy, 520, impK > 0 ? rgba(V.rgb, 0.22) : "rgba(63,210,255,0.12)", (0.35 + 0.25 * pul) * (impK > 0 ? impK : 0.8) * eo(seg(t, 0, 0.6)));
     // Staub (deterministisch, driftend)
     ctx.save();
     for (let i = 0; i < 26; i++) {
@@ -846,17 +910,17 @@
     const W = p.W || 1920, H = p.H || 1080;
     const t = Math.max(0, Number(p.t) || 0);
     const T = Number(p.T) || t;
-    const S = readState(p);
-    const V = S.V;
-    const Lo = getLayout(ctx, S);
-    const tim = timing(p, S, Lo.M);
-    const ST = getStamp(ctx, V, Lo.stamp.maxW, L);
-    const impK = seg(t, tim.tImp, 0.3);
-
+    let S = null, failed = false;
     ctx.save();
     try {
-      const OFF = window.__MC_OFF || {};
-      if (!OFF.ambient) drawAmbient(ctx, L, Lo, t, tim, V, T, W, H);
+      try { ctx.letterSpacing = "0px"; } catch (e) { /* */ }
+      S = readState(p);
+      const V = S.V;
+      const Lo = getLayout(ctx, S);
+      const tim = timing(p, S, Lo.M);
+      const ST = getStamp(ctx, V, Lo.stamp.maxW, L);
+      const impK = seg(t, tim.tImp, 0.3);
+      drawAmbient(ctx, L, Lo, t, tim, V, T, W, H);
       // Aufprall: Kamera-Stoß + Wackeln (klingt schnell ab)
       const dt = t - tim.tImp;
       if (dt >= 0 && dt < 0.9) {
@@ -870,14 +934,14 @@
         ctx.scale(punch, punch);
         ctx.translate(-Lo.stamp.cx, -Lo.stamp.cy);
       }
-      if (!OFF.drawCardFrame) drawCardFrame(ctx, L, Lo, t, V, impK, T);
-      if (!OFF.comet && t > 0.7) drawComet(ctx, L, Lo, t, impK > 0 ? V.color : COL.cyan, 0.55 * seg(t, 0.7, 0.4));
-      if (!OFF.drawHeader) drawHeader(ctx, L, Lo, t, S, V, tim, T);
-      if (!OFF.drawScan) drawScan(ctx, Lo, t, tim, T, V);
-      if (!OFF.drawReticle) drawReticle(ctx, L, Lo, t, tim, T, V);
-      if (!OFF.drawMyth) drawMyth(ctx, L, Lo, t, V, tim, T);
-      if (!OFF.drawExplanation) drawExplanation(ctx, L, Lo, t, tim, S, V, T);
-      if (!OFF.drawStampLayer) drawStampLayer(ctx, L, Lo, t, tim, V, ST);
+      drawCardFrame(ctx, L, Lo, t, V, impK, T);
+      if (t > 0.7) drawComet(ctx, L, Lo, t, impK > 0 ? V.color : COL.cyan, 0.55 * seg(t, 0.7, 0.4));
+      drawHeader(ctx, L, Lo, t, S, V, tim, T);
+      drawScan(ctx, Lo, t, tim, T, V);
+      drawReticle(ctx, L, Lo, t, tim, T, V);
+      drawMyth(ctx, L, Lo, t, V, tim, T);
+      drawExplanation(ctx, L, Lo, t, tim, S, V, T);
+      drawStampLayer(ctx, L, Lo, t, tim, V, ST);
       // Karten-Tönung beim Aufprall
       const fl = 1 - seg(t - tim.tImp, 0, 0.3);
       if (t >= tim.tImp && fl > 0) {
@@ -885,10 +949,17 @@
         ctx.beginPath(); rrPath(ctx, Lo.card.x, Lo.card.y, Lo.card.w, Lo.card.h, 18); ctx.fill(); ctx.restore();
       }
     } catch (e) {
-      // niemals werfen – im Fehlerfall zumindest die Behauptung zeigen
-      try { ctx.restore(); ctx.save(); L.text(ctx, S.myth, W / 2, H / 2, { size: 56, align: "center", color: COL.white }); } catch (e2) { /* */ }
+      failed = true;
     }
     ctx.restore();
+    if (failed) {
+      // niemals werfen – im Fehlerfall zumindest die Behauptung zeigen
+      try {
+        ctx.save();
+        L.text(ctx, "„" + ((S && S.myth) || DEFAULT_MYTH) + "“", W / 2, H / 2, { size: 56, align: "center", color: COL.white, font: "Inter", weight: 800 });
+        ctx.restore();
+      } catch (e2) { /* */ }
+    }
   }
 
   CEX.register("myth_card", { ownsText: true, draw });
