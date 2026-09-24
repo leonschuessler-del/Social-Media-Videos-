@@ -73,6 +73,12 @@ export interface StyleGuide {
   brandColors: { primary: string; accent: string; background: string; text: string };
   captionStyle: "word" | "line" | "none";
   disclosureText: string; // Pflichthinweis für synthetische Inhalte
+  /**
+   * YouTube `status.containsSyntheticMedia`. Pflicht bei realistisch wirkenden KI-Inhalten (Personen, Orte, Ereignisse,
+   * die für echt gehalten werden könnten). Nicht nötig bei klar animierten/illustrativen Inhalten.
+   * Default true (fotorealistische Renders); YouTube labelt fotorealistische KI ohnehin automatisch.
+   */
+  syntheticMedia?: boolean;
 }
 
 export interface Channel {

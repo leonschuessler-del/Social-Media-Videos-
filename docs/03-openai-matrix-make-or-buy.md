@@ -28,8 +28,8 @@ Quelle: offizielle OpenAI-Dokumentation/Preisseiten und Help-Center, Stand **202
 | Sound Effects | nicht gefunden | Nein | **Nein** | – | – | Lokale Bibliothek (Freesound CC0), ElevenLabs SFX | **BLOCKED_BY_PROVIDER** → lokale Bibliothek |
 | Video Editing | keine Schnitt-API (Sora-Remix weg) | Nein | **Ja – aber lokal** | 0 $ (FFmpeg, eigener Code) | CPU-Zeit | Remotion, Creatomate | **AVAILABLE (deterministisch, lokal)** |
 | Thumbnail | Bildmodelle + programmatischer Text (sharp/SVG) | App: ja | **Ja** | wie Bild | – | – | **AVAILABLE** |
-| Upload | keine OpenAI-Funktion; **YouTube Data API v3** (offiziell) | – | **Ja** (YouTube) | YouTube-Quota (10.000 Einheiten/Tag, Upload 1.600) | API-Audit nötig, sonst Uploads privat | – | **AVAILABLE (YouTube)**, Audit **MANUAL** |
-| Analytics | OpenAI Usage/Costs API für eigene Verbräuche (Admin-Key); **YouTube Analytics API** für Video-KPIs | – | **Ja** | kostenlos | Impressions/CTR nicht per API | – | **AVAILABLE**, Impressions/CTR **MANUAL** |
+| Upload | keine OpenAI-Funktion; **YouTube Data API v3** (offiziell) | – | **Ja** (YouTube) | kostenlos; eigener Upload-Topf 100 Uploads/Tag (1 Einheit je Upload) | API-Audit nötig, sonst Uploads privat | – | **AVAILABLE (YouTube)**, Audit **MANUAL** |
+| Analytics | OpenAI Usage/Costs API für eigene Verbräuche (Admin-Key); **YouTube Analytics API** (Views, Watchtime, AVD, APV, Retention, Subs, Revenue) + **Reporting API** (Impressions, CTR) | – | **Ja** | kostenlos | Reach-Reports täglich, erster bis ~48 h Verzug; „viewed vs. swiped“ nur Studio | – | **AVAILABLE**; Shorts-Swipe-Rate **MANUAL** |
 | QA (Fakten/Visual/Policy) | GPT-6-Vision auf Frames, omni-moderation (kostenlos) | App: ja | **Ja** | Tokens (Bild-Input) | – | Claude Vision | **AVAILABLE** |
 
 ## Make-or-Buy je Komponente

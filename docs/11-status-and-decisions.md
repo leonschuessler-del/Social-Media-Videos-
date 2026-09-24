@@ -33,8 +33,8 @@ _Stand: 2026-09-24 (wird bei jedem Meilenstein aktualisiert)_
 |---|---|---|---|
 | B1 | **OpenAI-API-Key + Prepaid-Guthaben** | ChatGPT-Abo ist offiziell nicht als API-Kontingent nutzbar; ohne Key läuft nur Mock | Freigabe: API-Account, Prepaid (Vorschlag 20 $), `OPENAI_API_KEY` in `.env` |
 | B2 | **Google-Cloud-Projekt + OAuth-Client** | Upload/Analytics nur über offizielle API mit deinem Kanal-Consent | Client-ID/Secret (Env), Consent im Browser; Audit-Antrag (Wartezeit) |
-| B3 | **KI-Video-Generierung** | OpenAI: nicht verfügbar (Sora eingestellt) | Entscheidung: bildbasiert bleiben (Empfehlung für Phase 1) oder externen Anbieter freigeben (Veo/Kling/Runway – Kosten ~0,10–0,50 $/s) |
-| B4 | **Musik/SFX-Quelle** | OpenAI bietet keine; Bibliothek nötig | Entscheidung: YouTube Audio Library/CC0 (0 €) vs. Abo (Epidemic/Artlist) vs. generativ (ElevenLabs Music – externer Anbieter) |
+| B3 | **KI-Video-Generierung** | OpenAI: nicht verfügbar (Sora-API am 24.09.2026 eingestellt, kein Nachfolger) | Entscheidung: bildbasiert bleiben (Empfehlung für Phase 1, 0 € Zusatzkosten) oder Google Veo 3.1 Fast freigeben (≈ 19 $ pro Longform für 10 Hero-Clips) |
+| B4 | **Musik/SFX-Quelle** | OpenAI bietet keine Musik-/SFX-API | Empfehlung: YouTube Audio Library + CC0-SFX manuell in `assets/music` / `assets/sfx` ablegen (0 €, Content-ID-sicher). Generativ nur nach Freigabe (ElevenLabs Music ≈ 3 $/Longform). Artlist-Automation ist laut AGB verboten. |
 | B5 | **Kanalstimme** | OpenAI-Stimmen (13) sind fest; Custom Voice nur mit Einwilligung/Freischaltung | Auswahl einer Stimme (Vorschlag `onyx` oder `ash`) nach Hörprobe im Live-Slice |
 
 ## Offene Entscheidungen (technisch, reversibel – ich habe entschieden, du kannst ändern)

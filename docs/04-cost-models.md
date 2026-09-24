@@ -64,7 +64,16 @@ Hinzu kommen Fixkosten: Hosting (VPS 4 vCPU/8 GB für Worker+API ≈ 20–40 €
 
 1. **Bilder** (60–85 % der variablen Kosten) – Hebel: low-Quality für B-Roll, Reuse-Library, weniger Szenen pro Minute bei Longform (8–10 s statt 5 s).
 2. **Premium-Text-Modell** (Script/Fact-Check) – Hebel: sol statt astra, Batch-API.
-3. **Wenn extern freigegeben: KI-Video** – würde alles dominieren (Beispiel: 10 Hero-Clips à 8 s bei ~0,10–0,50 $/s = 8–40 $/Longform). Deshalb standardmäßig aus.
+3. **Wenn extern freigegeben: KI-Video** – würde alles dominieren. Beispiel Google Veo 3.1 Fast (0,12 $/s, 1080p): 10 Hero-Clips à 8 s mit Retry-Reserve ≈ 19 $ pro Longform – das Vier- bis Fünfzehnfache der übrigen Kosten. Deshalb standardmäßig aus.
+
+## Optionale Zusatzkosten nach Freigabe (DISABLED)
+
+| Zusatz | Short | Longform | 1.000 Videos (70/30) |
+|---|---|---|---|
+| Veo 3.1 Fast, 2 bzw. 10 Hero-Clips (inkl. Retry) | ≈ 3,80 $ | ≈ 19 $ | ≈ 8.360 $ |
+| ElevenLabs Music | ≈ 0,15 $ | ≈ 3 $ | ≈ 1.000 $ |
+
+Für die Lernphase ist bildbasierte Produktion wirtschaftlich klar überlegen; KI-Video lohnt sich erst, wenn Analytics belegen, dass Hero-Clips die Retention messbar steigern (Experiment über `visualStyle`/Methoden).
 
 ## Was NICHT anfällt
 

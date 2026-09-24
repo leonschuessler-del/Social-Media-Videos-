@@ -27,6 +27,8 @@ export function createContext(input: { env: Env; store: Store; registry: Provide
     "openai:image.generate": { maxPerWindow: 50, windowSeconds: 60 },
     "openai:llm": { maxPerWindow: 200, windowSeconds: 60 },
     "openai:tts": { maxPerWindow: 30, windowSeconds: 60 },
+    // YouTube Data API: eigener Upload-Topf, Default 100 Uploads/Tag (Stand 2026)
+    "youtube:videos.insert": { maxPerWindow: 100, windowSeconds: 86_400 },
   });
   const kill = { flag: false, checkedAt: 0 };
   const ctx: PipelineContext = {

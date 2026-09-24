@@ -1,5 +1,5 @@
 import type { Video } from "@content-os/core";
-import { ContentOsError } from "@content-os/core";
+import { CapacityExhaustedError, ContentOsError } from "@content-os/core";
 import type { PipelineContext } from "../context.ts";
 import { recordUsage } from "../llm.ts";
 
@@ -31,10 +31,15 @@ export async function runPublish(ctx: PipelineContext, video: Video, opts: { sch
   const thumb = video.thumbnailAssetId ? await ctx.store.assets.get(video.thumbnailAssetId) : undefined;
   if (!render) throw new ContentOsError("NOT_FOUND", "Render-Asset fehlt");
   const publisher = ctx.registry.pick("publish", ["youtube", "mock"], "publish.youtube");
+  // Quota-Topf Uploads (Default 100/Tag) – bei Erschöpfung WAITING_FOR_CAPACITY statt Fehler
+  const capKey = `${publisher.name}:videos.insert`;
+  const cap = await ctx.capacity.check(capKey);
+  if (!cap.allowed) throw new CapacityExhaustedError(publisher.name, cap.reason ?? "Upload-Quota", cap.retryAfterSeconds);
+  await ctx.capacity.consume(capKey);
   const publishAt = opts.schedule === false ? undefined : nextPublishSlot(channel.defaultPublishHourLocal, channel.timezone).toISOString();
   const res = await publisher.upload({
     channelId: channel.id, filePath: await storage.localPath(render.storageKey), title: video.metadata.selectedTitle, description: video.metadata.description, tags: video.metadata.tags,
-    privacy: opts.privacy ?? channel.defaultPrivacy, publishAt, categoryId: video.metadata.categoryId, defaultLanguage: video.language, madeForKids: false, containsSyntheticMedia: true,
+    privacy: opts.privacy ?? channel.defaultPrivacy, publishAt, categoryId: video.metadata.categoryId, defaultLanguage: video.language, madeForKids: false, containsSyntheticMedia: project.styleGuide.syntheticMedia ?? true,
     thumbnailPath: thumb && video.format === "LONGFORM" ? await storage.localPath(thumb.storageKey) : undefined, notifySubscribers: true,
   });
   await recordUsage(ctx, res.usage, "publish.youtube", { projectId: project.id, videoId: video.id, stage: "SCHEDULED" });

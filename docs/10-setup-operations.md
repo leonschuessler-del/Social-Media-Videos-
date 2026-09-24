@@ -48,7 +48,8 @@ Siehe `.env.example`. Gruppen: Core (DATABASE_URL, KILL_SWITCH, DEFAULT_REVIEW_M
 1. Google-Cloud-Projekt → YouTube Data API v3 + YouTube Analytics API aktivieren → OAuth-Client (Web) mit Redirect `YOUTUBE_REDIRECT_URI`.
 2. `POST /projects/:id/channels` → channelId.
 3. Browser: `GET /oauth/youtube/start?channelId=…` → Consent → Refresh-Token wird verschlüsselt gespeichert (`secrets`).
-4. Uploads sind privat, bis das API-Projekt auditiert ist (MANUAL).
+4. Uploads sind privat, bis das API-Projekt auditiert ist (MANUAL, Formular: support.google.com/youtube/contact/yt_api_form).
+5. Scopes: `youtube.upload`, `youtube`, `yt-analytics.readonly`, `yt-analytics-monetary.readonly` (Umsatz nur für YPP-Kanäle). Beim ersten Analytics-Lauf legt das System den Reporting-Job `channel_reach_basic_a1` an; Impressions/CTR kommen ab ~48 h danach.
 
 ## Musik/SFX-Bibliothek
 

@@ -15,8 +15,8 @@
 | 9. QA | Stage QA (8 Checks, Score, Entscheidung) | ✅ | AUTOMATED (Visual-QA im Mock: SEMI) |
 | 10. Thumbnail + Titel | 3 Thumbnail-Varianten (sharp) + 5 Titelvarianten, Beschreibung, Chapters, Tags, Disclosure | ✅ | AUTOMATED |
 | 11. Ergebnis überprüfen | CLI `status`/`review`, API `GET /videos/:id` (+Assets streamen); Dashboard minimal später | ✅ (CLI/API) | MANUAL (bewusst) |
-| 12. Upload/Schedule über offizielle API | YouTube Data API v3 `videos.insert` (private + publishAt, containsSyntheticMedia) + Thumbnail | ✅ Code / ⏳ OAuth-Client & Audit | AUTOMATED (Audit MANUAL) |
-| 13. Analytics zurück ins System | YouTube Analytics API v2 (Views, Watchtime, AVD, APV, Subs, Revenue, Retention, Traffic, Geo) alle 6 h | ✅ Code / ⏳ Scope | AUTOMATED (Impressions/CTR MANUAL) |
+| 12. Upload/Schedule über offizielle API | YouTube Data API v3 `videos.insert` (private + publishAt, containsSyntheticMedia, selfDeclaredMadeForKids=false) + Thumbnail; Upload-Quota-Topf 100/Tag im CapacityManager | ✅ Code / ⏳ OAuth-Client & Audit | AUTOMATED (Audit MANUAL) |
+| 13. Analytics zurück ins System | YouTube Analytics API v2 (Views, Watchtime, AVD, APV, Subs, engagedViews, Revenue, Retention) + Reporting API (Impressions, CTR) alle 6 h | ✅ Code / ⏳ OAuth | AUTOMATED (Shorts-Swipe-Rate MANUAL) |
 | 14. Kosten vollständig protokolliert | UsageManager → cost_entries, Budget-Guard, Usage-Summary API | ✅ | AUTOMATED |
 | E2E-Testvideo | `packages/pipeline/src/e2e.test.ts` (Mock-Provider, echter FFmpeg-Render, 9:16 MP4, QA, Metadata, Freigabe, Mock-Upload) | ✅ | – |
 
