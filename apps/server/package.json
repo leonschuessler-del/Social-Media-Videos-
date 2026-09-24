@@ -1,0 +1,26 @@
+{
+  "name": "@content-os/server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev:api": "tsx watch src/api.ts",
+    "dev:worker": "tsx watch src/worker.ts",
+    "start:api": "node --import tsx src/api.ts",
+    "start:worker": "node --import tsx src/worker.ts"
+  },
+  "dependencies": {
+    "@content-os/core": "workspace:*",
+    "@content-os/db": "workspace:*",
+    "@content-os/pipeline": "workspace:*",
+    "@content-os/providers": "workspace:*",
+    "@hono/node-server": "^1.19.0",
+    "@hono/zod-validator": "^0.7.0",
+    "dotenv": "^17.0.0",
+    "hono": "^4.9.0",
+    "pg-boss": "^10.3.0",
+    "tsx": "^4.20.0",
+    "zod": "^4.1.0",
+    "drizzle-orm": "^0.45.0"
+  }
+}

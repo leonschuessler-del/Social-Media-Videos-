@@ -1,44 +1,40 @@
-# Social Media Videos
+# AI Content OS – Visual Edutainment Content Engine
 
-Eigenständiges Projekt zum Schneiden von Videos für Social Media (Reels, TikTok, Shorts etc.).
-Dieses Repository ist komplett getrennt von anderen Projekten (z. B. der Vertriebsplattform) –
-eigener Ordner, eigene Git-Historie, eigenes GitHub-Repo.
+Autonome, mehrprojektfähige Content-Engine für YouTube (Projekt 01: **Visual Science – „Was passiert, wenn …?“**). OpenAI-first, deterministischer FFmpeg-Schnitt, PostgreSQL, pg-boss, offizielle YouTube-APIs.
+
+**Vertical Slice:** Thema → Research → Fact-Check → Skript → Storyboard → Visuals → Voice → Edit → QA → Review → YouTube-ready.
+
+## Schnellstart
+
+```bash
+pnpm install
+cp .env.example .env
+pnpm test                      # Unit + E2E (offline, Mock-Provider, echter FFmpeg-Render)
+pnpm cli produce --memory      # erstes Testvideo (Short) ohne DB/Keys
+pnpm cli providers             # Provider-Status: AVAILABLE / MOCK / BLOCKED_BY_PROVIDER / DISABLED
+```
+
+Voraussetzungen: Node 22, pnpm 10, FFmpeg ≥ 6, PostgreSQL 16 (für Nicht-Memory-Betrieb). Details: [docs/10-setup-operations.md](docs/10-setup-operations.md).
+
+## Dokumentation
+
+Einstieg: [docs/00-README.md](docs/00-README.md) – Machbarkeit, Provider-Recherche, OpenAI-Matrix, Kostenmodelle, Architektur, Datenmodell, V1-Scope, Plan, YouTube-Policy, Setup, Status/Blocker, Testvideo-Konzept, ADRs.
 
 ## Struktur
 
 ```
-raw_videos/   Ausgangsmaterial (Rohvideos, nicht versioniert)
-exports/      Fertig geschnittene Clips (nicht versioniert)
-scripts/      Tools zum Schneiden/Bearbeiten
+apps/server     API (Hono) + Worker (pg-boss)      apps/cli   CLI für den Vertical Slice
+packages/core   Domäne, State Machine, Budget, Usage, Provider-Interfaces, Router
+packages/db     Drizzle-Schema, Migrationen, PgStore
+packages/providers  OpenAI, Mock, Storage (local/S3), Musik/SFX-Bibliothek, YouTube
+packages/render FFmpeg-Compositor, Captions, Thumbnails, Media-QA
+packages/pipeline   Stages, Runner, Review, Mock-LLM, E2E-Test
+legacy/         altes MoviePy-Schnittskript
 ```
 
-Videodateien selbst werden nicht ins Git-Repo eingecheckt (siehe `.gitignore`) – nur der Code
-und die Ordnerstruktur.
+## Wichtige Prinzipien
 
-## Setup
-
-1. Python-Abhängigkeiten installieren:
-   ```bash
-   pip install -r requirements.txt
-   ```
-2. `ffmpeg` installieren (wird von moviepy zum Encodieren benötigt):
-   - macOS: `brew install ffmpeg`
-   - Ubuntu/Debian: `sudo apt install ffmpeg`
-   - Windows: [ffmpeg.org/download](https://ffmpeg.org/download.html)
-
-## Benutzung
-
-Rohvideo nach `raw_videos/` legen, dann z. B.:
-
-```bash
-# Ausschnitt von Sekunde 10 bis 25 herausschneiden
-python scripts/cut_video.py raw_videos/input.mp4 --start 10 --end 25 --out exports/clip1.mp4
-
-# Video automatisch in 30-Sekunden-Häppchen aufteilen (z. B. für mehrere Reels)
-python scripts/cut_video.py raw_videos/input.mp4 --split 30
-
-# Ausschnitt zusätzlich auf 9:16 zuschneiden (Reels/TikTok/Shorts-Format)
-python scripts/cut_video.py raw_videos/input.mp4 --start 0 --end 15 --vertical
-```
-
-Fertige Clips landen in `exports/`.
+- **OpenAI-first:** andere KI-Anbieter sind standardmäßig DISABLED (`ENABLED_PROVIDERS`). Kein stiller Fallback – bei Limits `WAITING_FOR_CAPACITY`.
+- **Ehrliche Labels:** AUTOMATED / SEMI_AUTOMATED / MANUAL / BLOCKED_BY_PROVIDER überall.
+- **SAFE MODE** in V1: jedes Video braucht menschliche Freigabe.
+- **Keine Secrets im Repo** – nur Variablennamen in `.env.example`.

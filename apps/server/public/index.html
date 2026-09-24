@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><title>AI Content OS – Review</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{--bg:#0b1220;--card:#121b2e;--text:#e8eef7;--muted:#8fa3bf;--accent:#ffb347;--primary:#19c6d1;--bad:#ff6b6b;--ok:#5ad38a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,sans-serif}
+header{padding:14px 20px;border-bottom:1px solid #22304a;display:flex;gap:16px;align-items:center}
+h1{font-size:16px;margin:0}main{padding:20px;display:grid;grid-template-columns:1.1fr 1.6fr;gap:20px}
+.card{background:var(--card);border:1px solid #22304a;border-radius:10px;padding:14px;margin-bottom:14px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.kpi{background:#0f1729;border-radius:8px;padding:10px}.kpi b{display:block;font-size:20px}
+.kpi span{color:var(--muted);font-size:12px}table{width:100%;border-collapse:collapse}td,th{padding:6px 8px;border-bottom:1px solid #22304a;text-align:left;font-size:13px}
+tr:hover{background:#17223a;cursor:pointer}.tag{padding:2px 6px;border-radius:6px;font-size:11px;background:#1f2d48}.tag.REVIEW{background:#4a3a12;color:var(--accent)}.tag.DEAD_LETTER,.tag.REJECTED,.tag.FAILED{background:#4a1f1f;color:var(--bad)}
+.tag.SCHEDULED,.tag.PUBLISHED,.tag.READY{background:#1f4a2e;color:var(--ok)}.tag.WAITING_FOR_CAPACITY,.tag.PAUSED{background:#3a2f12;color:var(--accent)}
+button{background:var(--primary);color:#06202a;border:0;border-radius:6px;padding:8px 12px;font-weight:600;cursor:pointer;margin-right:6px}button.warn{background:var(--bad);color:#fff}button.alt{background:#2a3b5c;color:var(--text)}
+video{width:100%;max-height:520px;background:#000;border-radius:8px}pre{white-space:pre-wrap;font-size:12px;color:var(--muted);max-height:260px;overflow:auto}
+input{background:#0f1729;border:1px solid #22304a;color:var(--text);padding:6px 8px;border-radius:6px}.muted{color:var(--muted)}.check{display:inline-block;margin:2px 6px 2px 0}
+</style></head><body>
+<header><h1>AI CONTENT OS</h1><span class="muted" id="mode"></span><span style="flex:1"></span><input id="token" placeholder="API_TOKEN" size="28"><button class="alt" onclick="saveToken()">Verbinden</button><button class="warn" onclick="kill(true)">KILL SWITCH</button><button class="alt" onclick="kill(false)">Resume</button></header>
+<main>
+<section>
+  <div class="card"><div class="kpis" id="kpis"></div></div>
+  <div class="card"><b>Pipeline</b><div id="stages" class="muted" style="margin-top:6px"></div></div>
+  <div class="card"><b>Videos</b> <span class="muted">(Klick für Details)</span><table id="videos"></table></div>
+  <div class="card"><b>Provider</b><div id="providers"></div></div>
+</section>
+<section>
+  <div class="card" id="detail"><span class="muted">Kein Video ausgewählt.</span></div>
+</section>
+</main>
+<script>
+const T=()=>localStorage.getItem('token')||'';const H=()=>({'authorization':'Bearer '+T(),'content-type':'application/json'});
+function saveToken(){localStorage.setItem('token',document.getElementById('token').value);load()}
+async function api(p,o){const r=await fetch(p,{headers:H(),...o});if(!r.ok)throw new Error(p+' '+r.status);return r.json()}
+async function kill(on){await api('/kill-switch',{method:'POST',body:JSON.stringify({enabled:on})});load()}
+const fmt=n=>(n??0).toFixed(2);
+async function load(){try{
+ const o=await api('/overview');document.getElementById('mode').textContent=`Kill Switch: ${o.killSwitch?'AKTIV':'aus'} · Review-Queue: ${o.reviewQueue}`;
+ document.getElementById('kpis').innerHTML=[['Videos',o.videos],['Review',o.reviewQueue],['Kosten heute',fmt(o.usageToday.costEur)+' €'],['Kosten Monat',fmt(o.usageMonth.costEur)+' €'],['Text-Jobs heute',o.usageToday.textJobs],['Bilder heute',o.usageToday.images],['Retries heute',o.usageToday.retries],['Fehler heute',o.usageToday.failures]].map(([k,v])=>`<div class="kpi"><b>${v}</b><span>${k}</span></div>`).join('');
+ document.getElementById('stages').textContent=Object.entries(o.byStage).filter(([,n])=>n).map(([s,n])=>`${s}: ${n}`).join(' → ')||'–';
+ document.getElementById('providers').innerHTML=o.providers.map(p=>`<span class="check"><span class="tag ${p.status}">${p.status}</span> ${p.name} <span class="muted">${(p.notes||'').slice(0,80)}</span></span>`).join('<br>');
+ const vs=await api('/videos?limit=100');document.getElementById('videos').innerHTML='<tr><th>ID</th><th>Format</th><th>Stage</th><th>Status</th><th>Score</th><th>€</th></tr>'+vs.slice().reverse().map(v=>`<tr onclick="show('${v.id}')"><td>${v.id.slice(4,12)}</td><td>${v.format}</td><td>${v.stage}</td><td><span class="tag ${v.status}">${v.status}</span></td><td>${v.qualityScore?v.qualityScore.toFixed(2):''}</td><td>${fmt(v.costEur)}</td></tr>`).join('');
+}catch(e){document.getElementById('kpis').innerHTML=`<span class="muted">${e.message} – Token setzen.</span>`}}
+async function show(id){const d=await api('/videos/'+id);const v=d.video;const render=(d.assets||[]).find(a=>a.kind==='render');const thumbs=(d.assets||[]).filter(a=>a.kind==='thumbnail');
+ const src=a=>`/videos/${id}/asset/${a.id}?token=${encodeURIComponent(T())}`;
+ const checks=(d.qa?.checks||[]).map(c=>`<span class="check"><span class="tag ${c.passed?'READY':'FAILED'}">${c.check}</span> <span class="muted">${c.automation} · ${c.details.slice(0,90)}</span></span>`).join('<br>');
+ document.getElementById('detail').innerHTML=`<b>${v.metadata?.selectedTitle||d.script?.title||v.id}</b> <span class="tag ${v.status}">${v.stage} / ${v.status}</span><div class="muted">${v.statusReason||''}</div>
+ ${render?`<video controls src="${src(render)}"></video>`:'<div class="muted">Noch kein Render.</div>'}
+ <div style="margin:10px 0">${v.stage==='REVIEW'?`<button onclick="review('${id}','APPROVE')">Freigeben (READY)</button><button class="alt" onclick="review('${id}','REGENERATE')">Neu generieren (ASSETS)</button><button class="alt" onclick="review('${id}','FIX')">Fix (EDIT)</button><button class="warn" onclick="review('${id}','REJECT')">Ablehnen</button>`:''}
+ ${['READY','SCHEDULED','PUBLISHED','FAILED','WAITING_FOR_CAPACITY'].includes(v.stage)||v.status==='FAILED'?`<button class="alt" onclick="run('${id}')">Stufe ausführen</button>`:''}</div>
+ <div class="kpis"><div class="kpi"><b>${v.qualityScore?v.qualityScore.toFixed(2):'–'}</b><span>Quality Score</span></div><div class="kpi"><b>${fmt(d.costs?.costEur)} €</b><span>Kosten</span></div><div class="kpi"><b>${d.costs?.images||0}</b><span>Bilder</span></div><div class="kpi"><b>${d.qa?.decision||'–'}</b><span>QA</span></div></div>
+ <p>${checks}</p>${thumbs.length?`<div style="display:flex;gap:8px">${thumbs.map(t=>`<img src="${src(t)}" style="width:32%;border-radius:6px">`).join('')}</div>`:''}
+ <details><summary>Skript</summary><pre>${(d.script?.fullNarration||'')}</pre></details>
+ <details><summary>Quellen (${d.research?.sources?.length||0}) & Claims</summary><pre>${(d.research?.claims||[]).map(c=>`[${c.verdict||'?'}] ${c.text}`).join('\n')}\n\n${(d.research?.sources||[]).map(s=>`${s.title} – ${s.url}`).join('\n')}</pre></details>
+ <details><summary>Metadaten</summary><pre>${JSON.stringify(v.metadata,null,1)}</pre></details>
+ <details><summary>Audit (${(d.audit||[]).length})</summary><pre>${(d.audit||[]).map(a=>`${a.at.slice(0,19)} ${a.actor} ${a.action} ${JSON.stringify(a.details).slice(0,120)}`).join('\n')}</pre></details>`;}
+async function review(id,decision){await api('/videos/'+id+'/review',{method:'POST',body:JSON.stringify({decision,reviewer:'dashboard'})});await load();show(id)}
+async function run(id){await api('/videos/'+id+'/run',{method:'POST'});setTimeout(()=>{load();show(id)},1500)}
+document.getElementById('token').value=T();load();setInterval(load,15000);
+</script></body></html>

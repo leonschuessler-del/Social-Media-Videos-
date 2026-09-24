@@ -1,0 +1,12 @@
+{
+  "name": "@content-os/render",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "dependencies": {
+    "@content-os/core": "workspace:*",
+    "execa": "^9.6.0",
+    "sharp": "^0.34.0"
+  }
+}
