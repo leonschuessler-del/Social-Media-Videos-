@@ -182,7 +182,9 @@ if (stage === "all" || stage === "mux" || stage === "meta") {
 // ---------------------------------------------------------------- 8. QA
 if (stage === "all" || stage === "qa") {
   const file = join(out, "final.mp4");
-  const qa = await analyzeMedia(file, { width: 1920, height: 1080, minDurationSec: 540, maxDurationSec: 780 });
+  const minDur = arg("min-duration") ? Number(arg("min-duration")) : 540;
+  const maxDur = arg("max-duration") ? Number(arg("max-duration")) : 780;
+  const qa = await analyzeMedia(file, { width: 1920, height: 1080, minDurationSec: minDur, maxDurationSec: maxDur });
   await writeFile(join(out, "qa.json"), JSON.stringify(qa, null, 1));
   console.log(JSON.stringify({ durationSec: qa.durationSec, lufs: qa.integratedLufs, truePeak: qa.truePeakDb, issues: qa.issues }, null, 1));
 }

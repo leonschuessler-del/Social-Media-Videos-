@@ -1,0 +1,25 @@
+{
+ "title_candidates": [
+  "Testproduktion: Kurzer Rauchtest"
+ ],
+ "segments": [
+  {
+   "id": "s01",
+   "chapter": "Test",
+   "narration_tts": "Das ist ein kurzer Testsatz für die Produktionspipeline.",
+   "caption_text": "Das ist ein kurzer Testsatz für die Produktionspipeline.",
+   "visual_beat": "Titel",
+   "claim_ids": [],
+   "kind": "HOOK"
+  },
+  {
+   "id": "s02",
+   "chapter": "Test",
+   "narration_tts": "Und ein geänderter zweiter Satz, damit die Wiederaufnahme-Logik getestet wird.",
+   "caption_text": "Und ein geänderter zweiter Satz, damit die Wiederaufnahme-Logik getestet wird.",
+   "visual_beat": "Abschluss",
+   "claim_ids": [],
+   "kind": "OUTRO"
+  }
+ ]
+}

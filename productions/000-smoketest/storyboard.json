@@ -1,0 +1,6 @@
+{
+  "scenes": [
+    { "id": "s01_a", "segment_id": "s01", "template": "title_card", "params_json": "{\"title\":\"RAUCHTEST\",\"subtitle\":\"Produktions-Pipeline\"}", "on_screen_text": "", "weight": 1, "camera": "static", "sfx": "none", "description": "Test-Titelkarte" },
+    { "id": "s02_a", "segment_id": "s02", "template": "title_card", "params_json": "{\"title\":\"ENDE\",\"subtitle\":\"Test erfolgreich\"}", "on_screen_text": "", "weight": 1, "camera": "static", "sfx": "none", "description": "Test-Abspann" }
+  ]
+}
