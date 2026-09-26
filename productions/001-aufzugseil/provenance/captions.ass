@@ -1,0 +1,274 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1920
+PlayResY: 1080
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Cap,Inter,50,&H00FFFFFF,&H0047B3FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,4,2,2,60,60,60,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:04.31,Cap,,0,0,0,,1945. Im Empire State Building stürzt eine
+Dialogue: 0,0:00:04.26,0:00:07.20,Cap,,0,0,0,,Aufzugskabine rund 75 Stockwerke in die Tiefe.
+Dialogue: 0,0:00:07.49,0:00:09.75,Cap,,0,0,0,,Darin sitzt eine schwer verletzte junge Frau.
+Dialogue: 0,0:00:10.04,0:00:10.85,Cap,,0,0,0,,Sie überlebt.
+Dialogue: 0,0:00:11.13,0:00:12.14,Cap,,0,0,0,,Wie ist das möglich?
+Dialogue: 0,0:00:12.71,0:00:14.48,Cap,,0,0,0,,Die Frau heißt Betty Lou Oliver.
+Dialogue: 0,0:00:14.77,0:00:16.91,Cap,,0,0,0,,Ihr Sturz steht als längster überlebter
+Dialogue: 0,0:00:16.86,0:00:18.82,Cap,,0,0,0,,Aufzugsabsturz im Buch der Rekorde.
+Dialogue: 0,0:00:19.11,0:00:21.57,Cap,,0,0,0,,Doch warum stürzen Aufzüge sonst so gut wie nie
+Dialogue: 0,0:00:21.52,0:00:23.70,Cap,,0,0,0,,ab, obwohl sie an dünnen Stahlseilen hängen?
+Dialogue: 0,0:00:23.99,0:00:26.28,Cap,,0,0,0,,Wir kappen gleich in Gedanken alle Seile und
+Dialogue: 0,0:00:26.23,0:00:28.22,Cap,,0,0,0,,schauen Millisekunde für Millisekunde zu.
+Dialogue: 0,0:00:28.51,0:00:31.07,Cap,,0,0,0,,Am Ende suchen wir den Grund, warum damals keine
+Dialogue: 0,0:00:31.02,0:00:33.67,Cap,,0,0,0,,Sicherung griff, soweit er sich noch rekonstruieren
+Dialogue: 0,0:00:33.62,0:00:37.95,Cap,,0,0,0,,lässt. Die Idee dahinter ist alt: New York, 1854,
+Dialogue: 0,0:00:37.90,0:00:40.45,Cap,,0,0,0,,eine Ausstellung im Kristallpalast.
+Dialogue: 0,0:00:40.74,0:00:43.01,Cap,,0,0,0,,Der Mechaniker Elisha Otis steht auf einer
+Dialogue: 0,0:00:42.96,0:00:45.62,Cap,,0,0,0,,hochgezogenen Plattform, dann wird vor Publikum das
+Dialogue: 0,0:00:45.57,0:00:46.48,Cap,,0,0,0,,Tragseil gekappt.
+Dialogue: 0,0:00:46.77,0:00:49.43,Cap,,0,0,0,,Laut der Firmenchronik sackt die Plattform nur ein
+Dialogue: 0,0:00:49.38,0:00:50.13,Cap,,0,0,0,,paar Zoll ab.
+Dialogue: 0,0:00:50.41,0:00:53.36,Cap,,0,0,0,,Das Prinzip: Solange das Seil zieht, bleibt eine
+Dialogue: 0,0:00:53.31,0:00:54.44,Cap,,0,0,0,,Federsperre gelöst.
+Dialogue: 0,0:00:54.73,0:00:57.36,Cap,,0,0,0,,Reißt es, greift sie sofort in Zahnstangen an
+Dialogue: 0,0:00:57.31,0:00:58.16,Cap,,0,0,0,,beiden Seiten.
+Dialogue: 0,0:00:58.73,0:01:01.58,Cap,,0,0,0,,Oft wird erzählt, Otis habe danach gerufen, es sei
+Dialogue: 0,0:01:01.53,0:01:02.32,Cap,,0,0,0,,alles sicher.
+Dialogue: 0,0:01:02.62,0:01:05.16,Cap,,0,0,0,,In den wenigen Berichten von damals fehlt dieser
+Dialogue: 0,0:01:05.11,0:01:07.73,Cap,,0,0,0,,Ausruf. Eine New Yorker Zeitung notierte nur, der
+Dialogue: 0,0:01:07.68,0:01:09.85,Cap,,0,0,0,,Erfinder schneide gelegentlich selbst das Seil
+Dialogue: 0,0:01:09.80,0:01:13.49,Cap,,0,0,0,,durch. Heute ist aus dieser Sperre eine ganze Kette
+Dialogue: 0,0:01:13.44,0:01:14.93,Cap,,0,0,0,,von Schutzschichten geworden.
+Dialogue: 0,0:01:15.22,0:01:17.55,Cap,,0,0,0,,Jede deckt einen anderen Fehler ab, und manche
+Dialogue: 0,0:01:17.50,0:01:18.62,Cap,,0,0,0,,arbeiten nur zusammen.
+Dialogue: 0,0:01:18.91,0:01:21.79,Cap,,0,0,0,,Erste Schicht: die Seile, meist etwa 3 bis 8
+Dialogue: 0,0:01:21.74,0:01:24.70,Cap,,0,0,0,,unabhängige. Die europäische Aufzugsnorm verlangt
+Dialogue: 0,0:01:24.65,0:01:27.32,Cap,,0,0,0,,dann, dass jedes mindestens 12-mal so viel aushält,
+Dialogue: 0,0:01:27.27,0:01:29.69,Cap,,0,0,0,,wie bei voll beladener Kabine an ihm zieht.
+Dialogue: 0,0:01:30.26,0:01:32.73,Cap,,0,0,0,,Bei 6 Seilen könnte rein statisch gerechnet schon
+Dialogue: 0,0:01:32.68,0:01:35.15,Cap,,0,0,0,,ein einziges etwa das Doppelte der voll beladenen
+Dialogue: 0,0:01:35.10,0:01:35.83,Cap,,0,0,0,,Kabine halten.
+Dialogue: 0,0:01:36.12,0:01:38.47,Cap,,0,0,0,,Dabei ist so ein Seil nach der europäischen
+Dialogue: 0,0:01:38.42,0:01:40.92,Cap,,0,0,0,,Aufzugsnorm mindestens 8 Millimeter dick, kaum
+Dialogue: 0,0:01:40.87,0:01:42.24,Cap,,0,0,0,,dicker als ein Bleistift.
+Dialogue: 0,0:01:42.53,0:01:44.81,Cap,,0,0,0,,Je nach Bauart reißt es erst bei rund 3
+Dialogue: 0,0:01:44.77,0:01:46.30,Cap,,0,0,0,,bis gut 4 Tonnen Zugkraft.
+Dialogue: 0,0:01:46.87,0:01:49.26,Cap,,0,0,0,,An der Maschine oben ist die Kabine gar nicht
+Dialogue: 0,0:01:49.21,0:01:51.99,Cap,,0,0,0,,festgeschraubt. Die Seile liegen nur in den Rillen
+Dialogue: 0,0:01:51.94,0:01:54.05,Cap,,0,0,0,,der Treibscheibe, wie ein Handtuch über einer
+Dialogue: 0,0:01:53.99,0:01:55.86,Cap,,0,0,0,,Stange, und halten allein durch Reibung.
+Dialogue: 0,0:01:56.15,0:01:58.86,Cap,,0,0,0,,Am anderen Ende hängt das Gegengewicht, so schwer
+Dialogue: 0,0:01:58.81,0:02:01.18,Cap,,0,0,0,,wie die leere Kabine plus etwa 40 bis 50
+Dialogue: 0,0:02:01.13,0:02:02.33,Cap,,0,0,0,,Prozent der Nutzlast.
+Dialogue: 0,0:02:02.62,0:02:05.29,Cap,,0,0,0,,Merk dir das Gegengewicht, es sorgt später für eine
+Dialogue: 0,0:02:05.24,0:02:08.30,Cap,,0,0,0,,Überraschung. Jetzt das Experiment: Ein
+Dialogue: 0,0:02:08.25,0:02:11.04,Cap,,0,0,0,,Wohnhausaufzug mit Bremsfang fährt mit 1 Meter pro
+Dialogue: 0,0:02:10.99,0:02:11.84,Cap,,0,0,0,,Sekunde abwärts.
+Dialogue: 0,0:02:12.13,0:02:14.82,Cap,,0,0,0,,Wir durchtrennen alle Seile, die Stoppuhr läuft.
+Dialogue: 0,0:02:15.11,0:02:18.01,Cap,,0,0,0,,Nach 15 Millisekunden ist die Kabine rechnerisch
+Dialogue: 0,0:02:17.96,0:02:20.96,Cap,,0,0,0,,schon 15 Prozent schneller als normal, nach gut 1,5
+Dialogue: 0,0:02:20.91,0:02:21.94,Cap,,0,0,0,,Zentimetern Fall.
+Dialogue: 0,0:02:22.51,0:02:24.79,Cap,,0,0,0,,Frühestens ab dieser Grenze darf der Wächter
+Dialogue: 0,0:02:24.74,0:02:27.87,Cap,,0,0,0,,eingreifen. Spätestens muss er es tun, bevor die
+Dialogue: 0,0:02:27.82,0:02:30.96,Cap,,0,0,0,,Kabine 1,5 Meter pro Sekunde erreicht, nach etwa 50
+Dialogue: 0,0:02:30.91,0:02:33.82,Cap,,0,0,0,,Millisekunden. Dieser Wächter ist die zweite
+Dialogue: 0,0:02:33.77,0:02:35.59,Cap,,0,0,0,,Schicht: der Geschwindigkeitsbegrenzer.
+Dialogue: 0,0:02:35.88,0:02:38.79,Cap,,0,0,0,,Klassisch hat er oben eine eigene Seilscheibe und
+Dialogue: 0,0:02:38.74,0:02:40.11,Cap,,0,0,0,,ein eigenes, dünnes Seil.
+Dialogue: 0,0:02:40.40,0:02:42.83,Cap,,0,0,0,,Es läuft als Schleife bis zu einer Spannrolle in
+Dialogue: 0,0:02:42.78,0:02:44.94,Cap,,0,0,0,,der Grube und hängt an einem Hebel auf der
+Dialogue: 0,0:02:44.89,0:02:47.54,Cap,,0,0,0,,Kabine. So zieht die Kabine das Seil bei jeder
+Dialogue: 0,0:02:47.49,0:02:48.03,Cap,,0,0,0,,Fahrt mit.
+Dialogue: 0,0:02:48.60,0:02:50.74,Cap,,0,0,0,,Dreht sich die Scheibe zu schnell, schwenken
+Dialogue: 0,0:02:50.69,0:02:52.83,Cap,,0,0,0,,Fliehgewichte nach außen, wie die Sitze eines
+Dialogue: 0,0:02:52.78,0:02:55.53,Cap,,0,0,0,,Kettenkarussells. Sie lösen eine Sperre aus, und
+Dialogue: 0,0:02:55.48,0:02:57.31,Cap,,0,0,0,,der Begrenzer hält sein Seil fest.
+Dialogue: 0,0:02:57.60,0:03:00.29,Cap,,0,0,0,,Das ist reine Mechanik, sie funktioniert auch ohne
+Dialogue: 0,0:03:00.24,0:03:03.12,Cap,,0,0,0,,Strom. Dritte Schicht: Schalter und Bremse.
+Dialogue: 0,0:03:03.41,0:03:06.12,Cap,,0,0,0,,Spätestens jetzt öffnet ein Schalter am Begrenzer
+Dialogue: 0,0:03:06.07,0:03:08.40,Cap,,0,0,0,,den Sicherheitskreis: Motor aus, Bremse zu.
+Dialogue: 0,0:03:08.69,0:03:11.12,Cap,,0,0,0,,Diese Bremse ist ohne Strom immer zu, Federn
+Dialogue: 0,0:03:11.07,0:03:12.26,Cap,,0,0,0,,pressen die Beläge an.
+Dialogue: 0,0:03:12.55,0:03:14.84,Cap,,0,0,0,,Hier aber hilft sie nicht, denn an der Treibscheibe
+Dialogue: 0,0:03:14.79,0:03:16.16,Cap,,0,0,0,,hängt unsere Kabine nicht mehr.
+Dialogue: 0,0:03:16.73,0:03:19.23,Cap,,0,0,0,,Das Begrenzerseil steht still, doch die Kabine
+Dialogue: 0,0:03:19.18,0:03:19.87,Cap,,0,0,0,,fällt weiter.
+Dialogue: 0,0:03:20.16,0:03:22.32,Cap,,0,0,0,,Das stehende Seil zieht den Hebel, und Keile
+Dialogue: 0,0:03:22.27,0:03:24.23,Cap,,0,0,0,,klemmen die Kabine an den Schienen fest.
+Dialogue: 0,0:03:24.52,0:03:27.31,Cap,,0,0,0,,Das dünne Seil trägt also nichts, es löst nur
+Dialogue: 0,0:03:27.26,0:03:30.49,Cap,,0,0,0,,aus. Vierte Schicht: die Fangvorrichtung.
+Dialogue: 0,0:03:30.78,0:03:33.39,Cap,,0,0,0,,Sie erbt die Aufgabe der Sperre von Otis, reagiert
+Dialogue: 0,0:03:33.34,0:03:36.01,Cap,,0,0,0,,aber auf zu hohe Geschwindigkeit statt bloß auf ein
+Dialogue: 0,0:03:35.96,0:03:36.76,Cap,,0,0,0,,schlaffes Seil.
+Dialogue: 0,0:03:37.05,0:03:39.98,Cap,,0,0,0,,Der harte Sperrfang blockiert schlagartig und ist
+Dialogue: 0,0:03:39.93,0:03:42.92,Cap,,0,0,0,,am Fahrkorb nur bei Aufzügen bis zu 63 Zentimetern
+Dialogue: 0,0:03:42.87,0:03:44.08,Cap,,0,0,0,,pro Sekunde erlaubt.
+Dialogue: 0,0:03:44.37,0:03:47.05,Cap,,0,0,0,,Unser Bremsfang presst federbelastete Keile an die
+Dialogue: 0,0:03:46.99,0:03:49.56,Cap,,0,0,0,,Schiene und verwandelt die Bewegungsenergie beim
+Dialogue: 0,0:03:49.50,0:03:50.40,Cap,,0,0,0,,Gleiten in Wärme.
+Dialogue: 0,0:03:50.97,0:03:52.65,Cap,,0,0,0,,Wie fühlt sich so ein Fang an?
+Dialogue: 0,0:03:52.94,0:03:55.21,Cap,,0,0,0,,Bei voller Kabine verlangt die europäische
+Dialogue: 0,0:03:55.16,0:03:57.68,Cap,,0,0,0,,Aufzugsnorm im Mittel eine Verzögerung zwischen
+Dialogue: 0,0:03:57.63,0:04:00.09,Cap,,0,0,0,,einem Fünftel und der vollen Erdbeschleunigung.
+Dialogue: 0,0:04:00.38,0:04:02.79,Cap,,0,0,0,,Man fühlt sich also etwa ein Fünftel schwerer bis
+Dialogue: 0,0:04:02.74,0:04:03.66,Cap,,0,0,0,,doppelt so schwer.
+Dialogue: 0,0:04:03.95,0:04:06.67,Cap,,0,0,0,,Kurze Spitzen können darüber liegen, und eine leere
+Dialogue: 0,0:04:06.62,0:04:08.13,Cap,,0,0,0,,Kabine wird härter gebremst.
+Dialogue: 0,0:04:08.70,0:04:10.38,Cap,,0,0,0,,Und wie weit rutscht die Kabine?
+Dialogue: 0,0:04:10.67,0:04:13.00,Cap,,0,0,0,,Ein Rechenbeispiel mit voller Kabine: Aus 1,5
+Dialogue: 0,0:04:12.95,0:04:15.17,Cap,,0,0,0,,Metern pro Sekunde steht sie nach gut 11
+Dialogue: 0,0:04:15.12,0:04:17.57,Cap,,0,0,0,,Zentimetern, wenn sie im Mittel mit der vollen
+Dialogue: 0,0:04:17.52,0:04:18.81,Cap,,0,0,0,,Erdbeschleunigung bremst.
+Dialogue: 0,0:04:19.11,0:04:21.65,Cap,,0,0,0,,Bei einem Fünftel davon sind es knapp 60.
+Dialogue: 0,0:04:21.94,0:04:24.99,Cap,,0,0,0,,Mit Reaktionszeit und dem Einrücken der Keile sind
+Dialogue: 0,0:04:24.94,0:04:26.80,Cap,,0,0,0,,es real eher einige Dezimeter.
+Dialogue: 0,0:04:27.37,0:04:29.21,Cap,,0,0,0,,Spulen wir die Zeitlupe zurück.
+Dialogue: 0,0:04:29.50,0:04:30.83,Cap,,0,0,0,,Seile weg bei 0.
+Dialogue: 0,0:04:31.12,0:04:34.11,Cap,,0,0,0,,Nach wenigen Hundertstelsekunden löst der Begrenzer
+Dialogue: 0,0:04:34.06,0:04:36.86,Cap,,0,0,0,,aus: Motor aus, Bremse zu, Keile an die Schienen.
+Dialogue: 0,0:04:37.15,0:04:39.60,Cap,,0,0,0,,Aus dem Absturz in den Keller wird ein kräftiger
+Dialogue: 0,0:04:39.55,0:04:40.96,Cap,,0,0,0,,Ruck. Und dann?
+Dialogue: 0,0:04:41.25,0:04:43.78,Cap,,0,0,0,,Die Keile lösen sich nur, wenn man die Kabine
+Dialogue: 0,0:04:43.73,0:04:46.67,Cap,,0,0,0,,anhebt. Das darf nur eine sachkundige Person, und
+Dialogue: 0,0:04:46.62,0:04:49.11,Cap,,0,0,0,,erst nach ihrer Prüfung fährt der Aufzug wieder.
+Dialogue: 0,0:04:50.11,0:04:51.81,Cap,,0,0,0,,Und die Szenen aus dem Kino?
+Dialogue: 0,0:04:52.10,0:04:54.95,Cap,,0,0,0,,Funken sprühende Schienen, eine ungebremst rasende
+Dialogue: 0,0:04:54.90,0:04:58.08,Cap,,0,0,0,,Kabine? Mit echten Aufzügen hat das wenig zu tun.
+Dialogue: 0,0:04:58.37,0:05:00.88,Cap,,0,0,0,,Ohne die Schutzkette aber wäre eine frei fallende
+Dialogue: 0,0:05:00.83,0:05:03.30,Cap,,0,0,0,,Kabine rechnerisch nach 10 Metern schon rund 50
+Dialogue: 0,0:05:03.25,0:05:04.74,Cap,,0,0,0,,Kilometer pro Stunde schnell.
+Dialogue: 0,0:05:05.03,0:05:07.45,Cap,,0,0,0,,Nach 100 Metern wären es etwa 160.
+Dialogue: 0,0:05:08.02,0:05:10.46,Cap,,0,0,0,,Und der berühmte Sprung kurz vor dem Aufprall?
+Dialogue: 0,0:05:10.75,0:05:13.92,Cap,,0,0,0,,Eine amerikanische Fernsehsendung testete ihn 2004
+Dialogue: 0,0:05:13.87,0:05:15.74,Cap,,0,0,0,,und erklärte ihn für widerlegt.
+Dialogue: 0,0:05:16.03,0:05:18.20,Cap,,0,0,0,,Im echten freien Fall schwebt man nahezu
+Dialogue: 0,0:05:18.15,0:05:20.65,Cap,,0,0,0,,schwerelos, weil Körper und Kabine gleich schnell
+Dialogue: 0,0:05:20.60,0:05:23.76,Cap,,0,0,0,,fallen. Ein kräftiger Sprung zieht nur etwa 2 bis
+Dialogue: 0,0:05:23.71,0:05:25.15,Cap,,0,0,0,,3 Meter pro Sekunde ab.
+Dialogue: 0,0:05:25.44,0:05:27.94,Cap,,0,0,0,,Aus einem Sturz von 10 Metern würde so rechnerisch
+Dialogue: 0,0:05:27.89,0:05:30.08,Cap,,0,0,0,,immer noch einer aus rund 6 bis 7 Metern.
+Dialogue: 0,0:05:31.08,0:05:33.42,Cap,,0,0,0,,Fünfte Schicht, ganz unten in der Grube: die
+Dialogue: 0,0:05:33.37,0:05:36.13,Cap,,0,0,0,,Puffer. Sie sind für langsame Überfahrten gedacht,
+Dialogue: 0,0:05:36.08,0:05:37.73,Cap,,0,0,0,,etwa wenn die Steuerung versagt.
+Dialogue: 0,0:05:38.02,0:05:40.84,Cap,,0,0,0,,Federpuffer und Polyurethanpuffer sind nur bis zu 1
+Dialogue: 0,0:05:40.79,0:05:43.15,Cap,,0,0,0,,Meter pro Sekunde erlaubt, Ölpuffer bei jeder
+Dialogue: 0,0:05:43.10,0:05:46.44,Cap,,0,0,0,,Geschwindigkeit. Bei unserem Aufzug braucht ein
+Dialogue: 0,0:05:46.39,0:05:49.32,Cap,,0,0,0,,Ölpuffer rechnerisch etwa 7 Zentimeter Hub, eine
+Dialogue: 0,0:05:49.27,0:05:50.52,Cap,,0,0,0,,Stahlfeder rund 13,5.
+Dialogue: 0,0:05:50.81,0:05:52.78,Cap,,0,0,0,,Doch der Hub wächst mit dem Quadrat der
+Dialogue: 0,0:05:52.73,0:05:55.92,Cap,,0,0,0,,Geschwindigkeit. Bei 10 Metern pro Sekunde wären es
+Dialogue: 0,0:05:55.87,0:05:58.05,Cap,,0,0,0,,ohne Zusatzüberwachung fast 7 Meter.
+Dialogue: 0,0:05:58.62,0:06:01.28,Cap,,0,0,0,,Naheliegend, aber falsch: Der Puffer fängt einen
+Dialogue: 0,0:06:01.23,0:06:01.92,Cap,,0,0,0,,Absturz ab.
+Dialogue: 0,0:06:02.21,0:06:05.05,Cap,,0,0,0,,Er ist für einen Aufprall mit etwa 115 Prozent
+Dialogue: 0,0:06:04.99,0:06:07.01,Cap,,0,0,0,,der Nenngeschwindigkeit ausgelegt.
+Dialogue: 0,0:06:07.30,0:06:09.98,Cap,,0,0,0,,Nach 10 Metern freiem Fall brächte unsere Kabine
+Dialogue: 0,0:06:09.93,0:06:12.61,Cap,,0,0,0,,rechnerisch rund 150-mal so viel Energie mit, wie
+Dialogue: 0,0:06:12.56,0:06:14.02,Cap,,0,0,0,,ihr Puffer aufnehmen soll.
+Dialogue: 0,0:06:14.31,0:06:16.68,Cap,,0,0,0,,Die eigentliche Rettung sitzt weiter oben, an den
+Dialogue: 0,0:06:16.63,0:06:20.27,Cap,,0,0,0,,Schienen. Sechste Schicht: die Prüfungen, denn ein
+Dialogue: 0,0:06:20.22,0:06:22.99,Cap,,0,0,0,,Seil reißt nicht plötzlich, zuerst brechen einzelne
+Dialogue: 0,0:06:22.95,0:06:25.62,Cap,,0,0,0,,Drähte. Prüfer zählen diese Drahtbrüche, und ab
+Dialogue: 0,0:06:25.57,0:06:28.33,Cap,,0,0,0,,einer festgelegten Zahl muss das Seil ausgetauscht
+Dialogue: 0,0:06:28.28,0:06:31.44,Cap,,0,0,0,,werden. In Deutschland kommt ein unabhängiger
+Dialogue: 0,0:06:31.39,0:06:33.94,Cap,,0,0,0,,Prüfer dazu, etwa vom TÜV oder von der DEKRA.
+Dialogue: 0,0:06:34.23,0:06:36.79,Cap,,0,0,0,,Spätestens alle 2 Jahre ist eine Hauptprüfung
+Dialogue: 0,0:06:36.74,0:06:38.81,Cap,,0,0,0,,fällig, dazwischen eine Zwischenprüfung.
+Dialogue: 0,0:06:39.10,0:06:41.52,Cap,,0,0,0,,Den nächsten Termin zeigt die Prüfplakette in der
+Dialogue: 0,0:06:41.47,0:06:44.84,Cap,,0,0,0,,Kabine. Jetzt die versprochene Überraschung:
+Dialogue: 0,0:06:44.79,0:06:46.64,Cap,,0,0,0,,Aufzüge können nach oben abstürzen.
+Dialogue: 0,0:06:46.93,0:06:49.62,Cap,,0,0,0,,Weil das Gegengewicht in der Regel schwerer ist als
+Dialogue: 0,0:06:49.57,0:06:51.95,Cap,,0,0,0,,die leere Kabine, zieht es sie bei versagender
+Dialogue: 0,0:06:51.90,0:06:52.56,Cap,,0,0,0,,Bremse hoch.
+Dialogue: 0,0:06:52.85,0:06:55.50,Cap,,0,0,0,,Deshalb verlangt die europäische Aufzugsnorm auch
+Dialogue: 0,0:06:55.45,0:06:57.99,Cap,,0,0,0,,dagegen einen Schutz, etwa eine Fangvorrichtung,
+Dialogue: 0,0:06:57.95,0:06:59.42,Cap,,0,0,0,,die auch nach oben greift.
+Dialogue: 0,0:06:59.99,0:07:02.27,Cap,,0,0,0,,Einer der gefährlichsten realen Fehler ist ein
+Dialogue: 0,0:07:02.22,0:07:04.57,Cap,,0,0,0,,anderer: eine Kabine, die bei offener Tür losfährt.
+Dialogue: 0,0:07:04.86,0:07:08.23,Cap,,0,0,0,,Solche tödlichen Unfälle gab es, etwa 2006 in
+Dialogue: 0,0:07:08.18,0:07:11.42,Cap,,0,0,0,,Tokio. Seit einer Ergänzung von 2009 verlangt die
+Dialogue: 0,0:07:11.37,0:07:13.85,Cap,,0,0,0,,europäische Aufzugsnorm einen eigenen Schutz
+Dialogue: 0,0:07:13.80,0:07:16.75,Cap,,0,0,0,,dagegen. Für neue Aufzüge ist er seit 2012
+Dialogue: 0,0:07:16.70,0:07:17.88,Cap,,0,0,0,,praktisch Pflicht.
+Dialogue: 0,0:07:18.17,0:07:21.06,Cap,,0,0,0,,Er stoppt die Kabine spätestens 1,20 Meter nach dem
+Dialogue: 0,0:07:21.01,0:07:22.49,Cap,,0,0,0,,Verlassen der Haltestelle.
+Dialogue: 0,0:07:23.06,0:07:23.99,Cap,,0,0,0,,Und in Zahlen?
+Dialogue: 0,0:07:24.28,0:07:26.98,Cap,,0,0,0,,Eine ältere amerikanische Auswertung kam auf rund
+Dialogue: 0,0:07:26.93,0:07:29.65,Cap,,0,0,0,,30 Tote pro Jahr, Aufzüge und Fahrtreppen zusammen,
+Dialogue: 0,0:07:29.60,0:07:30.96,Cap,,0,0,0,,Beschäftigte eingerechnet.
+Dialogue: 0,0:07:31.25,0:07:33.51,Cap,,0,0,0,,Etwa die Hälfte der Toten an Aufzügen waren
+Dialogue: 0,0:07:33.46,0:07:34.99,Cap,,0,0,0,,Menschen, die dort arbeiteten.
+Dialogue: 0,0:07:35.28,0:07:37.96,Cap,,0,0,0,,Im Vordergrund standen Stürze in offene Schächte,
+Dialogue: 0,0:07:37.91,0:07:40.81,Cap,,0,0,0,,Einklemmen und Stolpern, nicht der Seilriss aus dem
+Dialogue: 0,0:07:40.76,0:07:44.06,Cap,,0,0,0,,Kino. Dem stehen nach älteren Branchenangaben aus
+Dialogue: 0,0:07:44.01,0:07:46.70,Cap,,0,0,0,,anderen Jahren rund 18 Milliarden Aufzugsfahrten
+Dialogue: 0,0:07:46.65,0:07:47.69,Cap,,0,0,0,,pro Jahr gegenüber.
+Dialogue: 0,0:07:47.98,0:07:50.72,Cap,,0,0,0,,Grob überschlagen ergibt das für alle, die nicht am
+Dialogue: 0,0:07:50.67,0:07:52.92,Cap,,0,0,0,,Aufzug arbeiten, in der Größenordnung einen
+Dialogue: 0,0:07:52.87,0:07:54.63,Cap,,0,0,0,,Todesfall pro Milliarde Fahrten.
+Dialogue: 0,0:07:55.20,0:07:56.02,Cap,,0,0,0,,Und die Treppe?
+Dialogue: 0,0:07:56.31,0:08:00.21,Cap,,0,0,0,,Eine Studie hat amerikanische Notaufnahmen von 1990
+Dialogue: 0,0:08:00.16,0:08:01.78,Cap,,0,0,0,,bis 2012 ausgewertet.
+Dialogue: 0,0:08:02.07,0:08:04.68,Cap,,0,0,0,,Im Schnitt kam dort etwa alle 30 Sekunden jemand
+Dialogue: 0,0:08:04.63,0:08:06.12,Cap,,0,0,0,,nach einem Treppenunfall an.
+Dialogue: 0,0:08:06.41,0:08:09.03,Cap,,0,0,0,,Das sind über 1 Million Fälle pro Jahr, gegenüber
+Dialogue: 0,0:08:08.98,0:08:11.52,Cap,,0,0,0,,rund 17.000 ernsthaften Verletzungen an Aufzügen
+Dialogue: 0,0:08:11.47,0:08:12.37,Cap,,0,0,0,,und Fahrtreppen.
+Dialogue: 0,0:08:12.66,0:08:15.44,Cap,,0,0,0,,Quellen und Definitionen unterscheiden sich, aber
+Dialogue: 0,0:08:15.39,0:08:17.07,Cap,,0,0,0,,die Größenordnung ist deutlich.
+Dialogue: 0,0:08:18.07,0:08:20.12,Cap,,0,0,0,,Zurück zum 28.
+Dialogue: 0,0:08:20.07,0:08:21.63,Cap,,0,0,0,,Juli 1945.
+Dialogue: 0,0:08:21.92,0:08:24.86,Cap,,0,0,0,,Im dichten Nebel prallt ein amerikanischer Bomber
+Dialogue: 0,0:08:24.81,0:08:27.15,Cap,,0,0,0,,gegen den Wolkenkratzer, auf Höhe des 79.
+Dialogue: 0,0:08:27.10,0:08:29.46,Cap,,0,0,0,,Stockwerks. 14 Menschen sterben.
+Dialogue: 0,0:08:29.75,0:08:32.16,Cap,,0,0,0,,Ein Triebwerk durchschlägt das ganze Haus, das
+Dialogue: 0,0:08:32.11,0:08:34.30,Cap,,0,0,0,,andere stürzt in einen Aufzugsschacht und
+Dialogue: 0,0:08:34.25,0:08:35.40,Cap,,0,0,0,,beschädigt dort Seile.
+Dialogue: 0,0:08:35.97,0:08:38.54,Cap,,0,0,0,,Oliver, die junge Frau vom Anfang, ist dort
+Dialogue: 0,0:08:38.49,0:08:40.38,Cap,,0,0,0,,Liftführerin und erleidet im 80.
+Dialogue: 0,0:08:40.33,0:08:41.99,Cap,,0,0,0,,Stock schwere Verbrennungen.
+Dialogue: 0,0:08:42.28,0:08:44.65,Cap,,0,0,0,,Helfer setzen sie in eine andere Kabine, um sie
+Dialogue: 0,0:08:44.60,0:08:45.73,Cap,,0,0,0,,nach unten zu bringen.
+Dialogue: 0,0:08:46.02,0:08:48.46,Cap,,0,0,0,,Doch deren beschädigte Seile reißen, und die Kabine
+Dialogue: 0,0:08:48.41,0:08:49.81,Cap,,0,0,0,,stürzt bis ins Untergeschoss.
+Dialogue: 0,0:08:50.38,0:08:52.15,Cap,,0,0,0,,Warum griff keine Fangvorrichtung?
+Dialogue: 0,0:08:52.44,0:08:54.04,Cap,,0,0,0,,Sicher belegt ist das nicht.
+Dialogue: 0,0:08:54.33,0:08:57.32,Cap,,0,0,0,,Ein Fachbeitrag nennt ein ebenfalls beschädigtes
+Dialogue: 0,0:08:57.27,0:09:00.12,Cap,,0,0,0,,Begrenzerseil. Dann hätte ein einziges Ereignis
+Dialogue: 0,0:09:00.07,0:09:02.47,Cap,,0,0,0,,Tragseile und Auslöser zugleich getroffen, genau
+Dialogue: 0,0:09:02.42,0:09:04.76,Cap,,0,0,0,,der Fall, gegen den getrennte Schichten sonst
+Dialogue: 0,0:09:04.71,0:09:07.24,Cap,,0,0,0,,schützen. Und warum überlebte sie?
+Dialogue: 0,0:09:07.53,0:09:09.26,Cap,,0,0,0,,Auch das ist nur rekonstruiert.
+Dialogue: 0,0:09:09.55,0:09:11.96,Cap,,0,0,0,,Vermutlich wirkte die Kabine im engen Schacht wie
+Dialogue: 0,0:09:11.91,0:09:14.29,Cap,,0,0,0,,ein Kolben und staute ein Luftpolster unter sich.
+Dialogue: 0,0:09:14.58,0:09:17.10,Cap,,0,0,0,,Dazu hatte sich wohl Seil in der Grube aufgehäuft
+Dialogue: 0,0:09:17.05,0:09:18.51,Cap,,0,0,0,,und federte den Aufprall ab.
+Dialogue: 0,0:09:18.80,0:09:21.25,Cap,,0,0,0,,Luftdicht ist aber kein Aufzugsschacht, und meist
+Dialogue: 0,0:09:21.20,0:09:23.14,Cap,,0,0,0,,ist der Kolbeneffekt deutlich schwächer.
+Dialogue: 0,0:09:23.71,0:09:26.84,Cap,,0,0,0,,Ungebremst hätte der Fall über rund 75 Stockwerke
+Dialogue: 0,0:09:26.79,0:09:29.77,Cap,,0,0,0,,rechnerisch mehr als 250 Kilometer pro Stunde
+Dialogue: 0,0:09:29.72,0:09:33.01,Cap,,0,0,0,,ergeben. Oliver brach sich Becken, Rücken und Hals,
+Dialogue: 0,0:09:32.96,0:09:34.09,Cap,,0,0,0,,aber sie überlebte.
+Dialogue: 0,0:09:34.38,0:09:36.88,Cap,,0,0,0,,Nach allem, was sich rekonstruieren lässt, retteten
+Dialogue: 0,0:09:36.83,0:09:39.29,Cap,,0,0,0,,sie eher Glück und Physik als Sicherheitstechnik.
+Dialogue: 0,0:09:39.58,0:09:42.09,Cap,,0,0,0,,Heute müssten dafür alle Seile reißen und zugleich
+Dialogue: 0,0:09:42.04,0:09:43.54,Cap,,0,0,0,,die Fangvorrichtung versagen.
+Dialogue: 0,0:09:44.54,0:09:47.02,Cap,,0,0,0,,Zusammengefasst: Die Kabine hängt an mehreren
+Dialogue: 0,0:09:46.97,0:09:49.63,Cap,,0,0,0,,Seilen, in Europa jedes mit mindestens 12-facher
+Dialogue: 0,0:09:49.58,0:09:52.53,Cap,,0,0,0,,Sicherheit. Wird sie zu schnell, lässt ein Schalter
+Dialogue: 0,0:09:52.48,0:09:55.06,Cap,,0,0,0,,die Bremse einfallen, spätestens wenn der Begrenzer
+Dialogue: 0,0:09:55.01,0:09:55.98,Cap,,0,0,0,,sein Seil festhält.
+Dialogue: 0,0:09:56.27,0:09:59.13,Cap,,0,0,0,,Dann klemmen Keile die Kabine an den Schienen fest.
+Dialogue: 0,0:09:59.42,0:10:02.03,Cap,,0,0,0,,Puffer sind für langsame Überfahrten da, und Prüfer
+Dialogue: 0,0:10:01.98,0:10:04.08,Cap,,0,0,0,,kontrollieren regelmäßig die ganze Kette.
+Dialogue: 0,0:10:04.65,0:10:06.95,Cap,,0,0,0,,Das war die Sicherheitskette im Röntgenblick.
+Dialogue: 0,0:10:07.24,0:10:09.35,Cap,,0,0,0,,Wenn du ab jetzt mit anderen Augen in den
+Dialogue: 0,0:10:09.30,0:10:11.48,Cap,,0,0,0,,Aufzug steigst, dann abonniere Visual Science.
+Dialogue: 0,0:10:12.05,0:10:13.77,Cap,,0,0,0,,Nächstes Mal wird es richtig schnell.
+Dialogue: 0,0:10:14.06,0:10:17.05,Cap,,0,0,0,,Was passiert im Motor bei 8.000 Umdrehungen pro
+Dialogue: 0,0:10:16.99,0:10:20.06,Cap,,0,0,0,,Minute? Bis dahin: gute Fahrt, egal in welche
+Dialogue: 0,0:10:20.01,0:10:20.59,Cap,,0,0,0,,Richtung.

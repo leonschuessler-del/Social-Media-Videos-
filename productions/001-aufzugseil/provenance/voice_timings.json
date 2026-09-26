@@ -1,0 +1,9726 @@
+{
+ "sample_rate": 22050,
+ "duration": 622.664,
+ "words": 1643,
+ "wpm": 158.7,
+ "length_scale": 0.9,
+ "synth_seconds": 2003.2,
+ "model": "coqui thorsten vits (CC0 dataset)",
+ "segments": [
+  {
+   "id": "s01",
+   "chapter": "Der Absturz von 1945",
+   "kind": "HOOK",
+   "start": 0.0,
+   "end": 12.706,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Neunzehnhundertfünfundvierzig.",
+     "caption": "1945.",
+     "start": 0.0,
+     "end": 1.643,
+     "words": [
+      {
+       "w": "Neunzehnhundertfünfundvierzig.",
+       "s": 0.0,
+       "e": 1.643
+      }
+     ]
+    },
+    {
+     "text": "Im Empire State Building stürzt eine Aufzugskabine rund fünfundsiebzig Stockwerke in die Tiefe.",
+     "caption": "Im Empire State Building stürzt eine Aufzugskabine rund 75 Stockwerke in die Tiefe.",
+     "start": 1.983,
+     "end": 7.147,
+     "words": [
+      {
+       "w": "Im",
+       "s": 1.983,
+       "e": 2.161
+      },
+      {
+       "w": "Empire",
+       "s": 2.161,
+       "e": 2.543
+      },
+      {
+       "w": "State",
+       "s": 2.543,
+       "e": 2.873
+      },
+      {
+       "w": "Building",
+       "s": 2.873,
+       "e": 3.357
+      },
+      {
+       "w": "stürzt",
+       "s": 3.357,
+       "e": 3.738
+      },
+      {
+       "w": "eine",
+       "s": 3.738,
+       "e": 4.018
+      },
+      {
+       "w": "Aufzugskabine",
+       "s": 4.018,
+       "e": 4.756
+      },
+      {
+       "w": "rund",
+       "s": 4.756,
+       "e": 5.036
+      },
+      {
+       "w": "fünfundsiebzig",
+       "s": 5.036,
+       "e": 5.824
+      },
+      {
+       "w": "Stockwerke",
+       "s": 5.824,
+       "e": 6.41
+      },
+      {
+       "w": "in",
+       "s": 6.41,
+       "e": 6.588
+      },
+      {
+       "w": "die",
+       "s": 6.588,
+       "e": 6.817
+      },
+      {
+       "w": "Tiefe.",
+       "s": 6.817,
+       "e": 7.147
+      }
+     ]
+    },
+    {
+     "text": "Darin sitzt eine schwer verletzte junge Frau.",
+     "caption": "Darin sitzt eine schwer verletzte junge Frau.",
+     "start": 7.487,
+     "end": 9.704,
+     "words": [
+      {
+       "w": "Darin",
+       "s": 7.487,
+       "e": 7.784
+      },
+      {
+       "w": "sitzt",
+       "s": 7.784,
+       "e": 8.081
+      },
+      {
+       "w": "eine",
+       "s": 8.081,
+       "e": 8.333
+      },
+      {
+       "w": "schwer",
+       "s": 8.333,
+       "e": 8.675
+      },
+      {
+       "w": "verletzte",
+       "s": 8.675,
+       "e": 9.155
+      },
+      {
+       "w": "junge",
+       "s": 9.155,
+       "e": 9.452
+      },
+      {
+       "w": "Frau.",
+       "s": 9.452,
+       "e": 9.704
+      }
+     ]
+    },
+    {
+     "text": "Sie überlebt.",
+     "caption": "Sie überlebt.",
+     "start": 10.044,
+     "end": 10.795,
+     "words": [
+      {
+       "w": "Sie",
+       "s": 10.044,
+       "e": 10.285
+      },
+      {
+       "w": "überlebt.",
+       "s": 10.285,
+       "e": 10.795
+      }
+     ]
+    },
+    {
+     "text": "Wie ist das möglich?",
+     "caption": "Wie ist das möglich?",
+     "start": 11.135,
+     "end": 12.086,
+     "words": [
+      {
+       "w": "Wie",
+       "s": 11.135,
+       "e": 11.33
+      },
+      {
+       "w": "ist",
+       "s": 11.33,
+       "e": 11.524
+      },
+      {
+       "w": "das",
+       "s": 11.524,
+       "e": 11.719
+      },
+      {
+       "w": "möglich?",
+       "s": 11.719,
+       "e": 12.086
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s02",
+   "chapter": "Der Absturz von 1945",
+   "kind": "SETUP",
+   "start": 12.706,
+   "end": 34.507,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Die Frau heißt Betty Lou Oliver.",
+     "caption": "Die Frau heißt Betty Lou Oliver.",
+     "start": 12.706,
+     "end": 14.431,
+     "words": [
+      {
+       "w": "Die",
+       "s": 12.706,
+       "e": 12.928
+      },
+      {
+       "w": "Frau",
+       "s": 12.928,
+       "e": 13.199
+      },
+      {
+       "w": "heißt",
+       "s": 13.199,
+       "e": 13.519
+      },
+      {
+       "w": "Betty",
+       "s": 13.519,
+       "e": 13.839
+      },
+      {
+       "w": "Lou",
+       "s": 13.839,
+       "e": 14.061
+      },
+      {
+       "w": "Oliver.",
+       "s": 14.061,
+       "e": 14.431
+      }
+     ]
+    },
+    {
+     "text": "Ihr Sturz steht als längster überlebter Aufzugsabsturz im Buch der Rekorde.",
+     "caption": "Ihr Sturz steht als längster überlebter Aufzugsabsturz im Buch der Rekorde.",
+     "start": 14.771,
+     "end": 18.765,
+     "words": [
+      {
+       "w": "Ihr",
+       "s": 14.771,
+       "e": 14.994
+      },
+      {
+       "w": "Sturz",
+       "s": 14.994,
+       "e": 15.316
+      },
+      {
+       "w": "steht",
+       "s": 15.316,
+       "e": 15.639
+      },
+      {
+       "w": "als",
+       "s": 15.639,
+       "e": 15.862
+      },
+      {
+       "w": "längster",
+       "s": 15.862,
+       "e": 16.334
+      },
+      {
+       "w": "überlebter",
+       "s": 16.334,
+       "e": 16.904
+      },
+      {
+       "w": "Aufzugsabsturz",
+       "s": 16.904,
+       "e": 17.673
+      },
+      {
+       "w": "im",
+       "s": 17.673,
+       "e": 17.847
+      },
+      {
+       "w": "Buch",
+       "s": 17.847,
+       "e": 18.12
+      },
+      {
+       "w": "der",
+       "s": 18.12,
+       "e": 18.343
+      },
+      {
+       "w": "Rekorde.",
+       "s": 18.343,
+       "e": 18.765
+      }
+     ]
+    },
+    {
+     "text": "Doch warum stürzen Aufzüge sonst so gut wie nie ab, obwohl sie an dünnen Stahlseilen hängen?",
+     "caption": "Doch warum stürzen Aufzüge sonst so gut wie nie ab, obwohl sie an dünnen Stahlseilen hängen?",
+     "start": 19.105,
+     "end": 23.646,
+     "words": [
+      {
+       "w": "Doch",
+       "s": 19.105,
+       "e": 19.357
+      },
+      {
+       "w": "warum",
+       "s": 19.357,
+       "e": 19.655
+      },
+      {
+       "w": "stürzen",
+       "s": 19.655,
+       "e": 20.045
+      },
+      {
+       "w": "Aufzüge",
+       "s": 20.045,
+       "e": 20.435
+      },
+      {
+       "w": "sonst",
+       "s": 20.435,
+       "e": 20.733
+      },
+      {
+       "w": "so",
+       "s": 20.733,
+       "e": 20.894
+      },
+      {
+       "w": "gut",
+       "s": 20.894,
+       "e": 21.1
+      },
+      {
+       "w": "wie",
+       "s": 21.1,
+       "e": 21.307
+      },
+      {
+       "w": "nie",
+       "s": 21.307,
+       "e": 21.513
+      },
+      {
+       "w": "ab,",
+       "s": 21.513,
+       "e": 21.674
+      },
+      {
+       "w": "obwohl",
+       "s": 21.674,
+       "e": 22.018
+      },
+      {
+       "w": "sie",
+       "s": 22.018,
+       "e": 22.224
+      },
+      {
+       "w": "an",
+       "s": 22.224,
+       "e": 22.384
+      },
+      {
+       "w": "dünnen",
+       "s": 22.384,
+       "e": 22.728
+      },
+      {
+       "w": "Stahlseilen",
+       "s": 22.728,
+       "e": 23.302
+      },
+      {
+       "w": "hängen?",
+       "s": 23.302,
+       "e": 23.646
+      }
+     ]
+    },
+    {
+     "text": "Wir kappen gleich in Gedanken alle Seile und schauen Millisekunde für Millisekunde zu.",
+     "caption": "Wir kappen gleich in Gedanken alle Seile und schauen Millisekunde für Millisekunde zu.",
+     "start": 23.986,
+     "end": 28.174,
+     "words": [
+      {
+       "w": "Wir",
+       "s": 23.986,
+       "e": 24.19
+      },
+      {
+       "w": "kappen",
+       "s": 24.19,
+       "e": 24.529
+      },
+      {
+       "w": "gleich",
+       "s": 24.529,
+       "e": 24.869
+      },
+      {
+       "w": "in",
+       "s": 24.869,
+       "e": 25.027
+      },
+      {
+       "w": "Gedanken",
+       "s": 25.027,
+       "e": 25.457
+      },
+      {
+       "w": "alle",
+       "s": 25.457,
+       "e": 25.706
+      },
+      {
+       "w": "Seile",
+       "s": 25.706,
+       "e": 26.001
+      },
+      {
+       "w": "und",
+       "s": 26.001,
+       "e": 26.204
+      },
+      {
+       "w": "schauen",
+       "s": 26.204,
+       "e": 26.589
+      },
+      {
+       "w": "Millisekunde",
+       "s": 26.589,
+       "e": 27.201
+      },
+      {
+       "w": "für",
+       "s": 27.201,
+       "e": 27.404
+      },
+      {
+       "w": "Millisekunde",
+       "s": 27.404,
+       "e": 28.016
+      },
+      {
+       "w": "zu.",
+       "s": 28.016,
+       "e": 28.174
+      }
+     ]
+    },
+    {
+     "text": "Am Ende suchen wir den Grund, warum damals keine Sicherung griff, soweit er sich noch rekonstruieren lässt.",
+     "caption": "Am Ende suchen wir den Grund, warum damals keine Sicherung griff, soweit er sich noch rekonstruieren lässt.",
+     "start": 28.514,
+     "end": 33.887,
+     "words": [
+      {
+       "w": "Am",
+       "s": 28.514,
+       "e": 28.68
+      },
+      {
+       "w": "Ende",
+       "s": 28.68,
+       "e": 28.94
+      },
+      {
+       "w": "suchen",
+       "s": 28.94,
+       "e": 29.295
+      },
+      {
+       "w": "wir",
+       "s": 29.295,
+       "e": 29.508
+      },
+      {
+       "w": "den",
+       "s": 29.508,
+       "e": 29.721
+      },
+      {
+       "w": "Grund,",
+       "s": 29.721,
+       "e": 30.029
+      },
+      {
+       "w": "warum",
+       "s": 30.029,
+       "e": 30.337
+      },
+      {
+       "w": "damals",
+       "s": 30.337,
+       "e": 30.692
+      },
+      {
+       "w": "keine",
+       "s": 30.692,
+       "e": 30.999
+      },
+      {
+       "w": "Sicherung",
+       "s": 30.999,
+       "e": 31.496
+      },
+      {
+       "w": "griff,",
+       "s": 31.496,
+       "e": 31.804
+      },
+      {
+       "w": "soweit",
+       "s": 31.804,
+       "e": 32.159
+      },
+      {
+       "w": "er",
+       "s": 32.159,
+       "e": 32.325
+      },
+      {
+       "w": "sich",
+       "s": 32.325,
+       "e": 32.585
+      },
+      {
+       "w": "noch",
+       "s": 32.585,
+       "e": 32.845
+      },
+      {
+       "w": "rekonstruieren",
+       "s": 32.845,
+       "e": 33.579
+      },
+      {
+       "w": "lässt.",
+       "s": 33.579,
+       "e": 33.887
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s03",
+   "chapter": "1854: Das gekappte Seil",
+   "kind": "STORY",
+   "start": 34.937,
+   "end": 58.731,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Die Idee dahinter ist alt: New York, achtzehnhundertvierundfünfzig, eine Ausstellung im Kristallpalast.",
+     "caption": "Die Idee dahinter ist alt: New York, 1854, eine Ausstellung im Kristallpalast.",
+     "start": 34.937,
+     "end": 40.399,
+     "words": [
+      {
+       "w": "Die",
+       "s": 34.937,
+       "e": 35.169
+      },
+      {
+       "w": "Idee",
+       "s": 35.169,
+       "e": 35.452
+      },
+      {
+       "w": "dahinter",
+       "s": 35.452,
+       "e": 35.942
+      },
+      {
+       "w": "ist",
+       "s": 35.942,
+       "e": 36.174
+      },
+      {
+       "w": "alt:",
+       "s": 36.174,
+       "e": 36.406
+      },
+      {
+       "w": "New",
+       "s": 36.406,
+       "e": 36.637
+      },
+      {
+       "w": "York,",
+       "s": 36.637,
+       "e": 36.921
+      },
+      {
+       "w": "achtzehnhundertvierundfünfzig,",
+       "s": 36.921,
+       "e": 38.493
+      },
+      {
+       "w": "eine",
+       "s": 38.493,
+       "e": 38.776
+      },
+      {
+       "w": "Ausstellung",
+       "s": 38.776,
+       "e": 39.42
+      },
+      {
+       "w": "im",
+       "s": 39.42,
+       "e": 39.601
+      },
+      {
+       "w": "Kristallpalast.",
+       "s": 39.601,
+       "e": 40.399
+      }
+     ]
+    },
+    {
+     "text": "Der Mechaniker Elisha Otis steht auf einer hochgezogenen Plattform, dann wird vor Publikum das Tragseil gekappt.",
+     "caption": "Der Mechaniker Elisha Otis steht auf einer hochgezogenen Plattform, dann wird vor Publikum das Tragseil gekappt.",
+     "start": 40.739,
+     "end": 46.427,
+     "words": [
+      {
+       "w": "Der",
+       "s": 40.739,
+       "e": 40.954
+      },
+      {
+       "w": "Mechaniker",
+       "s": 40.954,
+       "e": 41.504
+      },
+      {
+       "w": "Elisha",
+       "s": 41.504,
+       "e": 41.863
+      },
+      {
+       "w": "Otis",
+       "s": 41.863,
+       "e": 42.125
+      },
+      {
+       "w": "steht",
+       "s": 42.125,
+       "e": 42.436
+      },
+      {
+       "w": "auf",
+       "s": 42.436,
+       "e": 42.651
+      },
+      {
+       "w": "einer",
+       "s": 42.651,
+       "e": 42.962
+      },
+      {
+       "w": "hochgezogenen",
+       "s": 42.962,
+       "e": 43.655
+      },
+      {
+       "w": "Plattform,",
+       "s": 43.655,
+       "e": 44.157
+      },
+      {
+       "w": "dann",
+       "s": 44.157,
+       "e": 44.42
+      },
+      {
+       "w": "wird",
+       "s": 44.42,
+       "e": 44.683
+      },
+      {
+       "w": "vor",
+       "s": 44.683,
+       "e": 44.898
+      },
+      {
+       "w": "Publikum",
+       "s": 44.898,
+       "e": 45.352
+      },
+      {
+       "w": "das",
+       "s": 45.352,
+       "e": 45.567
+      },
+      {
+       "w": "Tragseil",
+       "s": 45.567,
+       "e": 46.021
+      },
+      {
+       "w": "gekappt.",
+       "s": 46.021,
+       "e": 46.427
+      }
+     ]
+    },
+    {
+     "text": "Laut der Firmenchronik sackt die Plattform nur ein paar Zoll ab.",
+     "caption": "Laut der Firmenchronik sackt die Plattform nur ein paar Zoll ab.",
+     "start": 46.767,
+     "end": 50.075,
+     "words": [
+      {
+       "w": "Laut",
+       "s": 46.767,
+       "e": 47.029
+      },
+      {
+       "w": "der",
+       "s": 47.029,
+       "e": 47.243
+      },
+      {
+       "w": "Firmenchronik",
+       "s": 47.243,
+       "e": 47.933
+      },
+      {
+       "w": "sackt",
+       "s": 47.933,
+       "e": 48.243
+      },
+      {
+       "w": "die",
+       "s": 48.243,
+       "e": 48.457
+      },
+      {
+       "w": "Plattform",
+       "s": 48.457,
+       "e": 48.956
+      },
+      {
+       "w": "nur",
+       "s": 48.956,
+       "e": 49.171
+      },
+      {
+       "w": "ein",
+       "s": 49.171,
+       "e": 49.385
+      },
+      {
+       "w": "paar",
+       "s": 49.385,
+       "e": 49.646
+      },
+      {
+       "w": "Zoll",
+       "s": 49.646,
+       "e": 49.908
+      },
+      {
+       "w": "ab.",
+       "s": 49.908,
+       "e": 50.075
+      }
+     ]
+    },
+    {
+     "text": "Das Prinzip: Solange das Seil zieht, bleibt eine Federsperre gelöst.",
+     "caption": "Das Prinzip: Solange das Seil zieht, bleibt eine Federsperre gelöst.",
+     "start": 50.415,
+     "end": 54.393,
+     "words": [
+      {
+       "w": "Das",
+       "s": 50.415,
+       "e": 50.667
+      },
+      {
+       "w": "Prinzip:",
+       "s": 50.667,
+       "e": 51.143
+      },
+      {
+       "w": "Solange",
+       "s": 51.143,
+       "e": 51.619
+      },
+      {
+       "w": "das",
+       "s": 51.619,
+       "e": 51.872
+      },
+      {
+       "w": "Seil",
+       "s": 51.872,
+       "e": 52.18
+      },
+      {
+       "w": "zieht,",
+       "s": 52.18,
+       "e": 52.544
+      },
+      {
+       "w": "bleibt",
+       "s": 52.544,
+       "e": 52.964
+      },
+      {
+       "w": "eine",
+       "s": 52.964,
+       "e": 53.272
+      },
+      {
+       "w": "Federsperre",
+       "s": 53.272,
+       "e": 53.973
+      },
+      {
+       "w": "gelöst.",
+       "s": 53.973,
+       "e": 54.393
+      }
+     ]
+    },
+    {
+     "text": "Reißt es, greift sie sofort in Zahnstangen an beiden Seiten.",
+     "caption": "Reißt es, greift sie sofort in Zahnstangen an beiden Seiten.",
+     "start": 54.733,
+     "end": 58.111,
+     "words": [
+      {
+       "w": "Reißt",
+       "s": 54.733,
+       "e": 55.076
+      },
+      {
+       "w": "es,",
+       "s": 55.076,
+       "e": 55.261
+      },
+      {
+       "w": "greift",
+       "s": 55.261,
+       "e": 55.657
+      },
+      {
+       "w": "sie",
+       "s": 55.657,
+       "e": 55.894
+      },
+      {
+       "w": "sofort",
+       "s": 55.894,
+       "e": 56.29
+      },
+      {
+       "w": "in",
+       "s": 56.29,
+       "e": 56.475
+      },
+      {
+       "w": "Zahnstangen",
+       "s": 56.475,
+       "e": 57.134
+      },
+      {
+       "w": "an",
+       "s": 57.134,
+       "e": 57.319
+      },
+      {
+       "w": "beiden",
+       "s": 57.319,
+       "e": 57.715
+      },
+      {
+       "w": "Seiten.",
+       "s": 57.715,
+       "e": 58.111
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s04",
+   "chapter": "1854: Das gekappte Seil",
+   "kind": "PATTERN_INTERRUPT",
+   "start": 58.731,
+   "end": 70.691,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Oft wird erzählt, Otis habe danach gerufen, es sei alles sicher.",
+     "caption": "Oft wird erzählt, Otis habe danach gerufen, es sei alles sicher.",
+     "start": 58.731,
+     "end": 62.275,
+     "words": [
+      {
+       "w": "Oft",
+       "s": 58.731,
+       "e": 58.967
+      },
+      {
+       "w": "wird",
+       "s": 58.967,
+       "e": 59.256
+      },
+      {
+       "w": "erzählt,",
+       "s": 59.256,
+       "e": 59.702
+      },
+      {
+       "w": "Otis",
+       "s": 59.702,
+       "e": 59.991
+      },
+      {
+       "w": "habe",
+       "s": 59.991,
+       "e": 60.28
+      },
+      {
+       "w": "danach",
+       "s": 60.28,
+       "e": 60.673
+      },
+      {
+       "w": "gerufen,",
+       "s": 60.673,
+       "e": 61.12
+      },
+      {
+       "w": "es",
+       "s": 61.12,
+       "e": 61.304
+      },
+      {
+       "w": "sei",
+       "s": 61.304,
+       "e": 61.54
+      },
+      {
+       "w": "alles",
+       "s": 61.54,
+       "e": 61.881
+      },
+      {
+       "w": "sicher.",
+       "s": 61.881,
+       "e": 62.275
+      }
+     ]
+    },
+    {
+     "text": "In den wenigen Berichten von damals fehlt dieser Ausruf.",
+     "caption": "In den wenigen Berichten von damals fehlt dieser Ausruf.",
+     "start": 62.615,
+     "end": 65.457,
+     "words": [
+      {
+       "w": "In",
+       "s": 62.615,
+       "e": 62.779
+      },
+      {
+       "w": "den",
+       "s": 62.779,
+       "e": 62.991
+      },
+      {
+       "w": "wenigen",
+       "s": 62.991,
+       "e": 63.39
+      },
+      {
+       "w": "Berichten",
+       "s": 63.39,
+       "e": 63.883
+      },
+      {
+       "w": "von",
+       "s": 63.883,
+       "e": 64.095
+      },
+      {
+       "w": "damals",
+       "s": 64.095,
+       "e": 64.447
+      },
+      {
+       "w": "fehlt",
+       "s": 64.447,
+       "e": 64.753
+      },
+      {
+       "w": "dieser",
+       "s": 64.753,
+       "e": 65.105
+      },
+      {
+       "w": "Ausruf.",
+       "s": 65.105,
+       "e": 65.457
+      }
+     ]
+    },
+    {
+     "text": "Eine New Yorker Zeitung notierte nur, der Erfinder schneide gelegentlich selbst das Seil durch.",
+     "caption": "Eine New Yorker Zeitung notierte nur, der Erfinder schneide gelegentlich selbst das Seil durch.",
+     "start": 65.797,
+     "end": 70.071,
+     "words": [
+      {
+       "w": "Eine",
+       "s": 65.797,
+       "e": 66.03
+      },
+      {
+       "w": "New",
+       "s": 66.03,
+       "e": 66.22
+      },
+      {
+       "w": "Yorker",
+       "s": 66.22,
+       "e": 66.538
+      },
+      {
+       "w": "Zeitung",
+       "s": 66.538,
+       "e": 66.897
+      },
+      {
+       "w": "notierte",
+       "s": 66.897,
+       "e": 67.299
+      },
+      {
+       "w": "nur,",
+       "s": 67.299,
+       "e": 67.49
+      },
+      {
+       "w": "der",
+       "s": 67.49,
+       "e": 67.68
+      },
+      {
+       "w": "Erfinder",
+       "s": 67.68,
+       "e": 68.082
+      },
+      {
+       "w": "schneide",
+       "s": 68.082,
+       "e": 68.484
+      },
+      {
+       "w": "gelegentlich",
+       "s": 68.484,
+       "e": 69.056
+      },
+      {
+       "w": "selbst",
+       "s": 69.056,
+       "e": 69.373
+      },
+      {
+       "w": "das",
+       "s": 69.373,
+       "e": 69.563
+      },
+      {
+       "w": "Seil",
+       "s": 69.563,
+       "e": 69.796
+      },
+      {
+       "w": "durch.",
+       "s": 69.796,
+       "e": 70.071
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s05",
+   "chapter": "Schicht 1: Die Seile",
+   "kind": "SETUP",
+   "start": 71.121,
+   "end": 90.258,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Heute ist aus dieser Sperre eine ganze Kette von Schutzschichten geworden.",
+     "caption": "Heute ist aus dieser Sperre eine ganze Kette von Schutzschichten geworden.",
+     "start": 71.121,
+     "end": 74.881,
+     "words": [
+      {
+       "w": "Heute",
+       "s": 71.121,
+       "e": 71.429
+      },
+      {
+       "w": "ist",
+       "s": 71.429,
+       "e": 71.641
+      },
+      {
+       "w": "aus",
+       "s": 71.641,
+       "e": 71.854
+      },
+      {
+       "w": "dieser",
+       "s": 71.854,
+       "e": 72.209
+      },
+      {
+       "w": "Sperre",
+       "s": 72.209,
+       "e": 72.563
+      },
+      {
+       "w": "eine",
+       "s": 72.563,
+       "e": 72.824
+      },
+      {
+       "w": "ganze",
+       "s": 72.824,
+       "e": 73.131
+      },
+      {
+       "w": "Kette",
+       "s": 73.131,
+       "e": 73.438
+      },
+      {
+       "w": "von",
+       "s": 73.438,
+       "e": 73.651
+      },
+      {
+       "w": "Schutzschichten",
+       "s": 73.651,
+       "e": 74.431
+      },
+      {
+       "w": "geworden.",
+       "s": 74.431,
+       "e": 74.881
+      }
+     ]
+    },
+    {
+     "text": "Jede deckt einen anderen Fehler ab, und manche arbeiten nur zusammen.",
+     "caption": "Jede deckt einen anderen Fehler ab, und manche arbeiten nur zusammen.",
+     "start": 75.221,
+     "end": 78.566,
+     "words": [
+      {
+       "w": "Jede",
+       "s": 75.221,
+       "e": 75.471
+      },
+      {
+       "w": "deckt",
+       "s": 75.471,
+       "e": 75.767
+      },
+      {
+       "w": "einen",
+       "s": 75.767,
+       "e": 76.063
+      },
+      {
+       "w": "anderen",
+       "s": 76.063,
+       "e": 76.45
+      },
+      {
+       "w": "Fehler",
+       "s": 76.45,
+       "e": 76.791
+      },
+      {
+       "w": "ab,",
+       "s": 76.791,
+       "e": 76.95
+      },
+      {
+       "w": "und",
+       "s": 76.95,
+       "e": 77.155
+      },
+      {
+       "w": "manche",
+       "s": 77.155,
+       "e": 77.497
+      },
+      {
+       "w": "arbeiten",
+       "s": 77.497,
+       "e": 77.929
+      },
+      {
+       "w": "nur",
+       "s": 77.929,
+       "e": 78.134
+      },
+      {
+       "w": "zusammen.",
+       "s": 78.134,
+       "e": 78.566
+      }
+     ]
+    },
+    {
+     "text": "Erste Schicht: die Seile, meist etwa drei bis acht unabhängige.",
+     "caption": "Erste Schicht: die Seile, meist etwa 3 bis 8 unabhängige.",
+     "start": 78.906,
+     "end": 82.4,
+     "words": [
+      {
+       "w": "Erste",
+       "s": 78.906,
+       "e": 79.251
+      },
+      {
+       "w": "Schicht:",
+       "s": 79.251,
+       "e": 79.7
+      },
+      {
+       "w": "die",
+       "s": 79.7,
+       "e": 79.939
+      },
+      {
+       "w": "Seile,",
+       "s": 79.939,
+       "e": 80.283
+      },
+      {
+       "w": "meist",
+       "s": 80.283,
+       "e": 80.627
+      },
+      {
+       "w": "etwa",
+       "s": 80.627,
+       "e": 80.918
+      },
+      {
+       "w": "drei",
+       "s": 80.918,
+       "e": 81.209
+      },
+      {
+       "w": "bis",
+       "s": 81.209,
+       "e": 81.447
+      },
+      {
+       "w": "acht",
+       "s": 81.447,
+       "e": 81.739
+      },
+      {
+       "w": "unabhängige.",
+       "s": 81.739,
+       "e": 82.4
+      }
+     ]
+    },
+    {
+     "text": "Die europäische Aufzugsnorm verlangt dann, dass jedes mindestens zwölfmal so viel aushält, wie bei voll beladener Kabine an ihm zieht.",
+     "caption": "Die europäische Aufzugsnorm verlangt dann, dass jedes mindestens 12-mal so viel aushält, wie bei voll beladener Kabine an ihm zieht.",
+     "start": 82.74,
+     "end": 89.638,
+     "words": [
+      {
+       "w": "Die",
+       "s": 82.74,
+       "e": 82.959
+      },
+      {
+       "w": "europäische",
+       "s": 82.959,
+       "e": 83.566
+      },
+      {
+       "w": "Aufzugsnorm",
+       "s": 83.566,
+       "e": 84.173
+      },
+      {
+       "w": "verlangt",
+       "s": 84.173,
+       "e": 84.635
+      },
+      {
+       "w": "dann,",
+       "s": 84.635,
+       "e": 84.902
+      },
+      {
+       "w": "dass",
+       "s": 84.902,
+       "e": 85.169
+      },
+      {
+       "w": "jedes",
+       "s": 85.169,
+       "e": 85.485
+      },
+      {
+       "w": "mindestens",
+       "s": 85.485,
+       "e": 86.044
+      },
+      {
+       "w": "zwölfmal",
+       "s": 86.044,
+       "e": 86.505
+      },
+      {
+       "w": "so",
+       "s": 86.505,
+       "e": 86.675
+      },
+      {
+       "w": "viel",
+       "s": 86.675,
+       "e": 86.942
+      },
+      {
+       "w": "aushält,",
+       "s": 86.942,
+       "e": 87.355
+      },
+      {
+       "w": "wie",
+       "s": 87.355,
+       "e": 87.574
+      },
+      {
+       "w": "bei",
+       "s": 87.574,
+       "e": 87.792
+      },
+      {
+       "w": "voll",
+       "s": 87.792,
+       "e": 88.06
+      },
+      {
+       "w": "beladener",
+       "s": 88.06,
+       "e": 88.57
+      },
+      {
+       "w": "Kabine",
+       "s": 88.57,
+       "e": 88.934
+      },
+      {
+       "w": "an",
+       "s": 88.934,
+       "e": 89.104
+      },
+      {
+       "w": "ihm",
+       "s": 89.104,
+       "e": 89.323
+      },
+      {
+       "w": "zieht.",
+       "s": 89.323,
+       "e": 89.638
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s06",
+   "chapter": "Schicht 1: Die Seile",
+   "kind": "PATTERN_INTERRUPT",
+   "start": 90.258,
+   "end": 106.867,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Bei sechs Seilen könnte rein statisch gerechnet schon ein einziges etwa das Doppelte der voll beladenen Kabine halten.",
+     "caption": "Bei 6 Seilen könnte rein statisch gerechnet schon ein einziges etwa das Doppelte der voll beladenen Kabine halten.",
+     "start": 90.258,
+     "end": 95.776,
+     "words": [
+      {
+       "w": "Bei",
+       "s": 90.258,
+       "e": 90.454
+      },
+      {
+       "w": "sechs",
+       "s": 90.454,
+       "e": 90.736
+      },
+      {
+       "w": "Seilen",
+       "s": 90.736,
+       "e": 91.062
+      },
+      {
+       "w": "könnte",
+       "s": 91.062,
+       "e": 91.388
+      },
+      {
+       "w": "rein",
+       "s": 91.388,
+       "e": 91.627
+      },
+      {
+       "w": "statisch",
+       "s": 91.627,
+       "e": 92.04
+      },
+      {
+       "w": "gerechnet",
+       "s": 92.04,
+       "e": 92.496
+      },
+      {
+       "w": "schon",
+       "s": 92.496,
+       "e": 92.778
+      },
+      {
+       "w": "ein",
+       "s": 92.778,
+       "e": 92.974
+      },
+      {
+       "w": "einziges",
+       "s": 92.974,
+       "e": 93.386
+      },
+      {
+       "w": "etwa",
+       "s": 93.386,
+       "e": 93.625
+      },
+      {
+       "w": "das",
+       "s": 93.625,
+       "e": 93.821
+      },
+      {
+       "w": "Doppelte",
+       "s": 93.821,
+       "e": 94.234
+      },
+      {
+       "w": "der",
+       "s": 94.234,
+       "e": 94.429
+      },
+      {
+       "w": "voll",
+       "s": 94.429,
+       "e": 94.668
+      },
+      {
+       "w": "beladenen",
+       "s": 94.668,
+       "e": 95.124
+      },
+      {
+       "w": "Kabine",
+       "s": 95.124,
+       "e": 95.45
+      },
+      {
+       "w": "halten.",
+       "s": 95.45,
+       "e": 95.776
+      }
+     ]
+    },
+    {
+     "text": "Dabei ist so ein Seil nach der europäischen Aufzugsnorm mindestens acht Millimeter dick, kaum dicker als ein Bleistift.",
+     "caption": "Dabei ist so ein Seil nach der europäischen Aufzugsnorm mindestens 8 Millimeter dick, kaum dicker als ein Bleistift.",
+     "start": 96.116,
+     "end": 102.189,
+     "words": [
+      {
+       "w": "Dabei",
+       "s": 96.116,
+       "e": 96.427
+      },
+      {
+       "w": "ist",
+       "s": 96.427,
+       "e": 96.642
+      },
+      {
+       "w": "so",
+       "s": 96.642,
+       "e": 96.809
+      },
+      {
+       "w": "ein",
+       "s": 96.809,
+       "e": 97.024
+      },
+      {
+       "w": "Seil",
+       "s": 97.024,
+       "e": 97.287
+      },
+      {
+       "w": "nach",
+       "s": 97.287,
+       "e": 97.55
+      },
+      {
+       "w": "der",
+       "s": 97.55,
+       "e": 97.766
+      },
+      {
+       "w": "europäischen",
+       "s": 97.766,
+       "e": 98.411
+      },
+      {
+       "w": "Aufzugsnorm",
+       "s": 98.411,
+       "e": 99.009
+      },
+      {
+       "w": "mindestens",
+       "s": 99.009,
+       "e": 99.559
+      },
+      {
+       "w": "acht",
+       "s": 99.559,
+       "e": 99.822
+      },
+      {
+       "w": "Millimeter",
+       "s": 99.822,
+       "e": 100.372
+      },
+      {
+       "w": "dick,",
+       "s": 100.372,
+       "e": 100.635
+      },
+      {
+       "w": "kaum",
+       "s": 100.635,
+       "e": 100.898
+      },
+      {
+       "w": "dicker",
+       "s": 100.898,
+       "e": 101.256
+      },
+      {
+       "w": "als",
+       "s": 101.256,
+       "e": 101.471
+      },
+      {
+       "w": "ein",
+       "s": 101.471,
+       "e": 101.687
+      },
+      {
+       "w": "Bleistift.",
+       "s": 101.687,
+       "e": 102.189
+      }
+     ]
+    },
+    {
+     "text": "Je nach Bauart reißt es erst bei rund drei bis gut vier Tonnen Zugkraft.",
+     "caption": "Je nach Bauart reißt es erst bei rund 3 bis gut 4 Tonnen Zugkraft.",
+     "start": 102.529,
+     "end": 106.247,
+     "words": [
+      {
+       "w": "Je",
+       "s": 102.529,
+       "e": 102.693
+      },
+      {
+       "w": "nach",
+       "s": 102.693,
+       "e": 102.952
+      },
+      {
+       "w": "Bauart",
+       "s": 102.952,
+       "e": 103.305
+      },
+      {
+       "w": "reißt",
+       "s": 103.305,
+       "e": 103.611
+      },
+      {
+       "w": "es",
+       "s": 103.611,
+       "e": 103.776
+      },
+      {
+       "w": "erst",
+       "s": 103.776,
+       "e": 104.035
+      },
+      {
+       "w": "bei",
+       "s": 104.035,
+       "e": 104.247
+      },
+      {
+       "w": "rund",
+       "s": 104.247,
+       "e": 104.506
+      },
+      {
+       "w": "drei",
+       "s": 104.506,
+       "e": 104.765
+      },
+      {
+       "w": "bis",
+       "s": 104.765,
+       "e": 104.976
+      },
+      {
+       "w": "gut",
+       "s": 104.976,
+       "e": 105.188
+      },
+      {
+       "w": "vier",
+       "s": 105.188,
+       "e": 105.447
+      },
+      {
+       "w": "Tonnen",
+       "s": 105.447,
+       "e": 105.8
+      },
+      {
+       "w": "Zugkraft.",
+       "s": 105.8,
+       "e": 106.247
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s07",
+   "chapter": "Schicht 1: Die Seile",
+   "kind": "EXPLANATION",
+   "start": 106.867,
+   "end": 126.468,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "An der Maschine oben ist die Kabine gar nicht festgeschraubt.",
+     "caption": "An der Maschine oben ist die Kabine gar nicht festgeschraubt.",
+     "start": 106.867,
+     "end": 109.934,
+     "words": [
+      {
+       "w": "An",
+       "s": 106.867,
+       "e": 107.03
+      },
+      {
+       "w": "der",
+       "s": 107.03,
+       "e": 107.239
+      },
+      {
+       "w": "Maschine",
+       "s": 107.239,
+       "e": 107.681
+      },
+      {
+       "w": "oben",
+       "s": 107.681,
+       "e": 107.936
+      },
+      {
+       "w": "ist",
+       "s": 107.936,
+       "e": 108.145
+      },
+      {
+       "w": "die",
+       "s": 108.145,
+       "e": 108.354
+      },
+      {
+       "w": "Kabine",
+       "s": 108.354,
+       "e": 108.703
+      },
+      {
+       "w": "gar",
+       "s": 108.703,
+       "e": 108.912
+      },
+      {
+       "w": "nicht",
+       "s": 108.912,
+       "e": 109.214
+      },
+      {
+       "w": "festgeschraubt.",
+       "s": 109.214,
+       "e": 109.934
+      }
+     ]
+    },
+    {
+     "text": "Die Seile liegen nur in den Rillen der Treibscheibe, wie ein Handtuch über einer Stange, und halten allein durch Reibung.",
+     "caption": "Die Seile liegen nur in den Rillen der Treibscheibe, wie ein Handtuch über einer Stange, und halten allein durch Reibung.",
+     "start": 110.274,
+     "end": 115.812,
+     "words": [
+      {
+       "w": "Die",
+       "s": 110.274,
+       "e": 110.468
+      },
+      {
+       "w": "Seile",
+       "s": 110.468,
+       "e": 110.747
+      },
+      {
+       "w": "liegen",
+       "s": 110.747,
+       "e": 111.068
+      },
+      {
+       "w": "nur",
+       "s": 111.068,
+       "e": 111.262
+      },
+      {
+       "w": "in",
+       "s": 111.262,
+       "e": 111.412
+      },
+      {
+       "w": "den",
+       "s": 111.412,
+       "e": 111.605
+      },
+      {
+       "w": "Rillen",
+       "s": 111.605,
+       "e": 111.927
+      },
+      {
+       "w": "der",
+       "s": 111.927,
+       "e": 112.12
+      },
+      {
+       "w": "Treibscheibe,",
+       "s": 112.12,
+       "e": 112.7
+      },
+      {
+       "w": "wie",
+       "s": 112.7,
+       "e": 112.893
+      },
+      {
+       "w": "ein",
+       "s": 112.893,
+       "e": 113.086
+      },
+      {
+       "w": "Handtuch",
+       "s": 113.086,
+       "e": 113.494
+      },
+      {
+       "w": "über",
+       "s": 113.494,
+       "e": 113.73
+      },
+      {
+       "w": "einer",
+       "s": 113.73,
+       "e": 114.009
+      },
+      {
+       "w": "Stange,",
+       "s": 114.009,
+       "e": 114.331
+      },
+      {
+       "w": "und",
+       "s": 114.331,
+       "e": 114.524
+      },
+      {
+       "w": "halten",
+       "s": 114.524,
+       "e": 114.846
+      },
+      {
+       "w": "allein",
+       "s": 114.846,
+       "e": 115.168
+      },
+      {
+       "w": "durch",
+       "s": 115.168,
+       "e": 115.447
+      },
+      {
+       "w": "Reibung.",
+       "s": 115.447,
+       "e": 115.812
+      }
+     ]
+    },
+    {
+     "text": "Am anderen Ende hängt das Gegengewicht, so schwer wie die leere Kabine plus etwa vierzig bis fünfzig Prozent der Nutzlast.",
+     "caption": "Am anderen Ende hängt das Gegengewicht, so schwer wie die leere Kabine plus etwa 40 bis 50 Prozent der Nutzlast.",
+     "start": 116.152,
+     "end": 122.277,
+     "words": [
+      {
+       "w": "Am",
+       "s": 116.152,
+       "e": 116.316
+      },
+      {
+       "w": "anderen",
+       "s": 116.316,
+       "e": 116.713
+      },
+      {
+       "w": "Ende",
+       "s": 116.713,
+       "e": 116.97
+      },
+      {
+       "w": "hängt",
+       "s": 116.97,
+       "e": 117.274
+      },
+      {
+       "w": "das",
+       "s": 117.274,
+       "e": 117.484
+      },
+      {
+       "w": "Gegengewicht,",
+       "s": 117.484,
+       "e": 118.116
+      },
+      {
+       "w": "so",
+       "s": 118.116,
+       "e": 118.279
+      },
+      {
+       "w": "schwer",
+       "s": 118.279,
+       "e": 118.63
+      },
+      {
+       "w": "wie",
+       "s": 118.63,
+       "e": 118.84
+      },
+      {
+       "w": "die",
+       "s": 118.84,
+       "e": 119.051
+      },
+      {
+       "w": "leere",
+       "s": 119.051,
+       "e": 119.355
+      },
+      {
+       "w": "Kabine",
+       "s": 119.355,
+       "e": 119.705
+      },
+      {
+       "w": "plus",
+       "s": 119.705,
+       "e": 119.962
+      },
+      {
+       "w": "etwa",
+       "s": 119.962,
+       "e": 120.219
+      },
+      {
+       "w": "vierzig",
+       "s": 120.219,
+       "e": 120.617
+      },
+      {
+       "w": "bis",
+       "s": 120.617,
+       "e": 120.827
+      },
+      {
+       "w": "fünfzig",
+       "s": 120.827,
+       "e": 121.225
+      },
+      {
+       "w": "Prozent",
+       "s": 121.225,
+       "e": 121.622
+      },
+      {
+       "w": "der",
+       "s": 121.622,
+       "e": 121.832
+      },
+      {
+       "w": "Nutzlast.",
+       "s": 121.832,
+       "e": 122.277
+      }
+     ]
+    },
+    {
+     "text": "Merk dir das Gegengewicht, es sorgt später für eine Überraschung.",
+     "caption": "Merk dir das Gegengewicht, es sorgt später für eine Überraschung.",
+     "start": 122.617,
+     "end": 125.848,
+     "words": [
+      {
+       "w": "Merk",
+       "s": 122.617,
+       "e": 122.874
+      },
+      {
+       "w": "dir",
+       "s": 122.874,
+       "e": 123.085
+      },
+      {
+       "w": "das",
+       "s": 123.085,
+       "e": 123.296
+      },
+      {
+       "w": "Gegengewicht,",
+       "s": 123.296,
+       "e": 123.928
+      },
+      {
+       "w": "es",
+       "s": 123.928,
+       "e": 124.092
+      },
+      {
+       "w": "sorgt",
+       "s": 124.092,
+       "e": 124.396
+      },
+      {
+       "w": "später",
+       "s": 124.396,
+       "e": 124.748
+      },
+      {
+       "w": "für",
+       "s": 124.748,
+       "e": 124.959
+      },
+      {
+       "w": "eine",
+       "s": 124.959,
+       "e": 125.216
+      },
+      {
+       "w": "Überraschung.",
+       "s": 125.216,
+       "e": 125.848
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s08",
+   "chapter": "Schicht 2 und 3: Begrenzer und Bremse",
+   "kind": "PATTERN_INTERRUPT",
+   "start": 126.898,
+   "end": 142.507,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Jetzt das Experiment: Ein Wohnhausaufzug mit Bremsfang fährt mit einem Meter pro Sekunde abwärts.",
+     "caption": "Jetzt das Experiment: Ein Wohnhausaufzug mit Bremsfang fährt mit 1 Meter pro Sekunde abwärts.",
+     "start": 126.898,
+     "end": 131.793,
+     "words": [
+      {
+       "w": "Jetzt",
+       "s": 126.898,
+       "e": 127.207
+      },
+      {
+       "w": "das",
+       "s": 127.207,
+       "e": 127.421
+      },
+      {
+       "w": "Experiment:",
+       "s": 127.421,
+       "e": 127.968
+      },
+      {
+       "w": "Ein",
+       "s": 127.968,
+       "e": 128.182
+      },
+      {
+       "w": "Wohnhausaufzug",
+       "s": 128.182,
+       "e": 128.918
+      },
+      {
+       "w": "mit",
+       "s": 128.918,
+       "e": 129.132
+      },
+      {
+       "w": "Bremsfang",
+       "s": 129.132,
+       "e": 129.631
+      },
+      {
+       "w": "fährt",
+       "s": 129.631,
+       "e": 129.94
+      },
+      {
+       "w": "mit",
+       "s": 129.94,
+       "e": 130.154
+      },
+      {
+       "w": "einem",
+       "s": 130.154,
+       "e": 130.463
+      },
+      {
+       "w": "Meter",
+       "s": 130.463,
+       "e": 130.772
+      },
+      {
+       "w": "pro",
+       "s": 130.772,
+       "e": 130.985
+      },
+      {
+       "w": "Sekunde",
+       "s": 130.985,
+       "e": 131.389
+      },
+      {
+       "w": "abwärts.",
+       "s": 131.389,
+       "e": 131.793
+      }
+     ]
+    },
+    {
+     "text": "Wir durchtrennen alle Seile, die Stoppuhr läuft.",
+     "caption": "Wir durchtrennen alle Seile, die Stoppuhr läuft.",
+     "start": 132.133,
+     "end": 134.772,
+     "words": [
+      {
+       "w": "Wir",
+       "s": 132.133,
+       "e": 132.368
+      },
+      {
+       "w": "durchtrennen",
+       "s": 132.368,
+       "e": 133.074
+      },
+      {
+       "w": "alle",
+       "s": 133.074,
+       "e": 133.361
+      },
+      {
+       "w": "Seile,",
+       "s": 133.361,
+       "e": 133.701
+      },
+      {
+       "w": "die",
+       "s": 133.701,
+       "e": 133.936
+      },
+      {
+       "w": "Stoppuhr",
+       "s": 133.936,
+       "e": 134.433
+      },
+      {
+       "w": "läuft.",
+       "s": 134.433,
+       "e": 134.772
+      }
+     ]
+    },
+    {
+     "text": "Nach fünfzehn Millisekunden ist die Kabine rechnerisch schon fünfzehn Prozent schneller als normal, nach gut eineinhalb Zentimetern Fall.",
+     "caption": "Nach 15 Millisekunden ist die Kabine rechnerisch schon 15 Prozent schneller als normal, nach gut 1,5 Zentimetern Fall.",
+     "start": 135.112,
+     "end": 141.887,
+     "words": [
+      {
+       "w": "Nach",
+       "s": 135.112,
+       "e": 135.369
+      },
+      {
+       "w": "fünfzehn",
+       "s": 135.369,
+       "e": 135.813
+      },
+      {
+       "w": "Millisekunden",
+       "s": 135.813,
+       "e": 136.491
+      },
+      {
+       "w": "ist",
+       "s": 136.491,
+       "e": 136.701
+      },
+      {
+       "w": "die",
+       "s": 136.701,
+       "e": 136.911
+      },
+      {
+       "w": "Kabine",
+       "s": 136.911,
+       "e": 137.262
+      },
+      {
+       "w": "rechnerisch",
+       "s": 137.262,
+       "e": 137.846
+      },
+      {
+       "w": "schon",
+       "s": 137.846,
+       "e": 138.149
+      },
+      {
+       "w": "fünfzehn",
+       "s": 138.149,
+       "e": 138.593
+      },
+      {
+       "w": "Prozent",
+       "s": 138.593,
+       "e": 138.99
+      },
+      {
+       "w": "schneller",
+       "s": 138.99,
+       "e": 139.481
+      },
+      {
+       "w": "als",
+       "s": 139.481,
+       "e": 139.691
+      },
+      {
+       "w": "normal,",
+       "s": 139.691,
+       "e": 140.041
+      },
+      {
+       "w": "nach",
+       "s": 140.041,
+       "e": 140.298
+      },
+      {
+       "w": "gut",
+       "s": 140.298,
+       "e": 140.508
+      },
+      {
+       "w": "eineinhalb",
+       "s": 140.508,
+       "e": 141.046
+      },
+      {
+       "w": "Zentimetern",
+       "s": 141.046,
+       "e": 141.63
+      },
+      {
+       "w": "Fall.",
+       "s": 141.63,
+       "e": 141.887
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s09",
+   "chapter": "Schicht 2 und 3: Begrenzer und Bremse",
+   "kind": "EXPLANATION",
+   "start": 142.507,
+   "end": 152.354,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Frühestens ab dieser Grenze darf der Wächter eingreifen.",
+     "caption": "Frühestens ab dieser Grenze darf der Wächter eingreifen.",
+     "start": 142.507,
+     "end": 145.294,
+     "words": [
+      {
+       "w": "Frühestens",
+       "s": 142.507,
+       "e": 143.041
+      },
+      {
+       "w": "ab",
+       "s": 143.041,
+       "e": 143.204
+      },
+      {
+       "w": "dieser",
+       "s": 143.204,
+       "e": 143.552
+      },
+      {
+       "w": "Grenze",
+       "s": 143.552,
+       "e": 143.9
+      },
+      {
+       "w": "darf",
+       "s": 143.9,
+       "e": 144.156
+      },
+      {
+       "w": "der",
+       "s": 144.156,
+       "e": 144.365
+      },
+      {
+       "w": "Wächter",
+       "s": 144.365,
+       "e": 144.76
+      },
+      {
+       "w": "eingreifen.",
+       "s": 144.76,
+       "e": 145.294
+      }
+     ]
+    },
+    {
+     "text": "Spätestens muss er es tun, bevor die Kabine eineinhalb Meter pro Sekunde erreicht, nach etwa fünfzig Millisekunden.",
+     "caption": "Spätestens muss er es tun, bevor die Kabine 1,5 Meter pro Sekunde erreicht, nach etwa 50 Millisekunden.",
+     "start": 145.634,
+     "end": 151.734,
+     "words": [
+      {
+       "w": "Spätestens",
+       "s": 145.634,
+       "e": 146.211
+      },
+      {
+       "w": "muss",
+       "s": 146.211,
+       "e": 146.488
+      },
+      {
+       "w": "er",
+       "s": 146.488,
+       "e": 146.663
+      },
+      {
+       "w": "es",
+       "s": 146.663,
+       "e": 146.839
+      },
+      {
+       "w": "tun,",
+       "s": 146.839,
+       "e": 147.065
+      },
+      {
+       "w": "bevor",
+       "s": 147.065,
+       "e": 147.391
+      },
+      {
+       "w": "die",
+       "s": 147.391,
+       "e": 147.617
+      },
+      {
+       "w": "Kabine",
+       "s": 147.617,
+       "e": 147.994
+      },
+      {
+       "w": "eineinhalb",
+       "s": 147.994,
+       "e": 148.571
+      },
+      {
+       "w": "Meter",
+       "s": 148.571,
+       "e": 148.898
+      },
+      {
+       "w": "pro",
+       "s": 148.898,
+       "e": 149.124
+      },
+      {
+       "w": "Sekunde",
+       "s": 149.124,
+       "e": 149.55
+      },
+      {
+       "w": "erreicht,",
+       "s": 149.55,
+       "e": 150.027
+      },
+      {
+       "w": "nach",
+       "s": 150.027,
+       "e": 150.303
+      },
+      {
+       "w": "etwa",
+       "s": 150.303,
+       "e": 150.58
+      },
+      {
+       "w": "fünfzig",
+       "s": 150.58,
+       "e": 151.006
+      },
+      {
+       "w": "Millisekunden.",
+       "s": 151.006,
+       "e": 151.734
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s10",
+   "chapter": "Schicht 2 und 3: Begrenzer und Bremse",
+   "kind": "EXPLANATION",
+   "start": 152.354,
+   "end": 168.599,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Dieser Wächter ist die zweite Schicht: der Geschwindigkeitsbegrenzer.",
+     "caption": "Dieser Wächter ist die zweite Schicht: der Geschwindigkeitsbegrenzer.",
+     "start": 152.354,
+     "end": 155.543,
+     "words": [
+      {
+       "w": "Dieser",
+       "s": 152.354,
+       "e": 152.687
+      },
+      {
+       "w": "Wächter",
+       "s": 152.687,
+       "e": 153.063
+      },
+      {
+       "w": "ist",
+       "s": 153.063,
+       "e": 153.262
+      },
+      {
+       "w": "die",
+       "s": 153.262,
+       "e": 153.461
+      },
+      {
+       "w": "zweite",
+       "s": 153.461,
+       "e": 153.794
+      },
+      {
+       "w": "Schicht:",
+       "s": 153.794,
+       "e": 154.17
+      },
+      {
+       "w": "der",
+       "s": 154.17,
+       "e": 154.369
+      },
+      {
+       "w": "Geschwindigkeitsbegrenzer.",
+       "s": 154.369,
+       "e": 155.543
+      }
+     ]
+    },
+    {
+     "text": "Klassisch hat er oben eine eigene Seilscheibe und ein eigenes, dünnes Seil.",
+     "caption": "Klassisch hat er oben eine eigene Seilscheibe und ein eigenes, dünnes Seil.",
+     "start": 155.883,
+     "end": 160.057,
+     "words": [
+      {
+       "w": "Klassisch",
+       "s": 155.883,
+       "e": 156.43
+      },
+      {
+       "w": "hat",
+       "s": 156.43,
+       "e": 156.665
+      },
+      {
+       "w": "er",
+       "s": 156.665,
+       "e": 156.848
+      },
+      {
+       "w": "oben",
+       "s": 156.848,
+       "e": 157.135
+      },
+      {
+       "w": "eine",
+       "s": 157.135,
+       "e": 157.422
+      },
+      {
+       "w": "eigene",
+       "s": 157.422,
+       "e": 157.813
+      },
+      {
+       "w": "Seilscheibe",
+       "s": 157.813,
+       "e": 158.465
+      },
+      {
+       "w": "und",
+       "s": 158.465,
+       "e": 158.7
+      },
+      {
+       "w": "ein",
+       "s": 158.7,
+       "e": 158.935
+      },
+      {
+       "w": "eigenes,",
+       "s": 158.935,
+       "e": 159.378
+      },
+      {
+       "w": "dünnes",
+       "s": 159.378,
+       "e": 159.77
+      },
+      {
+       "w": "Seil.",
+       "s": 159.77,
+       "e": 160.057
+      }
+     ]
+    },
+    {
+     "text": "Es läuft als Schleife bis zu einer Spannrolle in der Grube und hängt an einem Hebel auf der Kabine.",
+     "caption": "Es läuft als Schleife bis zu einer Spannrolle in der Grube und hängt an einem Hebel auf der Kabine.",
+     "start": 160.397,
+     "end": 165.231,
+     "words": [
+      {
+       "w": "Es",
+       "s": 160.397,
+       "e": 160.553
+      },
+      {
+       "w": "läuft",
+       "s": 160.553,
+       "e": 160.842
+      },
+      {
+       "w": "als",
+       "s": 160.842,
+       "e": 161.043
+      },
+      {
+       "w": "Schleife",
+       "s": 161.043,
+       "e": 161.466
+      },
+      {
+       "w": "bis",
+       "s": 161.466,
+       "e": 161.667
+      },
+      {
+       "w": "zu",
+       "s": 161.667,
+       "e": 161.823
+      },
+      {
+       "w": "einer",
+       "s": 161.823,
+       "e": 162.112
+      },
+      {
+       "w": "Spannrolle",
+       "s": 162.112,
+       "e": 162.625
+      },
+      {
+       "w": "in",
+       "s": 162.625,
+       "e": 162.781
+      },
+      {
+       "w": "der",
+       "s": 162.781,
+       "e": 162.981
+      },
+      {
+       "w": "Grube",
+       "s": 162.981,
+       "e": 163.271
+      },
+      {
+       "w": "und",
+       "s": 163.271,
+       "e": 163.471
+      },
+      {
+       "w": "hängt",
+       "s": 163.471,
+       "e": 163.761
+      },
+      {
+       "w": "an",
+       "s": 163.761,
+       "e": 163.917
+      },
+      {
+       "w": "einem",
+       "s": 163.917,
+       "e": 164.206
+      },
+      {
+       "w": "Hebel",
+       "s": 164.206,
+       "e": 164.496
+      },
+      {
+       "w": "auf",
+       "s": 164.496,
+       "e": 164.697
+      },
+      {
+       "w": "der",
+       "s": 164.697,
+       "e": 164.897
+      },
+      {
+       "w": "Kabine.",
+       "s": 164.897,
+       "e": 165.231
+      }
+     ]
+    },
+    {
+     "text": "So zieht die Kabine das Seil bei jeder Fahrt mit.",
+     "caption": "So zieht die Kabine das Seil bei jeder Fahrt mit.",
+     "start": 165.571,
+     "end": 167.979,
+     "words": [
+      {
+       "w": "So",
+       "s": 165.571,
+       "e": 165.727
+      },
+      {
+       "w": "zieht",
+       "s": 165.727,
+       "e": 166.017
+      },
+      {
+       "w": "die",
+       "s": 166.017,
+       "e": 166.218
+      },
+      {
+       "w": "Kabine",
+       "s": 166.218,
+       "e": 166.552
+      },
+      {
+       "w": "das",
+       "s": 166.552,
+       "e": 166.753
+      },
+      {
+       "w": "Seil",
+       "s": 166.753,
+       "e": 166.998
+      },
+      {
+       "w": "bei",
+       "s": 166.998,
+       "e": 167.199
+      },
+      {
+       "w": "jeder",
+       "s": 167.199,
+       "e": 167.489
+      },
+      {
+       "w": "Fahrt",
+       "s": 167.489,
+       "e": 167.779
+      },
+      {
+       "w": "mit.",
+       "s": 167.779,
+       "e": 167.979
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s11",
+   "chapter": "Schicht 2 und 3: Begrenzer und Bremse",
+   "kind": "EXPLANATION",
+   "start": 168.599,
+   "end": 181.178,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Dreht sich die Scheibe zu schnell, schwenken Fliehgewichte nach außen, wie die Sitze eines Kettenkarussells.",
+     "caption": "Dreht sich die Scheibe zu schnell, schwenken Fliehgewichte nach außen, wie die Sitze eines Kettenkarussells.",
+     "start": 168.599,
+     "end": 173.553,
+     "words": [
+      {
+       "w": "Dreht",
+       "s": 168.599,
+       "e": 168.883
+      },
+      {
+       "w": "sich",
+       "s": 168.883,
+       "e": 169.123
+      },
+      {
+       "w": "die",
+       "s": 169.123,
+       "e": 169.32
+      },
+      {
+       "w": "Scheibe",
+       "s": 169.32,
+       "e": 169.691
+      },
+      {
+       "w": "zu",
+       "s": 169.691,
+       "e": 169.843
+      },
+      {
+       "w": "schnell,",
+       "s": 169.843,
+       "e": 170.214
+      },
+      {
+       "w": "schwenken",
+       "s": 170.214,
+       "e": 170.673
+      },
+      {
+       "w": "Fliehgewichte",
+       "s": 170.673,
+       "e": 171.306
+      },
+      {
+       "w": "nach",
+       "s": 171.306,
+       "e": 171.546
+      },
+      {
+       "w": "außen,",
+       "s": 171.546,
+       "e": 171.829
+      },
+      {
+       "w": "wie",
+       "s": 171.829,
+       "e": 172.026
+      },
+      {
+       "w": "die",
+       "s": 172.026,
+       "e": 172.222
+      },
+      {
+       "w": "Sitze",
+       "s": 172.222,
+       "e": 172.506
+      },
+      {
+       "w": "eines",
+       "s": 172.506,
+       "e": 172.79
+      },
+      {
+       "w": "Kettenkarussells.",
+       "s": 172.79,
+       "e": 173.553
+      }
+     ]
+    },
+    {
+     "text": "Sie lösen eine Sperre aus, und der Begrenzer hält sein Seil fest.",
+     "caption": "Sie lösen eine Sperre aus, und der Begrenzer hält sein Seil fest.",
+     "start": 173.893,
+     "end": 177.259,
+     "words": [
+      {
+       "w": "Sie",
+       "s": 173.893,
+       "e": 174.11
+      },
+      {
+       "w": "lösen",
+       "s": 174.11,
+       "e": 174.422
+      },
+      {
+       "w": "eine",
+       "s": 174.422,
+       "e": 174.687
+      },
+      {
+       "w": "Sperre",
+       "s": 174.687,
+       "e": 175.047
+      },
+      {
+       "w": "aus,",
+       "s": 175.047,
+       "e": 175.264
+      },
+      {
+       "w": "und",
+       "s": 175.264,
+       "e": 175.48
+      },
+      {
+       "w": "der",
+       "s": 175.48,
+       "e": 175.696
+      },
+      {
+       "w": "Begrenzer",
+       "s": 175.696,
+       "e": 176.201
+      },
+      {
+       "w": "hält",
+       "s": 176.201,
+       "e": 176.466
+      },
+      {
+       "w": "sein",
+       "s": 176.466,
+       "e": 176.73
+      },
+      {
+       "w": "Seil",
+       "s": 176.73,
+       "e": 176.995
+      },
+      {
+       "w": "fest.",
+       "s": 176.995,
+       "e": 177.259
+      }
+     ]
+    },
+    {
+     "text": "Das ist reine Mechanik, sie funktioniert auch ohne Strom.",
+     "caption": "Das ist reine Mechanik, sie funktioniert auch ohne Strom.",
+     "start": 177.599,
+     "end": 180.558,
+     "words": [
+      {
+       "w": "Das",
+       "s": 177.599,
+       "e": 177.819
+      },
+      {
+       "w": "ist",
+       "s": 177.819,
+       "e": 178.039
+      },
+      {
+       "w": "reine",
+       "s": 178.039,
+       "e": 178.357
+      },
+      {
+       "w": "Mechanik,",
+       "s": 178.357,
+       "e": 178.822
+      },
+      {
+       "w": "sie",
+       "s": 178.822,
+       "e": 179.042
+      },
+      {
+       "w": "funktioniert",
+       "s": 179.042,
+       "e": 179.702
+      },
+      {
+       "w": "auch",
+       "s": 179.702,
+       "e": 179.971
+      },
+      {
+       "w": "ohne",
+       "s": 179.971,
+       "e": 180.24
+      },
+      {
+       "w": "Strom.",
+       "s": 180.24,
+       "e": 180.558
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s12",
+   "chapter": "Schicht 2 und 3: Begrenzer und Bremse",
+   "kind": "PATTERN_INTERRUPT",
+   "start": 181.178,
+   "end": 196.726,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Dritte Schicht: Schalter und Bremse.",
+     "caption": "Dritte Schicht: Schalter und Bremse.",
+     "start": 181.178,
+     "end": 183.067,
+     "words": [
+      {
+       "w": "Dritte",
+       "s": 181.178,
+       "e": 181.556
+      },
+      {
+       "w": "Schicht:",
+       "s": 181.556,
+       "e": 181.984
+      },
+      {
+       "w": "Schalter",
+       "s": 181.984,
+       "e": 182.463
+      },
+      {
+       "w": "und",
+       "s": 182.463,
+       "e": 182.689
+      },
+      {
+       "w": "Bremse.",
+       "s": 182.689,
+       "e": 183.067
+      }
+     ]
+    },
+    {
+     "text": "Spätestens jetzt öffnet ein Schalter am Begrenzer den Sicherheitskreis: Motor aus, Bremse zu.",
+     "caption": "Spätestens jetzt öffnet ein Schalter am Begrenzer den Sicherheitskreis: Motor aus, Bremse zu.",
+     "start": 183.407,
+     "end": 188.351,
+     "words": [
+      {
+       "w": "Spätestens",
+       "s": 183.407,
+       "e": 183.99
+      },
+      {
+       "w": "jetzt",
+       "s": 183.99,
+       "e": 184.32
+      },
+      {
+       "w": "öffnet",
+       "s": 184.32,
+       "e": 184.7
+      },
+      {
+       "w": "ein",
+       "s": 184.7,
+       "e": 184.928
+      },
+      {
+       "w": "Schalter",
+       "s": 184.928,
+       "e": 185.41
+      },
+      {
+       "w": "am",
+       "s": 185.41,
+       "e": 185.587
+      },
+      {
+       "w": "Begrenzer",
+       "s": 185.587,
+       "e": 186.12
+      },
+      {
+       "w": "den",
+       "s": 186.12,
+       "e": 186.348
+      },
+      {
+       "w": "Sicherheitskreis:",
+       "s": 186.348,
+       "e": 187.235
+      },
+      {
+       "w": "Motor",
+       "s": 187.235,
+       "e": 187.565
+      },
+      {
+       "w": "aus,",
+       "s": 187.565,
+       "e": 187.793
+      },
+      {
+       "w": "Bremse",
+       "s": 187.793,
+       "e": 188.173
+      },
+      {
+       "w": "zu.",
+       "s": 188.173,
+       "e": 188.351
+      }
+     ]
+    },
+    {
+     "text": "Diese Bremse ist ohne Strom immer zu, Federn pressen die Beläge an.",
+     "caption": "Diese Bremse ist ohne Strom immer zu, Federn pressen die Beläge an.",
+     "start": 188.691,
+     "end": 192.21,
+     "words": [
+      {
+       "w": "Diese",
+       "s": 188.691,
+       "e": 189.008
+      },
+      {
+       "w": "Bremse",
+       "s": 189.008,
+       "e": 189.375
+      },
+      {
+       "w": "ist",
+       "s": 189.375,
+       "e": 189.595
+      },
+      {
+       "w": "ohne",
+       "s": 189.595,
+       "e": 189.864
+      },
+      {
+       "w": "Strom",
+       "s": 189.864,
+       "e": 190.182
+      },
+      {
+       "w": "immer",
+       "s": 190.182,
+       "e": 190.499
+      },
+      {
+       "w": "zu,",
+       "s": 190.499,
+       "e": 190.67
+      },
+      {
+       "w": "Federn",
+       "s": 190.67,
+       "e": 191.037
+      },
+      {
+       "w": "pressen",
+       "s": 191.037,
+       "e": 191.452
+      },
+      {
+       "w": "die",
+       "s": 191.452,
+       "e": 191.672
+      },
+      {
+       "w": "Beläge",
+       "s": 191.672,
+       "e": 192.039
+      },
+      {
+       "w": "an.",
+       "s": 192.039,
+       "e": 192.21
+      }
+     ]
+    },
+    {
+     "text": "Hier aber hilft sie nicht, denn an der Treibscheibe hängt unsere Kabine nicht mehr.",
+     "caption": "Hier aber hilft sie nicht, denn an der Treibscheibe hängt unsere Kabine nicht mehr.",
+     "start": 192.55,
+     "end": 196.106,
+     "words": [
+      {
+       "w": "Hier",
+       "s": 192.55,
+       "e": 192.77
+      },
+      {
+       "w": "aber",
+       "s": 192.77,
+       "e": 192.99
+      },
+      {
+       "w": "hilft",
+       "s": 192.99,
+       "e": 193.249
+      },
+      {
+       "w": "sie",
+       "s": 193.249,
+       "e": 193.429
+      },
+      {
+       "w": "nicht,",
+       "s": 193.429,
+       "e": 193.689
+      },
+      {
+       "w": "denn",
+       "s": 193.689,
+       "e": 193.909
+      },
+      {
+       "w": "an",
+       "s": 193.909,
+       "e": 194.049
+      },
+      {
+       "w": "der",
+       "s": 194.049,
+       "e": 194.228
+      },
+      {
+       "w": "Treibscheibe",
+       "s": 194.228,
+       "e": 194.768
+      },
+      {
+       "w": "hängt",
+       "s": 194.768,
+       "e": 195.028
+      },
+      {
+       "w": "unsere",
+       "s": 195.028,
+       "e": 195.327
+      },
+      {
+       "w": "Kabine",
+       "s": 195.327,
+       "e": 195.627
+      },
+      {
+       "w": "nicht",
+       "s": 195.627,
+       "e": 195.887
+      },
+      {
+       "w": "mehr.",
+       "s": 195.887,
+       "e": 196.106
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s13",
+   "chapter": "Schicht 2 und 3: Begrenzer und Bremse",
+   "kind": "EXPLANATION",
+   "start": 196.726,
+   "end": 208.145,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Das Begrenzerseil steht still, doch die Kabine fällt weiter.",
+     "caption": "Das Begrenzerseil steht still, doch die Kabine fällt weiter.",
+     "start": 196.726,
+     "end": 199.821,
+     "words": [
+      {
+       "w": "Das",
+       "s": 196.726,
+       "e": 196.946
+      },
+      {
+       "w": "Begrenzerseil",
+       "s": 196.946,
+       "e": 197.652
+      },
+      {
+       "w": "steht",
+       "s": 197.652,
+       "e": 197.969
+      },
+      {
+       "w": "still,",
+       "s": 197.969,
+       "e": 198.286
+      },
+      {
+       "w": "doch",
+       "s": 198.286,
+       "e": 198.554
+      },
+      {
+       "w": "die",
+       "s": 198.554,
+       "e": 198.773
+      },
+      {
+       "w": "Kabine",
+       "s": 198.773,
+       "e": 199.139
+      },
+      {
+       "w": "fällt",
+       "s": 199.139,
+       "e": 199.456
+      },
+      {
+       "w": "weiter.",
+       "s": 199.456,
+       "e": 199.821
+      }
+     ]
+    },
+    {
+     "text": "Das stehende Seil zieht den Hebel, und Keile klemmen die Kabine an den Schienen fest.",
+     "caption": "Das stehende Seil zieht den Hebel, und Keile klemmen die Kabine an den Schienen fest.",
+     "start": 200.161,
+     "end": 204.182,
+     "words": [
+      {
+       "w": "Das",
+       "s": 200.161,
+       "e": 200.359
+      },
+      {
+       "w": "stehende",
+       "s": 200.359,
+       "e": 200.777
+      },
+      {
+       "w": "Seil",
+       "s": 200.777,
+       "e": 201.018
+      },
+      {
+       "w": "zieht",
+       "s": 201.018,
+       "e": 201.304
+      },
+      {
+       "w": "den",
+       "s": 201.304,
+       "e": 201.502
+      },
+      {
+       "w": "Hebel,",
+       "s": 201.502,
+       "e": 201.787
+      },
+      {
+       "w": "und",
+       "s": 201.787,
+       "e": 201.985
+      },
+      {
+       "w": "Keile",
+       "s": 201.985,
+       "e": 202.271
+      },
+      {
+       "w": "klemmen",
+       "s": 202.271,
+       "e": 202.644
+      },
+      {
+       "w": "die",
+       "s": 202.644,
+       "e": 202.842
+      },
+      {
+       "w": "Kabine",
+       "s": 202.842,
+       "e": 203.172
+      },
+      {
+       "w": "an",
+       "s": 203.172,
+       "e": 203.326
+      },
+      {
+       "w": "den",
+       "s": 203.326,
+       "e": 203.523
+      },
+      {
+       "w": "Schienen",
+       "s": 203.523,
+       "e": 203.941
+      },
+      {
+       "w": "fest.",
+       "s": 203.941,
+       "e": 204.182
+      }
+     ]
+    },
+    {
+     "text": "Das dünne Seil trägt also nichts, es löst nur aus.",
+     "caption": "Das dünne Seil trägt also nichts, es löst nur aus.",
+     "start": 204.522,
+     "end": 207.525,
+     "words": [
+      {
+       "w": "Das",
+       "s": 204.522,
+       "e": 204.773
+      },
+      {
+       "w": "dünne",
+       "s": 204.773,
+       "e": 205.134
+      },
+      {
+       "w": "Seil",
+       "s": 205.134,
+       "e": 205.44
+      },
+      {
+       "w": "trägt",
+       "s": 205.44,
+       "e": 205.801
+      },
+      {
+       "w": "also",
+       "s": 205.801,
+       "e": 206.107
+      },
+      {
+       "w": "nichts,",
+       "s": 206.107,
+       "e": 206.524
+      },
+      {
+       "w": "es",
+       "s": 206.524,
+       "e": 206.719
+      },
+      {
+       "w": "löst",
+       "s": 206.719,
+       "e": 207.025
+      },
+      {
+       "w": "nur",
+       "s": 207.025,
+       "e": 207.275
+      },
+      {
+       "w": "aus.",
+       "s": 207.275,
+       "e": 207.525
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s14",
+   "chapter": "Schicht 4: Die Fangvorrichtung",
+   "kind": "EXPLANATION",
+   "start": 208.575,
+   "end": 230.97,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Vierte Schicht: die Fangvorrichtung.",
+     "caption": "Vierte Schicht: die Fangvorrichtung.",
+     "start": 208.575,
+     "end": 210.437,
+     "words": [
+      {
+       "w": "Vierte",
+       "s": 208.575,
+       "e": 208.953
+      },
+      {
+       "w": "Schicht:",
+       "s": 208.953,
+       "e": 209.38
+      },
+      {
+       "w": "die",
+       "s": 209.38,
+       "e": 209.607
+      },
+      {
+       "w": "Fangvorrichtung.",
+       "s": 209.607,
+       "e": 210.437
+      }
+     ]
+    },
+    {
+     "text": "Sie erbt die Aufgabe der Sperre von Otis, reagiert aber auf zu hohe Geschwindigkeit statt bloß auf ein schlaffes Seil.",
+     "caption": "Sie erbt die Aufgabe der Sperre von Otis, reagiert aber auf zu hohe Geschwindigkeit statt bloß auf ein schlaffes Seil.",
+     "start": 210.777,
+     "end": 216.712,
+     "words": [
+      {
+       "w": "Sie",
+       "s": 210.777,
+       "e": 210.988
+      },
+      {
+       "w": "erbt",
+       "s": 210.988,
+       "e": 211.245
+      },
+      {
+       "w": "die",
+       "s": 211.245,
+       "e": 211.455
+      },
+      {
+       "w": "Aufgabe",
+       "s": 211.455,
+       "e": 211.852
+      },
+      {
+       "w": "der",
+       "s": 211.852,
+       "e": 212.063
+      },
+      {
+       "w": "Sperre",
+       "s": 212.063,
+       "e": 212.413
+      },
+      {
+       "w": "von",
+       "s": 212.413,
+       "e": 212.623
+      },
+      {
+       "w": "Otis,",
+       "s": 212.623,
+       "e": 212.88
+      },
+      {
+       "w": "reagiert",
+       "s": 212.88,
+       "e": 213.324
+      },
+      {
+       "w": "aber",
+       "s": 213.324,
+       "e": 213.581
+      },
+      {
+       "w": "auf",
+       "s": 213.581,
+       "e": 213.792
+      },
+      {
+       "w": "zu",
+       "s": 213.792,
+       "e": 213.955
+      },
+      {
+       "w": "hohe",
+       "s": 213.955,
+       "e": 214.212
+      },
+      {
+       "w": "Geschwindigkeit",
+       "s": 214.212,
+       "e": 214.983
+      },
+      {
+       "w": "statt",
+       "s": 214.983,
+       "e": 215.287
+      },
+      {
+       "w": "bloß",
+       "s": 215.287,
+       "e": 215.544
+      },
+      {
+       "w": "auf",
+       "s": 215.544,
+       "e": 215.754
+      },
+      {
+       "w": "ein",
+       "s": 215.754,
+       "e": 215.964
+      },
+      {
+       "w": "schlaffes",
+       "s": 215.964,
+       "e": 216.455
+      },
+      {
+       "w": "Seil.",
+       "s": 216.455,
+       "e": 216.712
+      }
+     ]
+    },
+    {
+     "text": "Der harte Sperrfang blockiert schlagartig und ist am Fahrkorb nur bei Aufzügen bis zu dreiundsechzig Zentimetern pro Sekunde erlaubt.",
+     "caption": "Der harte Sperrfang blockiert schlagartig und ist am Fahrkorb nur bei Aufzügen bis zu 63 Zentimetern pro Sekunde erlaubt.",
+     "start": 217.052,
+     "end": 224.025,
+     "words": [
+      {
+       "w": "Der",
+       "s": 217.052,
+       "e": 217.272
+      },
+      {
+       "w": "harte",
+       "s": 217.272,
+       "e": 217.59
+      },
+      {
+       "w": "Sperrfang",
+       "s": 217.59,
+       "e": 218.104
+      },
+      {
+       "w": "blockiert",
+       "s": 218.104,
+       "e": 218.618
+      },
+      {
+       "w": "schlagartig",
+       "s": 218.618,
+       "e": 219.23
+      },
+      {
+       "w": "und",
+       "s": 219.23,
+       "e": 219.45
+      },
+      {
+       "w": "ist",
+       "s": 219.45,
+       "e": 219.67
+      },
+      {
+       "w": "am",
+       "s": 219.67,
+       "e": 219.841
+      },
+      {
+       "w": "Fahrkorb",
+       "s": 219.841,
+       "e": 220.306
+      },
+      {
+       "w": "nur",
+       "s": 220.306,
+       "e": 220.526
+      },
+      {
+       "w": "bei",
+       "s": 220.526,
+       "e": 220.747
+      },
+      {
+       "w": "Aufzügen",
+       "s": 220.747,
+       "e": 221.211
+      },
+      {
+       "w": "bis",
+       "s": 221.211,
+       "e": 221.432
+      },
+      {
+       "w": "zu",
+       "s": 221.432,
+       "e": 221.603
+      },
+      {
+       "w": "dreiundsechzig",
+       "s": 221.603,
+       "e": 222.361
+      },
+      {
+       "w": "Zentimetern",
+       "s": 222.361,
+       "e": 222.973
+      },
+      {
+       "w": "pro",
+       "s": 222.973,
+       "e": 223.193
+      },
+      {
+       "w": "Sekunde",
+       "s": 223.193,
+       "e": 223.609
+      },
+      {
+       "w": "erlaubt.",
+       "s": 223.609,
+       "e": 224.025
+      }
+     ]
+    },
+    {
+     "text": "Unser Bremsfang presst federbelastete Keile an die Schiene und verwandelt die Bewegungsenergie beim Gleiten in Wärme.",
+     "caption": "Unser Bremsfang presst federbelastete Keile an die Schiene und verwandelt die Bewegungsenergie beim Gleiten in Wärme.",
+     "start": 224.365,
+     "end": 230.35,
+     "words": [
+      {
+       "w": "Unser",
+       "s": 224.365,
+       "e": 224.676
+      },
+      {
+       "w": "Bremsfang",
+       "s": 224.676,
+       "e": 225.179
+      },
+      {
+       "w": "presst",
+       "s": 225.179,
+       "e": 225.538
+      },
+      {
+       "w": "federbelastete",
+       "s": 225.538,
+       "e": 226.28
+      },
+      {
+       "w": "Keile",
+       "s": 226.28,
+       "e": 226.591
+      },
+      {
+       "w": "an",
+       "s": 226.591,
+       "e": 226.759
+      },
+      {
+       "w": "die",
+       "s": 226.759,
+       "e": 226.974
+      },
+      {
+       "w": "Schiene",
+       "s": 226.974,
+       "e": 227.381
+      },
+      {
+       "w": "und",
+       "s": 227.381,
+       "e": 227.597
+      },
+      {
+       "w": "verwandelt",
+       "s": 227.597,
+       "e": 228.147
+      },
+      {
+       "w": "die",
+       "s": 228.147,
+       "e": 228.363
+      },
+      {
+       "w": "Bewegungsenergie",
+       "s": 228.363,
+       "e": 229.201
+      },
+      {
+       "w": "beim",
+       "s": 229.201,
+       "e": 229.464
+      },
+      {
+       "w": "Gleiten",
+       "s": 229.464,
+       "e": 229.871
+      },
+      {
+       "w": "in",
+       "s": 229.871,
+       "e": 230.038
+      },
+      {
+       "w": "Wärme.",
+       "s": 230.038,
+       "e": 230.35
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s15",
+   "chapter": "Schicht 4: Die Fangvorrichtung",
+   "kind": "PATTERN_INTERRUPT",
+   "start": 230.97,
+   "end": 248.696,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Wie fühlt sich so ein Fang an?",
+     "caption": "Wie fühlt sich so ein Fang an?",
+     "start": 230.97,
+     "end": 232.604,
+     "words": [
+      {
+       "w": "Wie",
+       "s": 230.97,
+       "e": 231.189
+      },
+      {
+       "w": "fühlt",
+       "s": 231.189,
+       "e": 231.506
+      },
+      {
+       "w": "sich",
+       "s": 231.506,
+       "e": 231.775
+      },
+      {
+       "w": "so",
+       "s": 231.775,
+       "e": 231.945
+      },
+      {
+       "w": "ein",
+       "s": 231.945,
+       "e": 232.165
+      },
+      {
+       "w": "Fang",
+       "s": 232.165,
+       "e": 232.433
+      },
+      {
+       "w": "an?",
+       "s": 232.433,
+       "e": 232.604
+      }
+     ]
+    },
+    {
+     "text": "Bei voller Kabine verlangt die europäische Aufzugsnorm im Mittel eine Verzögerung zwischen einem Fünftel und der vollen Erdbeschleunigung.",
+     "caption": "Bei voller Kabine verlangt die europäische Aufzugsnorm im Mittel eine Verzögerung zwischen einem Fünftel und der vollen Erdbeschleunigung.",
+     "start": 232.944,
+     "end": 240.045,
+     "words": [
+      {
+       "w": "Bei",
+       "s": 232.944,
+       "e": 233.161
+      },
+      {
+       "w": "voller",
+       "s": 233.161,
+       "e": 233.524
+      },
+      {
+       "w": "Kabine",
+       "s": 233.524,
+       "e": 233.886
+      },
+      {
+       "w": "verlangt",
+       "s": 233.886,
+       "e": 234.345
+      },
+      {
+       "w": "die",
+       "s": 234.345,
+       "e": 234.562
+      },
+      {
+       "w": "europäische",
+       "s": 234.562,
+       "e": 235.166
+      },
+      {
+       "w": "Aufzugsnorm",
+       "s": 235.166,
+       "e": 235.77
+      },
+      {
+       "w": "im",
+       "s": 235.77,
+       "e": 235.939
+      },
+      {
+       "w": "Mittel",
+       "s": 235.939,
+       "e": 236.301
+      },
+      {
+       "w": "eine",
+       "s": 236.301,
+       "e": 236.567
+      },
+      {
+       "w": "Verzögerung",
+       "s": 236.567,
+       "e": 237.171
+      },
+      {
+       "w": "zwischen",
+       "s": 237.171,
+       "e": 237.63
+      },
+      {
+       "w": "einem",
+       "s": 237.63,
+       "e": 237.944
+      },
+      {
+       "w": "Fünftel",
+       "s": 237.944,
+       "e": 238.354
+      },
+      {
+       "w": "und",
+       "s": 238.354,
+       "e": 238.572
+      },
+      {
+       "w": "der",
+       "s": 238.572,
+       "e": 238.789
+      },
+      {
+       "w": "vollen",
+       "s": 238.789,
+       "e": 239.151
+      },
+      {
+       "w": "Erdbeschleunigung.",
+       "s": 239.151,
+       "e": 240.045
+      }
+     ]
+    },
+    {
+     "text": "Man fühlt sich also etwa ein Fünftel schwerer bis doppelt so schwer.",
+     "caption": "Man fühlt sich also etwa ein Fünftel schwerer bis doppelt so schwer.",
+     "start": 240.385,
+     "end": 243.608,
+     "words": [
+      {
+       "w": "Man",
+       "s": 240.385,
+       "e": 240.581
+      },
+      {
+       "w": "fühlt",
+       "s": 240.581,
+       "e": 240.864
+      },
+      {
+       "w": "sich",
+       "s": 240.864,
+       "e": 241.103
+      },
+      {
+       "w": "also",
+       "s": 241.103,
+       "e": 241.343
+      },
+      {
+       "w": "etwa",
+       "s": 241.343,
+       "e": 241.582
+      },
+      {
+       "w": "ein",
+       "s": 241.582,
+       "e": 241.778
+      },
+      {
+       "w": "Fünftel",
+       "s": 241.778,
+       "e": 242.149
+      },
+      {
+       "w": "schwerer",
+       "s": 242.149,
+       "e": 242.562
+      },
+      {
+       "w": "bis",
+       "s": 242.562,
+       "e": 242.758
+      },
+      {
+       "w": "doppelt",
+       "s": 242.758,
+       "e": 243.129
+      },
+      {
+       "w": "so",
+       "s": 243.129,
+       "e": 243.281
+      },
+      {
+       "w": "schwer.",
+       "s": 243.281,
+       "e": 243.608
+      }
+     ]
+    },
+    {
+     "text": "Kurze Spitzen können darüber liegen, und eine leere Kabine wird härter gebremst.",
+     "caption": "Kurze Spitzen können darüber liegen, und eine leere Kabine wird härter gebremst.",
+     "start": 243.948,
+     "end": 248.076,
+     "words": [
+      {
+       "w": "Kurze",
+       "s": 243.948,
+       "e": 244.263
+      },
+      {
+       "w": "Spitzen",
+       "s": 244.263,
+       "e": 244.676
+      },
+      {
+       "w": "können",
+       "s": 244.676,
+       "e": 245.04
+      },
+      {
+       "w": "darüber",
+       "s": 245.04,
+       "e": 245.453
+      },
+      {
+       "w": "liegen,",
+       "s": 245.453,
+       "e": 245.818
+      },
+      {
+       "w": "und",
+       "s": 245.818,
+       "e": 246.036
+      },
+      {
+       "w": "eine",
+       "s": 246.036,
+       "e": 246.303
+      },
+      {
+       "w": "leere",
+       "s": 246.303,
+       "e": 246.619
+      },
+      {
+       "w": "Kabine",
+       "s": 246.619,
+       "e": 246.983
+      },
+      {
+       "w": "wird",
+       "s": 246.983,
+       "e": 247.251
+      },
+      {
+       "w": "härter",
+       "s": 247.251,
+       "e": 247.615
+      },
+      {
+       "w": "gebremst.",
+       "s": 247.615,
+       "e": 248.076
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s16",
+   "chapter": "Schicht 4: Die Fangvorrichtung",
+   "kind": "EXPLANATION",
+   "start": 248.696,
+   "end": 267.365,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Und wie weit rutscht die Kabine?",
+     "caption": "Und wie weit rutscht die Kabine?",
+     "start": 248.696,
+     "end": 250.333,
+     "words": [
+      {
+       "w": "Und",
+       "s": 248.696,
+       "e": 248.907
+      },
+      {
+       "w": "wie",
+       "s": 248.907,
+       "e": 249.117
+      },
+      {
+       "w": "weit",
+       "s": 249.117,
+       "e": 249.374
+      },
+      {
+       "w": "rutscht",
+       "s": 249.374,
+       "e": 249.772
+      },
+      {
+       "w": "die",
+       "s": 249.772,
+       "e": 249.982
+      },
+      {
+       "w": "Kabine?",
+       "s": 249.982,
+       "e": 250.333
+      }
+     ]
+    },
+    {
+     "text": "Ein Rechenbeispiel mit voller Kabine: Aus eineinhalb Metern pro Sekunde steht sie nach gut elf Zentimetern, wenn sie im Mittel mit der vollen Erdbeschleunigung bremst.",
+     "caption": "Ein Rechenbeispiel mit voller Kabine: Aus 1,5 Metern pro Sekunde steht sie nach gut 11 Zentimetern, wenn sie im Mittel mit der vollen Erdbeschleunigung bremst.",
+     "start": 250.673,
+     "end": 258.765,
+     "words": [
+      {
+       "w": "Ein",
+       "s": 250.673,
+       "e": 250.878
+      },
+      {
+       "w": "Rechenbeispiel",
+       "s": 250.878,
+       "e": 251.585
+      },
+      {
+       "w": "mit",
+       "s": 251.585,
+       "e": 251.79
+      },
+      {
+       "w": "voller",
+       "s": 251.79,
+       "e": 252.132
+      },
+      {
+       "w": "Kabine:",
+       "s": 252.132,
+       "e": 252.474
+      },
+      {
+       "w": "Aus",
+       "s": 252.474,
+       "e": 252.679
+      },
+      {
+       "w": "eineinhalb",
+       "s": 252.679,
+       "e": 253.203
+      },
+      {
+       "w": "Metern",
+       "s": 253.203,
+       "e": 253.545
+      },
+      {
+       "w": "pro",
+       "s": 253.545,
+       "e": 253.75
+      },
+      {
+       "w": "Sekunde",
+       "s": 253.75,
+       "e": 254.138
+      },
+      {
+       "w": "steht",
+       "s": 254.138,
+       "e": 254.434
+      },
+      {
+       "w": "sie",
+       "s": 254.434,
+       "e": 254.639
+      },
+      {
+       "w": "nach",
+       "s": 254.639,
+       "e": 254.89
+      },
+      {
+       "w": "gut",
+       "s": 254.89,
+       "e": 255.095
+      },
+      {
+       "w": "elf",
+       "s": 255.095,
+       "e": 255.3
+      },
+      {
+       "w": "Zentimetern,",
+       "s": 255.3,
+       "e": 255.87
+      },
+      {
+       "w": "wenn",
+       "s": 255.87,
+       "e": 256.121
+      },
+      {
+       "w": "sie",
+       "s": 256.121,
+       "e": 256.326
+      },
+      {
+       "w": "im",
+       "s": 256.326,
+       "e": 256.485
+      },
+      {
+       "w": "Mittel",
+       "s": 256.485,
+       "e": 256.827
+      },
+      {
+       "w": "mit",
+       "s": 256.827,
+       "e": 257.032
+      },
+      {
+       "w": "der",
+       "s": 257.032,
+       "e": 257.238
+      },
+      {
+       "w": "vollen",
+       "s": 257.238,
+       "e": 257.579
+      },
+      {
+       "w": "Erdbeschleunigung",
+       "s": 257.579,
+       "e": 258.423
+      },
+      {
+       "w": "bremst.",
+       "s": 258.423,
+       "e": 258.765
+      }
+     ]
+    },
+    {
+     "text": "Bei einem Fünftel davon sind es knapp sechzig.",
+     "caption": "Bei einem Fünftel davon sind es knapp 60.",
+     "start": 259.105,
+     "end": 261.6,
+     "words": [
+      {
+       "w": "Bei",
+       "s": 259.105,
+       "e": 259.329
+      },
+      {
+       "w": "einem",
+       "s": 259.329,
+       "e": 259.654
+      },
+      {
+       "w": "Fünftel",
+       "s": 259.654,
+       "e": 260.078
+      },
+      {
+       "w": "davon",
+       "s": 260.078,
+       "e": 260.402
+      },
+      {
+       "w": "sind",
+       "s": 260.402,
+       "e": 260.676
+      },
+      {
+       "w": "es",
+       "s": 260.676,
+       "e": 260.851
+      },
+      {
+       "w": "knapp",
+       "s": 260.851,
+       "e": 261.175
+      },
+      {
+       "w": "sechzig.",
+       "s": 261.175,
+       "e": 261.6
+      }
+     ]
+    },
+    {
+     "text": "Mit Reaktionszeit und dem Einrücken der Keile sind es real eher einige Dezimeter.",
+     "caption": "Mit Reaktionszeit und dem Einrücken der Keile sind es real eher einige Dezimeter.",
+     "start": 261.94,
+     "end": 266.745,
+     "words": [
+      {
+       "w": "Mit",
+       "s": 261.94,
+       "e": 262.187
+      },
+      {
+       "w": "Reaktionszeit",
+       "s": 262.187,
+       "e": 262.983
+      },
+      {
+       "w": "und",
+       "s": 262.983,
+       "e": 263.23
+      },
+      {
+       "w": "dem",
+       "s": 263.23,
+       "e": 263.477
+      },
+      {
+       "w": "Einrücken",
+       "s": 263.477,
+       "e": 264.054
+      },
+      {
+       "w": "der",
+       "s": 264.054,
+       "e": 264.301
+      },
+      {
+       "w": "Keile",
+       "s": 264.301,
+       "e": 264.658
+      },
+      {
+       "w": "sind",
+       "s": 264.658,
+       "e": 264.96
+      },
+      {
+       "w": "es",
+       "s": 264.96,
+       "e": 265.152
+      },
+      {
+       "w": "real",
+       "s": 265.152,
+       "e": 265.455
+      },
+      {
+       "w": "eher",
+       "s": 265.455,
+       "e": 265.757
+      },
+      {
+       "w": "einige",
+       "s": 265.757,
+       "e": 266.169
+      },
+      {
+       "w": "Dezimeter.",
+       "s": 266.169,
+       "e": 266.745
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s17",
+   "chapter": "Schicht 4: Die Fangvorrichtung",
+   "kind": "PAYOFF",
+   "start": 267.365,
+   "end": 280.419,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Spulen wir die Zeitlupe zurück.",
+     "caption": "Spulen wir die Zeitlupe zurück.",
+     "start": 267.365,
+     "end": 269.164,
+     "words": [
+      {
+       "w": "Spulen",
+       "s": 267.365,
+       "e": 267.768
+      },
+      {
+       "w": "wir",
+       "s": 267.768,
+       "e": 268.01
+      },
+      {
+       "w": "die",
+       "s": 268.01,
+       "e": 268.251
+      },
+      {
+       "w": "Zeitlupe",
+       "s": 268.251,
+       "e": 268.761
+      },
+      {
+       "w": "zurück.",
+       "s": 268.761,
+       "e": 269.164
+      }
+     ]
+    },
+    {
+     "text": "Seile weg bei null.",
+     "caption": "Seile weg bei 0.",
+     "start": 269.504,
+     "end": 270.784,
+     "words": [
+      {
+       "w": "Seile",
+       "s": 269.504,
+       "e": 269.9
+      },
+      {
+       "w": "weg",
+       "s": 269.9,
+       "e": 270.174
+      },
+      {
+       "w": "bei",
+       "s": 270.174,
+       "e": 270.449
+      },
+      {
+       "w": "null.",
+       "s": 270.449,
+       "e": 270.784
+      }
+     ]
+    },
+    {
+     "text": "Nach wenigen Hundertstelsekunden löst der Begrenzer aus: Motor aus, Bremse zu, Keile an die Schienen.",
+     "caption": "Nach wenigen Hundertstelsekunden löst der Begrenzer aus: Motor aus, Bremse zu, Keile an die Schienen.",
+     "start": 271.124,
+     "end": 276.809,
+     "words": [
+      {
+       "w": "Nach",
+       "s": 271.124,
+       "e": 271.42
+      },
+      {
+       "w": "wenigen",
+       "s": 271.42,
+       "e": 271.878
+      },
+      {
+       "w": "Hundertstelsekunden",
+       "s": 271.878,
+       "e": 272.983
+      },
+      {
+       "w": "löst",
+       "s": 272.983,
+       "e": 273.279
+      },
+      {
+       "w": "der",
+       "s": 273.279,
+       "e": 273.522
+      },
+      {
+       "w": "Begrenzer",
+       "s": 273.522,
+       "e": 274.088
+      },
+      {
+       "w": "aus:",
+       "s": 274.088,
+       "e": 274.33
+      },
+      {
+       "w": "Motor",
+       "s": 274.33,
+       "e": 274.681
+      },
+      {
+       "w": "aus,",
+       "s": 274.681,
+       "e": 274.923
+      },
+      {
+       "w": "Bremse",
+       "s": 274.923,
+       "e": 275.327
+      },
+      {
+       "w": "zu,",
+       "s": 275.327,
+       "e": 275.516
+      },
+      {
+       "w": "Keile",
+       "s": 275.516,
+       "e": 275.866
+      },
+      {
+       "w": "an",
+       "s": 275.866,
+       "e": 276.055
+      },
+      {
+       "w": "die",
+       "s": 276.055,
+       "e": 276.297
+      },
+      {
+       "w": "Schienen.",
+       "s": 276.297,
+       "e": 276.809
+      }
+     ]
+    },
+    {
+     "text": "Aus dem Absturz in den Keller wird ein kräftiger Ruck.",
+     "caption": "Aus dem Absturz in den Keller wird ein kräftiger Ruck.",
+     "start": 277.149,
+     "end": 279.799,
+     "words": [
+      {
+       "w": "Aus",
+       "s": 277.149,
+       "e": 277.351
+      },
+      {
+       "w": "dem",
+       "s": 277.351,
+       "e": 277.554
+      },
+      {
+       "w": "Absturz",
+       "s": 277.554,
+       "e": 277.935
+      },
+      {
+       "w": "in",
+       "s": 277.935,
+       "e": 278.092
+      },
+      {
+       "w": "den",
+       "s": 278.092,
+       "e": 278.295
+      },
+      {
+       "w": "Keller",
+       "s": 278.295,
+       "e": 278.631
+      },
+      {
+       "w": "wird",
+       "s": 278.631,
+       "e": 278.878
+      },
+      {
+       "w": "ein",
+       "s": 278.878,
+       "e": 279.081
+      },
+      {
+       "w": "kräftiger",
+       "s": 279.081,
+       "e": 279.552
+      },
+      {
+       "w": "Ruck.",
+       "s": 279.552,
+       "e": 279.799
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s18",
+   "chapter": "Schicht 4: Die Fangvorrichtung",
+   "kind": "EXPLANATION",
+   "start": 280.419,
+   "end": 289.681,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Und dann?",
+     "caption": "Und dann?",
+     "start": 280.419,
+     "end": 280.909,
+     "words": [
+      {
+       "w": "Und",
+       "s": 280.419,
+       "e": 280.64
+      },
+      {
+       "w": "dann?",
+       "s": 280.64,
+       "e": 280.909
+      }
+     ]
+    },
+    {
+     "text": "Die Keile lösen sich nur, wenn man die Kabine anhebt.",
+     "caption": "Die Keile lösen sich nur, wenn man die Kabine anhebt.",
+     "start": 281.249,
+     "end": 284.111,
+     "words": [
+      {
+       "w": "Die",
+       "s": 281.249,
+       "e": 281.475
+      },
+      {
+       "w": "Keile",
+       "s": 281.475,
+       "e": 281.802
+      },
+      {
+       "w": "lösen",
+       "s": 281.802,
+       "e": 282.128
+      },
+      {
+       "w": "sich",
+       "s": 282.128,
+       "e": 282.404
+      },
+      {
+       "w": "nur,",
+       "s": 282.404,
+       "e": 282.63
+      },
+      {
+       "w": "wenn",
+       "s": 282.63,
+       "e": 282.906
+      },
+      {
+       "w": "man",
+       "s": 282.906,
+       "e": 283.132
+      },
+      {
+       "w": "die",
+       "s": 283.132,
+       "e": 283.358
+      },
+      {
+       "w": "Kabine",
+       "s": 283.358,
+       "e": 283.734
+      },
+      {
+       "w": "anhebt.",
+       "s": 283.734,
+       "e": 284.111
+      }
+     ]
+    },
+    {
+     "text": "Das darf nur eine sachkundige Person, und erst nach ihrer Prüfung fährt der Aufzug wieder.",
+     "caption": "Das darf nur eine sachkundige Person, und erst nach ihrer Prüfung fährt der Aufzug wieder.",
+     "start": 284.451,
+     "end": 289.061,
+     "words": [
+      {
+       "w": "Das",
+       "s": 284.451,
+       "e": 284.666
+      },
+      {
+       "w": "darf",
+       "s": 284.666,
+       "e": 284.929
+      },
+      {
+       "w": "nur",
+       "s": 284.929,
+       "e": 285.144
+      },
+      {
+       "w": "eine",
+       "s": 285.144,
+       "e": 285.406
+      },
+      {
+       "w": "sachkundige",
+       "s": 285.406,
+       "e": 286.003
+      },
+      {
+       "w": "Person,",
+       "s": 286.003,
+       "e": 286.362
+      },
+      {
+       "w": "und",
+       "s": 286.362,
+       "e": 286.577
+      },
+      {
+       "w": "erst",
+       "s": 286.577,
+       "e": 286.84
+      },
+      {
+       "w": "nach",
+       "s": 286.84,
+       "e": 287.102
+      },
+      {
+       "w": "ihrer",
+       "s": 287.102,
+       "e": 287.413
+      },
+      {
+       "w": "Prüfung",
+       "s": 287.413,
+       "e": 287.819
+      },
+      {
+       "w": "fährt",
+       "s": 287.819,
+       "e": 288.129
+      },
+      {
+       "w": "der",
+       "s": 288.129,
+       "e": 288.344
+      },
+      {
+       "w": "Aufzug",
+       "s": 288.344,
+       "e": 288.703
+      },
+      {
+       "w": "wieder.",
+       "s": 288.703,
+       "e": 289.061
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s19",
+   "chapter": "Kino und Mythen",
+   "kind": "PATTERN_INTERRUPT",
+   "start": 290.111,
+   "end": 308.02,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Und die Szenen aus dem Kino?",
+     "caption": "Und die Szenen aus dem Kino?",
+     "start": 290.111,
+     "end": 291.758,
+     "words": [
+      {
+       "w": "Und",
+       "s": 290.111,
+       "e": 290.35
+      },
+      {
+       "w": "die",
+       "s": 290.35,
+       "e": 290.589
+      },
+      {
+       "w": "Szenen",
+       "s": 290.589,
+       "e": 290.987
+      },
+      {
+       "w": "aus",
+       "s": 290.987,
+       "e": 291.226
+      },
+      {
+       "w": "dem",
+       "s": 291.226,
+       "e": 291.465
+      },
+      {
+       "w": "Kino?",
+       "s": 291.465,
+       "e": 291.758
+      }
+     ]
+    },
+    {
+     "text": "Funken sprühende Schienen, eine ungebremst rasende Kabine?",
+     "caption": "Funken sprühende Schienen, eine ungebremst rasende Kabine?",
+     "start": 292.098,
+     "end": 295.306,
+     "words": [
+      {
+       "w": "Funken",
+       "s": 292.098,
+       "e": 292.495
+      },
+      {
+       "w": "sprühende",
+       "s": 292.495,
+       "e": 293.052
+      },
+      {
+       "w": "Schienen,",
+       "s": 293.052,
+       "e": 293.556
+      },
+      {
+       "w": "eine",
+       "s": 293.556,
+       "e": 293.848
+      },
+      {
+       "w": "ungebremst",
+       "s": 293.848,
+       "e": 294.458
+      },
+      {
+       "w": "rasende",
+       "s": 294.458,
+       "e": 294.909
+      },
+      {
+       "w": "Kabine?",
+       "s": 294.909,
+       "e": 295.306
+      }
+     ]
+    },
+    {
+     "text": "Mit echten Aufzügen hat das wenig zu tun.",
+     "caption": "Mit echten Aufzügen hat das wenig zu tun.",
+     "start": 295.646,
+     "end": 298.028,
+     "words": [
+      {
+       "w": "Mit",
+       "s": 295.646,
+       "e": 295.885
+      },
+      {
+       "w": "echten",
+       "s": 295.885,
+       "e": 296.282
+      },
+      {
+       "w": "Aufzügen",
+       "s": 296.282,
+       "e": 296.785
+      },
+      {
+       "w": "hat",
+       "s": 296.785,
+       "e": 297.023
+      },
+      {
+       "w": "das",
+       "s": 297.023,
+       "e": 297.261
+      },
+      {
+       "w": "wenig",
+       "s": 297.261,
+       "e": 297.605
+      },
+      {
+       "w": "zu",
+       "s": 297.605,
+       "e": 297.79
+      },
+      {
+       "w": "tun.",
+       "s": 297.79,
+       "e": 298.028
+      }
+     ]
+    },
+    {
+     "text": "Ohne die Schutzkette aber wäre eine frei fallende Kabine rechnerisch nach zehn Metern schon rund fünfzig Kilometer pro Stunde schnell.",
+     "caption": "Ohne die Schutzkette aber wäre eine frei fallende Kabine rechnerisch nach 10 Metern schon rund 50 Kilometer pro Stunde schnell.",
+     "start": 298.368,
+     "end": 304.689,
+     "words": [
+      {
+       "w": "Ohne",
+       "s": 298.368,
+       "e": 298.61
+      },
+      {
+       "w": "die",
+       "s": 298.61,
+       "e": 298.807
+      },
+      {
+       "w": "Schutzkette",
+       "s": 298.807,
+       "e": 299.356
+      },
+      {
+       "w": "aber",
+       "s": 299.356,
+       "e": 299.597
+      },
+      {
+       "w": "wäre",
+       "s": 299.597,
+       "e": 299.839
+      },
+      {
+       "w": "eine",
+       "s": 299.839,
+       "e": 300.08
+      },
+      {
+       "w": "frei",
+       "s": 300.08,
+       "e": 300.322
+      },
+      {
+       "w": "fallende",
+       "s": 300.322,
+       "e": 300.739
+      },
+      {
+       "w": "Kabine",
+       "s": 300.739,
+       "e": 301.068
+      },
+      {
+       "w": "rechnerisch",
+       "s": 301.068,
+       "e": 301.617
+      },
+      {
+       "w": "nach",
+       "s": 301.617,
+       "e": 301.858
+      },
+      {
+       "w": "zehn",
+       "s": 301.858,
+       "e": 302.099
+      },
+      {
+       "w": "Metern",
+       "s": 302.099,
+       "e": 302.429
+      },
+      {
+       "w": "schon",
+       "s": 302.429,
+       "e": 302.714
+      },
+      {
+       "w": "rund",
+       "s": 302.714,
+       "e": 302.955
+      },
+      {
+       "w": "fünfzig",
+       "s": 302.955,
+       "e": 303.328
+      },
+      {
+       "w": "Kilometer",
+       "s": 303.328,
+       "e": 303.789
+      },
+      {
+       "w": "pro",
+       "s": 303.789,
+       "e": 303.987
+      },
+      {
+       "w": "Stunde",
+       "s": 303.987,
+       "e": 304.316
+      },
+      {
+       "w": "schnell.",
+       "s": 304.316,
+       "e": 304.689
+      }
+     ]
+    },
+    {
+     "text": "Nach hundert Metern wären es etwa hundertsechzig.",
+     "caption": "Nach 100 Metern wären es etwa 160.",
+     "start": 305.029,
+     "end": 307.4,
+     "words": [
+      {
+       "w": "Nach",
+       "s": 305.029,
+       "e": 305.277
+      },
+      {
+       "w": "hundert",
+       "s": 305.277,
+       "e": 305.661
+      },
+      {
+       "w": "Metern",
+       "s": 305.661,
+       "e": 306.0
+      },
+      {
+       "w": "wären",
+       "s": 306.0,
+       "e": 306.294
+      },
+      {
+       "w": "es",
+       "s": 306.294,
+       "e": 306.452
+      },
+      {
+       "w": "etwa",
+       "s": 306.452,
+       "e": 306.7
+      },
+      {
+       "w": "hundertsechzig.",
+       "s": 306.7,
+       "e": 307.4
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s20",
+   "chapter": "Kino und Mythen",
+   "kind": "PATTERN_INTERRUPT",
+   "start": 308.02,
+   "end": 330.648,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Und der berühmte Sprung kurz vor dem Aufprall?",
+     "caption": "Und der berühmte Sprung kurz vor dem Aufprall?",
+     "start": 308.02,
+     "end": 310.411,
+     "words": [
+      {
+       "w": "Und",
+       "s": 308.02,
+       "e": 308.235
+      },
+      {
+       "w": "der",
+       "s": 308.235,
+       "e": 308.45
+      },
+      {
+       "w": "berühmte",
+       "s": 308.45,
+       "e": 308.905
+      },
+      {
+       "w": "Sprung",
+       "s": 308.905,
+       "e": 309.263
+      },
+      {
+       "w": "kurz",
+       "s": 309.263,
+       "e": 309.526
+      },
+      {
+       "w": "vor",
+       "s": 309.526,
+       "e": 309.741
+      },
+      {
+       "w": "dem",
+       "s": 309.741,
+       "e": 309.957
+      },
+      {
+       "w": "Aufprall?",
+       "s": 309.957,
+       "e": 310.411
+      }
+     ]
+    },
+    {
+     "text": "Eine amerikanische Fernsehsendung testete ihn zweitausendvier und erklärte ihn für widerlegt.",
+     "caption": "Eine amerikanische Fernsehsendung testete ihn 2004 und erklärte ihn für widerlegt.",
+     "start": 310.751,
+     "end": 315.689,
+     "words": [
+      {
+       "w": "Eine",
+       "s": 310.751,
+       "e": 311.026
+      },
+      {
+       "w": "amerikanische",
+       "s": 311.026,
+       "e": 311.753
+      },
+      {
+       "w": "Fernsehsendung",
+       "s": 311.753,
+       "e": 312.53
+      },
+      {
+       "w": "testete",
+       "s": 312.53,
+       "e": 312.957
+      },
+      {
+       "w": "ihn",
+       "s": 312.957,
+       "e": 313.182
+      },
+      {
+       "w": "zweitausendvier",
+       "s": 313.182,
+       "e": 314.009
+      },
+      {
+       "w": "und",
+       "s": 314.009,
+       "e": 314.235
+      },
+      {
+       "w": "erklärte",
+       "s": 314.235,
+       "e": 314.711
+      },
+      {
+       "w": "ihn",
+       "s": 314.711,
+       "e": 314.937
+      },
+      {
+       "w": "für",
+       "s": 314.937,
+       "e": 315.163
+      },
+      {
+       "w": "widerlegt.",
+       "s": 315.163,
+       "e": 315.689
+      }
+     ]
+    },
+    {
+     "text": "Im echten freien Fall schwebt man nahezu schwerelos, weil Körper und Kabine gleich schnell fallen.",
+     "caption": "Im echten freien Fall schwebt man nahezu schwerelos, weil Körper und Kabine gleich schnell fallen.",
+     "start": 316.029,
+     "end": 320.954,
+     "words": [
+      {
+       "w": "Im",
+       "s": 316.029,
+       "e": 316.194
+      },
+      {
+       "w": "echten",
+       "s": 316.194,
+       "e": 316.547
+      },
+      {
+       "w": "freien",
+       "s": 316.547,
+       "e": 316.901
+      },
+      {
+       "w": "Fall",
+       "s": 316.901,
+       "e": 317.16
+      },
+      {
+       "w": "schwebt",
+       "s": 317.16,
+       "e": 317.561
+      },
+      {
+       "w": "man",
+       "s": 317.561,
+       "e": 317.773
+      },
+      {
+       "w": "nahezu",
+       "s": 317.773,
+       "e": 318.126
+      },
+      {
+       "w": "schwerelos,",
+       "s": 318.126,
+       "e": 318.668
+      },
+      {
+       "w": "weil",
+       "s": 318.668,
+       "e": 318.927
+      },
+      {
+       "w": "Körper",
+       "s": 318.927,
+       "e": 319.281
+      },
+      {
+       "w": "und",
+       "s": 319.281,
+       "e": 319.493
+      },
+      {
+       "w": "Kabine",
+       "s": 319.493,
+       "e": 319.846
+      },
+      {
+       "w": "gleich",
+       "s": 319.846,
+       "e": 320.2
+      },
+      {
+       "w": "schnell",
+       "s": 320.2,
+       "e": 320.601
+      },
+      {
+       "w": "fallen.",
+       "s": 320.601,
+       "e": 320.954
+      }
+     ]
+    },
+    {
+     "text": "Ein kräftiger Sprung zieht nur etwa zwei bis drei Meter pro Sekunde ab.",
+     "caption": "Ein kräftiger Sprung zieht nur etwa 2 bis 3 Meter pro Sekunde ab.",
+     "start": 321.294,
+     "end": 325.098,
+     "words": [
+      {
+       "w": "Ein",
+       "s": 321.294,
+       "e": 321.515
+      },
+      {
+       "w": "kräftiger",
+       "s": 321.515,
+       "e": 322.03
+      },
+      {
+       "w": "Sprung",
+       "s": 322.03,
+       "e": 322.398
+      },
+      {
+       "w": "zieht",
+       "s": 322.398,
+       "e": 322.717
+      },
+      {
+       "w": "nur",
+       "s": 322.717,
+       "e": 322.938
+      },
+      {
+       "w": "etwa",
+       "s": 322.938,
+       "e": 323.208
+      },
+      {
+       "w": "zwei",
+       "s": 323.208,
+       "e": 323.478
+      },
+      {
+       "w": "bis",
+       "s": 323.478,
+       "e": 323.699
+      },
+      {
+       "w": "drei",
+       "s": 323.699,
+       "e": 323.969
+      },
+      {
+       "w": "Meter",
+       "s": 323.969,
+       "e": 324.288
+      },
+      {
+       "w": "pro",
+       "s": 324.288,
+       "e": 324.509
+      },
+      {
+       "w": "Sekunde",
+       "s": 324.509,
+       "e": 324.926
+      },
+      {
+       "w": "ab.",
+       "s": 324.926,
+       "e": 325.098
+      }
+     ]
+    },
+    {
+     "text": "Aus einem Sturz von zehn Metern würde so rechnerisch immer noch einer aus rund sechs bis sieben Metern.",
+     "caption": "Aus einem Sturz von 10 Metern würde so rechnerisch immer noch einer aus rund 6 bis 7 Metern.",
+     "start": 325.438,
+     "end": 330.028,
+     "words": [
+      {
+       "w": "Aus",
+       "s": 325.438,
+       "e": 325.622
+      },
+      {
+       "w": "einem",
+       "s": 325.622,
+       "e": 325.888
+      },
+      {
+       "w": "Sturz",
+       "s": 325.888,
+       "e": 326.155
+      },
+      {
+       "w": "von",
+       "s": 326.155,
+       "e": 326.339
+      },
+      {
+       "w": "zehn",
+       "s": 326.339,
+       "e": 326.565
+      },
+      {
+       "w": "Metern",
+       "s": 326.565,
+       "e": 326.872
+      },
+      {
+       "w": "würde",
+       "s": 326.872,
+       "e": 327.138
+      },
+      {
+       "w": "so",
+       "s": 327.138,
+       "e": 327.282
+      },
+      {
+       "w": "rechnerisch",
+       "s": 327.282,
+       "e": 327.794
+      },
+      {
+       "w": "immer",
+       "s": 327.794,
+       "e": 328.061
+      },
+      {
+       "w": "noch",
+       "s": 328.061,
+       "e": 328.286
+      },
+      {
+       "w": "einer",
+       "s": 328.286,
+       "e": 328.552
+      },
+      {
+       "w": "aus",
+       "s": 328.552,
+       "e": 328.737
+      },
+      {
+       "w": "rund",
+       "s": 328.737,
+       "e": 328.962
+      },
+      {
+       "w": "sechs",
+       "s": 328.962,
+       "e": 329.229
+      },
+      {
+       "w": "bis",
+       "s": 329.229,
+       "e": 329.413
+      },
+      {
+       "w": "sieben",
+       "s": 329.413,
+       "e": 329.72
+      },
+      {
+       "w": "Metern.",
+       "s": 329.72,
+       "e": 330.028
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s21",
+   "chapter": "Schicht 5: Die Puffer",
+   "kind": "EXPLANATION",
+   "start": 331.078,
+   "end": 344.524,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Fünfte Schicht, ganz unten in der Grube: die Puffer.",
+     "caption": "Fünfte Schicht, ganz unten in der Grube: die Puffer.",
+     "start": 331.078,
+     "end": 333.743,
+     "words": [
+      {
+       "w": "Fünfte",
+       "s": 331.078,
+       "e": 331.445
+      },
+      {
+       "w": "Schicht,",
+       "s": 331.445,
+       "e": 331.86
+      },
+      {
+       "w": "ganz",
+       "s": 331.86,
+       "e": 332.129
+      },
+      {
+       "w": "unten",
+       "s": 332.129,
+       "e": 332.447
+      },
+      {
+       "w": "in",
+       "s": 332.447,
+       "e": 332.618
+      },
+      {
+       "w": "der",
+       "s": 332.618,
+       "e": 332.838
+      },
+      {
+       "w": "Grube:",
+       "s": 332.838,
+       "e": 333.156
+      },
+      {
+       "w": "die",
+       "s": 333.156,
+       "e": 333.376
+      },
+      {
+       "w": "Puffer.",
+       "s": 333.376,
+       "e": 333.743
+      }
+     ]
+    },
+    {
+     "text": "Sie sind für langsame Überfahrten gedacht, etwa wenn die Steuerung versagt.",
+     "caption": "Sie sind für langsame Überfahrten gedacht, etwa wenn die Steuerung versagt.",
+     "start": 334.083,
+     "end": 337.68,
+     "words": [
+      {
+       "w": "Sie",
+       "s": 334.083,
+       "e": 334.287
+      },
+      {
+       "w": "sind",
+       "s": 334.287,
+       "e": 334.536
+      },
+      {
+       "w": "für",
+       "s": 334.536,
+       "e": 334.739
+      },
+      {
+       "w": "langsame",
+       "s": 334.739,
+       "e": 335.169
+      },
+      {
+       "w": "Überfahrten",
+       "s": 335.169,
+       "e": 335.735
+      },
+      {
+       "w": "gedacht,",
+       "s": 335.735,
+       "e": 336.119
+      },
+      {
+       "w": "etwa",
+       "s": 336.119,
+       "e": 336.368
+      },
+      {
+       "w": "wenn",
+       "s": 336.368,
+       "e": 336.617
+      },
+      {
+       "w": "die",
+       "s": 336.617,
+       "e": 336.82
+      },
+      {
+       "w": "Steuerung",
+       "s": 336.82,
+       "e": 337.295
+      },
+      {
+       "w": "versagt.",
+       "s": 337.295,
+       "e": 337.68
+      }
+     ]
+    },
+    {
+     "text": "Federpuffer und Polyurethanpuffer sind nur bis zu einem Meter pro Sekunde erlaubt, Ölpuffer bei jeder Geschwindigkeit.",
+     "caption": "Federpuffer und Polyurethanpuffer sind nur bis zu 1 Meter pro Sekunde erlaubt, Ölpuffer bei jeder Geschwindigkeit.",
+     "start": 338.02,
+     "end": 343.904,
+     "words": [
+      {
+       "w": "Federpuffer",
+       "s": 338.02,
+       "e": 338.608
+      },
+      {
+       "w": "und",
+       "s": 338.608,
+       "e": 338.82
+      },
+      {
+       "w": "Polyurethanpuffer",
+       "s": 338.82,
+       "e": 339.691
+      },
+      {
+       "w": "sind",
+       "s": 339.691,
+       "e": 339.95
+      },
+      {
+       "w": "nur",
+       "s": 339.95,
+       "e": 340.162
+      },
+      {
+       "w": "bis",
+       "s": 340.162,
+       "e": 340.374
+      },
+      {
+       "w": "zu",
+       "s": 340.374,
+       "e": 340.538
+      },
+      {
+       "w": "einem",
+       "s": 340.538,
+       "e": 340.844
+      },
+      {
+       "w": "Meter",
+       "s": 340.844,
+       "e": 341.15
+      },
+      {
+       "w": "pro",
+       "s": 341.15,
+       "e": 341.362
+      },
+      {
+       "w": "Sekunde",
+       "s": 341.362,
+       "e": 341.762
+      },
+      {
+       "w": "erlaubt,",
+       "s": 341.762,
+       "e": 342.163
+      },
+      {
+       "w": "Ölpuffer",
+       "s": 342.163,
+       "e": 342.61
+      },
+      {
+       "w": "bei",
+       "s": 342.61,
+       "e": 342.822
+      },
+      {
+       "w": "jeder",
+       "s": 342.822,
+       "e": 343.128
+      },
+      {
+       "w": "Geschwindigkeit.",
+       "s": 343.128,
+       "e": 343.904
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s22",
+   "chapter": "Schicht 5: Die Puffer",
+   "kind": "EXPLANATION",
+   "start": 344.524,
+   "end": 358.618,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Bei unserem Aufzug braucht ein Ölpuffer rechnerisch etwa sieben Zentimeter Hub, eine Stahlfeder rund dreizehneinhalb.",
+     "caption": "Bei unserem Aufzug braucht ein Ölpuffer rechnerisch etwa 7 Zentimeter Hub, eine Stahlfeder rund 13,5.",
+     "start": 344.524,
+     "end": 350.466,
+     "words": [
+      {
+       "w": "Bei",
+       "s": 344.524,
+       "e": 344.741
+      },
+      {
+       "w": "unserem",
+       "s": 344.741,
+       "e": 345.15
+      },
+      {
+       "w": "Aufzug",
+       "s": 345.15,
+       "e": 345.511
+      },
+      {
+       "w": "braucht",
+       "s": 345.511,
+       "e": 345.92
+      },
+      {
+       "w": "ein",
+       "s": 345.92,
+       "e": 346.136
+      },
+      {
+       "w": "Ölpuffer",
+       "s": 346.136,
+       "e": 346.593
+      },
+      {
+       "w": "rechnerisch",
+       "s": 346.593,
+       "e": 347.194
+      },
+      {
+       "w": "etwa",
+       "s": 347.194,
+       "e": 347.459
+      },
+      {
+       "w": "sieben",
+       "s": 347.459,
+       "e": 347.82
+      },
+      {
+       "w": "Zentimeter",
+       "s": 347.82,
+       "e": 348.373
+      },
+      {
+       "w": "Hub,",
+       "s": 348.373,
+       "e": 348.59
+      },
+      {
+       "w": "eine",
+       "s": 348.59,
+       "e": 348.854
+      },
+      {
+       "w": "Stahlfeder",
+       "s": 348.854,
+       "e": 349.407
+      },
+      {
+       "w": "rund",
+       "s": 349.407,
+       "e": 349.672
+      },
+      {
+       "w": "dreizehneinhalb.",
+       "s": 349.672,
+       "e": 350.466
+      }
+     ]
+    },
+    {
+     "text": "Doch der Hub wächst mit dem Quadrat der Geschwindigkeit.",
+     "caption": "Doch der Hub wächst mit dem Quadrat der Geschwindigkeit.",
+     "start": 350.806,
+     "end": 353.464,
+     "words": [
+      {
+       "w": "Doch",
+       "s": 350.806,
+       "e": 351.048
+      },
+      {
+       "w": "der",
+       "s": 351.048,
+       "e": 351.245
+      },
+      {
+       "w": "Hub",
+       "s": 351.245,
+       "e": 351.443
+      },
+      {
+       "w": "wächst",
+       "s": 351.443,
+       "e": 351.773
+      },
+      {
+       "w": "mit",
+       "s": 351.773,
+       "e": 351.97
+      },
+      {
+       "w": "dem",
+       "s": 351.97,
+       "e": 352.168
+      },
+      {
+       "w": "Quadrat",
+       "s": 352.168,
+       "e": 352.541
+      },
+      {
+       "w": "der",
+       "s": 352.541,
+       "e": 352.739
+      },
+      {
+       "w": "Geschwindigkeit.",
+       "s": 352.739,
+       "e": 353.464
+      }
+     ]
+    },
+    {
+     "text": "Bei zehn Metern pro Sekunde wären es ohne Zusatzüberwachung fast sieben Meter.",
+     "caption": "Bei 10 Metern pro Sekunde wären es ohne Zusatzüberwachung fast 7 Meter.",
+     "start": 353.804,
+     "end": 357.998,
+     "words": [
+      {
+       "w": "Bei",
+       "s": 353.804,
+       "e": 354.029
+      },
+      {
+       "w": "zehn",
+       "s": 354.029,
+       "e": 354.303
+      },
+      {
+       "w": "Metern",
+       "s": 354.303,
+       "e": 354.678
+      },
+      {
+       "w": "pro",
+       "s": 354.678,
+       "e": 354.903
+      },
+      {
+       "w": "Sekunde",
+       "s": 354.903,
+       "e": 355.327
+      },
+      {
+       "w": "wären",
+       "s": 355.327,
+       "e": 355.652
+      },
+      {
+       "w": "es",
+       "s": 355.652,
+       "e": 355.826
+      },
+      {
+       "w": "ohne",
+       "s": 355.826,
+       "e": 356.101
+      },
+      {
+       "w": "Zusatzüberwachung",
+       "s": 356.101,
+       "e": 357.025
+      },
+      {
+       "w": "fast",
+       "s": 357.025,
+       "e": 357.299
+      },
+      {
+       "w": "sieben",
+       "s": 357.299,
+       "e": 357.674
+      },
+      {
+       "w": "Meter.",
+       "s": 357.674,
+       "e": 357.998
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s23",
+   "chapter": "Schicht 5: Die Puffer",
+   "kind": "PATTERN_INTERRUPT",
+   "start": 358.618,
+   "end": 377.663,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Naheliegend, aber falsch: Der Puffer fängt einen Absturz ab.",
+     "caption": "Naheliegend, aber falsch: Der Puffer fängt einen Absturz ab.",
+     "start": 358.618,
+     "end": 361.866,
+     "words": [
+      {
+       "w": "Naheliegend,",
+       "s": 358.618,
+       "e": 359.268
+      },
+      {
+       "w": "aber",
+       "s": 359.268,
+       "e": 359.554
+      },
+      {
+       "w": "falsch:",
+       "s": 359.554,
+       "e": 359.944
+      },
+      {
+       "w": "Der",
+       "s": 359.944,
+       "e": 360.177
+      },
+      {
+       "w": "Puffer",
+       "s": 360.177,
+       "e": 360.567
+      },
+      {
+       "w": "fängt",
+       "s": 360.567,
+       "e": 360.905
+      },
+      {
+       "w": "einen",
+       "s": 360.905,
+       "e": 361.243
+      },
+      {
+       "w": "Absturz",
+       "s": 361.243,
+       "e": 361.685
+      },
+      {
+       "w": "ab.",
+       "s": 361.685,
+       "e": 361.866
+      }
+     ]
+    },
+    {
+     "text": "Er ist für einen Aufprall mit etwa hundertfünfzehn Prozent der Nenngeschwindigkeit ausgelegt.",
+     "caption": "Er ist für einen Aufprall mit etwa 115 Prozent der Nenngeschwindigkeit ausgelegt.",
+     "start": 362.206,
+     "end": 366.961,
+     "words": [
+      {
+       "w": "Er",
+       "s": 362.206,
+       "e": 362.375
+      },
+      {
+       "w": "ist",
+       "s": 362.375,
+       "e": 362.591
+      },
+      {
+       "w": "für",
+       "s": 362.591,
+       "e": 362.807
+      },
+      {
+       "w": "einen",
+       "s": 362.807,
+       "e": 363.119
+      },
+      {
+       "w": "Aufprall",
+       "s": 363.119,
+       "e": 363.575
+      },
+      {
+       "w": "mit",
+       "s": 363.575,
+       "e": 363.791
+      },
+      {
+       "w": "etwa",
+       "s": 363.791,
+       "e": 364.056
+      },
+      {
+       "w": "hundertfünfzehn",
+       "s": 364.056,
+       "e": 364.848
+      },
+      {
+       "w": "Prozent",
+       "s": 364.848,
+       "e": 365.256
+      },
+      {
+       "w": "der",
+       "s": 365.256,
+       "e": 365.472
+      },
+      {
+       "w": "Nenngeschwindigkeit",
+       "s": 365.472,
+       "e": 366.457
+      },
+      {
+       "w": "ausgelegt.",
+       "s": 366.457,
+       "e": 366.961
+      }
+     ]
+    },
+    {
+     "text": "Nach zehn Metern freiem Fall brächte unsere Kabine rechnerisch rund hundertfünfzigmal so viel Energie mit, wie ihr Puffer aufnehmen soll.",
+     "caption": "Nach 10 Metern freiem Fall brächte unsere Kabine rechnerisch rund 150-mal so viel Energie mit, wie ihr Puffer aufnehmen soll.",
+     "start": 367.301,
+     "end": 373.969,
+     "words": [
+      {
+       "w": "Nach",
+       "s": 367.301,
+       "e": 367.553
+      },
+      {
+       "w": "zehn",
+       "s": 367.553,
+       "e": 367.804
+      },
+      {
+       "w": "Metern",
+       "s": 367.804,
+       "e": 368.146
+      },
+      {
+       "w": "freiem",
+       "s": 368.146,
+       "e": 368.489
+      },
+      {
+       "w": "Fall",
+       "s": 368.489,
+       "e": 368.74
+      },
+      {
+       "w": "brächte",
+       "s": 368.74,
+       "e": 369.128
+      },
+      {
+       "w": "unsere",
+       "s": 369.128,
+       "e": 369.471
+      },
+      {
+       "w": "Kabine",
+       "s": 369.471,
+       "e": 369.813
+      },
+      {
+       "w": "rechnerisch",
+       "s": 369.813,
+       "e": 370.384
+      },
+      {
+       "w": "rund",
+       "s": 370.384,
+       "e": 370.635
+      },
+      {
+       "w": "hundertfünfzigmal",
+       "s": 370.635,
+       "e": 371.48
+      },
+      {
+       "w": "so",
+       "s": 371.48,
+       "e": 371.64
+      },
+      {
+       "w": "viel",
+       "s": 371.64,
+       "e": 371.891
+      },
+      {
+       "w": "Energie",
+       "s": 371.891,
+       "e": 372.28
+      },
+      {
+       "w": "mit,",
+       "s": 372.28,
+       "e": 372.485
+      },
+      {
+       "w": "wie",
+       "s": 372.485,
+       "e": 372.691
+      },
+      {
+       "w": "ihr",
+       "s": 372.691,
+       "e": 372.896
+      },
+      {
+       "w": "Puffer",
+       "s": 372.896,
+       "e": 373.239
+      },
+      {
+       "w": "aufnehmen",
+       "s": 373.239,
+       "e": 373.718
+      },
+      {
+       "w": "soll.",
+       "s": 373.718,
+       "e": 373.969
+      }
+     ]
+    },
+    {
+     "text": "Die eigentliche Rettung sitzt weiter oben, an den Schienen.",
+     "caption": "Die eigentliche Rettung sitzt weiter oben, an den Schienen.",
+     "start": 374.309,
+     "end": 377.043,
+     "words": [
+      {
+       "w": "Die",
+       "s": 374.309,
+       "e": 374.506
+      },
+      {
+       "w": "eigentliche",
+       "s": 374.506,
+       "e": 375.053
+      },
+      {
+       "w": "Rettung",
+       "s": 375.053,
+       "e": 375.425
+      },
+      {
+       "w": "sitzt",
+       "s": 375.425,
+       "e": 375.709
+      },
+      {
+       "w": "weiter",
+       "s": 375.709,
+       "e": 376.037
+      },
+      {
+       "w": "oben,",
+       "s": 376.037,
+       "e": 376.277
+      },
+      {
+       "w": "an",
+       "s": 376.277,
+       "e": 376.43
+      },
+      {
+       "w": "den",
+       "s": 376.43,
+       "e": 376.627
+      },
+      {
+       "w": "Schienen.",
+       "s": 376.627,
+       "e": 377.043
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s24",
+   "chapter": "Schicht 6: Die Prüfungen",
+   "kind": "EXPLANATION",
+   "start": 378.093,
+   "end": 389.273,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Sechste Schicht: die Prüfungen, denn ein Seil reißt nicht plötzlich, zuerst brechen einzelne Drähte.",
+     "caption": "Sechste Schicht: die Prüfungen, denn ein Seil reißt nicht plötzlich, zuerst brechen einzelne Drähte.",
+     "start": 378.093,
+     "end": 383.285,
+     "words": [
+      {
+       "w": "Sechste",
+       "s": 378.093,
+       "e": 378.517
+      },
+      {
+       "w": "Schicht:",
+       "s": 378.517,
+       "e": 378.941
+      },
+      {
+       "w": "die",
+       "s": 378.941,
+       "e": 379.166
+      },
+      {
+       "w": "Prüfungen,",
+       "s": 379.166,
+       "e": 379.69
+      },
+      {
+       "w": "denn",
+       "s": 379.69,
+       "e": 379.965
+      },
+      {
+       "w": "ein",
+       "s": 379.965,
+       "e": 380.189
+      },
+      {
+       "w": "Seil",
+       "s": 380.189,
+       "e": 380.464
+      },
+      {
+       "w": "reißt",
+       "s": 380.464,
+       "e": 380.789
+      },
+      {
+       "w": "nicht",
+       "s": 380.789,
+       "e": 381.113
+      },
+      {
+       "w": "plötzlich,",
+       "s": 381.113,
+       "e": 381.637
+      },
+      {
+       "w": "zuerst",
+       "s": 381.637,
+       "e": 382.012
+      },
+      {
+       "w": "brechen",
+       "s": 382.012,
+       "e": 382.436
+      },
+      {
+       "w": "einzelne",
+       "s": 382.436,
+       "e": 382.91
+      },
+      {
+       "w": "Drähte.",
+       "s": 382.91,
+       "e": 383.285
+      }
+     ]
+    },
+    {
+     "text": "Prüfer zählen diese Drahtbrüche, und ab einer festgelegten Zahl muss das Seil ausgetauscht werden.",
+     "caption": "Prüfer zählen diese Drahtbrüche, und ab einer festgelegten Zahl muss das Seil ausgetauscht werden.",
+     "start": 383.625,
+     "end": 388.653,
+     "words": [
+      {
+       "w": "Prüfer",
+       "s": 383.625,
+       "e": 383.987
+      },
+      {
+       "w": "zählen",
+       "s": 383.987,
+       "e": 384.35
+      },
+      {
+       "w": "diese",
+       "s": 384.35,
+       "e": 384.664
+      },
+      {
+       "w": "Drahtbrüche,",
+       "s": 384.664,
+       "e": 385.269
+      },
+      {
+       "w": "und",
+       "s": 385.269,
+       "e": 385.486
+      },
+      {
+       "w": "ab",
+       "s": 385.486,
+       "e": 385.656
+      },
+      {
+       "w": "einer",
+       "s": 385.656,
+       "e": 385.97
+      },
+      {
+       "w": "festgelegten",
+       "s": 385.97,
+       "e": 386.623
+      },
+      {
+       "w": "Zahl",
+       "s": 386.623,
+       "e": 386.889
+      },
+      {
+       "w": "muss",
+       "s": 386.889,
+       "e": 387.155
+      },
+      {
+       "w": "das",
+       "s": 387.155,
+       "e": 387.372
+      },
+      {
+       "w": "Seil",
+       "s": 387.372,
+       "e": 387.638
+      },
+      {
+       "w": "ausgetauscht",
+       "s": 387.638,
+       "e": 388.291
+      },
+      {
+       "w": "werden.",
+       "s": 388.291,
+       "e": 388.653
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s25",
+   "chapter": "Schicht 6: Die Prüfungen",
+   "kind": "EXPLANATION",
+   "start": 389.273,
+   "end": 402.434,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "In Deutschland kommt ein unabhängiger Prüfer dazu, etwa vom Tüff oder von der Dekra.",
+     "caption": "In Deutschland kommt ein unabhängiger Prüfer dazu, etwa vom TÜV oder von der DEKRA.",
+     "start": 389.273,
+     "end": 393.886,
+     "words": [
+      {
+       "w": "In",
+       "s": 389.273,
+       "e": 389.453
+      },
+      {
+       "w": "Deutschland",
+       "s": 389.453,
+       "e": 390.094
+      },
+      {
+       "w": "kommt",
+       "s": 390.094,
+       "e": 390.427
+      },
+      {
+       "w": "ein",
+       "s": 390.427,
+       "e": 390.657
+      },
+      {
+       "w": "unabhängiger",
+       "s": 390.657,
+       "e": 391.349
+      },
+      {
+       "w": "Prüfer",
+       "s": 391.349,
+       "e": 391.734
+      },
+      {
+       "w": "dazu,",
+       "s": 391.734,
+       "e": 392.015
+      },
+      {
+       "w": "etwa",
+       "s": 392.015,
+       "e": 392.297
+      },
+      {
+       "w": "vom",
+       "s": 392.297,
+       "e": 392.528
+      },
+      {
+       "w": "Tüff",
+       "s": 392.528,
+       "e": 392.81
+      },
+      {
+       "w": "oder",
+       "s": 392.81,
+       "e": 393.092
+      },
+      {
+       "w": "von",
+       "s": 393.092,
+       "e": 393.322
+      },
+      {
+       "w": "der",
+       "s": 393.322,
+       "e": 393.553
+      },
+      {
+       "w": "Dekra.",
+       "s": 393.553,
+       "e": 393.886
+      }
+     ]
+    },
+    {
+     "text": "Spätestens alle zwei Jahre ist eine Hauptprüfung fällig, dazwischen eine Zwischenprüfung.",
+     "caption": "Spätestens alle 2 Jahre ist eine Hauptprüfung fällig, dazwischen eine Zwischenprüfung.",
+     "start": 394.226,
+     "end": 398.76,
+     "words": [
+      {
+       "w": "Spätestens",
+       "s": 394.226,
+       "e": 394.784
+      },
+      {
+       "w": "alle",
+       "s": 394.784,
+       "e": 395.05
+      },
+      {
+       "w": "zwei",
+       "s": 395.05,
+       "e": 395.317
+      },
+      {
+       "w": "Jahre",
+       "s": 395.317,
+       "e": 395.632
+      },
+      {
+       "w": "ist",
+       "s": 395.632,
+       "e": 395.85
+      },
+      {
+       "w": "eine",
+       "s": 395.85,
+       "e": 396.117
+      },
+      {
+       "w": "Hauptprüfung",
+       "s": 396.117,
+       "e": 396.772
+      },
+      {
+       "w": "fällig,",
+       "s": 396.772,
+       "e": 397.135
+      },
+      {
+       "w": "dazwischen",
+       "s": 397.135,
+       "e": 397.693
+      },
+      {
+       "w": "eine",
+       "s": 397.693,
+       "e": 397.96
+      },
+      {
+       "w": "Zwischenprüfung.",
+       "s": 397.96,
+       "e": 398.76
+      }
+     ]
+    },
+    {
+     "text": "Den nächsten Termin zeigt die Prüfplakette in der Kabine.",
+     "caption": "Den nächsten Termin zeigt die Prüfplakette in der Kabine.",
+     "start": 399.1,
+     "end": 401.814,
+     "words": [
+      {
+       "w": "Den",
+       "s": 399.1,
+       "e": 399.298
+      },
+      {
+       "w": "nächsten",
+       "s": 399.298,
+       "e": 399.717
+      },
+      {
+       "w": "Termin",
+       "s": 399.717,
+       "e": 400.048
+      },
+      {
+       "w": "zeigt",
+       "s": 400.048,
+       "e": 400.335
+      },
+      {
+       "w": "die",
+       "s": 400.335,
+       "e": 400.534
+      },
+      {
+       "w": "Prüfplakette",
+       "s": 400.534,
+       "e": 401.13
+      },
+      {
+       "w": "in",
+       "s": 401.13,
+       "e": 401.284
+      },
+      {
+       "w": "der",
+       "s": 401.284,
+       "e": 401.483
+      },
+      {
+       "w": "Kabine.",
+       "s": 401.483,
+       "e": 401.814
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s26",
+   "chapter": "Überraschungen und echte Risiken",
+   "kind": "PATTERN_INTERRUPT",
+   "start": 402.864,
+   "end": 419.992,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Jetzt die versprochene Überraschung: Aufzüge können nach oben abstürzen.",
+     "caption": "Jetzt die versprochene Überraschung: Aufzüge können nach oben abstürzen.",
+     "start": 402.864,
+     "end": 406.589,
+     "words": [
+      {
+       "w": "Jetzt",
+       "s": 402.864,
+       "e": 403.184
+      },
+      {
+       "w": "die",
+       "s": 403.184,
+       "e": 403.406
+      },
+      {
+       "w": "versprochene",
+       "s": 403.406,
+       "e": 404.073
+      },
+      {
+       "w": "Überraschung:",
+       "s": 404.073,
+       "e": 404.739
+      },
+      {
+       "w": "Aufzüge",
+       "s": 404.739,
+       "e": 405.158
+      },
+      {
+       "w": "können",
+       "s": 405.158,
+       "e": 405.528
+      },
+      {
+       "w": "nach",
+       "s": 405.528,
+       "e": 405.8
+      },
+      {
+       "w": "oben",
+       "s": 405.8,
+       "e": 406.071
+      },
+      {
+       "w": "abstürzen.",
+       "s": 406.071,
+       "e": 406.589
+      }
+     ]
+    },
+    {
+     "text": "Weil das Gegengewicht in der Regel schwerer ist als die leere Kabine, zieht es sie bei versagender Bremse hoch.",
+     "caption": "Weil das Gegengewicht in der Regel schwerer ist als die leere Kabine, zieht es sie bei versagender Bremse hoch.",
+     "start": 406.929,
+     "end": 412.51,
+     "words": [
+      {
+       "w": "Weil",
+       "s": 406.929,
+       "e": 407.186
+      },
+      {
+       "w": "das",
+       "s": 407.186,
+       "e": 407.396
+      },
+      {
+       "w": "Gegengewicht",
+       "s": 407.396,
+       "e": 408.027
+      },
+      {
+       "w": "in",
+       "s": 408.027,
+       "e": 408.19
+      },
+      {
+       "w": "der",
+       "s": 408.19,
+       "e": 408.4
+      },
+      {
+       "w": "Regel",
+       "s": 408.4,
+       "e": 408.704
+      },
+      {
+       "w": "schwerer",
+       "s": 408.704,
+       "e": 409.148
+      },
+      {
+       "w": "ist",
+       "s": 409.148,
+       "e": 409.358
+      },
+      {
+       "w": "als",
+       "s": 409.358,
+       "e": 409.568
+      },
+      {
+       "w": "die",
+       "s": 409.568,
+       "e": 409.778
+      },
+      {
+       "w": "leere",
+       "s": 409.778,
+       "e": 410.081
+      },
+      {
+       "w": "Kabine,",
+       "s": 410.081,
+       "e": 410.432
+      },
+      {
+       "w": "zieht",
+       "s": 410.432,
+       "e": 410.735
+      },
+      {
+       "w": "es",
+       "s": 410.735,
+       "e": 410.899
+      },
+      {
+       "w": "sie",
+       "s": 410.899,
+       "e": 411.109
+      },
+      {
+       "w": "bei",
+       "s": 411.109,
+       "e": 411.319
+      },
+      {
+       "w": "versagender",
+       "s": 411.319,
+       "e": 411.903
+      },
+      {
+       "w": "Bremse",
+       "s": 411.903,
+       "e": 412.253
+      },
+      {
+       "w": "hoch.",
+       "s": 412.253,
+       "e": 412.51
+      }
+     ]
+    },
+    {
+     "text": "Deshalb verlangt die europäische Aufzugsnorm auch dagegen einen Schutz, etwa eine Fangvorrichtung, die auch nach oben greift.",
+     "caption": "Deshalb verlangt die europäische Aufzugsnorm auch dagegen einen Schutz, etwa eine Fangvorrichtung, die auch nach oben greift.",
+     "start": 412.85,
+     "end": 419.372,
+     "words": [
+      {
+       "w": "Deshalb",
+       "s": 412.85,
+       "e": 413.271
+      },
+      {
+       "w": "verlangt",
+       "s": 413.271,
+       "e": 413.742
+      },
+      {
+       "w": "die",
+       "s": 413.742,
+       "e": 413.966
+      },
+      {
+       "w": "europäische",
+       "s": 413.966,
+       "e": 414.586
+      },
+      {
+       "w": "Aufzugsnorm",
+       "s": 414.586,
+       "e": 415.206
+      },
+      {
+       "w": "auch",
+       "s": 415.206,
+       "e": 415.478
+      },
+      {
+       "w": "dagegen",
+       "s": 415.478,
+       "e": 415.9
+      },
+      {
+       "w": "einen",
+       "s": 415.9,
+       "e": 416.222
+      },
+      {
+       "w": "Schutz,",
+       "s": 416.222,
+       "e": 416.594
+      },
+      {
+       "w": "etwa",
+       "s": 416.594,
+       "e": 416.867
+      },
+      {
+       "w": "eine",
+       "s": 416.867,
+       "e": 417.14
+      },
+      {
+       "w": "Fangvorrichtung,",
+       "s": 417.14,
+       "e": 417.958
+      },
+      {
+       "w": "die",
+       "s": 417.958,
+       "e": 418.181
+      },
+      {
+       "w": "auch",
+       "s": 418.181,
+       "e": 418.454
+      },
+      {
+       "w": "nach",
+       "s": 418.454,
+       "e": 418.727
+      },
+      {
+       "w": "oben",
+       "s": 418.727,
+       "e": 419.0
+      },
+      {
+       "w": "greift.",
+       "s": 419.0,
+       "e": 419.372
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s27",
+   "chapter": "Überraschungen und echte Risiken",
+   "kind": "EXPLANATION",
+   "start": 419.992,
+   "end": 443.063,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Einer der gefährlichsten realen Fehler ist ein anderer: eine Kabine, die bei offener Tür losfährt.",
+     "caption": "Einer der gefährlichsten realen Fehler ist ein anderer: eine Kabine, die bei offener Tür losfährt.",
+     "start": 419.992,
+     "end": 424.518,
+     "words": [
+      {
+       "w": "Einer",
+       "s": 419.992,
+       "e": 420.276
+      },
+      {
+       "w": "der",
+       "s": 420.276,
+       "e": 420.473
+      },
+      {
+       "w": "gefährlichsten",
+       "s": 420.473,
+       "e": 421.151
+      },
+      {
+       "w": "realen",
+       "s": 421.151,
+       "e": 421.479
+      },
+      {
+       "w": "Fehler",
+       "s": 421.479,
+       "e": 421.807
+      },
+      {
+       "w": "ist",
+       "s": 421.807,
+       "e": 422.004
+      },
+      {
+       "w": "ein",
+       "s": 422.004,
+       "e": 422.2
+      },
+      {
+       "w": "anderer:",
+       "s": 422.2,
+       "e": 422.572
+      },
+      {
+       "w": "eine",
+       "s": 422.572,
+       "e": 422.813
+      },
+      {
+       "w": "Kabine,",
+       "s": 422.813,
+       "e": 423.141
+      },
+      {
+       "w": "die",
+       "s": 423.141,
+       "e": 423.337
+      },
+      {
+       "w": "bei",
+       "s": 423.337,
+       "e": 423.534
+      },
+      {
+       "w": "offener",
+       "s": 423.534,
+       "e": 423.906
+      },
+      {
+       "w": "Tür",
+       "s": 423.906,
+       "e": 424.103
+      },
+      {
+       "w": "losfährt.",
+       "s": 424.103,
+       "e": 424.518
+      }
+     ]
+    },
+    {
+     "text": "Solche tödlichen Unfälle gab es, etwa zweitausendsechs in Tokio.",
+     "caption": "Solche tödlichen Unfälle gab es, etwa 2006 in Tokio.",
+     "start": 424.858,
+     "end": 428.641,
+     "words": [
+      {
+       "w": "Solche",
+       "s": 424.858,
+       "e": 425.278
+      },
+      {
+       "w": "tödlichen",
+       "s": 425.278,
+       "e": 425.867
+      },
+      {
+       "w": "Unfälle",
+       "s": 425.867,
+       "e": 426.343
+      },
+      {
+       "w": "gab",
+       "s": 426.343,
+       "e": 426.595
+      },
+      {
+       "w": "es,",
+       "s": 426.595,
+       "e": 426.791
+      },
+      {
+       "w": "etwa",
+       "s": 426.791,
+       "e": 427.1
+      },
+      {
+       "w": "zweitausendsechs",
+       "s": 427.1,
+       "e": 428.08
+      },
+      {
+       "w": "in",
+       "s": 428.08,
+       "e": 428.276
+      },
+      {
+       "w": "Tokio.",
+       "s": 428.276,
+       "e": 428.641
+      }
+     ]
+    },
+    {
+     "text": "Seit einer Ergänzung von zweitausendneun verlangt die europäische Aufzugsnorm einen eigenen Schutz dagegen.",
+     "caption": "Seit einer Ergänzung von 2009 verlangt die europäische Aufzugsnorm einen eigenen Schutz dagegen.",
+     "start": 428.981,
+     "end": 434.246,
+     "words": [
+      {
+       "w": "Seit",
+       "s": 428.981,
+       "e": 429.236
+      },
+      {
+       "w": "einer",
+       "s": 429.236,
+       "e": 429.537
+      },
+      {
+       "w": "Ergänzung",
+       "s": 429.537,
+       "e": 430.024
+      },
+      {
+       "w": "von",
+       "s": 430.024,
+       "e": 430.233
+      },
+      {
+       "w": "zweitausendneun",
+       "s": 430.233,
+       "e": 430.998
+      },
+      {
+       "w": "verlangt",
+       "s": 430.998,
+       "e": 431.439
+      },
+      {
+       "w": "die",
+       "s": 431.439,
+       "e": 431.648
+      },
+      {
+       "w": "europäische",
+       "s": 431.648,
+       "e": 432.228
+      },
+      {
+       "w": "Aufzugsnorm",
+       "s": 432.228,
+       "e": 432.808
+      },
+      {
+       "w": "einen",
+       "s": 432.808,
+       "e": 433.109
+      },
+      {
+       "w": "eigenen",
+       "s": 433.109,
+       "e": 433.503
+      },
+      {
+       "w": "Schutz",
+       "s": 433.503,
+       "e": 433.851
+      },
+      {
+       "w": "dagegen.",
+       "s": 433.851,
+       "e": 434.246
+      }
+     ]
+    },
+    {
+     "text": "Für neue Aufzüge ist er seit zweitausendzwölf praktisch Pflicht.",
+     "caption": "Für neue Aufzüge ist er seit 2012 praktisch Pflicht.",
+     "start": 434.586,
+     "end": 437.825,
+     "words": [
+      {
+       "w": "Für",
+       "s": 434.586,
+       "e": 434.798
+      },
+      {
+       "w": "neue",
+       "s": 434.798,
+       "e": 435.058
+      },
+      {
+       "w": "Aufzüge",
+       "s": 435.058,
+       "e": 435.46
+      },
+      {
+       "w": "ist",
+       "s": 435.46,
+       "e": 435.673
+      },
+      {
+       "w": "er",
+       "s": 435.673,
+       "e": 435.839
+      },
+      {
+       "w": "seit",
+       "s": 435.839,
+       "e": 436.099
+      },
+      {
+       "w": "zweitausendzwölf",
+       "s": 436.099,
+       "e": 436.926
+      },
+      {
+       "w": "praktisch",
+       "s": 436.926,
+       "e": 437.423
+      },
+      {
+       "w": "Pflicht.",
+       "s": 437.423,
+       "e": 437.825
+      }
+     ]
+    },
+    {
+     "text": "Er stoppt die Kabine spätestens einen Meter zwanzig nach dem Verlassen der Haltestelle.",
+     "caption": "Er stoppt die Kabine spätestens 1,20 Meter nach dem Verlassen der Haltestelle.",
+     "start": 438.165,
+     "end": 442.443,
+     "words": [
+      {
+       "w": "Er",
+       "s": 438.165,
+       "e": 438.325
+      },
+      {
+       "w": "stoppt",
+       "s": 438.325,
+       "e": 438.668
+      },
+      {
+       "w": "die",
+       "s": 438.668,
+       "e": 438.874
+      },
+      {
+       "w": "Kabine",
+       "s": 438.874,
+       "e": 439.217
+      },
+      {
+       "w": "spätestens",
+       "s": 439.217,
+       "e": 439.743
+      },
+      {
+       "w": "einen",
+       "s": 439.743,
+       "e": 440.041
+      },
+      {
+       "w": "Meter",
+       "s": 440.041,
+       "e": 440.338
+      },
+      {
+       "w": "zwanzig",
+       "s": 440.338,
+       "e": 440.727
+      },
+      {
+       "w": "nach",
+       "s": 440.727,
+       "e": 440.979
+      },
+      {
+       "w": "dem",
+       "s": 440.979,
+       "e": 441.185
+      },
+      {
+       "w": "Verlassen",
+       "s": 441.185,
+       "e": 441.665
+      },
+      {
+       "w": "der",
+       "s": 441.665,
+       "e": 441.871
+      },
+      {
+       "w": "Haltestelle.",
+       "s": 441.871,
+       "e": 442.443
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s28",
+   "chapter": "Überraschungen und echte Risiken",
+   "kind": "EXPLANATION",
+   "start": 443.063,
+   "end": 461.669,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Und in Zahlen?",
+     "caption": "Und in Zahlen?",
+     "start": 443.063,
+     "end": 443.939,
+     "words": [
+      {
+       "w": "Und",
+       "s": 443.063,
+       "e": 443.317
+      },
+      {
+       "w": "in",
+       "s": 443.317,
+       "e": 443.515
+      },
+      {
+       "w": "Zahlen?",
+       "s": 443.515,
+       "e": 443.939
+      }
+     ]
+    },
+    {
+     "text": "Eine ältere amerikanische Auswertung kam auf rund dreißig Tote pro Jahr, Aufzüge und Fahrtreppen zusammen, Beschäftigte eingerechnet.",
+     "caption": "Eine ältere amerikanische Auswertung kam auf rund 30 Tote pro Jahr, Aufzüge und Fahrtreppen zusammen, Beschäftigte eingerechnet.",
+     "start": 444.279,
+     "end": 450.911,
+     "words": [
+      {
+       "w": "Eine",
+       "s": 444.279,
+       "e": 444.541
+      },
+      {
+       "w": "ältere",
+       "s": 444.541,
+       "e": 444.897
+      },
+      {
+       "w": "amerikanische",
+       "s": 444.897,
+       "e": 445.587
+      },
+      {
+       "w": "Auswertung",
+       "s": 445.587,
+       "e": 446.133
+      },
+      {
+       "w": "kam",
+       "s": 446.133,
+       "e": 446.347
+      },
+      {
+       "w": "auf",
+       "s": 446.347,
+       "e": 446.561
+      },
+      {
+       "w": "rund",
+       "s": 446.561,
+       "e": 446.823
+      },
+      {
+       "w": "dreißig",
+       "s": 446.823,
+       "e": 447.227
+      },
+      {
+       "w": "Tote",
+       "s": 447.227,
+       "e": 447.488
+      },
+      {
+       "w": "pro",
+       "s": 447.488,
+       "e": 447.702
+      },
+      {
+       "w": "Jahr,",
+       "s": 447.702,
+       "e": 447.964
+      },
+      {
+       "w": "Aufzüge",
+       "s": 447.964,
+       "e": 448.368
+      },
+      {
+       "w": "und",
+       "s": 448.368,
+       "e": 448.582
+      },
+      {
+       "w": "Fahrtreppen",
+       "s": 448.582,
+       "e": 449.176
+      },
+      {
+       "w": "zusammen,",
+       "s": 449.176,
+       "e": 449.628
+      },
+      {
+       "w": "Beschäftigte",
+       "s": 449.628,
+       "e": 450.269
+      },
+      {
+       "w": "eingerechnet.",
+       "s": 450.269,
+       "e": 450.911
+      }
+     ]
+    },
+    {
+     "text": "Etwa die Hälfte der Toten an Aufzügen waren Menschen, die dort arbeiteten.",
+     "caption": "Etwa die Hälfte der Toten an Aufzügen waren Menschen, die dort arbeiteten.",
+     "start": 451.251,
+     "end": 454.942,
+     "words": [
+      {
+       "w": "Etwa",
+       "s": 451.251,
+       "e": 451.508
+      },
+      {
+       "w": "die",
+       "s": 451.508,
+       "e": 451.718
+      },
+      {
+       "w": "Hälfte",
+       "s": 451.718,
+       "e": 452.069
+      },
+      {
+       "w": "der",
+       "s": 452.069,
+       "e": 452.279
+      },
+      {
+       "w": "Toten",
+       "s": 452.279,
+       "e": 452.583
+      },
+      {
+       "w": "an",
+       "s": 452.583,
+       "e": 452.746
+      },
+      {
+       "w": "Aufzügen",
+       "s": 452.746,
+       "e": 453.19
+      },
+      {
+       "w": "waren",
+       "s": 453.19,
+       "e": 453.494
+      },
+      {
+       "w": "Menschen,",
+       "s": 453.494,
+       "e": 453.938
+      },
+      {
+       "w": "die",
+       "s": 453.938,
+       "e": 454.148
+      },
+      {
+       "w": "dort",
+       "s": 454.148,
+       "e": 454.405
+      },
+      {
+       "w": "arbeiteten.",
+       "s": 454.405,
+       "e": 454.942
+      }
+     ]
+    },
+    {
+     "text": "Im Vordergrund standen Stürze in offene Schächte, Einklemmen und Stolpern, nicht der Seilriss aus dem Kino.",
+     "caption": "Im Vordergrund standen Stürze in offene Schächte, Einklemmen und Stolpern, nicht der Seilriss aus dem Kino.",
+     "start": 455.282,
+     "end": 461.049,
+     "words": [
+      {
+       "w": "Im",
+       "s": 455.282,
+       "e": 455.461
+      },
+      {
+       "w": "Vordergrund",
+       "s": 455.461,
+       "e": 456.099
+      },
+      {
+       "w": "standen",
+       "s": 456.099,
+       "e": 456.532
+      },
+      {
+       "w": "Stürze",
+       "s": 456.532,
+       "e": 456.915
+      },
+      {
+       "w": "in",
+       "s": 456.915,
+       "e": 457.094
+      },
+      {
+       "w": "offene",
+       "s": 457.094,
+       "e": 457.476
+      },
+      {
+       "w": "Schächte,",
+       "s": 457.476,
+       "e": 457.961
+      },
+      {
+       "w": "Einklemmen",
+       "s": 457.961,
+       "e": 458.548
+      },
+      {
+       "w": "und",
+       "s": 458.548,
+       "e": 458.778
+      },
+      {
+       "w": "Stolpern,",
+       "s": 458.778,
+       "e": 459.263
+      },
+      {
+       "w": "nicht",
+       "s": 459.263,
+       "e": 459.594
+      },
+      {
+       "w": "der",
+       "s": 459.594,
+       "e": 459.824
+      },
+      {
+       "w": "Seilriss",
+       "s": 459.824,
+       "e": 460.309
+      },
+      {
+       "w": "aus",
+       "s": 460.309,
+       "e": 460.538
+      },
+      {
+       "w": "dem",
+       "s": 460.538,
+       "e": 460.768
+      },
+      {
+       "w": "Kino.",
+       "s": 460.768,
+       "e": 461.049
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s29",
+   "chapter": "Überraschungen und echte Risiken",
+   "kind": "EXPLANATION",
+   "start": 461.669,
+   "end": 475.198,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Dem stehen nach älteren Branchenangaben aus anderen Jahren rund achtzehn Milliarden Aufzugsfahrten pro Jahr gegenüber.",
+     "caption": "Dem stehen nach älteren Branchenangaben aus anderen Jahren rund 18 Milliarden Aufzugsfahrten pro Jahr gegenüber.",
+     "start": 461.669,
+     "end": 467.643,
+     "words": [
+      {
+       "w": "Dem",
+       "s": 461.669,
+       "e": 461.883
+      },
+      {
+       "w": "stehen",
+       "s": 461.883,
+       "e": 462.24
+      },
+      {
+       "w": "nach",
+       "s": 462.24,
+       "e": 462.502
+      },
+      {
+       "w": "älteren",
+       "s": 462.502,
+       "e": 462.907
+      },
+      {
+       "w": "Branchenangaben",
+       "s": 462.907,
+       "e": 463.692
+      },
+      {
+       "w": "aus",
+       "s": 463.692,
+       "e": 463.906
+      },
+      {
+       "w": "anderen",
+       "s": 463.906,
+       "e": 464.311
+      },
+      {
+       "w": "Jahren",
+       "s": 464.311,
+       "e": 464.668
+      },
+      {
+       "w": "rund",
+       "s": 464.668,
+       "e": 464.93
+      },
+      {
+       "w": "achtzehn",
+       "s": 464.93,
+       "e": 465.382
+      },
+      {
+       "w": "Milliarden",
+       "s": 465.382,
+       "e": 465.929
+      },
+      {
+       "w": "Aufzugsfahrten",
+       "s": 465.929,
+       "e": 466.667
+      },
+      {
+       "w": "pro",
+       "s": 466.667,
+       "e": 466.881
+      },
+      {
+       "w": "Jahr",
+       "s": 466.881,
+       "e": 467.143
+      },
+      {
+       "w": "gegenüber.",
+       "s": 467.143,
+       "e": 467.643
+      }
+     ]
+    },
+    {
+     "text": "Grob überschlagen ergibt das für alle, die nicht am Aufzug arbeiten, in der Größenordnung einen Todesfall pro Milliarde Fahrten.",
+     "caption": "Grob überschlagen ergibt das für alle, die nicht am Aufzug arbeiten, in der Größenordnung einen Todesfall pro Milliarde Fahrten.",
+     "start": 467.983,
+     "end": 474.578,
+     "words": [
+      {
+       "w": "Grob",
+       "s": 467.983,
+       "e": 468.251
+      },
+      {
+       "w": "überschlagen",
+       "s": 468.251,
+       "e": 468.908
+      },
+      {
+       "w": "ergibt",
+       "s": 468.908,
+       "e": 469.273
+      },
+      {
+       "w": "das",
+       "s": 469.273,
+       "e": 469.492
+      },
+      {
+       "w": "für",
+       "s": 469.492,
+       "e": 469.711
+      },
+      {
+       "w": "alle,",
+       "s": 469.711,
+       "e": 469.978
+      },
+      {
+       "w": "die",
+       "s": 469.978,
+       "e": 470.197
+      },
+      {
+       "w": "nicht",
+       "s": 470.197,
+       "e": 470.514
+      },
+      {
+       "w": "am",
+       "s": 470.514,
+       "e": 470.684
+      },
+      {
+       "w": "Aufzug",
+       "s": 470.684,
+       "e": 471.049
+      },
+      {
+       "w": "arbeiten,",
+       "s": 471.049,
+       "e": 471.512
+      },
+      {
+       "w": "in",
+       "s": 471.512,
+       "e": 471.682
+      },
+      {
+       "w": "der",
+       "s": 471.682,
+       "e": 471.901
+      },
+      {
+       "w": "Größenordnung",
+       "s": 471.901,
+       "e": 472.607
+      },
+      {
+       "w": "einen",
+       "s": 472.607,
+       "e": 472.923
+      },
+      {
+       "w": "Todesfall",
+       "s": 472.923,
+       "e": 473.434
+      },
+      {
+       "w": "pro",
+       "s": 473.434,
+       "e": 473.653
+      },
+      {
+       "w": "Milliarde",
+       "s": 473.653,
+       "e": 474.164
+      },
+      {
+       "w": "Fahrten.",
+       "s": 474.164,
+       "e": 474.578
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s30",
+   "chapter": "Überraschungen und echte Risiken",
+   "kind": "PATTERN_INTERRUPT",
+   "start": 475.198,
+   "end": 497.642,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Und die Treppe?",
+     "caption": "Und die Treppe?",
+     "start": 475.198,
+     "end": 475.972,
+     "words": [
+      {
+       "w": "Und",
+       "s": 475.198,
+       "e": 475.409
+      },
+      {
+       "w": "die",
+       "s": 475.409,
+       "e": 475.62
+      },
+      {
+       "w": "Treppe?",
+       "s": 475.62,
+       "e": 475.972
+      }
+     ]
+    },
+    {
+     "text": "Eine Studie hat amerikanische Notaufnahmen von neunzehnhundertneunzig bis zweitausendzwölf ausgewertet.",
+     "caption": "Eine Studie hat amerikanische Notaufnahmen von 1990 bis 2012 ausgewertet.",
+     "start": 476.312,
+     "end": 481.726,
+     "words": [
+      {
+       "w": "Eine",
+       "s": 476.312,
+       "e": 476.588
+      },
+      {
+       "w": "Studie",
+       "s": 476.588,
+       "e": 476.964
+      },
+      {
+       "w": "hat",
+       "s": 476.964,
+       "e": 477.189
+      },
+      {
+       "w": "amerikanische",
+       "s": 477.189,
+       "e": 477.916
+      },
+      {
+       "w": "Notaufnahmen",
+       "s": 477.916,
+       "e": 478.593
+      },
+      {
+       "w": "von",
+       "s": 478.593,
+       "e": 478.818
+      },
+      {
+       "w": "neunzehnhundertneunzig",
+       "s": 478.818,
+       "e": 479.996
+      },
+      {
+       "w": "bis",
+       "s": 479.996,
+       "e": 480.222
+      },
+      {
+       "w": "zweitausendzwölf",
+       "s": 480.222,
+       "e": 481.099
+      },
+      {
+       "w": "ausgewertet.",
+       "s": 481.099,
+       "e": 481.726
+      }
+     ]
+    },
+    {
+     "text": "Im Schnitt kam dort etwa alle dreißig Sekunden jemand nach einem Treppenunfall an.",
+     "caption": "Im Schnitt kam dort etwa alle 30 Sekunden jemand nach einem Treppenunfall an.",
+     "start": 482.066,
+     "end": 486.07,
+     "words": [
+      {
+       "w": "Im",
+       "s": 482.066,
+       "e": 482.224
+      },
+      {
+       "w": "Schnitt",
+       "s": 482.224,
+       "e": 482.609
+      },
+      {
+       "w": "kam",
+       "s": 482.609,
+       "e": 482.813
+      },
+      {
+       "w": "dort",
+       "s": 482.813,
+       "e": 483.061
+      },
+      {
+       "w": "etwa",
+       "s": 483.061,
+       "e": 483.31
+      },
+      {
+       "w": "alle",
+       "s": 483.31,
+       "e": 483.559
+      },
+      {
+       "w": "dreißig",
+       "s": 483.559,
+       "e": 483.944
+      },
+      {
+       "w": "Sekunden",
+       "s": 483.944,
+       "e": 484.373
+      },
+      {
+       "w": "jemand",
+       "s": 484.373,
+       "e": 484.713
+      },
+      {
+       "w": "nach",
+       "s": 484.713,
+       "e": 484.962
+      },
+      {
+       "w": "einem",
+       "s": 484.962,
+       "e": 485.256
+      },
+      {
+       "w": "Treppenunfall",
+       "s": 485.256,
+       "e": 485.912
+      },
+      {
+       "w": "an.",
+       "s": 485.912,
+       "e": 486.07
+      }
+     ]
+    },
+    {
+     "text": "Das sind über eine Million Fälle pro Jahr, gegenüber rund siebzehntausend ernsthaften Verletzungen an Aufzügen und Fahrtreppen.",
+     "caption": "Das sind über 1 Million Fälle pro Jahr, gegenüber rund 17.000 ernsthaften Verletzungen an Aufzügen und Fahrtreppen.",
+     "start": 486.41,
+     "end": 492.322,
+     "words": [
+      {
+       "w": "Das",
+       "s": 486.41,
+       "e": 486.608
+      },
+      {
+       "w": "sind",
+       "s": 486.608,
+       "e": 486.85
+      },
+      {
+       "w": "über",
+       "s": 486.85,
+       "e": 487.091
+      },
+      {
+       "w": "eine",
+       "s": 487.091,
+       "e": 487.333
+      },
+      {
+       "w": "Million",
+       "s": 487.333,
+       "e": 487.707
+      },
+      {
+       "w": "Fälle",
+       "s": 487.707,
+       "e": 487.992
+      },
+      {
+       "w": "pro",
+       "s": 487.992,
+       "e": 488.19
+      },
+      {
+       "w": "Jahr,",
+       "s": 488.19,
+       "e": 488.432
+      },
+      {
+       "w": "gegenüber",
+       "s": 488.432,
+       "e": 488.894
+      },
+      {
+       "w": "rund",
+       "s": 488.894,
+       "e": 489.135
+      },
+      {
+       "w": "siebzehntausend",
+       "s": 489.135,
+       "e": 489.861
+      },
+      {
+       "w": "ernsthaften",
+       "s": 489.861,
+       "e": 490.41
+      },
+      {
+       "w": "Verletzungen",
+       "s": 490.41,
+       "e": 491.004
+      },
+      {
+       "w": "an",
+       "s": 491.004,
+       "e": 491.157
+      },
+      {
+       "w": "Aufzügen",
+       "s": 491.157,
+       "e": 491.575
+      },
+      {
+       "w": "und",
+       "s": 491.575,
+       "e": 491.773
+      },
+      {
+       "w": "Fahrtreppen.",
+       "s": 491.773,
+       "e": 492.322
+      }
+     ]
+    },
+    {
+     "text": "Quellen und Definitionen unterscheiden sich, aber die Größenordnung ist deutlich.",
+     "caption": "Quellen und Definitionen unterscheiden sich, aber die Größenordnung ist deutlich.",
+     "start": 492.662,
+     "end": 497.022,
+     "words": [
+      {
+       "w": "Quellen",
+       "s": 492.662,
+       "e": 493.098
+      },
+      {
+       "w": "und",
+       "s": 493.098,
+       "e": 493.329
+      },
+      {
+       "w": "Definitionen",
+       "s": 493.329,
+       "e": 494.022
+      },
+      {
+       "w": "unterscheiden",
+       "s": 494.022,
+       "e": 494.765
+      },
+      {
+       "w": "sich,",
+       "s": 494.765,
+       "e": 495.047
+      },
+      {
+       "w": "aber",
+       "s": 495.047,
+       "e": 495.33
+      },
+      {
+       "w": "die",
+       "s": 495.33,
+       "e": 495.56
+      },
+      {
+       "w": "Größenordnung",
+       "s": 495.56,
+       "e": 496.304
+      },
+      {
+       "w": "ist",
+       "s": 496.304,
+       "e": 496.535
+      },
+      {
+       "w": "deutlich.",
+       "s": 496.535,
+       "e": 497.022
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s31",
+   "chapter": "Die Auflösung: 1945",
+   "kind": "STORY",
+   "start": 498.072,
+   "end": 515.969,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Zurück zum achtundzwanzigsten Juli neunzehnhundertfünfundvierzig.",
+     "caption": "Zurück zum 28. Juli 1945.",
+     "start": 498.072,
+     "end": 501.583,
+     "words": [
+      {
+       "w": "Zurück",
+       "s": 498.072,
+       "e": 498.462
+      },
+      {
+       "w": "zum",
+       "s": 498.462,
+       "e": 498.696
+      },
+      {
+       "w": "achtundzwanzigsten",
+       "s": 498.696,
+       "e": 499.71
+      },
+      {
+       "w": "Juli",
+       "s": 499.71,
+       "e": 499.997
+      },
+      {
+       "w": "neunzehnhundertfünfundvierzig.",
+       "s": 499.997,
+       "e": 501.583
+      }
+     ]
+    },
+    {
+     "text": "Im dichten Nebel prallt ein amerikanischer Bomber gegen den Wolkenkratzer, auf Höhe des neunundsiebzigsten Stockwerks.",
+     "caption": "Im dichten Nebel prallt ein amerikanischer Bomber gegen den Wolkenkratzer, auf Höhe des 79. Stockwerks.",
+     "start": 501.923,
+     "end": 507.722,
+     "words": [
+      {
+       "w": "Im",
+       "s": 501.923,
+       "e": 502.086
+      },
+      {
+       "w": "dichten",
+       "s": 502.086,
+       "e": 502.482
+      },
+      {
+       "w": "Nebel",
+       "s": 502.482,
+       "e": 502.785
+      },
+      {
+       "w": "prallt",
+       "s": 502.785,
+       "e": 503.134
+      },
+      {
+       "w": "ein",
+       "s": 503.134,
+       "e": 503.344
+      },
+      {
+       "w": "amerikanischer",
+       "s": 503.344,
+       "e": 504.066
+      },
+      {
+       "w": "Bomber",
+       "s": 504.066,
+       "e": 504.415
+      },
+      {
+       "w": "gegen",
+       "s": 504.415,
+       "e": 504.718
+      },
+      {
+       "w": "den",
+       "s": 504.718,
+       "e": 504.927
+      },
+      {
+       "w": "Wolkenkratzer,",
+       "s": 504.927,
+       "e": 505.603
+      },
+      {
+       "w": "auf",
+       "s": 505.603,
+       "e": 505.813
+      },
+      {
+       "w": "Höhe",
+       "s": 505.813,
+       "e": 506.069
+      },
+      {
+       "w": "des",
+       "s": 506.069,
+       "e": 506.278
+      },
+      {
+       "w": "neunundsiebzigsten",
+       "s": 506.278,
+       "e": 507.187
+      },
+      {
+       "w": "Stockwerks.",
+       "s": 507.187,
+       "e": 507.722
+      }
+     ]
+    },
+    {
+     "text": "Vierzehn Menschen sterben.",
+     "caption": "14 Menschen sterben.",
+     "start": 508.062,
+     "end": 509.413,
+     "words": [
+      {
+       "w": "Vierzehn",
+       "s": 508.062,
+       "e": 508.529
+      },
+      {
+       "w": "Menschen",
+       "s": 508.529,
+       "e": 508.995
+      },
+      {
+       "w": "sterben.",
+       "s": 508.995,
+       "e": 509.413
+      }
+     ]
+    },
+    {
+     "text": "Ein Triebwerk durchschlägt das ganze Haus, das andere stürzt in einen Aufzugsschacht und beschädigt dort Seile.",
+     "caption": "Ein Triebwerk durchschlägt das ganze Haus, das andere stürzt in einen Aufzugsschacht und beschädigt dort Seile.",
+     "start": 509.753,
+     "end": 515.349,
+     "words": [
+      {
+       "w": "Ein",
+       "s": 509.753,
+       "e": 509.966
+      },
+      {
+       "w": "Triebwerk",
+       "s": 509.966,
+       "e": 510.464
+      },
+      {
+       "w": "durchschlägt",
+       "s": 510.464,
+       "e": 511.104
+      },
+      {
+       "w": "das",
+       "s": 511.104,
+       "e": 511.318
+      },
+      {
+       "w": "ganze",
+       "s": 511.318,
+       "e": 511.626
+      },
+      {
+       "w": "Haus,",
+       "s": 511.626,
+       "e": 511.887
+      },
+      {
+       "w": "das",
+       "s": 511.887,
+       "e": 512.1
+      },
+      {
+       "w": "andere",
+       "s": 512.1,
+       "e": 512.456
+      },
+      {
+       "w": "stürzt",
+       "s": 512.456,
+       "e": 512.811
+      },
+      {
+       "w": "in",
+       "s": 512.811,
+       "e": 512.977
+      },
+      {
+       "w": "einen",
+       "s": 512.977,
+       "e": 513.286
+      },
+      {
+       "w": "Aufzugsschacht",
+       "s": 513.286,
+       "e": 514.021
+      },
+      {
+       "w": "und",
+       "s": 514.021,
+       "e": 514.234
+      },
+      {
+       "w": "beschädigt",
+       "s": 514.234,
+       "e": 514.779
+      },
+      {
+       "w": "dort",
+       "s": 514.779,
+       "e": 515.04
+      },
+      {
+       "w": "Seile.",
+       "s": 515.04,
+       "e": 515.349
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s32",
+   "chapter": "Die Auflösung: 1945",
+   "kind": "STORY",
+   "start": 515.969,
+   "end": 530.377,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Oliver, die junge Frau vom Anfang, ist dort Liftführerin und erleidet im achtzigsten Stock schwere Verbrennungen.",
+     "caption": "Oliver, die junge Frau vom Anfang, ist dort Liftführerin und erleidet im 80. Stock schwere Verbrennungen.",
+     "start": 515.969,
+     "end": 521.945,
+     "words": [
+      {
+       "w": "Oliver,",
+       "s": 515.969,
+       "e": 516.345
+      },
+      {
+       "w": "die",
+       "s": 516.345,
+       "e": 516.571
+      },
+      {
+       "w": "junge",
+       "s": 516.571,
+       "e": 516.898
+      },
+      {
+       "w": "Frau",
+       "s": 516.898,
+       "e": 517.174
+      },
+      {
+       "w": "vom",
+       "s": 517.174,
+       "e": 517.4
+      },
+      {
+       "w": "Anfang,",
+       "s": 517.4,
+       "e": 517.776
+      },
+      {
+       "w": "ist",
+       "s": 517.776,
+       "e": 518.002
+      },
+      {
+       "w": "dort",
+       "s": 518.002,
+       "e": 518.279
+      },
+      {
+       "w": "Liftführerin",
+       "s": 518.279,
+       "e": 518.957
+      },
+      {
+       "w": "und",
+       "s": 518.957,
+       "e": 519.182
+      },
+      {
+       "w": "erleidet",
+       "s": 519.182,
+       "e": 519.66
+      },
+      {
+       "w": "im",
+       "s": 519.66,
+       "e": 519.835
+      },
+      {
+       "w": "achtzigsten",
+       "s": 519.835,
+       "e": 520.463
+      },
+      {
+       "w": "Stock",
+       "s": 520.463,
+       "e": 520.789
+      },
+      {
+       "w": "schwere",
+       "s": 520.789,
+       "e": 521.216
+      },
+      {
+       "w": "Verbrennungen.",
+       "s": 521.216,
+       "e": 521.945
+      }
+     ]
+    },
+    {
+     "text": "Helfer setzen sie in eine andere Kabine, um sie nach unten zu bringen.",
+     "caption": "Helfer setzen sie in eine andere Kabine, um sie nach unten zu bringen.",
+     "start": 522.285,
+     "end": 525.682,
+     "words": [
+      {
+       "w": "Helfer",
+       "s": 522.285,
+       "e": 522.622
+      },
+      {
+       "w": "setzen",
+       "s": 522.622,
+       "e": 522.96
+      },
+      {
+       "w": "sie",
+       "s": 522.96,
+       "e": 523.162
+      },
+      {
+       "w": "in",
+       "s": 523.162,
+       "e": 523.32
+      },
+      {
+       "w": "eine",
+       "s": 523.32,
+       "e": 523.567
+      },
+      {
+       "w": "andere",
+       "s": 523.567,
+       "e": 523.905
+      },
+      {
+       "w": "Kabine,",
+       "s": 523.905,
+       "e": 524.242
+      },
+      {
+       "w": "um",
+       "s": 524.242,
+       "e": 524.4
+      },
+      {
+       "w": "sie",
+       "s": 524.4,
+       "e": 524.602
+      },
+      {
+       "w": "nach",
+       "s": 524.602,
+       "e": 524.85
+      },
+      {
+       "w": "unten",
+       "s": 524.85,
+       "e": 525.142
+      },
+      {
+       "w": "zu",
+       "s": 525.142,
+       "e": 525.3
+      },
+      {
+       "w": "bringen.",
+       "s": 525.3,
+       "e": 525.682
+      }
+     ]
+    },
+    {
+     "text": "Doch deren beschädigte Seile reißen, und die Kabine stürzt bis ins Untergeschoss.",
+     "caption": "Doch deren beschädigte Seile reißen, und die Kabine stürzt bis ins Untergeschoss.",
+     "start": 526.022,
+     "end": 529.757,
+     "words": [
+      {
+       "w": "Doch",
+       "s": 526.022,
+       "e": 526.261
+      },
+      {
+       "w": "deren",
+       "s": 526.261,
+       "e": 526.544
+      },
+      {
+       "w": "beschädigte",
+       "s": 526.544,
+       "e": 527.086
+      },
+      {
+       "w": "Seile",
+       "s": 527.086,
+       "e": 527.369
+      },
+      {
+       "w": "reißen,",
+       "s": 527.369,
+       "e": 527.694
+      },
+      {
+       "w": "und",
+       "s": 527.694,
+       "e": 527.89
+      },
+      {
+       "w": "die",
+       "s": 527.89,
+       "e": 528.085
+      },
+      {
+       "w": "Kabine",
+       "s": 528.085,
+       "e": 528.411
+      },
+      {
+       "w": "stürzt",
+       "s": 528.411,
+       "e": 528.736
+      },
+      {
+       "w": "bis",
+       "s": 528.736,
+       "e": 528.932
+      },
+      {
+       "w": "ins",
+       "s": 528.932,
+       "e": 529.127
+      },
+      {
+       "w": "Untergeschoss.",
+       "s": 529.127,
+       "e": 529.757
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s33",
+   "chapter": "Die Auflösung: 1945",
+   "kind": "PAYOFF",
+   "start": 530.377,
+   "end": 545.73,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Warum griff keine Fangvorrichtung?",
+     "caption": "Warum griff keine Fangvorrichtung?",
+     "start": 530.377,
+     "end": 532.098,
+     "words": [
+      {
+       "w": "Warum",
+       "s": 530.377,
+       "e": 530.687
+      },
+      {
+       "w": "griff",
+       "s": 530.687,
+       "e": 530.998
+      },
+      {
+       "w": "keine",
+       "s": 530.998,
+       "e": 531.309
+      },
+      {
+       "w": "Fangvorrichtung?",
+       "s": 531.309,
+       "e": 532.098
+      }
+     ]
+    },
+    {
+     "text": "Sicher belegt ist das nicht.",
+     "caption": "Sicher belegt ist das nicht.",
+     "start": 532.438,
+     "end": 533.993,
+     "words": [
+      {
+       "w": "Sicher",
+       "s": 532.438,
+       "e": 532.82
+      },
+      {
+       "w": "belegt",
+       "s": 532.82,
+       "e": 533.203
+      },
+      {
+       "w": "ist",
+       "s": 533.203,
+       "e": 533.432
+      },
+      {
+       "w": "das",
+       "s": 533.432,
+       "e": 533.662
+      },
+      {
+       "w": "nicht.",
+       "s": 533.662,
+       "e": 533.993
+      }
+     ]
+    },
+    {
+     "text": "Ein Fachbeitrag nennt ein ebenfalls beschädigtes Begrenzerseil.",
+     "caption": "Ein Fachbeitrag nennt ein ebenfalls beschädigtes Begrenzerseil.",
+     "start": 534.333,
+     "end": 538.103,
+     "words": [
+      {
+       "w": "Ein",
+       "s": 534.333,
+       "e": 534.588
+      },
+      {
+       "w": "Fachbeitrag",
+       "s": 534.588,
+       "e": 535.297
+      },
+      {
+       "w": "nennt",
+       "s": 535.297,
+       "e": 535.666
+      },
+      {
+       "w": "ein",
+       "s": 535.666,
+       "e": 535.921
+      },
+      {
+       "w": "ebenfalls",
+       "s": 535.921,
+       "e": 536.516
+      },
+      {
+       "w": "beschädigtes",
+       "s": 536.516,
+       "e": 537.281
+      },
+      {
+       "w": "Begrenzerseil.",
+       "s": 537.281,
+       "e": 538.103
+      }
+     ]
+    },
+    {
+     "text": "Dann hätte ein einziges Ereignis Tragseile und Auslöser zugleich getroffen, genau der Fall, gegen den getrennte Schichten sonst schützen.",
+     "caption": "Dann hätte ein einziges Ereignis Tragseile und Auslöser zugleich getroffen, genau der Fall, gegen den getrennte Schichten sonst schützen.",
+     "start": 538.443,
+     "end": 545.11,
+     "words": [
+      {
+       "w": "Dann",
+       "s": 538.443,
+       "e": 538.697
+      },
+      {
+       "w": "hätte",
+       "s": 538.697,
+       "e": 538.997
+      },
+      {
+       "w": "ein",
+       "s": 538.997,
+       "e": 539.204
+      },
+      {
+       "w": "einziges",
+       "s": 539.204,
+       "e": 539.643
+      },
+      {
+       "w": "Ereignis",
+       "s": 539.643,
+       "e": 540.081
+      },
+      {
+       "w": "Tragseile",
+       "s": 540.081,
+       "e": 540.565
+      },
+      {
+       "w": "und",
+       "s": 540.565,
+       "e": 540.773
+      },
+      {
+       "w": "Auslöser",
+       "s": 540.773,
+       "e": 541.211
+      },
+      {
+       "w": "zugleich",
+       "s": 541.211,
+       "e": 541.65
+      },
+      {
+       "w": "getroffen,",
+       "s": 541.65,
+       "e": 542.134
+      },
+      {
+       "w": "genau",
+       "s": 542.134,
+       "e": 542.434
+      },
+      {
+       "w": "der",
+       "s": 542.434,
+       "e": 542.642
+      },
+      {
+       "w": "Fall,",
+       "s": 542.642,
+       "e": 542.895
+      },
+      {
+       "w": "gegen",
+       "s": 542.895,
+       "e": 543.195
+      },
+      {
+       "w": "den",
+       "s": 543.195,
+       "e": 543.403
+      },
+      {
+       "w": "getrennte",
+       "s": 543.403,
+       "e": 543.887
+      },
+      {
+       "w": "Schichten",
+       "s": 543.887,
+       "e": 544.372
+      },
+      {
+       "w": "sonst",
+       "s": 544.372,
+       "e": 544.672
+      },
+      {
+       "w": "schützen.",
+       "s": 544.672,
+       "e": 545.11
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s34",
+   "chapter": "Die Auflösung: 1945",
+   "kind": "PAYOFF",
+   "start": 545.73,
+   "end": 563.711,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Und warum überlebte sie?",
+     "caption": "Und warum überlebte sie?",
+     "start": 545.73,
+     "end": 547.19,
+     "words": [
+      {
+       "w": "Und",
+       "s": 545.73,
+       "e": 545.983
+      },
+      {
+       "w": "warum",
+       "s": 545.983,
+       "e": 546.348
+      },
+      {
+       "w": "überlebte",
+       "s": 546.348,
+       "e": 546.937
+      },
+      {
+       "w": "sie?",
+       "s": 546.937,
+       "e": 547.19
+      }
+     ]
+    },
+    {
+     "text": "Auch das ist nur rekonstruiert.",
+     "caption": "Auch das ist nur rekonstruiert.",
+     "start": 547.53,
+     "end": 549.208,
+     "words": [
+      {
+       "w": "Auch",
+       "s": 547.53,
+       "e": 547.805
+      },
+      {
+       "w": "das",
+       "s": 547.805,
+       "e": 548.031
+      },
+      {
+       "w": "ist",
+       "s": 548.031,
+       "e": 548.256
+      },
+      {
+       "w": "nur",
+       "s": 548.256,
+       "e": 548.481
+      },
+      {
+       "w": "rekonstruiert.",
+       "s": 548.481,
+       "e": 549.208
+      }
+     ]
+    },
+    {
+     "text": "Vermutlich wirkte die Kabine im engen Schacht wie ein Kolben und staute ein Luftpolster unter sich.",
+     "caption": "Vermutlich wirkte die Kabine im engen Schacht wie ein Kolben und staute ein Luftpolster unter sich.",
+     "start": 549.548,
+     "end": 554.236,
+     "words": [
+      {
+       "w": "Vermutlich",
+       "s": 549.548,
+       "e": 550.051
+      },
+      {
+       "w": "wirkte",
+       "s": 550.051,
+       "e": 550.38
+      },
+      {
+       "w": "die",
+       "s": 550.38,
+       "e": 550.577
+      },
+      {
+       "w": "Kabine",
+       "s": 550.577,
+       "e": 550.906
+      },
+      {
+       "w": "im",
+       "s": 550.906,
+       "e": 551.059
+      },
+      {
+       "w": "engen",
+       "s": 551.059,
+       "e": 551.344
+      },
+      {
+       "w": "Schacht",
+       "s": 551.344,
+       "e": 551.717
+      },
+      {
+       "w": "wie",
+       "s": 551.717,
+       "e": 551.914
+      },
+      {
+       "w": "ein",
+       "s": 551.914,
+       "e": 552.111
+      },
+      {
+       "w": "Kolben",
+       "s": 552.111,
+       "e": 552.44
+      },
+      {
+       "w": "und",
+       "s": 552.44,
+       "e": 552.637
+      },
+      {
+       "w": "staute",
+       "s": 552.637,
+       "e": 552.965
+      },
+      {
+       "w": "ein",
+       "s": 552.965,
+       "e": 553.163
+      },
+      {
+       "w": "Luftpolster",
+       "s": 553.163,
+       "e": 553.71
+      },
+      {
+       "w": "unter",
+       "s": 553.71,
+       "e": 553.995
+      },
+      {
+       "w": "sich.",
+       "s": 553.995,
+       "e": 554.236
+      }
+     ]
+    },
+    {
+     "text": "Dazu hatte sich wohl Seil in der Grube aufgehäuft und federte den Aufprall ab.",
+     "caption": "Dazu hatte sich wohl Seil in der Grube aufgehäuft und federte den Aufprall ab.",
+     "start": 554.576,
+     "end": 558.462,
+     "words": [
+      {
+       "w": "Dazu",
+       "s": 554.576,
+       "e": 554.827
+      },
+      {
+       "w": "hatte",
+       "s": 554.827,
+       "e": 555.125
+      },
+      {
+       "w": "sich",
+       "s": 555.125,
+       "e": 555.376
+      },
+      {
+       "w": "wohl",
+       "s": 555.376,
+       "e": 555.627
+      },
+      {
+       "w": "Seil",
+       "s": 555.627,
+       "e": 555.879
+      },
+      {
+       "w": "in",
+       "s": 555.879,
+       "e": 556.039
+      },
+      {
+       "w": "der",
+       "s": 556.039,
+       "e": 556.245
+      },
+      {
+       "w": "Grube",
+       "s": 556.245,
+       "e": 556.542
+      },
+      {
+       "w": "aufgehäuft",
+       "s": 556.542,
+       "e": 557.067
+      },
+      {
+       "w": "und",
+       "s": 557.067,
+       "e": 557.273
+      },
+      {
+       "w": "federte",
+       "s": 557.273,
+       "e": 557.662
+      },
+      {
+       "w": "den",
+       "s": 557.662,
+       "e": 557.867
+      },
+      {
+       "w": "Aufprall",
+       "s": 557.867,
+       "e": 558.302
+      },
+      {
+       "w": "ab.",
+       "s": 558.302,
+       "e": 558.462
+      }
+     ]
+    },
+    {
+     "text": "Luftdicht ist aber kein Aufzugsschacht, und meist ist der Kolbeneffekt deutlich schwächer.",
+     "caption": "Luftdicht ist aber kein Aufzugsschacht, und meist ist der Kolbeneffekt deutlich schwächer.",
+     "start": 558.802,
+     "end": 563.091,
+     "words": [
+      {
+       "w": "Luftdicht",
+       "s": 558.802,
+       "e": 559.276
+      },
+      {
+       "w": "ist",
+       "s": 559.276,
+       "e": 559.479
+      },
+      {
+       "w": "aber",
+       "s": 559.479,
+       "e": 559.727
+      },
+      {
+       "w": "kein",
+       "s": 559.727,
+       "e": 559.975
+      },
+      {
+       "w": "Aufzugsschacht,",
+       "s": 559.975,
+       "e": 560.675
+      },
+      {
+       "w": "und",
+       "s": 560.675,
+       "e": 560.878
+      },
+      {
+       "w": "meist",
+       "s": 560.878,
+       "e": 561.172
+      },
+      {
+       "w": "ist",
+       "s": 561.172,
+       "e": 561.375
+      },
+      {
+       "w": "der",
+       "s": 561.375,
+       "e": 561.578
+      },
+      {
+       "w": "Kolbeneffekt",
+       "s": 561.578,
+       "e": 562.188
+      },
+      {
+       "w": "deutlich",
+       "s": 562.188,
+       "e": 562.617
+      },
+      {
+       "w": "schwächer.",
+       "s": 562.617,
+       "e": 563.091
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s35",
+   "chapter": "Die Auflösung: 1945",
+   "kind": "PAYOFF",
+   "start": 563.711,
+   "end": 584.11,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Ungebremst hätte der Fall über rund fünfundsiebzig Stockwerke rechnerisch mehr als zweihundertfünfzig Kilometer pro Stunde ergeben.",
+     "caption": "Ungebremst hätte der Fall über rund 75 Stockwerke rechnerisch mehr als 250 Kilometer pro Stunde ergeben.",
+     "start": 563.711,
+     "end": 570.223,
+     "words": [
+      {
+       "w": "Ungebremst",
+       "s": 563.711,
+       "e": 564.25
+      },
+      {
+       "w": "hätte",
+       "s": 564.25,
+       "e": 564.554
+      },
+      {
+       "w": "der",
+       "s": 564.554,
+       "e": 564.765
+      },
+      {
+       "w": "Fall",
+       "s": 564.765,
+       "e": 565.023
+      },
+      {
+       "w": "über",
+       "s": 565.023,
+       "e": 565.28
+      },
+      {
+       "w": "rund",
+       "s": 565.28,
+       "e": 565.538
+      },
+      {
+       "w": "fünfundsiebzig",
+       "s": 565.538,
+       "e": 566.264
+      },
+      {
+       "w": "Stockwerke",
+       "s": 566.264,
+       "e": 566.803
+      },
+      {
+       "w": "rechnerisch",
+       "s": 566.803,
+       "e": 567.389
+      },
+      {
+       "w": "mehr",
+       "s": 567.389,
+       "e": 567.646
+      },
+      {
+       "w": "als",
+       "s": 567.646,
+       "e": 567.857
+      },
+      {
+       "w": "zweihundertfünfzig",
+       "s": 567.857,
+       "e": 568.771
+      },
+      {
+       "w": "Kilometer",
+       "s": 568.771,
+       "e": 569.263
+      },
+      {
+       "w": "pro",
+       "s": 569.263,
+       "e": 569.473
+      },
+      {
+       "w": "Stunde",
+       "s": 569.473,
+       "e": 569.825
+      },
+      {
+       "w": "ergeben.",
+       "s": 569.825,
+       "e": 570.223
+      }
+     ]
+    },
+    {
+     "text": "Oliver brach sich Becken, Rücken und Hals, aber sie überlebte.",
+     "caption": "Oliver brach sich Becken, Rücken und Hals, aber sie überlebte.",
+     "start": 570.563,
+     "end": 574.037,
+     "words": [
+      {
+       "w": "Oliver",
+       "s": 570.563,
+       "e": 570.964
+      },
+      {
+       "w": "brach",
+       "s": 570.964,
+       "e": 571.311
+      },
+      {
+       "w": "sich",
+       "s": 571.311,
+       "e": 571.605
+      },
+      {
+       "w": "Becken,",
+       "s": 571.605,
+       "e": 572.006
+      },
+      {
+       "w": "Rücken",
+       "s": 572.006,
+       "e": 572.407
+      },
+      {
+       "w": "und",
+       "s": 572.407,
+       "e": 572.647
+      },
+      {
+       "w": "Hals,",
+       "s": 572.647,
+       "e": 572.941
+      },
+      {
+       "w": "aber",
+       "s": 572.941,
+       "e": 573.235
+      },
+      {
+       "w": "sie",
+       "s": 573.235,
+       "e": 573.476
+      },
+      {
+       "w": "überlebte.",
+       "s": 573.476,
+       "e": 574.037
+      }
+     ]
+    },
+    {
+     "text": "Nach allem, was sich rekonstruieren lässt, retteten sie eher Glück und Physik als Sicherheitstechnik.",
+     "caption": "Nach allem, was sich rekonstruieren lässt, retteten sie eher Glück und Physik als Sicherheitstechnik.",
+     "start": 574.377,
+     "end": 579.241,
+     "words": [
+      {
+       "w": "Nach",
+       "s": 574.377,
+       "e": 574.629
+      },
+      {
+       "w": "allem,",
+       "s": 574.629,
+       "e": 574.927
+      },
+      {
+       "w": "was",
+       "s": 574.927,
+       "e": 575.134
+      },
+      {
+       "w": "sich",
+       "s": 575.134,
+       "e": 575.386
+      },
+      {
+       "w": "rekonstruieren",
+       "s": 575.386,
+       "e": 576.098
+      },
+      {
+       "w": "lässt,",
+       "s": 576.098,
+       "e": 576.396
+      },
+      {
+       "w": "retteten",
+       "s": 576.396,
+       "e": 576.832
+      },
+      {
+       "w": "sie",
+       "s": 576.832,
+       "e": 577.038
+      },
+      {
+       "w": "eher",
+       "s": 577.038,
+       "e": 577.291
+      },
+      {
+       "w": "Glück",
+       "s": 577.291,
+       "e": 577.589
+      },
+      {
+       "w": "und",
+       "s": 577.589,
+       "e": 577.795
+      },
+      {
+       "w": "Physik",
+       "s": 577.795,
+       "e": 578.14
+      },
+      {
+       "w": "als",
+       "s": 578.14,
+       "e": 578.346
+      },
+      {
+       "w": "Sicherheitstechnik.",
+       "s": 578.346,
+       "e": 579.241
+      }
+     ]
+    },
+    {
+     "text": "Heute müssten dafür alle Seile reißen und zugleich die Fangvorrichtung versagen.",
+     "caption": "Heute müssten dafür alle Seile reißen und zugleich die Fangvorrichtung versagen.",
+     "start": 579.581,
+     "end": 583.49,
+     "words": [
+      {
+       "w": "Heute",
+       "s": 579.581,
+       "e": 579.878
+      },
+      {
+       "w": "müssten",
+       "s": 579.878,
+       "e": 580.267
+      },
+      {
+       "w": "dafür",
+       "s": 580.267,
+       "e": 580.564
+      },
+      {
+       "w": "alle",
+       "s": 580.564,
+       "e": 580.815
+      },
+      {
+       "w": "Seile",
+       "s": 580.815,
+       "e": 581.112
+      },
+      {
+       "w": "reißen",
+       "s": 581.112,
+       "e": 581.455
+      },
+      {
+       "w": "und",
+       "s": 581.455,
+       "e": 581.661
+      },
+      {
+       "w": "zugleich",
+       "s": 581.661,
+       "e": 582.095
+      },
+      {
+       "w": "die",
+       "s": 582.095,
+       "e": 582.301
+      },
+      {
+       "w": "Fangvorrichtung",
+       "s": 582.301,
+       "e": 583.055
+      },
+      {
+       "w": "versagen.",
+       "s": 583.055,
+       "e": 583.49
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s36",
+   "chapter": "Zusammenfassung",
+   "kind": "RECAP",
+   "start": 584.54,
+   "end": 604.652,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Zusammengefasst: Die Kabine hängt an mehreren Seilen, in Europa jedes mit mindestens zwölffacher Sicherheit.",
+     "caption": "Zusammengefasst: Die Kabine hängt an mehreren Seilen, in Europa jedes mit mindestens 12-facher Sicherheit.",
+     "start": 584.54,
+     "end": 590.174,
+     "words": [
+      {
+       "w": "Zusammengefasst:",
+       "s": 584.54,
+       "e": 585.362
+      },
+      {
+       "w": "Die",
+       "s": 585.362,
+       "e": 585.587
+      },
+      {
+       "w": "Kabine",
+       "s": 585.587,
+       "e": 585.961
+      },
+      {
+       "w": "hängt",
+       "s": 585.961,
+       "e": 586.285
+      },
+      {
+       "w": "an",
+       "s": 586.285,
+       "e": 586.459
+      },
+      {
+       "w": "mehreren",
+       "s": 586.459,
+       "e": 586.933
+      },
+      {
+       "w": "Seilen,",
+       "s": 586.933,
+       "e": 587.307
+      },
+      {
+       "w": "in",
+       "s": 587.307,
+       "e": 587.481
+      },
+      {
+       "w": "Europa",
+       "s": 587.481,
+       "e": 587.855
+      },
+      {
+       "w": "jedes",
+       "s": 587.855,
+       "e": 588.179
+      },
+      {
+       "w": "mit",
+       "s": 588.179,
+       "e": 588.404
+      },
+      {
+       "w": "mindestens",
+       "s": 588.404,
+       "e": 588.977
+      },
+      {
+       "w": "zwölffacher",
+       "s": 588.977,
+       "e": 589.601
+      },
+      {
+       "w": "Sicherheit.",
+       "s": 589.601,
+       "e": 590.174
+      }
+     ]
+    },
+    {
+     "text": "Wird sie zu schnell, lässt ein Schalter die Bremse einfallen, spätestens wenn der Begrenzer sein Seil festhält.",
+     "caption": "Wird sie zu schnell, lässt ein Schalter die Bremse einfallen, spätestens wenn der Begrenzer sein Seil festhält.",
+     "start": 590.514,
+     "end": 595.934,
+     "words": [
+      {
+       "w": "Wird",
+       "s": 590.514,
+       "e": 590.768
+      },
+      {
+       "w": "sie",
+       "s": 590.768,
+       "e": 590.975
+      },
+      {
+       "w": "zu",
+       "s": 590.975,
+       "e": 591.137
+      },
+      {
+       "w": "schnell,",
+       "s": 591.137,
+       "e": 591.529
+      },
+      {
+       "w": "lässt",
+       "s": 591.529,
+       "e": 591.829
+      },
+      {
+       "w": "ein",
+       "s": 591.829,
+       "e": 592.036
+      },
+      {
+       "w": "Schalter",
+       "s": 592.036,
+       "e": 592.474
+      },
+      {
+       "w": "die",
+       "s": 592.474,
+       "e": 592.682
+      },
+      {
+       "w": "Bremse",
+       "s": 592.682,
+       "e": 593.028
+      },
+      {
+       "w": "einfallen,",
+       "s": 593.028,
+       "e": 593.512
+      },
+      {
+       "w": "spätestens",
+       "s": 593.512,
+       "e": 594.042
+      },
+      {
+       "w": "wenn",
+       "s": 594.042,
+       "e": 594.296
+      },
+      {
+       "w": "der",
+       "s": 594.296,
+       "e": 594.504
+      },
+      {
+       "w": "Begrenzer",
+       "s": 594.504,
+       "e": 594.988
+      },
+      {
+       "w": "sein",
+       "s": 594.988,
+       "e": 595.242
+      },
+      {
+       "w": "Seil",
+       "s": 595.242,
+       "e": 595.495
+      },
+      {
+       "w": "festhält.",
+       "s": 595.495,
+       "e": 595.934
+      }
+     ]
+    },
+    {
+     "text": "Dann klemmen Keile die Kabine an den Schienen fest.",
+     "caption": "Dann klemmen Keile die Kabine an den Schienen fest.",
+     "start": 596.274,
+     "end": 599.077,
+     "words": [
+      {
+       "w": "Dann",
+       "s": 596.274,
+       "e": 596.551
+      },
+      {
+       "w": "klemmen",
+       "s": 596.551,
+       "e": 596.981
+      },
+      {
+       "w": "Keile",
+       "s": 596.981,
+       "e": 597.309
+      },
+      {
+       "w": "die",
+       "s": 597.309,
+       "e": 597.536
+      },
+      {
+       "w": "Kabine",
+       "s": 597.536,
+       "e": 597.915
+      },
+      {
+       "w": "an",
+       "s": 597.915,
+       "e": 598.092
+      },
+      {
+       "w": "den",
+       "s": 598.092,
+       "e": 598.319
+      },
+      {
+       "w": "Schienen",
+       "s": 598.319,
+       "e": 598.799
+      },
+      {
+       "w": "fest.",
+       "s": 598.799,
+       "e": 599.077
+      }
+     ]
+    },
+    {
+     "text": "Puffer sind für langsame Überfahrten da, und Prüfer kontrollieren regelmäßig die ganze Kette.",
+     "caption": "Puffer sind für langsame Überfahrten da, und Prüfer kontrollieren regelmäßig die ganze Kette.",
+     "start": 599.417,
+     "end": 604.032,
+     "words": [
+      {
+       "w": "Puffer",
+       "s": 599.417,
+       "e": 599.768
+      },
+      {
+       "w": "sind",
+       "s": 599.768,
+       "e": 600.026
+      },
+      {
+       "w": "für",
+       "s": 600.026,
+       "e": 600.237
+      },
+      {
+       "w": "langsame",
+       "s": 600.237,
+       "e": 600.682
+      },
+      {
+       "w": "Überfahrten",
+       "s": 600.682,
+       "e": 601.267
+      },
+      {
+       "w": "da,",
+       "s": 601.267,
+       "e": 601.431
+      },
+      {
+       "w": "und",
+       "s": 601.431,
+       "e": 601.642
+      },
+      {
+       "w": "Prüfer",
+       "s": 601.642,
+       "e": 601.994
+      },
+      {
+       "w": "kontrollieren",
+       "s": 601.994,
+       "e": 602.673
+      },
+      {
+       "w": "regelmäßig",
+       "s": 602.673,
+       "e": 603.212
+      },
+      {
+       "w": "die",
+       "s": 603.212,
+       "e": 603.423
+      },
+      {
+       "w": "ganze",
+       "s": 603.423,
+       "e": 603.727
+      },
+      {
+       "w": "Kette.",
+       "s": 603.727,
+       "e": 604.032
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s37",
+   "chapter": "Zusammenfassung",
+   "kind": "CTA",
+   "start": 604.652,
+   "end": 612.053,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Das war die Sicherheitskette im Röntgenblick.",
+     "caption": "Das war die Sicherheitskette im Röntgenblick.",
+     "start": 604.652,
+     "end": 606.898,
+     "words": [
+      {
+       "w": "Das",
+       "s": 604.652,
+       "e": 604.862
+      },
+      {
+       "w": "war",
+       "s": 604.862,
+       "e": 605.073
+      },
+      {
+       "w": "die",
+       "s": 605.073,
+       "e": 605.283
+      },
+      {
+       "w": "Sicherheitskette",
+       "s": 605.283,
+       "e": 606.102
+      },
+      {
+       "w": "im",
+       "s": 606.102,
+       "e": 606.266
+      },
+      {
+       "w": "Röntgenblick.",
+       "s": 606.266,
+       "e": 606.898
+      }
+     ]
+    },
+    {
+     "text": "Wenn du ab jetzt mit anderen Augen in den Aufzug steigst, dann abonniere Visual Science.",
+     "caption": "Wenn du ab jetzt mit anderen Augen in den Aufzug steigst, dann abonniere Visual Science.",
+     "start": 607.238,
+     "end": 611.433,
+     "words": [
+      {
+       "w": "Wenn",
+       "s": 607.238,
+       "e": 607.482
+      },
+      {
+       "w": "du",
+       "s": 607.482,
+       "e": 607.638
+      },
+      {
+       "w": "ab",
+       "s": 607.638,
+       "e": 607.793
+      },
+      {
+       "w": "jetzt",
+       "s": 607.793,
+       "e": 608.081
+      },
+      {
+       "w": "mit",
+       "s": 608.081,
+       "e": 608.281
+      },
+      {
+       "w": "anderen",
+       "s": 608.281,
+       "e": 608.659
+      },
+      {
+       "w": "Augen",
+       "s": 608.659,
+       "e": 608.947
+      },
+      {
+       "w": "in",
+       "s": 608.947,
+       "e": 609.102
+      },
+      {
+       "w": "den",
+       "s": 609.102,
+       "e": 609.302
+      },
+      {
+       "w": "Aufzug",
+       "s": 609.302,
+       "e": 609.635
+      },
+      {
+       "w": "steigst,",
+       "s": 609.635,
+       "e": 610.012
+      },
+      {
+       "w": "dann",
+       "s": 610.012,
+       "e": 610.256
+      },
+      {
+       "w": "abonniere",
+       "s": 610.256,
+       "e": 610.723
+      },
+      {
+       "w": "Visual",
+       "s": 610.723,
+       "e": 611.055
+      },
+      {
+       "w": "Science.",
+       "s": 611.055,
+       "e": 611.433
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s38",
+   "chapter": "Zusammenfassung",
+   "kind": "OUTRO",
+   "start": 612.053,
+   "end": 621.165,
+   "caption_sentences_match": true,
+   "sentences": [
+    {
+     "text": "Nächstes Mal wird es richtig schnell.",
+     "caption": "Nächstes Mal wird es richtig schnell.",
+     "start": 612.053,
+     "end": 613.721,
+     "words": [
+      {
+       "w": "Nächstes",
+       "s": 612.053,
+       "e": 612.449
+      },
+      {
+       "w": "Mal",
+       "s": 612.449,
+       "e": 612.637
+      },
+      {
+       "w": "wird",
+       "s": 612.637,
+       "e": 612.866
+      },
+      {
+       "w": "es",
+       "s": 612.866,
+       "e": 613.012
+      },
+      {
+       "w": "richtig",
+       "s": 613.012,
+       "e": 613.367
+      },
+      {
+       "w": "schnell.",
+       "s": 613.367,
+       "e": 613.721
+      }
+     ]
+    },
+    {
+     "text": "Was passiert im Motor bei achttausend Umdrehungen pro Minute?",
+     "caption": "Was passiert im Motor bei 8.000 Umdrehungen pro Minute?",
+     "start": 614.061,
+     "end": 617.431,
+     "words": [
+      {
+       "w": "Was",
+       "s": 614.061,
+       "e": 614.293
+      },
+      {
+       "w": "passiert",
+       "s": 614.293,
+       "e": 614.781
+      },
+      {
+       "w": "im",
+       "s": 614.781,
+       "e": 614.961
+      },
+      {
+       "w": "Motor",
+       "s": 614.961,
+       "e": 615.296
+      },
+      {
+       "w": "bei",
+       "s": 615.296,
+       "e": 615.527
+      },
+      {
+       "w": "achttausend",
+       "s": 615.527,
+       "e": 616.17
+      },
+      {
+       "w": "Umdrehungen",
+       "s": 616.17,
+       "e": 616.813
+      },
+      {
+       "w": "pro",
+       "s": 616.813,
+       "e": 617.045
+      },
+      {
+       "w": "Minute?",
+       "s": 617.045,
+       "e": 617.431
+      }
+     ]
+    },
+    {
+     "text": "Bis dahin: gute Fahrt, egal in welche Richtung.",
+     "caption": "Bis dahin: gute Fahrt, egal in welche Richtung.",
+     "start": 617.771,
+     "end": 620.545,
+     "words": [
+      {
+       "w": "Bis",
+       "s": 617.771,
+       "e": 618.025
+      },
+      {
+       "w": "dahin:",
+       "s": 618.025,
+       "e": 618.393
+      },
+      {
+       "w": "gute",
+       "s": 618.393,
+       "e": 618.705
+      },
+      {
+       "w": "Fahrt,",
+       "s": 618.705,
+       "e": 619.073
+      },
+      {
+       "w": "egal",
+       "s": 619.073,
+       "e": 619.384
+      },
+      {
+       "w": "in",
+       "s": 619.384,
+       "e": 619.582
+      },
+      {
+       "w": "welche",
+       "s": 619.582,
+       "e": 620.007
+      },
+      {
+       "w": "Richtung.",
+       "s": 620.007,
+       "e": 620.545
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,32 @@
+{
+ "system_build|claude-fable-5-1": {
+  "input": 2806,
+  "cache_read": 25398953,
+  "cache_write": 886444,
+  "output": 291070
+ },
+ "system_build|claude-opus-5-5": {
+  "input": 182,
+  "cache_read": 16685725,
+  "cache_write": 704139,
+  "output": 51500
+ },
+ "video_production|<synthetic>": {
+  "input": 0,
+  "cache_read": 0,
+  "cache_write": 0,
+  "output": 0
+ },
+ "video_production|claude-opus-5-5": {
+  "input": 10544,
+  "cache_read": 1003061059,
+  "cache_write": 32013238,
+  "output": 978615
+ },
+ "video_production|claude-sonnet-5": {
+  "input": 44,
+  "cache_read": 10387877,
+  "cache_write": 508753,
+  "output": 26703
+ }
+}

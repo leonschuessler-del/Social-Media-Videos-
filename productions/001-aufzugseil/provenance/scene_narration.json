@@ -1,0 +1,7474 @@
+[
+ {
+  "id": "s01_a",
+  "template": "historic_scene",
+  "start": 0,
+  "end": 7.237,
+  "duration": 7.237,
+  "narration": "Neunzehnhundertfünfundvierzig. Im Empire State Building stürzt eine Aufzugskabine rund fünfundsiebzig Stockwerke in die Tiefe.",
+  "words": [
+   {
+    "w": "Neunzehnhundertfünfundvierzig.",
+    "t": 0
+   },
+   {
+    "w": "Im",
+    "t": 1.98
+   },
+   {
+    "w": "Empire",
+    "t": 2.16
+   },
+   {
+    "w": "State",
+    "t": 2.54
+   },
+   {
+    "w": "Building",
+    "t": 2.87
+   },
+   {
+    "w": "stürzt",
+    "t": 3.36
+   },
+   {
+    "w": "eine",
+    "t": 3.74
+   },
+   {
+    "w": "Aufzugskabine",
+    "t": 4.02
+   },
+   {
+    "w": "rund",
+    "t": 4.76
+   },
+   {
+    "w": "fünfundsiebzig",
+    "t": 5.04
+   },
+   {
+    "w": "Stockwerke",
+    "t": 5.82
+   },
+   {
+    "w": "in",
+    "t": 6.41
+   },
+   {
+    "w": "die",
+    "t": 6.59
+   },
+   {
+    "w": "Tiefe.",
+    "t": 6.82
+   }
+  ]
+ },
+ {
+  "id": "s01_b",
+  "template": "shaft_xray",
+  "start": 7.237,
+  "end": 12.706,
+  "duration": 5.469,
+  "narration": "Darin sitzt eine schwer verletzte junge Frau. Sie überlebt. Wie ist das möglich?",
+  "words": [
+   {
+    "w": "Darin",
+    "t": 0.25
+   },
+   {
+    "w": "sitzt",
+    "t": 0.55
+   },
+   {
+    "w": "eine",
+    "t": 0.84
+   },
+   {
+    "w": "schwer",
+    "t": 1.1
+   },
+   {
+    "w": "verletzte",
+    "t": 1.44
+   },
+   {
+    "w": "junge",
+    "t": 1.92
+   },
+   {
+    "w": "Frau.",
+    "t": 2.21
+   },
+   {
+    "w": "Sie",
+    "t": 2.81
+   },
+   {
+    "w": "überlebt.",
+    "t": 3.05
+   },
+   {
+    "w": "Wie",
+    "t": 3.9
+   },
+   {
+    "w": "ist",
+    "t": 4.09
+   },
+   {
+    "w": "das",
+    "t": 4.29
+   },
+   {
+    "w": "möglich?",
+    "t": 4.48
+   }
+  ]
+ },
+ {
+  "id": "s02_a",
+  "template": "stat_counter",
+  "start": 12.706,
+  "end": 18.855,
+  "duration": 6.149,
+  "narration": "Die Frau heißt Betty Lou Oliver. Ihr Sturz steht als längster überlebter Aufzugsabsturz im Buch der Rekorde.",
+  "words": [
+   {
+    "w": "Die",
+    "t": 0
+   },
+   {
+    "w": "Frau",
+    "t": 0.22
+   },
+   {
+    "w": "heißt",
+    "t": 0.49
+   },
+   {
+    "w": "Betty",
+    "t": 0.81
+   },
+   {
+    "w": "Lou",
+    "t": 1.13
+   },
+   {
+    "w": "Oliver.",
+    "t": 1.36
+   },
+   {
+    "w": "Ihr",
+    "t": 2.07
+   },
+   {
+    "w": "Sturz",
+    "t": 2.29
+   },
+   {
+    "w": "steht",
+    "t": 2.61
+   },
+   {
+    "w": "als",
+    "t": 2.93
+   },
+   {
+    "w": "längster",
+    "t": 3.16
+   },
+   {
+    "w": "überlebter",
+    "t": 3.63
+   },
+   {
+    "w": "Aufzugsabsturz",
+    "t": 4.2
+   },
+   {
+    "w": "im",
+    "t": 4.97
+   },
+   {
+    "w": "Buch",
+    "t": 5.14
+   },
+   {
+    "w": "der",
+    "t": 5.41
+   },
+   {
+    "w": "Rekorde.",
+    "t": 5.64
+   }
+  ]
+ },
+ {
+  "id": "s02_b",
+  "template": "shaft_xray",
+  "start": 18.855,
+  "end": 23.736,
+  "duration": 4.881,
+  "narration": "Doch warum stürzen Aufzüge sonst so gut wie nie ab, obwohl sie an dünnen Stahlseilen hängen?",
+  "words": [
+   {
+    "w": "Doch",
+    "t": 0.25
+   },
+   {
+    "w": "warum",
+    "t": 0.5
+   },
+   {
+    "w": "stürzen",
+    "t": 0.8
+   },
+   {
+    "w": "Aufzüge",
+    "t": 1.19
+   },
+   {
+    "w": "sonst",
+    "t": 1.58
+   },
+   {
+    "w": "so",
+    "t": 1.88
+   },
+   {
+    "w": "gut",
+    "t": 2.04
+   },
+   {
+    "w": "wie",
+    "t": 2.25
+   },
+   {
+    "w": "nie",
+    "t": 2.45
+   },
+   {
+    "w": "ab,",
+    "t": 2.66
+   },
+   {
+    "w": "obwohl",
+    "t": 2.82
+   },
+   {
+    "w": "sie",
+    "t": 3.16
+   },
+   {
+    "w": "an",
+    "t": 3.37
+   },
+   {
+    "w": "dünnen",
+    "t": 3.53
+   },
+   {
+    "w": "Stahlseilen",
+    "t": 3.87
+   },
+   {
+    "w": "hängen?",
+    "t": 4.45
+   }
+  ]
+ },
+ {
+  "id": "s02_c",
+  "template": "title_card",
+  "start": 23.736,
+  "end": 34.507,
+  "duration": 10.771,
+  "narration": "Wir kappen gleich in Gedanken alle Seile und schauen Millisekunde für Millisekunde zu. Am Ende suchen wir den Grund, warum damals keine Sicherung griff, soweit er sich noch rekonstruieren lässt.",
+  "words": [
+   {
+    "w": "Wir",
+    "t": 0.25
+   },
+   {
+    "w": "kappen",
+    "t": 0.45
+   },
+   {
+    "w": "gleich",
+    "t": 0.79
+   },
+   {
+    "w": "in",
+    "t": 1.13
+   },
+   {
+    "w": "Gedanken",
+    "t": 1.29
+   },
+   {
+    "w": "alle",
+    "t": 1.72
+   },
+   {
+    "w": "Seile",
+    "t": 1.97
+   },
+   {
+    "w": "und",
+    "t": 2.27
+   },
+   {
+    "w": "schauen",
+    "t": 2.47
+   },
+   {
+    "w": "Millisekunde",
+    "t": 2.85
+   },
+   {
+    "w": "für",
+    "t": 3.46
+   },
+   {
+    "w": "Millisekunde",
+    "t": 3.67
+   },
+   {
+    "w": "zu.",
+    "t": 4.28
+   },
+   {
+    "w": "Am",
+    "t": 4.78
+   },
+   {
+    "w": "Ende",
+    "t": 4.94
+   },
+   {
+    "w": "suchen",
+    "t": 5.2
+   },
+   {
+    "w": "wir",
+    "t": 5.56
+   },
+   {
+    "w": "den",
+    "t": 5.77
+   },
+   {
+    "w": "Grund,",
+    "t": 5.98
+   },
+   {
+    "w": "warum",
+    "t": 6.29
+   },
+   {
+    "w": "damals",
+    "t": 6.6
+   },
+   {
+    "w": "keine",
+    "t": 6.96
+   },
+   {
+    "w": "Sicherung",
+    "t": 7.26
+   },
+   {
+    "w": "griff,",
+    "t": 7.76
+   },
+   {
+    "w": "soweit",
+    "t": 8.07
+   },
+   {
+    "w": "er",
+    "t": 8.42
+   },
+   {
+    "w": "sich",
+    "t": 8.59
+   },
+   {
+    "w": "noch",
+    "t": 8.85
+   },
+   {
+    "w": "rekonstruieren",
+    "t": 9.11
+   },
+   {
+    "w": "lässt.",
+    "t": 9.84
+   }
+  ]
+ },
+ {
+  "id": "s03_a",
+  "template": "timeline",
+  "start": 34.937,
+  "end": 40.489,
+  "duration": 5.552,
+  "narration": "Die Idee dahinter ist alt: New York, achtzehnhundertvierundfünfzig, eine Ausstellung im Kristallpalast.",
+  "words": [
+   {
+    "w": "Die",
+    "t": 0
+   },
+   {
+    "w": "Idee",
+    "t": 0.23
+   },
+   {
+    "w": "dahinter",
+    "t": 0.52
+   },
+   {
+    "w": "ist",
+    "t": 1.01
+   },
+   {
+    "w": "alt:",
+    "t": 1.24
+   },
+   {
+    "w": "New",
+    "t": 1.47
+   },
+   {
+    "w": "York,",
+    "t": 1.7
+   },
+   {
+    "w": "achtzehnhundertvierundfünfzig,",
+    "t": 1.98
+   },
+   {
+    "w": "eine",
+    "t": 3.56
+   },
+   {
+    "w": "Ausstellung",
+    "t": 3.84
+   },
+   {
+    "w": "im",
+    "t": 4.48
+   },
+   {
+    "w": "Kristallpalast.",
+    "t": 4.66
+   }
+  ]
+ },
+ {
+  "id": "s03_b",
+  "template": "historic_scene",
+  "start": 40.489,
+  "end": 50.165,
+  "duration": 9.676,
+  "narration": "Der Mechaniker Elisha Otis steht auf einer hochgezogenen Plattform, dann wird vor Publikum das Tragseil gekappt. Laut der Firmenchronik sackt die Plattform nur ein paar Zoll ab.",
+  "words": [
+   {
+    "w": "Der",
+    "t": 0.25
+   },
+   {
+    "w": "Mechaniker",
+    "t": 0.47
+   },
+   {
+    "w": "Elisha",
+    "t": 1.02
+   },
+   {
+    "w": "Otis",
+    "t": 1.37
+   },
+   {
+    "w": "steht",
+    "t": 1.64
+   },
+   {
+    "w": "auf",
+    "t": 1.95
+   },
+   {
+    "w": "einer",
+    "t": 2.16
+   },
+   {
+    "w": "hochgezogenen",
+    "t": 2.47
+   },
+   {
+    "w": "Plattform,",
+    "t": 3.17
+   },
+   {
+    "w": "dann",
+    "t": 3.67
+   },
+   {
+    "w": "wird",
+    "t": 3.93
+   },
+   {
+    "w": "vor",
+    "t": 4.19
+   },
+   {
+    "w": "Publikum",
+    "t": 4.41
+   },
+   {
+    "w": "das",
+    "t": 4.86
+   },
+   {
+    "w": "Tragseil",
+    "t": 5.08
+   },
+   {
+    "w": "gekappt.",
+    "t": 5.53
+   },
+   {
+    "w": "Laut",
+    "t": 6.28
+   },
+   {
+    "w": "der",
+    "t": 6.54
+   },
+   {
+    "w": "Firmenchronik",
+    "t": 6.75
+   },
+   {
+    "w": "sackt",
+    "t": 7.44
+   },
+   {
+    "w": "die",
+    "t": 7.75
+   },
+   {
+    "w": "Plattform",
+    "t": 7.97
+   },
+   {
+    "w": "nur",
+    "t": 8.47
+   },
+   {
+    "w": "ein",
+    "t": 8.68
+   },
+   {
+    "w": "paar",
+    "t": 8.9
+   },
+   {
+    "w": "Zoll",
+    "t": 9.16
+   },
+   {
+    "w": "ab.",
+    "t": 9.42
+   }
+  ]
+ },
+ {
+  "id": "s03_c",
+  "template": "historic_scene",
+  "start": 50.165,
+  "end": 58.731,
+  "duration": 8.566,
+  "narration": "Das Prinzip: Solange das Seil zieht, bleibt eine Federsperre gelöst. Reißt es, greift sie sofort in Zahnstangen an beiden Seiten.",
+  "words": [
+   {
+    "w": "Das",
+    "t": 0.25
+   },
+   {
+    "w": "Prinzip:",
+    "t": 0.5
+   },
+   {
+    "w": "Solange",
+    "t": 0.98
+   },
+   {
+    "w": "das",
+    "t": 1.45
+   },
+   {
+    "w": "Seil",
+    "t": 1.71
+   },
+   {
+    "w": "zieht,",
+    "t": 2.02
+   },
+   {
+    "w": "bleibt",
+    "t": 2.38
+   },
+   {
+    "w": "eine",
+    "t": 2.8
+   },
+   {
+    "w": "Federsperre",
+    "t": 3.11
+   },
+   {
+    "w": "gelöst.",
+    "t": 3.81
+   },
+   {
+    "w": "Reißt",
+    "t": 4.57
+   },
+   {
+    "w": "es,",
+    "t": 4.91
+   },
+   {
+    "w": "greift",
+    "t": 5.1
+   },
+   {
+    "w": "sie",
+    "t": 5.49
+   },
+   {
+    "w": "sofort",
+    "t": 5.73
+   },
+   {
+    "w": "in",
+    "t": 6.13
+   },
+   {
+    "w": "Zahnstangen",
+    "t": 6.31
+   },
+   {
+    "w": "an",
+    "t": 6.97
+   },
+   {
+    "w": "beiden",
+    "t": 7.15
+   },
+   {
+    "w": "Seiten.",
+    "t": 7.55
+   }
+  ]
+ },
+ {
+  "id": "s04_a",
+  "template": "myth_card",
+  "start": 58.731,
+  "end": 62.365,
+  "duration": 3.634,
+  "narration": "Oft wird erzählt, Otis habe danach gerufen, es sei alles sicher.",
+  "words": [
+   {
+    "w": "Oft",
+    "t": 0
+   },
+   {
+    "w": "wird",
+    "t": 0.24
+   },
+   {
+    "w": "erzählt,",
+    "t": 0.52
+   },
+   {
+    "w": "Otis",
+    "t": 0.97
+   },
+   {
+    "w": "habe",
+    "t": 1.26
+   },
+   {
+    "w": "danach",
+    "t": 1.55
+   },
+   {
+    "w": "gerufen,",
+    "t": 1.94
+   },
+   {
+    "w": "es",
+    "t": 2.39
+   },
+   {
+    "w": "sei",
+    "t": 2.57
+   },
+   {
+    "w": "alles",
+    "t": 2.81
+   },
+   {
+    "w": "sicher.",
+    "t": 3.15
+   }
+  ]
+ },
+ {
+  "id": "s04_b",
+  "template": "historic_scene",
+  "start": 62.365,
+  "end": 65.547,
+  "duration": 3.182,
+  "narration": "In den wenigen Berichten von damals fehlt dieser Ausruf.",
+  "words": [
+   {
+    "w": "In",
+    "t": 0.25
+   },
+   {
+    "w": "den",
+    "t": 0.41
+   },
+   {
+    "w": "wenigen",
+    "t": 0.63
+   },
+   {
+    "w": "Berichten",
+    "t": 1.02
+   },
+   {
+    "w": "von",
+    "t": 1.52
+   },
+   {
+    "w": "damals",
+    "t": 1.73
+   },
+   {
+    "w": "fehlt",
+    "t": 2.08
+   },
+   {
+    "w": "dieser",
+    "t": 2.39
+   },
+   {
+    "w": "Ausruf.",
+    "t": 2.74
+   }
+  ]
+ },
+ {
+  "id": "s04_c",
+  "template": "comparison_split",
+  "start": 65.547,
+  "end": 70.691,
+  "duration": 5.144,
+  "narration": "Eine New Yorker Zeitung notierte nur, der Erfinder schneide gelegentlich selbst das Seil durch.",
+  "words": [
+   {
+    "w": "Eine",
+    "t": 0.25
+   },
+   {
+    "w": "New",
+    "t": 0.48
+   },
+   {
+    "w": "Yorker",
+    "t": 0.67
+   },
+   {
+    "w": "Zeitung",
+    "t": 0.99
+   },
+   {
+    "w": "notierte",
+    "t": 1.35
+   },
+   {
+    "w": "nur,",
+    "t": 1.75
+   },
+   {
+    "w": "der",
+    "t": 1.94
+   },
+   {
+    "w": "Erfinder",
+    "t": 2.13
+   },
+   {
+    "w": "schneide",
+    "t": 2.53
+   },
+   {
+    "w": "gelegentlich",
+    "t": 2.94
+   },
+   {
+    "w": "selbst",
+    "t": 3.51
+   },
+   {
+    "w": "das",
+    "t": 3.83
+   },
+   {
+    "w": "Seil",
+    "t": 4.02
+   },
+   {
+    "w": "durch.",
+    "t": 4.25
+   }
+  ]
+ },
+ {
+  "id": "s05_a",
+  "template": "layers_overview",
+  "start": 71.121,
+  "end": 78.656,
+  "duration": 7.535,
+  "narration": "Heute ist aus dieser Sperre eine ganze Kette von Schutzschichten geworden. Jede deckt einen anderen Fehler ab, und manche arbeiten nur zusammen.",
+  "words": [
+   {
+    "w": "Heute",
+    "t": 0
+   },
+   {
+    "w": "ist",
+    "t": 0.31
+   },
+   {
+    "w": "aus",
+    "t": 0.52
+   },
+   {
+    "w": "dieser",
+    "t": 0.73
+   },
+   {
+    "w": "Sperre",
+    "t": 1.09
+   },
+   {
+    "w": "eine",
+    "t": 1.44
+   },
+   {
+    "w": "ganze",
+    "t": 1.7
+   },
+   {
+    "w": "Kette",
+    "t": 2.01
+   },
+   {
+    "w": "von",
+    "t": 2.32
+   },
+   {
+    "w": "Schutzschichten",
+    "t": 2.53
+   },
+   {
+    "w": "geworden.",
+    "t": 3.31
+   },
+   {
+    "w": "Jede",
+    "t": 4.1
+   },
+   {
+    "w": "deckt",
+    "t": 4.35
+   },
+   {
+    "w": "einen",
+    "t": 4.65
+   },
+   {
+    "w": "anderen",
+    "t": 4.94
+   },
+   {
+    "w": "Fehler",
+    "t": 5.33
+   },
+   {
+    "w": "ab,",
+    "t": 5.67
+   },
+   {
+    "w": "und",
+    "t": 5.83
+   },
+   {
+    "w": "manche",
+    "t": 6.03
+   },
+   {
+    "w": "arbeiten",
+    "t": 6.38
+   },
+   {
+    "w": "nur",
+    "t": 6.81
+   },
+   {
+    "w": "zusammen.",
+    "t": 7.01
+   }
+  ]
+ },
+ {
+  "id": "s05_b",
+  "template": "shaft_xray",
+  "start": 78.656,
+  "end": 82.49,
+  "duration": 3.834,
+  "narration": "Erste Schicht: die Seile, meist etwa drei bis acht unabhängige.",
+  "words": [
+   {
+    "w": "Erste",
+    "t": 0.25
+   },
+   {
+    "w": "Schicht:",
+    "t": 0.59
+   },
+   {
+    "w": "die",
+    "t": 1.04
+   },
+   {
+    "w": "Seile,",
+    "t": 1.28
+   },
+   {
+    "w": "meist",
+    "t": 1.63
+   },
+   {
+    "w": "etwa",
+    "t": 1.97
+   },
+   {
+    "w": "drei",
+    "t": 2.26
+   },
+   {
+    "w": "bis",
+    "t": 2.55
+   },
+   {
+    "w": "acht",
+    "t": 2.79
+   },
+   {
+    "w": "unabhängige.",
+    "t": 3.08
+   }
+  ]
+ },
+ {
+  "id": "s05_c",
+  "template": "stat_counter",
+  "start": 82.49,
+  "end": 90.258,
+  "duration": 7.768,
+  "narration": "Die europäische Aufzugsnorm verlangt dann, dass jedes mindestens zwölfmal so viel aushält, wie bei voll beladener Kabine an ihm zieht.",
+  "words": [
+   {
+    "w": "Die",
+    "t": 0.25
+   },
+   {
+    "w": "europäische",
+    "t": 0.47
+   },
+   {
+    "w": "Aufzugsnorm",
+    "t": 1.08
+   },
+   {
+    "w": "verlangt",
+    "t": 1.68
+   },
+   {
+    "w": "dann,",
+    "t": 2.15
+   },
+   {
+    "w": "dass",
+    "t": 2.41
+   },
+   {
+    "w": "jedes",
+    "t": 2.68
+   },
+   {
+    "w": "mindestens",
+    "t": 3
+   },
+   {
+    "w": "zwölfmal",
+    "t": 3.55
+   },
+   {
+    "w": "so",
+    "t": 4.02
+   },
+   {
+    "w": "viel",
+    "t": 4.19
+   },
+   {
+    "w": "aushält,",
+    "t": 4.45
+   },
+   {
+    "w": "wie",
+    "t": 4.87
+   },
+   {
+    "w": "bei",
+    "t": 5.08
+   },
+   {
+    "w": "voll",
+    "t": 5.3
+   },
+   {
+    "w": "beladener",
+    "t": 5.57
+   },
+   {
+    "w": "Kabine",
+    "t": 6.08
+   },
+   {
+    "w": "an",
+    "t": 6.44
+   },
+   {
+    "w": "ihm",
+    "t": 6.61
+   },
+   {
+    "w": "zieht.",
+    "t": 6.83
+   }
+  ]
+ },
+ {
+  "id": "s06_a",
+  "template": "shaft_xray",
+  "start": 90.258,
+  "end": 95.866,
+  "duration": 5.608,
+  "narration": "Bei sechs Seilen könnte rein statisch gerechnet schon ein einziges etwa das Doppelte der voll beladenen Kabine halten.",
+  "words": [
+   {
+    "w": "Bei",
+    "t": 0
+   },
+   {
+    "w": "sechs",
+    "t": 0.2
+   },
+   {
+    "w": "Seilen",
+    "t": 0.48
+   },
+   {
+    "w": "könnte",
+    "t": 0.8
+   },
+   {
+    "w": "rein",
+    "t": 1.13
+   },
+   {
+    "w": "statisch",
+    "t": 1.37
+   },
+   {
+    "w": "gerechnet",
+    "t": 1.78
+   },
+   {
+    "w": "schon",
+    "t": 2.24
+   },
+   {
+    "w": "ein",
+    "t": 2.52
+   },
+   {
+    "w": "einziges",
+    "t": 2.72
+   },
+   {
+    "w": "etwa",
+    "t": 3.13
+   },
+   {
+    "w": "das",
+    "t": 3.37
+   },
+   {
+    "w": "Doppelte",
+    "t": 3.56
+   },
+   {
+    "w": "der",
+    "t": 3.98
+   },
+   {
+    "w": "voll",
+    "t": 4.17
+   },
+   {
+    "w": "beladenen",
+    "t": 4.41
+   },
+   {
+    "w": "Kabine",
+    "t": 4.87
+   },
+   {
+    "w": "halten.",
+    "t": 5.19
+   }
+  ]
+ },
+ {
+  "id": "s06_b",
+  "template": "map_or_scale",
+  "start": 95.866,
+  "end": 106.867,
+  "duration": 11.001,
+  "narration": "Dabei ist so ein Seil nach der europäischen Aufzugsnorm mindestens acht Millimeter dick, kaum dicker als ein Bleistift. Je nach Bauart reißt es erst bei rund drei bis gut vier Tonnen Zugkraft.",
+  "words": [
+   {
+    "w": "Dabei",
+    "t": 0.25
+   },
+   {
+    "w": "ist",
+    "t": 0.56
+   },
+   {
+    "w": "so",
+    "t": 0.78
+   },
+   {
+    "w": "ein",
+    "t": 0.94
+   },
+   {
+    "w": "Seil",
+    "t": 1.16
+   },
+   {
+    "w": "nach",
+    "t": 1.42
+   },
+   {
+    "w": "der",
+    "t": 1.68
+   },
+   {
+    "w": "europäischen",
+    "t": 1.9
+   },
+   {
+    "w": "Aufzugsnorm",
+    "t": 2.55
+   },
+   {
+    "w": "mindestens",
+    "t": 3.14
+   },
+   {
+    "w": "acht",
+    "t": 3.69
+   },
+   {
+    "w": "Millimeter",
+    "t": 3.96
+   },
+   {
+    "w": "dick,",
+    "t": 4.51
+   },
+   {
+    "w": "kaum",
+    "t": 4.77
+   },
+   {
+    "w": "dicker",
+    "t": 5.03
+   },
+   {
+    "w": "als",
+    "t": 5.39
+   },
+   {
+    "w": "ein",
+    "t": 5.61
+   },
+   {
+    "w": "Bleistift.",
+    "t": 5.82
+   },
+   {
+    "w": "Je",
+    "t": 6.66
+   },
+   {
+    "w": "nach",
+    "t": 6.83
+   },
+   {
+    "w": "Bauart",
+    "t": 7.09
+   },
+   {
+    "w": "reißt",
+    "t": 7.44
+   },
+   {
+    "w": "es",
+    "t": 7.75
+   },
+   {
+    "w": "erst",
+    "t": 7.91
+   },
+   {
+    "w": "bei",
+    "t": 8.17
+   },
+   {
+    "w": "rund",
+    "t": 8.38
+   },
+   {
+    "w": "drei",
+    "t": 8.64
+   },
+   {
+    "w": "bis",
+    "t": 8.9
+   },
+   {
+    "w": "gut",
+    "t": 9.11
+   },
+   {
+    "w": "vier",
+    "t": 9.32
+   },
+   {
+    "w": "Tonnen",
+    "t": 9.58
+   },
+   {
+    "w": "Zugkraft.",
+    "t": 9.93
+   }
+  ]
+ },
+ {
+  "id": "s07_a",
+  "template": "shaft_xray",
+  "start": 106.867,
+  "end": 110.024,
+  "duration": 3.157,
+  "narration": "An der Maschine oben ist die Kabine gar nicht festgeschraubt.",
+  "words": [
+   {
+    "w": "An",
+    "t": 0
+   },
+   {
+    "w": "der",
+    "t": 0.16
+   },
+   {
+    "w": "Maschine",
+    "t": 0.37
+   },
+   {
+    "w": "oben",
+    "t": 0.81
+   },
+   {
+    "w": "ist",
+    "t": 1.07
+   },
+   {
+    "w": "die",
+    "t": 1.28
+   },
+   {
+    "w": "Kabine",
+    "t": 1.49
+   },
+   {
+    "w": "gar",
+    "t": 1.84
+   },
+   {
+    "w": "nicht",
+    "t": 2.05
+   },
+   {
+    "w": "festgeschraubt.",
+    "t": 2.35
+   }
+  ]
+ },
+ {
+  "id": "s07_b",
+  "template": "traction_sheave",
+  "start": 110.024,
+  "end": 115.902,
+  "duration": 5.878,
+  "narration": "Die Seile liegen nur in den Rillen der Treibscheibe, wie ein Handtuch über einer Stange, und halten allein durch Reibung.",
+  "words": [
+   {
+    "w": "Die",
+    "t": 0.25
+   },
+   {
+    "w": "Seile",
+    "t": 0.44
+   },
+   {
+    "w": "liegen",
+    "t": 0.72
+   },
+   {
+    "w": "nur",
+    "t": 1.04
+   },
+   {
+    "w": "in",
+    "t": 1.24
+   },
+   {
+    "w": "den",
+    "t": 1.39
+   },
+   {
+    "w": "Rillen",
+    "t": 1.58
+   },
+   {
+    "w": "der",
+    "t": 1.9
+   },
+   {
+    "w": "Treibscheibe,",
+    "t": 2.1
+   },
+   {
+    "w": "wie",
+    "t": 2.68
+   },
+   {
+    "w": "ein",
+    "t": 2.87
+   },
+   {
+    "w": "Handtuch",
+    "t": 3.06
+   },
+   {
+    "w": "über",
+    "t": 3.47
+   },
+   {
+    "w": "einer",
+    "t": 3.71
+   },
+   {
+    "w": "Stange,",
+    "t": 3.98
+   },
+   {
+    "w": "und",
+    "t": 4.31
+   },
+   {
+    "w": "halten",
+    "t": 4.5
+   },
+   {
+    "w": "allein",
+    "t": 4.82
+   },
+   {
+    "w": "durch",
+    "t": 5.14
+   },
+   {
+    "w": "Reibung.",
+    "t": 5.42
+   }
+  ]
+ },
+ {
+  "id": "s07_c",
+  "template": "traction_sheave",
+  "start": 115.902,
+  "end": 126.468,
+  "duration": 10.566,
+  "narration": "Am anderen Ende hängt das Gegengewicht, so schwer wie die leere Kabine plus etwa vierzig bis fünfzig Prozent der Nutzlast. Merk dir das Gegengewicht, es sorgt später für eine Überraschung.",
+  "words": [
+   {
+    "w": "Am",
+    "t": 0.25
+   },
+   {
+    "w": "anderen",
+    "t": 0.41
+   },
+   {
+    "w": "Ende",
+    "t": 0.81
+   },
+   {
+    "w": "hängt",
+    "t": 1.07
+   },
+   {
+    "w": "das",
+    "t": 1.37
+   },
+   {
+    "w": "Gegengewicht,",
+    "t": 1.58
+   },
+   {
+    "w": "so",
+    "t": 2.21
+   },
+   {
+    "w": "schwer",
+    "t": 2.38
+   },
+   {
+    "w": "wie",
+    "t": 2.73
+   },
+   {
+    "w": "die",
+    "t": 2.94
+   },
+   {
+    "w": "leere",
+    "t": 3.15
+   },
+   {
+    "w": "Kabine",
+    "t": 3.45
+   },
+   {
+    "w": "plus",
+    "t": 3.8
+   },
+   {
+    "w": "etwa",
+    "t": 4.06
+   },
+   {
+    "w": "vierzig",
+    "t": 4.32
+   },
+   {
+    "w": "bis",
+    "t": 4.72
+   },
+   {
+    "w": "fünfzig",
+    "t": 4.92
+   },
+   {
+    "w": "Prozent",
+    "t": 5.32
+   },
+   {
+    "w": "der",
+    "t": 5.72
+   },
+   {
+    "w": "Nutzlast.",
+    "t": 5.93
+   },
+   {
+    "w": "Merk",
+    "t": 6.72
+   },
+   {
+    "w": "dir",
+    "t": 6.97
+   },
+   {
+    "w": "das",
+    "t": 7.18
+   },
+   {
+    "w": "Gegengewicht,",
+    "t": 7.39
+   },
+   {
+    "w": "es",
+    "t": 8.03
+   },
+   {
+    "w": "sorgt",
+    "t": 8.19
+   },
+   {
+    "w": "später",
+    "t": 8.49
+   },
+   {
+    "w": "für",
+    "t": 8.85
+   },
+   {
+    "w": "eine",
+    "t": 9.06
+   },
+   {
+    "w": "Überraschung.",
+    "t": 9.31
+   }
+  ]
+ },
+ {
+  "id": "s08_a",
+  "template": "shaft_xray",
+  "start": 126.898,
+  "end": 131.883,
+  "duration": 4.985,
+  "narration": "Jetzt das Experiment: Ein Wohnhausaufzug mit Bremsfang fährt mit einem Meter pro Sekunde abwärts.",
+  "words": [
+   {
+    "w": "Jetzt",
+    "t": 0
+   },
+   {
+    "w": "das",
+    "t": 0.31
+   },
+   {
+    "w": "Experiment:",
+    "t": 0.52
+   },
+   {
+    "w": "Ein",
+    "t": 1.07
+   },
+   {
+    "w": "Wohnhausaufzug",
+    "t": 1.28
+   },
+   {
+    "w": "mit",
+    "t": 2.02
+   },
+   {
+    "w": "Bremsfang",
+    "t": 2.23
+   },
+   {
+    "w": "fährt",
+    "t": 2.73
+   },
+   {
+    "w": "mit",
+    "t": 3.04
+   },
+   {
+    "w": "einem",
+    "t": 3.26
+   },
+   {
+    "w": "Meter",
+    "t": 3.56
+   },
+   {
+    "w": "pro",
+    "t": 3.87
+   },
+   {
+    "w": "Sekunde",
+    "t": 4.09
+   },
+   {
+    "w": "abwärts.",
+    "t": 4.49
+   }
+  ]
+ },
+ {
+  "id": "s08_b",
+  "template": "shaft_xray",
+  "start": 131.883,
+  "end": 142.507,
+  "duration": 10.624,
+  "narration": "Wir durchtrennen alle Seile, die Stoppuhr läuft. Nach fünfzehn Millisekunden ist die Kabine rechnerisch schon fünfzehn Prozent schneller als normal, nach gut eineinhalb Zentimetern Fall.",
+  "words": [
+   {
+    "w": "Wir",
+    "t": 0.25
+   },
+   {
+    "w": "durchtrennen",
+    "t": 0.48
+   },
+   {
+    "w": "alle",
+    "t": 1.19
+   },
+   {
+    "w": "Seile,",
+    "t": 1.48
+   },
+   {
+    "w": "die",
+    "t": 1.82
+   },
+   {
+    "w": "Stoppuhr",
+    "t": 2.05
+   },
+   {
+    "w": "läuft.",
+    "t": 2.55
+   },
+   {
+    "w": "Nach",
+    "t": 3.23
+   },
+   {
+    "w": "fünfzehn",
+    "t": 3.49
+   },
+   {
+    "w": "Millisekunden",
+    "t": 3.93
+   },
+   {
+    "w": "ist",
+    "t": 4.61
+   },
+   {
+    "w": "die",
+    "t": 4.82
+   },
+   {
+    "w": "Kabine",
+    "t": 5.03
+   },
+   {
+    "w": "rechnerisch",
+    "t": 5.38
+   },
+   {
+    "w": "schon",
+    "t": 5.96
+   },
+   {
+    "w": "fünfzehn",
+    "t": 6.27
+   },
+   {
+    "w": "Prozent",
+    "t": 6.71
+   },
+   {
+    "w": "schneller",
+    "t": 7.11
+   },
+   {
+    "w": "als",
+    "t": 7.6
+   },
+   {
+    "w": "normal,",
+    "t": 7.81
+   },
+   {
+    "w": "nach",
+    "t": 8.16
+   },
+   {
+    "w": "gut",
+    "t": 8.41
+   },
+   {
+    "w": "eineinhalb",
+    "t": 8.63
+   },
+   {
+    "w": "Zentimetern",
+    "t": 9.16
+   },
+   {
+    "w": "Fall.",
+    "t": 9.75
+   }
+  ]
+ },
+ {
+  "id": "s09_a",
+  "template": "graph",
+  "start": 142.507,
+  "end": 147.994,
+  "duration": 5.487,
+  "narration": "Frühestens ab dieser Grenze darf der Wächter eingreifen. Spätestens muss er es tun, bevor die Kabine",
+  "words": [
+   {
+    "w": "Frühestens",
+    "t": 0
+   },
+   {
+    "w": "ab",
+    "t": 0.53
+   },
+   {
+    "w": "dieser",
+    "t": 0.7
+   },
+   {
+    "w": "Grenze",
+    "t": 1.04
+   },
+   {
+    "w": "darf",
+    "t": 1.39
+   },
+   {
+    "w": "der",
+    "t": 1.65
+   },
+   {
+    "w": "Wächter",
+    "t": 1.86
+   },
+   {
+    "w": "eingreifen.",
+    "t": 2.25
+   },
+   {
+    "w": "Spätestens",
+    "t": 3.13
+   },
+   {
+    "w": "muss",
+    "t": 3.7
+   },
+   {
+    "w": "er",
+    "t": 3.98
+   },
+   {
+    "w": "es",
+    "t": 4.16
+   },
+   {
+    "w": "tun,",
+    "t": 4.33
+   },
+   {
+    "w": "bevor",
+    "t": 4.56
+   },
+   {
+    "w": "die",
+    "t": 4.88
+   },
+   {
+    "w": "Kabine",
+    "t": 5.11
+   }
+  ]
+ },
+ {
+  "id": "s09_b",
+  "template": "graph",
+  "start": 147.994,
+  "end": 152.354,
+  "duration": 4.36,
+  "narration": "eineinhalb Meter pro Sekunde erreicht, nach etwa fünfzig Millisekunden.",
+  "words": [
+   {
+    "w": "eineinhalb",
+    "t": 0
+   },
+   {
+    "w": "Meter",
+    "t": 0.58
+   },
+   {
+    "w": "pro",
+    "t": 0.9
+   },
+   {
+    "w": "Sekunde",
+    "t": 1.13
+   },
+   {
+    "w": "erreicht,",
+    "t": 1.56
+   },
+   {
+    "w": "nach",
+    "t": 2.03
+   },
+   {
+    "w": "etwa",
+    "t": 2.31
+   },
+   {
+    "w": "fünfzig",
+    "t": 2.59
+   },
+   {
+    "w": "Millisekunden.",
+    "t": 3.01
+   }
+  ]
+ },
+ {
+  "id": "s10_a",
+  "template": "layers_overview",
+  "start": 152.354,
+  "end": 155.633,
+  "duration": 3.279,
+  "narration": "Dieser Wächter ist die zweite Schicht: der Geschwindigkeitsbegrenzer.",
+  "words": [
+   {
+    "w": "Dieser",
+    "t": 0
+   },
+   {
+    "w": "Wächter",
+    "t": 0.33
+   },
+   {
+    "w": "ist",
+    "t": 0.71
+   },
+   {
+    "w": "die",
+    "t": 0.91
+   },
+   {
+    "w": "zweite",
+    "t": 1.11
+   },
+   {
+    "w": "Schicht:",
+    "t": 1.44
+   },
+   {
+    "w": "der",
+    "t": 1.82
+   },
+   {
+    "w": "Geschwindigkeitsbegrenzer.",
+    "t": 2.01
+   }
+  ]
+ },
+ {
+  "id": "s10_b",
+  "template": "shaft_xray",
+  "start": 155.633,
+  "end": 160.147,
+  "duration": 4.514,
+  "narration": "Klassisch hat er oben eine eigene Seilscheibe und ein eigenes, dünnes Seil.",
+  "words": [
+   {
+    "w": "Klassisch",
+    "t": 0.25
+   },
+   {
+    "w": "hat",
+    "t": 0.8
+   },
+   {
+    "w": "er",
+    "t": 1.03
+   },
+   {
+    "w": "oben",
+    "t": 1.22
+   },
+   {
+    "w": "eine",
+    "t": 1.5
+   },
+   {
+    "w": "eigene",
+    "t": 1.79
+   },
+   {
+    "w": "Seilscheibe",
+    "t": 2.18
+   },
+   {
+    "w": "und",
+    "t": 2.83
+   },
+   {
+    "w": "ein",
+    "t": 3.07
+   },
+   {
+    "w": "eigenes,",
+    "t": 3.3
+   },
+   {
+    "w": "dünnes",
+    "t": 3.74
+   },
+   {
+    "w": "Seil.",
+    "t": 4.14
+   }
+  ]
+ },
+ {
+  "id": "s10_c",
+  "template": "shaft_xray",
+  "start": 160.147,
+  "end": 168.599,
+  "duration": 8.452,
+  "narration": "Es läuft als Schleife bis zu einer Spannrolle in der Grube und hängt an einem Hebel auf der Kabine. So zieht die Kabine das Seil bei jeder Fahrt mit.",
+  "words": [
+   {
+    "w": "Es",
+    "t": 0.25
+   },
+   {
+    "w": "läuft",
+    "t": 0.41
+   },
+   {
+    "w": "als",
+    "t": 0.7
+   },
+   {
+    "w": "Schleife",
+    "t": 0.9
+   },
+   {
+    "w": "bis",
+    "t": 1.32
+   },
+   {
+    "w": "zu",
+    "t": 1.52
+   },
+   {
+    "w": "einer",
+    "t": 1.68
+   },
+   {
+    "w": "Spannrolle",
+    "t": 1.97
+   },
+   {
+    "w": "in",
+    "t": 2.48
+   },
+   {
+    "w": "der",
+    "t": 2.63
+   },
+   {
+    "w": "Grube",
+    "t": 2.83
+   },
+   {
+    "w": "und",
+    "t": 3.12
+   },
+   {
+    "w": "hängt",
+    "t": 3.32
+   },
+   {
+    "w": "an",
+    "t": 3.61
+   },
+   {
+    "w": "einem",
+    "t": 3.77
+   },
+   {
+    "w": "Hebel",
+    "t": 4.06
+   },
+   {
+    "w": "auf",
+    "t": 4.35
+   },
+   {
+    "w": "der",
+    "t": 4.55
+   },
+   {
+    "w": "Kabine.",
+    "t": 4.75
+   },
+   {
+    "w": "So",
+    "t": 5.42
+   },
+   {
+    "w": "zieht",
+    "t": 5.58
+   },
+   {
+    "w": "die",
+    "t": 5.87
+   },
+   {
+    "w": "Kabine",
+    "t": 6.07
+   },
+   {
+    "w": "das",
+    "t": 6.41
+   },
+   {
+    "w": "Seil",
+    "t": 6.61
+   },
+   {
+    "w": "bei",
+    "t": 6.85
+   },
+   {
+    "w": "jeder",
+    "t": 7.05
+   },
+   {
+    "w": "Fahrt",
+    "t": 7.34
+   },
+   {
+    "w": "mit.",
+    "t": 7.63
+   }
+  ]
+ },
+ {
+  "id": "s11_a",
+  "template": "comparison_split",
+  "start": 168.599,
+  "end": 173.643,
+  "duration": 5.044,
+  "narration": "Dreht sich die Scheibe zu schnell, schwenken Fliehgewichte nach außen, wie die Sitze eines Kettenkarussells.",
+  "words": [
+   {
+    "w": "Dreht",
+    "t": 0
+   },
+   {
+    "w": "sich",
+    "t": 0.28
+   },
+   {
+    "w": "die",
+    "t": 0.52
+   },
+   {
+    "w": "Scheibe",
+    "t": 0.72
+   },
+   {
+    "w": "zu",
+    "t": 1.09
+   },
+   {
+    "w": "schnell,",
+    "t": 1.24
+   },
+   {
+    "w": "schwenken",
+    "t": 1.62
+   },
+   {
+    "w": "Fliehgewichte",
+    "t": 2.07
+   },
+   {
+    "w": "nach",
+    "t": 2.71
+   },
+   {
+    "w": "außen,",
+    "t": 2.95
+   },
+   {
+    "w": "wie",
+    "t": 3.23
+   },
+   {
+    "w": "die",
+    "t": 3.43
+   },
+   {
+    "w": "Sitze",
+    "t": 3.62
+   },
+   {
+    "w": "eines",
+    "t": 3.91
+   },
+   {
+    "w": "Kettenkarussells.",
+    "t": 4.19
+   }
+  ]
+ },
+ {
+  "id": "s11_b",
+  "template": "governor",
+  "start": 173.643,
+  "end": 181.178,
+  "duration": 7.535,
+  "narration": "Sie lösen eine Sperre aus, und der Begrenzer hält sein Seil fest. Das ist reine Mechanik, sie funktioniert auch ohne Strom.",
+  "words": [
+   {
+    "w": "Sie",
+    "t": 0.25
+   },
+   {
+    "w": "lösen",
+    "t": 0.47
+   },
+   {
+    "w": "eine",
+    "t": 0.78
+   },
+   {
+    "w": "Sperre",
+    "t": 1.04
+   },
+   {
+    "w": "aus,",
+    "t": 1.4
+   },
+   {
+    "w": "und",
+    "t": 1.62
+   },
+   {
+    "w": "der",
+    "t": 1.84
+   },
+   {
+    "w": "Begrenzer",
+    "t": 2.05
+   },
+   {
+    "w": "hält",
+    "t": 2.56
+   },
+   {
+    "w": "sein",
+    "t": 2.82
+   },
+   {
+    "w": "Seil",
+    "t": 3.09
+   },
+   {
+    "w": "fest.",
+    "t": 3.35
+   },
+   {
+    "w": "Das",
+    "t": 3.96
+   },
+   {
+    "w": "ist",
+    "t": 4.18
+   },
+   {
+    "w": "reine",
+    "t": 4.4
+   },
+   {
+    "w": "Mechanik,",
+    "t": 4.71
+   },
+   {
+    "w": "sie",
+    "t": 5.18
+   },
+   {
+    "w": "funktioniert",
+    "t": 5.4
+   },
+   {
+    "w": "auch",
+    "t": 6.06
+   },
+   {
+    "w": "ohne",
+    "t": 6.33
+   },
+   {
+    "w": "Strom.",
+    "t": 6.6
+   }
+  ]
+ },
+ {
+  "id": "s12_a",
+  "template": "layers_overview",
+  "start": 181.178,
+  "end": 184.32,
+  "duration": 3.142,
+  "narration": "Dritte Schicht: Schalter und Bremse. Spätestens jetzt",
+  "words": [
+   {
+    "w": "Dritte",
+    "t": 0
+   },
+   {
+    "w": "Schicht:",
+    "t": 0.38
+   },
+   {
+    "w": "Schalter",
+    "t": 0.81
+   },
+   {
+    "w": "und",
+    "t": 1.28
+   },
+   {
+    "w": "Bremse.",
+    "t": 1.51
+   },
+   {
+    "w": "Spätestens",
+    "t": 2.23
+   },
+   {
+    "w": "jetzt",
+    "t": 2.81
+   }
+  ]
+ },
+ {
+  "id": "s12_b",
+  "template": "brake",
+  "start": 184.32,
+  "end": 192.3,
+  "duration": 7.98,
+  "narration": "öffnet ein Schalter am Begrenzer den Sicherheitskreis: Motor aus, Bremse zu. Diese Bremse ist ohne Strom immer zu, Federn pressen die Beläge an.",
+  "words": [
+   {
+    "w": "öffnet",
+    "t": 0
+   },
+   {
+    "w": "ein",
+    "t": 0.38
+   },
+   {
+    "w": "Schalter",
+    "t": 0.61
+   },
+   {
+    "w": "am",
+    "t": 1.09
+   },
+   {
+    "w": "Begrenzer",
+    "t": 1.27
+   },
+   {
+    "w": "den",
+    "t": 1.8
+   },
+   {
+    "w": "Sicherheitskreis:",
+    "t": 2.03
+   },
+   {
+    "w": "Motor",
+    "t": 2.92
+   },
+   {
+    "w": "aus,",
+    "t": 3.25
+   },
+   {
+    "w": "Bremse",
+    "t": 3.47
+   },
+   {
+    "w": "zu.",
+    "t": 3.85
+   },
+   {
+    "w": "Diese",
+    "t": 4.37
+   },
+   {
+    "w": "Bremse",
+    "t": 4.69
+   },
+   {
+    "w": "ist",
+    "t": 5.06
+   },
+   {
+    "w": "ohne",
+    "t": 5.28
+   },
+   {
+    "w": "Strom",
+    "t": 5.54
+   },
+   {
+    "w": "immer",
+    "t": 5.86
+   },
+   {
+    "w": "zu,",
+    "t": 6.18
+   },
+   {
+    "w": "Federn",
+    "t": 6.35
+   },
+   {
+    "w": "pressen",
+    "t": 6.72
+   },
+   {
+    "w": "die",
+    "t": 7.13
+   },
+   {
+    "w": "Beläge",
+    "t": 7.35
+   },
+   {
+    "w": "an.",
+    "t": 7.72
+   }
+  ]
+ },
+ {
+  "id": "s12_c",
+  "template": "shaft_xray",
+  "start": 192.3,
+  "end": 196.726,
+  "duration": 4.426,
+  "narration": "Hier aber hilft sie nicht, denn an der Treibscheibe hängt unsere Kabine nicht mehr.",
+  "words": [
+   {
+    "w": "Hier",
+    "t": 0.25
+   },
+   {
+    "w": "aber",
+    "t": 0.47
+   },
+   {
+    "w": "hilft",
+    "t": 0.69
+   },
+   {
+    "w": "sie",
+    "t": 0.95
+   },
+   {
+    "w": "nicht,",
+    "t": 1.13
+   },
+   {
+    "w": "denn",
+    "t": 1.39
+   },
+   {
+    "w": "an",
+    "t": 1.61
+   },
+   {
+    "w": "der",
+    "t": 1.75
+   },
+   {
+    "w": "Treibscheibe",
+    "t": 1.93
+   },
+   {
+    "w": "hängt",
+    "t": 2.47
+   },
+   {
+    "w": "unsere",
+    "t": 2.73
+   },
+   {
+    "w": "Kabine",
+    "t": 3.03
+   },
+   {
+    "w": "nicht",
+    "t": 3.33
+   },
+   {
+    "w": "mehr.",
+    "t": 3.59
+   }
+  ]
+ },
+ {
+  "id": "s13_a",
+  "template": "shaft_xray",
+  "start": 196.726,
+  "end": 204.272,
+  "duration": 7.546,
+  "narration": "Das Begrenzerseil steht still, doch die Kabine fällt weiter. Das stehende Seil zieht den Hebel, und Keile klemmen die Kabine an den Schienen fest.",
+  "words": [
+   {
+    "w": "Das",
+    "t": 0
+   },
+   {
+    "w": "Begrenzerseil",
+    "t": 0.22
+   },
+   {
+    "w": "steht",
+    "t": 0.93
+   },
+   {
+    "w": "still,",
+    "t": 1.24
+   },
+   {
+    "w": "doch",
+    "t": 1.56
+   },
+   {
+    "w": "die",
+    "t": 1.83
+   },
+   {
+    "w": "Kabine",
+    "t": 2.05
+   },
+   {
+    "w": "fällt",
+    "t": 2.41
+   },
+   {
+    "w": "weiter.",
+    "t": 2.73
+   },
+   {
+    "w": "Das",
+    "t": 3.44
+   },
+   {
+    "w": "stehende",
+    "t": 3.63
+   },
+   {
+    "w": "Seil",
+    "t": 4.05
+   },
+   {
+    "w": "zieht",
+    "t": 4.29
+   },
+   {
+    "w": "den",
+    "t": 4.58
+   },
+   {
+    "w": "Hebel,",
+    "t": 4.78
+   },
+   {
+    "w": "und",
+    "t": 5.06
+   },
+   {
+    "w": "Keile",
+    "t": 5.26
+   },
+   {
+    "w": "klemmen",
+    "t": 5.54
+   },
+   {
+    "w": "die",
+    "t": 5.92
+   },
+   {
+    "w": "Kabine",
+    "t": 6.12
+   },
+   {
+    "w": "an",
+    "t": 6.45
+   },
+   {
+    "w": "den",
+    "t": 6.6
+   },
+   {
+    "w": "Schienen",
+    "t": 6.8
+   },
+   {
+    "w": "fest.",
+    "t": 7.22
+   }
+  ]
+ },
+ {
+  "id": "s13_b",
+  "template": "stat_counter",
+  "start": 204.272,
+  "end": 208.145,
+  "duration": 3.873,
+  "narration": "Das dünne Seil trägt also nichts, es löst nur aus.",
+  "words": [
+   {
+    "w": "Das",
+    "t": 0.25
+   },
+   {
+    "w": "dünne",
+    "t": 0.5
+   },
+   {
+    "w": "Seil",
+    "t": 0.86
+   },
+   {
+    "w": "trägt",
+    "t": 1.17
+   },
+   {
+    "w": "also",
+    "t": 1.53
+   },
+   {
+    "w": "nichts,",
+    "t": 1.84
+   },
+   {
+    "w": "es",
+    "t": 2.25
+   },
+   {
+    "w": "löst",
+    "t": 2.45
+   },
+   {
+    "w": "nur",
+    "t": 2.75
+   },
+   {
+    "w": "aus.",
+    "t": 3
+   }
+  ]
+ },
+ {
+  "id": "s14_a",
+  "template": "layers_overview",
+  "start": 208.575,
+  "end": 216.802,
+  "duration": 8.227,
+  "narration": "Vierte Schicht: die Fangvorrichtung. Sie erbt die Aufgabe der Sperre von Otis, reagiert aber auf zu hohe Geschwindigkeit statt bloß auf ein schlaffes Seil.",
+  "words": [
+   {
+    "w": "Vierte",
+    "t": 0
+   },
+   {
+    "w": "Schicht:",
+    "t": 0.38
+   },
+   {
+    "w": "die",
+    "t": 0.81
+   },
+   {
+    "w": "Fangvorrichtung.",
+    "t": 1.03
+   },
+   {
+    "w": "Sie",
+    "t": 2.2
+   },
+   {
+    "w": "erbt",
+    "t": 2.41
+   },
+   {
+    "w": "die",
+    "t": 2.67
+   },
+   {
+    "w": "Aufgabe",
+    "t": 2.88
+   },
+   {
+    "w": "der",
+    "t": 3.28
+   },
+   {
+    "w": "Sperre",
+    "t": 3.49
+   },
+   {
+    "w": "von",
+    "t": 3.84
+   },
+   {
+    "w": "Otis,",
+    "t": 4.05
+   },
+   {
+    "w": "reagiert",
+    "t": 4.31
+   },
+   {
+    "w": "aber",
+    "t": 4.75
+   },
+   {
+    "w": "auf",
+    "t": 5.01
+   },
+   {
+    "w": "zu",
+    "t": 5.22
+   },
+   {
+    "w": "hohe",
+    "t": 5.38
+   },
+   {
+    "w": "Geschwindigkeit",
+    "t": 5.64
+   },
+   {
+    "w": "statt",
+    "t": 6.41
+   },
+   {
+    "w": "bloß",
+    "t": 6.71
+   },
+   {
+    "w": "auf",
+    "t": 6.97
+   },
+   {
+    "w": "ein",
+    "t": 7.18
+   },
+   {
+    "w": "schlaffes",
+    "t": 7.39
+   },
+   {
+    "w": "Seil.",
+    "t": 7.88
+   }
+  ]
+ },
+ {
+  "id": "s14_b",
+  "template": "comparison_split",
+  "start": 216.802,
+  "end": 224.115,
+  "duration": 7.313,
+  "narration": "Der harte Sperrfang blockiert schlagartig und ist am Fahrkorb nur bei Aufzügen bis zu dreiundsechzig Zentimetern pro Sekunde erlaubt.",
+  "words": [
+   {
+    "w": "Der",
+    "t": 0.25
+   },
+   {
+    "w": "harte",
+    "t": 0.47
+   },
+   {
+    "w": "Sperrfang",
+    "t": 0.79
+   },
+   {
+    "w": "blockiert",
+    "t": 1.3
+   },
+   {
+    "w": "schlagartig",
+    "t": 1.82
+   },
+   {
+    "w": "und",
+    "t": 2.43
+   },
+   {
+    "w": "ist",
+    "t": 2.65
+   },
+   {
+    "w": "am",
+    "t": 2.87
+   },
+   {
+    "w": "Fahrkorb",
+    "t": 3.04
+   },
+   {
+    "w": "nur",
+    "t": 3.5
+   },
+   {
+    "w": "bei",
+    "t": 3.72
+   },
+   {
+    "w": "Aufzügen",
+    "t": 3.95
+   },
+   {
+    "w": "bis",
+    "t": 4.41
+   },
+   {
+    "w": "zu",
+    "t": 4.63
+   },
+   {
+    "w": "dreiundsechzig",
+    "t": 4.8
+   },
+   {
+    "w": "Zentimetern",
+    "t": 5.56
+   },
+   {
+    "w": "pro",
+    "t": 6.17
+   },
+   {
+    "w": "Sekunde",
+    "t": 6.39
+   },
+   {
+    "w": "erlaubt.",
+    "t": 6.81
+   }
+  ]
+ },
+ {
+  "id": "s14_c",
+  "template": "safety_gear",
+  "start": 224.115,
+  "end": 230.97,
+  "duration": 6.855,
+  "narration": "Unser Bremsfang presst federbelastete Keile an die Schiene und verwandelt die Bewegungsenergie beim Gleiten in Wärme.",
+  "words": [
+   {
+    "w": "Unser",
+    "t": 0.25
+   },
+   {
+    "w": "Bremsfang",
+    "t": 0.56
+   },
+   {
+    "w": "presst",
+    "t": 1.06
+   },
+   {
+    "w": "federbelastete",
+    "t": 1.42
+   },
+   {
+    "w": "Keile",
+    "t": 2.16
+   },
+   {
+    "w": "an",
+    "t": 2.48
+   },
+   {
+    "w": "die",
+    "t": 2.64
+   },
+   {
+    "w": "Schiene",
+    "t": 2.86
+   },
+   {
+    "w": "und",
+    "t": 3.27
+   },
+   {
+    "w": "verwandelt",
+    "t": 3.48
+   },
+   {
+    "w": "die",
+    "t": 4.03
+   },
+   {
+    "w": "Bewegungsenergie",
+    "t": 4.25
+   },
+   {
+    "w": "beim",
+    "t": 5.09
+   },
+   {
+    "w": "Gleiten",
+    "t": 5.35
+   },
+   {
+    "w": "in",
+    "t": 5.76
+   },
+   {
+    "w": "Wärme.",
+    "t": 5.92
+   }
+  ]
+ },
+ {
+  "id": "s15_a",
+  "template": "graph",
+  "start": 230.97,
+  "end": 240.135,
+  "duration": 9.165,
+  "narration": "Wie fühlt sich so ein Fang an? Bei voller Kabine verlangt die europäische Aufzugsnorm im Mittel eine Verzögerung zwischen einem Fünftel und der vollen Erdbeschleunigung.",
+  "words": [
+   {
+    "w": "Wie",
+    "t": 0
+   },
+   {
+    "w": "fühlt",
+    "t": 0.22
+   },
+   {
+    "w": "sich",
+    "t": 0.54
+   },
+   {
+    "w": "so",
+    "t": 0.81
+   },
+   {
+    "w": "ein",
+    "t": 0.97
+   },
+   {
+    "w": "Fang",
+    "t": 1.19
+   },
+   {
+    "w": "an?",
+    "t": 1.46
+   },
+   {
+    "w": "Bei",
+    "t": 1.97
+   },
+   {
+    "w": "voller",
+    "t": 2.19
+   },
+   {
+    "w": "Kabine",
+    "t": 2.55
+   },
+   {
+    "w": "verlangt",
+    "t": 2.92
+   },
+   {
+    "w": "die",
+    "t": 3.38
+   },
+   {
+    "w": "europäische",
+    "t": 3.59
+   },
+   {
+    "w": "Aufzugsnorm",
+    "t": 4.2
+   },
+   {
+    "w": "im",
+    "t": 4.8
+   },
+   {
+    "w": "Mittel",
+    "t": 4.97
+   },
+   {
+    "w": "eine",
+    "t": 5.33
+   },
+   {
+    "w": "Verzögerung",
+    "t": 5.6
+   },
+   {
+    "w": "zwischen",
+    "t": 6.2
+   },
+   {
+    "w": "einem",
+    "t": 6.66
+   },
+   {
+    "w": "Fünftel",
+    "t": 6.97
+   },
+   {
+    "w": "und",
+    "t": 7.38
+   },
+   {
+    "w": "der",
+    "t": 7.6
+   },
+   {
+    "w": "vollen",
+    "t": 7.82
+   },
+   {
+    "w": "Erdbeschleunigung.",
+    "t": 8.18
+   }
+  ]
+ },
+ {
+  "id": "s15_b",
+  "template": "stat_counter",
+  "start": 240.135,
+  "end": 248.696,
+  "duration": 8.561,
+  "narration": "Man fühlt sich also etwa ein Fünftel schwerer bis doppelt so schwer. Kurze Spitzen können darüber liegen, und eine leere Kabine wird härter gebremst.",
+  "words": [
+   {
+    "w": "Man",
+    "t": 0.25
+   },
+   {
+    "w": "fühlt",
+    "t": 0.45
+   },
+   {
+    "w": "sich",
+    "t": 0.73
+   },
+   {
+    "w": "also",
+    "t": 0.97
+   },
+   {
+    "w": "etwa",
+    "t": 1.21
+   },
+   {
+    "w": "ein",
+    "t": 1.45
+   },
+   {
+    "w": "Fünftel",
+    "t": 1.64
+   },
+   {
+    "w": "schwerer",
+    "t": 2.01
+   },
+   {
+    "w": "bis",
+    "t": 2.43
+   },
+   {
+    "w": "doppelt",
+    "t": 2.62
+   },
+   {
+    "w": "so",
+    "t": 2.99
+   },
+   {
+    "w": "schwer.",
+    "t": 3.15
+   },
+   {
+    "w": "Kurze",
+    "t": 3.81
+   },
+   {
+    "w": "Spitzen",
+    "t": 4.13
+   },
+   {
+    "w": "können",
+    "t": 4.54
+   },
+   {
+    "w": "darüber",
+    "t": 4.91
+   },
+   {
+    "w": "liegen,",
+    "t": 5.32
+   },
+   {
+    "w": "und",
+    "t": 5.68
+   },
+   {
+    "w": "eine",
+    "t": 5.9
+   },
+   {
+    "w": "leere",
+    "t": 6.17
+   },
+   {
+    "w": "Kabine",
+    "t": 6.48
+   },
+   {
+    "w": "wird",
+    "t": 6.85
+   },
+   {
+    "w": "härter",
+    "t": 7.12
+   },
+   {
+    "w": "gebremst.",
+    "t": 7.48
+   }
+  ]
+ },
+ {
+  "id": "s16_a",
+  "template": "graph",
+  "start": 248.696,
+  "end": 258.855,
+  "duration": 10.159,
+  "narration": "Und wie weit rutscht die Kabine? Ein Rechenbeispiel mit voller Kabine: Aus eineinhalb Metern pro Sekunde steht sie nach gut elf Zentimetern, wenn sie im Mittel mit der vollen Erdbeschleunigung bremst.",
+  "words": [
+   {
+    "w": "Und",
+    "t": 0
+   },
+   {
+    "w": "wie",
+    "t": 0.21
+   },
+   {
+    "w": "weit",
+    "t": 0.42
+   },
+   {
+    "w": "rutscht",
+    "t": 0.68
+   },
+   {
+    "w": "die",
+    "t": 1.08
+   },
+   {
+    "w": "Kabine?",
+    "t": 1.29
+   },
+   {
+    "w": "Ein",
+    "t": 1.98
+   },
+   {
+    "w": "Rechenbeispiel",
+    "t": 2.18
+   },
+   {
+    "w": "mit",
+    "t": 2.89
+   },
+   {
+    "w": "voller",
+    "t": 3.09
+   },
+   {
+    "w": "Kabine:",
+    "t": 3.44
+   },
+   {
+    "w": "Aus",
+    "t": 3.78
+   },
+   {
+    "w": "eineinhalb",
+    "t": 3.98
+   },
+   {
+    "w": "Metern",
+    "t": 4.51
+   },
+   {
+    "w": "pro",
+    "t": 4.85
+   },
+   {
+    "w": "Sekunde",
+    "t": 5.05
+   },
+   {
+    "w": "steht",
+    "t": 5.44
+   },
+   {
+    "w": "sie",
+    "t": 5.74
+   },
+   {
+    "w": "nach",
+    "t": 5.94
+   },
+   {
+    "w": "gut",
+    "t": 6.19
+   },
+   {
+    "w": "elf",
+    "t": 6.4
+   },
+   {
+    "w": "Zentimetern,",
+    "t": 6.6
+   },
+   {
+    "w": "wenn",
+    "t": 7.17
+   },
+   {
+    "w": "sie",
+    "t": 7.42
+   },
+   {
+    "w": "im",
+    "t": 7.63
+   },
+   {
+    "w": "Mittel",
+    "t": 7.79
+   },
+   {
+    "w": "mit",
+    "t": 8.13
+   },
+   {
+    "w": "der",
+    "t": 8.34
+   },
+   {
+    "w": "vollen",
+    "t": 8.54
+   },
+   {
+    "w": "Erdbeschleunigung",
+    "t": 8.88
+   },
+   {
+    "w": "bremst.",
+    "t": 9.73
+   }
+  ]
+ },
+ {
+  "id": "s16_b",
+  "template": "map_or_scale",
+  "start": 258.855,
+  "end": 267.365,
+  "duration": 8.51,
+  "narration": "Bei einem Fünftel davon sind es knapp sechzig. Mit Reaktionszeit und dem Einrücken der Keile sind es real eher einige Dezimeter.",
+  "words": [
+   {
+    "w": "Bei",
+    "t": 0.25
+   },
+   {
+    "w": "einem",
+    "t": 0.47
+   },
+   {
+    "w": "Fünftel",
+    "t": 0.8
+   },
+   {
+    "w": "davon",
+    "t": 1.22
+   },
+   {
+    "w": "sind",
+    "t": 1.55
+   },
+   {
+    "w": "es",
+    "t": 1.82
+   },
+   {
+    "w": "knapp",
+    "t": 2
+   },
+   {
+    "w": "sechzig.",
+    "t": 2.32
+   },
+   {
+    "w": "Mit",
+    "t": 3.08
+   },
+   {
+    "w": "Reaktionszeit",
+    "t": 3.33
+   },
+   {
+    "w": "und",
+    "t": 4.13
+   },
+   {
+    "w": "dem",
+    "t": 4.38
+   },
+   {
+    "w": "Einrücken",
+    "t": 4.62
+   },
+   {
+    "w": "der",
+    "t": 5.2
+   },
+   {
+    "w": "Keile",
+    "t": 5.45
+   },
+   {
+    "w": "sind",
+    "t": 5.8
+   },
+   {
+    "w": "es",
+    "t": 6.1
+   },
+   {
+    "w": "real",
+    "t": 6.3
+   },
+   {
+    "w": "eher",
+    "t": 6.6
+   },
+   {
+    "w": "einige",
+    "t": 6.9
+   },
+   {
+    "w": "Dezimeter.",
+    "t": 7.31
+   }
+  ]
+ },
+ {
+  "id": "s17_a",
+  "template": "timeline",
+  "start": 267.365,
+  "end": 276.899,
+  "duration": 9.534,
+  "narration": "Spulen wir die Zeitlupe zurück. Seile weg bei null. Nach wenigen Hundertstelsekunden löst der Begrenzer aus: Motor aus, Bremse zu, Keile an die Schienen.",
+  "words": [
+   {
+    "w": "Spulen",
+    "t": 0
+   },
+   {
+    "w": "wir",
+    "t": 0.4
+   },
+   {
+    "w": "die",
+    "t": 0.64
+   },
+   {
+    "w": "Zeitlupe",
+    "t": 0.89
+   },
+   {
+    "w": "zurück.",
+    "t": 1.4
+   },
+   {
+    "w": "Seile",
+    "t": 2.14
+   },
+   {
+    "w": "weg",
+    "t": 2.53
+   },
+   {
+    "w": "bei",
+    "t": 2.81
+   },
+   {
+    "w": "null.",
+    "t": 3.08
+   },
+   {
+    "w": "Nach",
+    "t": 3.76
+   },
+   {
+    "w": "wenigen",
+    "t": 4.06
+   },
+   {
+    "w": "Hundertstelsekunden",
+    "t": 4.51
+   },
+   {
+    "w": "löst",
+    "t": 5.62
+   },
+   {
+    "w": "der",
+    "t": 5.91
+   },
+   {
+    "w": "Begrenzer",
+    "t": 6.16
+   },
+   {
+    "w": "aus:",
+    "t": 6.72
+   },
+   {
+    "w": "Motor",
+    "t": 6.96
+   },
+   {
+    "w": "aus,",
+    "t": 7.32
+   },
+   {
+    "w": "Bremse",
+    "t": 7.56
+   },
+   {
+    "w": "zu,",
+    "t": 7.96
+   },
+   {
+    "w": "Keile",
+    "t": 8.15
+   },
+   {
+    "w": "an",
+    "t": 8.5
+   },
+   {
+    "w": "die",
+    "t": 8.69
+   },
+   {
+    "w": "Schienen.",
+    "t": 8.93
+   }
+  ]
+ },
+ {
+  "id": "s17_b",
+  "template": "shaft_xray",
+  "start": 276.899,
+  "end": 280.419,
+  "duration": 3.52,
+  "narration": "Aus dem Absturz in den Keller wird ein kräftiger Ruck.",
+  "words": [
+   {
+    "w": "Aus",
+    "t": 0.25
+   },
+   {
+    "w": "dem",
+    "t": 0.45
+   },
+   {
+    "w": "Absturz",
+    "t": 0.65
+   },
+   {
+    "w": "in",
+    "t": 1.04
+   },
+   {
+    "w": "den",
+    "t": 1.19
+   },
+   {
+    "w": "Keller",
+    "t": 1.4
+   },
+   {
+    "w": "wird",
+    "t": 1.73
+   },
+   {
+    "w": "ein",
+    "t": 1.98
+   },
+   {
+    "w": "kräftiger",
+    "t": 2.18
+   },
+   {
+    "w": "Ruck.",
+    "t": 2.65
+   }
+  ]
+ },
+ {
+  "id": "s18_a",
+  "template": "safety_gear",
+  "start": 280.419,
+  "end": 289.681,
+  "duration": 9.262,
+  "narration": "Und dann? Die Keile lösen sich nur, wenn man die Kabine anhebt. Das darf nur eine sachkundige Person, und erst nach ihrer Prüfung fährt der Aufzug wieder.",
+  "words": [
+   {
+    "w": "Und",
+    "t": 0
+   },
+   {
+    "w": "dann?",
+    "t": 0.22
+   },
+   {
+    "w": "Die",
+    "t": 0.83
+   },
+   {
+    "w": "Keile",
+    "t": 1.06
+   },
+   {
+    "w": "lösen",
+    "t": 1.38
+   },
+   {
+    "w": "sich",
+    "t": 1.71
+   },
+   {
+    "w": "nur,",
+    "t": 1.99
+   },
+   {
+    "w": "wenn",
+    "t": 2.21
+   },
+   {
+    "w": "man",
+    "t": 2.49
+   },
+   {
+    "w": "die",
+    "t": 2.71
+   },
+   {
+    "w": "Kabine",
+    "t": 2.94
+   },
+   {
+    "w": "anhebt.",
+    "t": 3.31
+   },
+   {
+    "w": "Das",
+    "t": 4.03
+   },
+   {
+    "w": "darf",
+    "t": 4.25
+   },
+   {
+    "w": "nur",
+    "t": 4.51
+   },
+   {
+    "w": "eine",
+    "t": 4.73
+   },
+   {
+    "w": "sachkundige",
+    "t": 4.99
+   },
+   {
+    "w": "Person,",
+    "t": 5.58
+   },
+   {
+    "w": "und",
+    "t": 5.94
+   },
+   {
+    "w": "erst",
+    "t": 6.16
+   },
+   {
+    "w": "nach",
+    "t": 6.42
+   },
+   {
+    "w": "ihrer",
+    "t": 6.68
+   },
+   {
+    "w": "Prüfung",
+    "t": 6.99
+   },
+   {
+    "w": "fährt",
+    "t": 7.4
+   },
+   {
+    "w": "der",
+    "t": 7.71
+   },
+   {
+    "w": "Aufzug",
+    "t": 7.93
+   },
+   {
+    "w": "wieder.",
+    "t": 8.28
+   }
+  ]
+ },
+ {
+  "id": "s19_a",
+  "template": "myth_card",
+  "start": 290.111,
+  "end": 298.118,
+  "duration": 8.007,
+  "narration": "Und die Szenen aus dem Kino? Funken sprühende Schienen, eine ungebremst rasende Kabine? Mit echten Aufzügen hat das wenig zu tun.",
+  "words": [
+   {
+    "w": "Und",
+    "t": 0
+   },
+   {
+    "w": "die",
+    "t": 0.24
+   },
+   {
+    "w": "Szenen",
+    "t": 0.48
+   },
+   {
+    "w": "aus",
+    "t": 0.88
+   },
+   {
+    "w": "dem",
+    "t": 1.12
+   },
+   {
+    "w": "Kino?",
+    "t": 1.35
+   },
+   {
+    "w": "Funken",
+    "t": 1.99
+   },
+   {
+    "w": "sprühende",
+    "t": 2.38
+   },
+   {
+    "w": "Schienen,",
+    "t": 2.94
+   },
+   {
+    "w": "eine",
+    "t": 3.44
+   },
+   {
+    "w": "ungebremst",
+    "t": 3.74
+   },
+   {
+    "w": "rasende",
+    "t": 4.35
+   },
+   {
+    "w": "Kabine?",
+    "t": 4.8
+   },
+   {
+    "w": "Mit",
+    "t": 5.54
+   },
+   {
+    "w": "echten",
+    "t": 5.77
+   },
+   {
+    "w": "Aufzügen",
+    "t": 6.17
+   },
+   {
+    "w": "hat",
+    "t": 6.67
+   },
+   {
+    "w": "das",
+    "t": 6.91
+   },
+   {
+    "w": "wenig",
+    "t": 7.15
+   },
+   {
+    "w": "zu",
+    "t": 7.49
+   },
+   {
+    "w": "tun.",
+    "t": 7.68
+   }
+  ]
+ },
+ {
+  "id": "s19_b",
+  "template": "physics_fall",
+  "start": 298.118,
+  "end": 308.02,
+  "duration": 9.902,
+  "narration": "Ohne die Schutzkette aber wäre eine frei fallende Kabine rechnerisch nach zehn Metern schon rund fünfzig Kilometer pro Stunde schnell. Nach hundert Metern wären es etwa hundertsechzig.",
+  "words": [
+   {
+    "w": "Ohne",
+    "t": 0.25
+   },
+   {
+    "w": "die",
+    "t": 0.49
+   },
+   {
+    "w": "Schutzkette",
+    "t": 0.69
+   },
+   {
+    "w": "aber",
+    "t": 1.24
+   },
+   {
+    "w": "wäre",
+    "t": 1.48
+   },
+   {
+    "w": "eine",
+    "t": 1.72
+   },
+   {
+    "w": "frei",
+    "t": 1.96
+   },
+   {
+    "w": "fallende",
+    "t": 2.2
+   },
+   {
+    "w": "Kabine",
+    "t": 2.62
+   },
+   {
+    "w": "rechnerisch",
+    "t": 2.95
+   },
+   {
+    "w": "nach",
+    "t": 3.5
+   },
+   {
+    "w": "zehn",
+    "t": 3.74
+   },
+   {
+    "w": "Metern",
+    "t": 3.98
+   },
+   {
+    "w": "schon",
+    "t": 4.31
+   },
+   {
+    "w": "rund",
+    "t": 4.6
+   },
+   {
+    "w": "fünfzig",
+    "t": 4.84
+   },
+   {
+    "w": "Kilometer",
+    "t": 5.21
+   },
+   {
+    "w": "pro",
+    "t": 5.67
+   },
+   {
+    "w": "Stunde",
+    "t": 5.87
+   },
+   {
+    "w": "schnell.",
+    "t": 6.2
+   },
+   {
+    "w": "Nach",
+    "t": 6.91
+   },
+   {
+    "w": "hundert",
+    "t": 7.16
+   },
+   {
+    "w": "Metern",
+    "t": 7.54
+   },
+   {
+    "w": "wären",
+    "t": 7.88
+   },
+   {
+    "w": "es",
+    "t": 8.18
+   },
+   {
+    "w": "etwa",
+    "t": 8.33
+   },
+   {
+    "w": "hundertsechzig.",
+    "t": 8.58
+   }
+  ]
+ },
+ {
+  "id": "s20_a",
+  "template": "myth_card",
+  "start": 308.02,
+  "end": 315.779,
+  "duration": 7.759,
+  "narration": "Und der berühmte Sprung kurz vor dem Aufprall? Eine amerikanische Fernsehsendung testete ihn zweitausendvier und erklärte ihn für widerlegt.",
+  "words": [
+   {
+    "w": "Und",
+    "t": 0
+   },
+   {
+    "w": "der",
+    "t": 0.22
+   },
+   {
+    "w": "berühmte",
+    "t": 0.43
+   },
+   {
+    "w": "Sprung",
+    "t": 0.88
+   },
+   {
+    "w": "kurz",
+    "t": 1.24
+   },
+   {
+    "w": "vor",
+    "t": 1.51
+   },
+   {
+    "w": "dem",
+    "t": 1.72
+   },
+   {
+    "w": "Aufprall?",
+    "t": 1.94
+   },
+   {
+    "w": "Eine",
+    "t": 2.73
+   },
+   {
+    "w": "amerikanische",
+    "t": 3.01
+   },
+   {
+    "w": "Fernsehsendung",
+    "t": 3.73
+   },
+   {
+    "w": "testete",
+    "t": 4.51
+   },
+   {
+    "w": "ihn",
+    "t": 4.94
+   },
+   {
+    "w": "zweitausendvier",
+    "t": 5.16
+   },
+   {
+    "w": "und",
+    "t": 5.99
+   },
+   {
+    "w": "erklärte",
+    "t": 6.22
+   },
+   {
+    "w": "ihn",
+    "t": 6.69
+   },
+   {
+    "w": "für",
+    "t": 6.92
+   },
+   {
+    "w": "widerlegt.",
+    "t": 7.14
+   }
+  ]
+ },
+ {
+  "id": "s20_b",
+  "template": "shaft_xray",
+  "start": 315.779,
+  "end": 321.044,
+  "duration": 5.265,
+  "narration": "Im echten freien Fall schwebt man nahezu schwerelos, weil Körper und Kabine gleich schnell fallen.",
+  "words": [
+   {
+    "w": "Im",
+    "t": 0.25
+   },
+   {
+    "w": "echten",
+    "t": 0.42
+   },
+   {
+    "w": "freien",
+    "t": 0.77
+   },
+   {
+    "w": "Fall",
+    "t": 1.12
+   },
+   {
+    "w": "schwebt",
+    "t": 1.38
+   },
+   {
+    "w": "man",
+    "t": 1.78
+   },
+   {
+    "w": "nahezu",
+    "t": 1.99
+   },
+   {
+    "w": "schwerelos,",
+    "t": 2.35
+   },
+   {
+    "w": "weil",
+    "t": 2.89
+   },
+   {
+    "w": "Körper",
+    "t": 3.15
+   },
+   {
+    "w": "und",
+    "t": 3.5
+   },
+   {
+    "w": "Kabine",
+    "t": 3.71
+   },
+   {
+    "w": "gleich",
+    "t": 4.07
+   },
+   {
+    "w": "schnell",
+    "t": 4.42
+   },
+   {
+    "w": "fallen.",
+    "t": 4.82
+   }
+  ]
+ },
+ {
+  "id": "s20_c",
+  "template": "comparison_split",
+  "start": 321.044,
+  "end": 330.648,
+  "duration": 9.604,
+  "narration": "Ein kräftiger Sprung zieht nur etwa zwei bis drei Meter pro Sekunde ab. Aus einem Sturz von zehn Metern würde so rechnerisch immer noch einer aus rund sechs bis sieben Metern.",
+  "words": [
+   {
+    "w": "Ein",
+    "t": 0.25
+   },
+   {
+    "w": "kräftiger",
+    "t": 0.47
+   },
+   {
+    "w": "Sprung",
+    "t": 0.99
+   },
+   {
+    "w": "zieht",
+    "t": 1.35
+   },
+   {
+    "w": "nur",
+    "t": 1.67
+   },
+   {
+    "w": "etwa",
+    "t": 1.89
+   },
+   {
+    "w": "zwei",
+    "t": 2.16
+   },
+   {
+    "w": "bis",
+    "t": 2.43
+   },
+   {
+    "w": "drei",
+    "t": 2.66
+   },
+   {
+    "w": "Meter",
+    "t": 2.93
+   },
+   {
+    "w": "pro",
+    "t": 3.24
+   },
+   {
+    "w": "Sekunde",
+    "t": 3.47
+   },
+   {
+    "w": "ab.",
+    "t": 3.88
+   },
+   {
+    "w": "Aus",
+    "t": 4.39
+   },
+   {
+    "w": "einem",
+    "t": 4.58
+   },
+   {
+    "w": "Sturz",
+    "t": 4.84
+   },
+   {
+    "w": "von",
+    "t": 5.11
+   },
+   {
+    "w": "zehn",
+    "t": 5.3
+   },
+   {
+    "w": "Metern",
+    "t": 5.52
+   },
+   {
+    "w": "würde",
+    "t": 5.83
+   },
+   {
+    "w": "so",
+    "t": 6.09
+   },
+   {
+    "w": "rechnerisch",
+    "t": 6.24
+   },
+   {
+    "w": "immer",
+    "t": 6.75
+   },
+   {
+    "w": "noch",
+    "t": 7.02
+   },
+   {
+    "w": "einer",
+    "t": 7.24
+   },
+   {
+    "w": "aus",
+    "t": 7.51
+   },
+   {
+    "w": "rund",
+    "t": 7.69
+   },
+   {
+    "w": "sechs",
+    "t": 7.92
+   },
+   {
+    "w": "bis",
+    "t": 8.19
+   },
+   {
+    "w": "sieben",
+    "t": 8.37
+   },
+   {
+    "w": "Metern.",
+    "t": 8.68
+   }
+  ]
+ },
+ {
+  "id": "s21_a",
+  "template": "layers_overview",
+  "start": 331.078,
+  "end": 337.77,
+  "duration": 6.692,
+  "narration": "Fünfte Schicht, ganz unten in der Grube: die Puffer. Sie sind für langsame Überfahrten gedacht, etwa wenn die Steuerung versagt.",
+  "words": [
+   {
+    "w": "Fünfte",
+    "t": 0
+   },
+   {
+    "w": "Schicht,",
+    "t": 0.37
+   },
+   {
+    "w": "ganz",
+    "t": 0.78
+   },
+   {
+    "w": "unten",
+    "t": 1.05
+   },
+   {
+    "w": "in",
+    "t": 1.37
+   },
+   {
+    "w": "der",
+    "t": 1.54
+   },
+   {
+    "w": "Grube:",
+    "t": 1.76
+   },
+   {
+    "w": "die",
+    "t": 2.08
+   },
+   {
+    "w": "Puffer.",
+    "t": 2.3
+   },
+   {
+    "w": "Sie",
+    "t": 3.01
+   },
+   {
+    "w": "sind",
+    "t": 3.21
+   },
+   {
+    "w": "für",
+    "t": 3.46
+   },
+   {
+    "w": "langsame",
+    "t": 3.66
+   },
+   {
+    "w": "Überfahrten",
+    "t": 4.09
+   },
+   {
+    "w": "gedacht,",
+    "t": 4.66
+   },
+   {
+    "w": "etwa",
+    "t": 5.04
+   },
+   {
+    "w": "wenn",
+    "t": 5.29
+   },
+   {
+    "w": "die",
+    "t": 5.54
+   },
+   {
+    "w": "Steuerung",
+    "t": 5.74
+   },
+   {
+    "w": "versagt.",
+    "t": 6.22
+   }
+  ]
+ },
+ {
+  "id": "s21_b",
+  "template": "buffer",
+  "start": 337.77,
+  "end": 344.524,
+  "duration": 6.754,
+  "narration": "Federpuffer und Polyurethanpuffer sind nur bis zu einem Meter pro Sekunde erlaubt, Ölpuffer bei jeder Geschwindigkeit.",
+  "words": [
+   {
+    "w": "Federpuffer",
+    "t": 0.25
+   },
+   {
+    "w": "und",
+    "t": 0.84
+   },
+   {
+    "w": "Polyurethanpuffer",
+    "t": 1.05
+   },
+   {
+    "w": "sind",
+    "t": 1.92
+   },
+   {
+    "w": "nur",
+    "t": 2.18
+   },
+   {
+    "w": "bis",
+    "t": 2.39
+   },
+   {
+    "w": "zu",
+    "t": 2.6
+   },
+   {
+    "w": "einem",
+    "t": 2.77
+   },
+   {
+    "w": "Meter",
+    "t": 3.07
+   },
+   {
+    "w": "pro",
+    "t": 3.38
+   },
+   {
+    "w": "Sekunde",
+    "t": 3.59
+   },
+   {
+    "w": "erlaubt,",
+    "t": 3.99
+   },
+   {
+    "w": "Ölpuffer",
+    "t": 4.39
+   },
+   {
+    "w": "bei",
+    "t": 4.84
+   },
+   {
+    "w": "jeder",
+    "t": 5.05
+   },
+   {
+    "w": "Geschwindigkeit.",
+    "t": 5.36
+   }
+  ]
+ },
+ {
+  "id": "s22_a",
+  "template": "buffer",
+  "start": 344.524,
+  "end": 350.556,
+  "duration": 6.032,
+  "narration": "Bei unserem Aufzug braucht ein Ölpuffer rechnerisch etwa sieben Zentimeter Hub, eine Stahlfeder rund dreizehneinhalb.",
+  "words": [
+   {
+    "w": "Bei",
+    "t": 0
+   },
+   {
+    "w": "unserem",
+    "t": 0.22
+   },
+   {
+    "w": "Aufzug",
+    "t": 0.63
+   },
+   {
+    "w": "braucht",
+    "t": 0.99
+   },
+   {
+    "w": "ein",
+    "t": 1.4
+   },
+   {
+    "w": "Ölpuffer",
+    "t": 1.61
+   },
+   {
+    "w": "rechnerisch",
+    "t": 2.07
+   },
+   {
+    "w": "etwa",
+    "t": 2.67
+   },
+   {
+    "w": "sieben",
+    "t": 2.94
+   },
+   {
+    "w": "Zentimeter",
+    "t": 3.3
+   },
+   {
+    "w": "Hub,",
+    "t": 3.85
+   },
+   {
+    "w": "eine",
+    "t": 4.07
+   },
+   {
+    "w": "Stahlfeder",
+    "t": 4.33
+   },
+   {
+    "w": "rund",
+    "t": 4.88
+   },
+   {
+    "w": "dreizehneinhalb.",
+    "t": 5.15
+   }
+  ]
+ },
+ {
+  "id": "s22_b",
+  "template": "graph",
+  "start": 350.556,
+  "end": 358.618,
+  "duration": 8.062,
+  "narration": "Doch der Hub wächst mit dem Quadrat der Geschwindigkeit. Bei zehn Metern pro Sekunde wären es ohne Zusatzüberwachung fast sieben Meter.",
+  "words": [
+   {
+    "w": "Doch",
+    "t": 0.25
+   },
+   {
+    "w": "der",
+    "t": 0.49
+   },
+   {
+    "w": "Hub",
+    "t": 0.69
+   },
+   {
+    "w": "wächst",
+    "t": 0.89
+   },
+   {
+    "w": "mit",
+    "t": 1.22
+   },
+   {
+    "w": "dem",
+    "t": 1.41
+   },
+   {
+    "w": "Quadrat",
+    "t": 1.61
+   },
+   {
+    "w": "der",
+    "t": 1.99
+   },
+   {
+    "w": "Geschwindigkeit.",
+    "t": 2.18
+   },
+   {
+    "w": "Bei",
+    "t": 3.25
+   },
+   {
+    "w": "zehn",
+    "t": 3.47
+   },
+   {
+    "w": "Metern",
+    "t": 3.75
+   },
+   {
+    "w": "pro",
+    "t": 4.12
+   },
+   {
+    "w": "Sekunde",
+    "t": 4.35
+   },
+   {
+    "w": "wären",
+    "t": 4.77
+   },
+   {
+    "w": "es",
+    "t": 5.1
+   },
+   {
+    "w": "ohne",
+    "t": 5.27
+   },
+   {
+    "w": "Zusatzüberwachung",
+    "t": 5.55
+   },
+   {
+    "w": "fast",
+    "t": 6.47
+   },
+   {
+    "w": "sieben",
+    "t": 6.74
+   },
+   {
+    "w": "Meter.",
+    "t": 7.12
+   }
+  ]
+ },
+ {
+  "id": "s23_a",
+  "template": "myth_card",
+  "start": 358.618,
+  "end": 367.051,
+  "duration": 8.433,
+  "narration": "Naheliegend, aber falsch: Der Puffer fängt einen Absturz ab. Er ist für einen Aufprall mit etwa hundertfünfzehn Prozent der Nenngeschwindigkeit ausgelegt.",
+  "words": [
+   {
+    "w": "Naheliegend,",
+    "t": 0
+   },
+   {
+    "w": "aber",
+    "t": 0.65
+   },
+   {
+    "w": "falsch:",
+    "t": 0.94
+   },
+   {
+    "w": "Der",
+    "t": 1.33
+   },
+   {
+    "w": "Puffer",
+    "t": 1.56
+   },
+   {
+    "w": "fängt",
+    "t": 1.95
+   },
+   {
+    "w": "einen",
+    "t": 2.29
+   },
+   {
+    "w": "Absturz",
+    "t": 2.63
+   },
+   {
+    "w": "ab.",
+    "t": 3.07
+   },
+   {
+    "w": "Er",
+    "t": 3.59
+   },
+   {
+    "w": "ist",
+    "t": 3.76
+   },
+   {
+    "w": "für",
+    "t": 3.97
+   },
+   {
+    "w": "einen",
+    "t": 4.19
+   },
+   {
+    "w": "Aufprall",
+    "t": 4.5
+   },
+   {
+    "w": "mit",
+    "t": 4.96
+   },
+   {
+    "w": "etwa",
+    "t": 5.17
+   },
+   {
+    "w": "hundertfünfzehn",
+    "t": 5.44
+   },
+   {
+    "w": "Prozent",
+    "t": 6.23
+   },
+   {
+    "w": "der",
+    "t": 6.64
+   },
+   {
+    "w": "Nenngeschwindigkeit",
+    "t": 6.85
+   },
+   {
+    "w": "ausgelegt.",
+    "t": 7.84
+   }
+  ]
+ },
+ {
+  "id": "s23_b",
+  "template": "stat_counter",
+  "start": 367.051,
+  "end": 374.059,
+  "duration": 7.008,
+  "narration": "Nach zehn Metern freiem Fall brächte unsere Kabine rechnerisch rund hundertfünfzigmal so viel Energie mit, wie ihr Puffer aufnehmen soll.",
+  "words": [
+   {
+    "w": "Nach",
+    "t": 0.25
+   },
+   {
+    "w": "zehn",
+    "t": 0.5
+   },
+   {
+    "w": "Metern",
+    "t": 0.75
+   },
+   {
+    "w": "freiem",
+    "t": 1.1
+   },
+   {
+    "w": "Fall",
+    "t": 1.44
+   },
+   {
+    "w": "brächte",
+    "t": 1.69
+   },
+   {
+    "w": "unsere",
+    "t": 2.08
+   },
+   {
+    "w": "Kabine",
+    "t": 2.42
+   },
+   {
+    "w": "rechnerisch",
+    "t": 2.76
+   },
+   {
+    "w": "rund",
+    "t": 3.33
+   },
+   {
+    "w": "hundertfünfzigmal",
+    "t": 3.58
+   },
+   {
+    "w": "so",
+    "t": 4.43
+   },
+   {
+    "w": "viel",
+    "t": 4.59
+   },
+   {
+    "w": "Energie",
+    "t": 4.84
+   },
+   {
+    "w": "mit,",
+    "t": 5.23
+   },
+   {
+    "w": "wie",
+    "t": 5.43
+   },
+   {
+    "w": "ihr",
+    "t": 5.64
+   },
+   {
+    "w": "Puffer",
+    "t": 5.85
+   },
+   {
+    "w": "aufnehmen",
+    "t": 6.19
+   },
+   {
+    "w": "soll.",
+    "t": 6.67
+   }
+  ]
+ },
+ {
+  "id": "s23_c",
+  "template": "shaft_xray",
+  "start": 374.059,
+  "end": 377.663,
+  "duration": 3.604,
+  "narration": "Die eigentliche Rettung sitzt weiter oben, an den Schienen.",
+  "words": [
+   {
+    "w": "Die",
+    "t": 0.25
+   },
+   {
+    "w": "eigentliche",
+    "t": 0.45
+   },
+   {
+    "w": "Rettung",
+    "t": 0.99
+   },
+   {
+    "w": "sitzt",
+    "t": 1.37
+   },
+   {
+    "w": "weiter",
+    "t": 1.65
+   },
+   {
+    "w": "oben,",
+    "t": 1.98
+   },
+   {
+    "w": "an",
+    "t": 2.22
+   },
+   {
+    "w": "den",
+    "t": 2.37
+   },
+   {
+    "w": "Schienen.",
+    "t": 2.57
+   }
+  ]
+ },
+ {
+  "id": "s24_a",
+  "template": "layers_overview",
+  "start": 378.093,
+  "end": 381.113,
+  "duration": 3.02,
+  "narration": "Sechste Schicht: die Prüfungen, denn ein Seil reißt nicht",
+  "words": [
+   {
+    "w": "Sechste",
+    "t": 0
+   },
+   {
+    "w": "Schicht:",
+    "t": 0.42
+   },
+   {
+    "w": "die",
+    "t": 0.85
+   },
+   {
+    "w": "Prüfungen,",
+    "t": 1.07
+   },
+   {
+    "w": "denn",
+    "t": 1.6
+   },
+   {
+    "w": "ein",
+    "t": 1.87
+   },
+   {
+    "w": "Seil",
+    "t": 2.1
+   },
+   {
+    "w": "reißt",
+    "t": 2.37
+   },
+   {
+    "w": "nicht",
+    "t": 2.7
+   }
+  ]
+ },
+ {
+  "id": "s24_b",
+  "template": "rope_macro",
+  "start": 381.113,
+  "end": 384.664,
+  "duration": 3.551,
+  "narration": "plötzlich, zuerst brechen einzelne Drähte. Prüfer zählen diese",
+  "words": [
+   {
+    "w": "plötzlich,",
+    "t": 0
+   },
+   {
+    "w": "zuerst",
+    "t": 0.52
+   },
+   {
+    "w": "brechen",
+    "t": 0.9
+   },
+   {
+    "w": "einzelne",
+    "t": 1.32
+   },
+   {
+    "w": "Drähte.",
+    "t": 1.8
+   },
+   {
+    "w": "Prüfer",
+    "t": 2.51
+   },
+   {
+    "w": "zählen",
+    "t": 2.87
+   },
+   {
+    "w": "diese",
+    "t": 3.24
+   }
+  ]
+ },
+ {
+  "id": "s24_c",
+  "template": "rope_macro",
+  "start": 384.664,
+  "end": 389.273,
+  "duration": 4.609,
+  "narration": "Drahtbrüche, und ab einer festgelegten Zahl muss das Seil ausgetauscht werden.",
+  "words": [
+   {
+    "w": "Drahtbrüche,",
+    "t": 0
+   },
+   {
+    "w": "und",
+    "t": 0.61
+   },
+   {
+    "w": "ab",
+    "t": 0.82
+   },
+   {
+    "w": "einer",
+    "t": 0.99
+   },
+   {
+    "w": "festgelegten",
+    "t": 1.31
+   },
+   {
+    "w": "Zahl",
+    "t": 1.96
+   },
+   {
+    "w": "muss",
+    "t": 2.23
+   },
+   {
+    "w": "das",
+    "t": 2.49
+   },
+   {
+    "w": "Seil",
+    "t": 2.71
+   },
+   {
+    "w": "ausgetauscht",
+    "t": 2.97
+   },
+   {
+    "w": "werden.",
+    "t": 3.63
+   }
+  ]
+ },
+ {
+  "id": "s25_a",
+  "template": "timeline",
+  "start": 389.273,
+  "end": 398.85,
+  "duration": 9.577,
+  "narration": "In Deutschland kommt ein unabhängiger Prüfer dazu, etwa vom Tüff oder von der Dekra. Spätestens alle zwei Jahre ist eine Hauptprüfung fällig, dazwischen eine Zwischenprüfung.",
+  "words": [
+   {
+    "w": "In",
+    "t": 0
+   },
+   {
+    "w": "Deutschland",
+    "t": 0.18
+   },
+   {
+    "w": "kommt",
+    "t": 0.82
+   },
+   {
+    "w": "ein",
+    "t": 1.15
+   },
+   {
+    "w": "unabhängiger",
+    "t": 1.38
+   },
+   {
+    "w": "Prüfer",
+    "t": 2.08
+   },
+   {
+    "w": "dazu,",
+    "t": 2.46
+   },
+   {
+    "w": "etwa",
+    "t": 2.74
+   },
+   {
+    "w": "vom",
+    "t": 3.02
+   },
+   {
+    "w": "Tüff",
+    "t": 3.25
+   },
+   {
+    "w": "oder",
+    "t": 3.54
+   },
+   {
+    "w": "von",
+    "t": 3.82
+   },
+   {
+    "w": "der",
+    "t": 4.05
+   },
+   {
+    "w": "Dekra.",
+    "t": 4.28
+   },
+   {
+    "w": "Spätestens",
+    "t": 4.95
+   },
+   {
+    "w": "alle",
+    "t": 5.51
+   },
+   {
+    "w": "zwei",
+    "t": 5.78
+   },
+   {
+    "w": "Jahre",
+    "t": 6.04
+   },
+   {
+    "w": "ist",
+    "t": 6.36
+   },
+   {
+    "w": "eine",
+    "t": 6.58
+   },
+   {
+    "w": "Hauptprüfung",
+    "t": 6.84
+   },
+   {
+    "w": "fällig,",
+    "t": 7.5
+   },
+   {
+    "w": "dazwischen",
+    "t": 7.86
+   },
+   {
+    "w": "eine",
+    "t": 8.42
+   },
+   {
+    "w": "Zwischenprüfung.",
+    "t": 8.69
+   }
+  ]
+ },
+ {
+  "id": "s25_b",
+  "template": "shaft_xray",
+  "start": 398.85,
+  "end": 402.434,
+  "duration": 3.584,
+  "narration": "Den nächsten Termin zeigt die Prüfplakette in der Kabine.",
+  "words": [
+   {
+    "w": "Den",
+    "t": 0.25
+   },
+   {
+    "w": "nächsten",
+    "t": 0.45
+   },
+   {
+    "w": "Termin",
+    "t": 0.87
+   },
+   {
+    "w": "zeigt",
+    "t": 1.2
+   },
+   {
+    "w": "die",
+    "t": 1.48
+   },
+   {
+    "w": "Prüfplakette",
+    "t": 1.68
+   },
+   {
+    "w": "in",
+    "t": 2.28
+   },
+   {
+    "w": "der",
+    "t": 2.43
+   },
+   {
+    "w": "Kabine.",
+    "t": 2.63
+   }
+  ]
+ },
+ {
+  "id": "s26_a",
+  "template": "myth_card",
+  "start": 402.864,
+  "end": 406.679,
+  "duration": 3.815,
+  "narration": "Jetzt die versprochene Überraschung: Aufzüge können nach oben abstürzen.",
+  "words": [
+   {
+    "w": "Jetzt",
+    "t": 0
+   },
+   {
+    "w": "die",
+    "t": 0.32
+   },
+   {
+    "w": "versprochene",
+    "t": 0.54
+   },
+   {
+    "w": "Überraschung:",
+    "t": 1.21
+   },
+   {
+    "w": "Aufzüge",
+    "t": 1.88
+   },
+   {
+    "w": "können",
+    "t": 2.29
+   },
+   {
+    "w": "nach",
+    "t": 2.66
+   },
+   {
+    "w": "oben",
+    "t": 2.94
+   },
+   {
+    "w": "abstürzen.",
+    "t": 3.21
+   }
+  ]
+ },
+ {
+  "id": "s26_b",
+  "template": "shaft_xray",
+  "start": 406.679,
+  "end": 412.6,
+  "duration": 5.921,
+  "narration": "Weil das Gegengewicht in der Regel schwerer ist als die leere Kabine, zieht es sie bei versagender Bremse hoch.",
+  "words": [
+   {
+    "w": "Weil",
+    "t": 0.25
+   },
+   {
+    "w": "das",
+    "t": 0.51
+   },
+   {
+    "w": "Gegengewicht",
+    "t": 0.72
+   },
+   {
+    "w": "in",
+    "t": 1.35
+   },
+   {
+    "w": "der",
+    "t": 1.51
+   },
+   {
+    "w": "Regel",
+    "t": 1.72
+   },
+   {
+    "w": "schwerer",
+    "t": 2.03
+   },
+   {
+    "w": "ist",
+    "t": 2.47
+   },
+   {
+    "w": "als",
+    "t": 2.68
+   },
+   {
+    "w": "die",
+    "t": 2.89
+   },
+   {
+    "w": "leere",
+    "t": 3.1
+   },
+   {
+    "w": "Kabine,",
+    "t": 3.4
+   },
+   {
+    "w": "zieht",
+    "t": 3.75
+   },
+   {
+    "w": "es",
+    "t": 4.06
+   },
+   {
+    "w": "sie",
+    "t": 4.22
+   },
+   {
+    "w": "bei",
+    "t": 4.43
+   },
+   {
+    "w": "versagender",
+    "t": 4.64
+   },
+   {
+    "w": "Bremse",
+    "t": 5.22
+   },
+   {
+    "w": "hoch.",
+    "t": 5.57
+   }
+  ]
+ },
+ {
+  "id": "s26_c",
+  "template": "safety_gear",
+  "start": 412.6,
+  "end": 419.992,
+  "duration": 7.392,
+  "narration": "Deshalb verlangt die europäische Aufzugsnorm auch dagegen einen Schutz, etwa eine Fangvorrichtung, die auch nach oben greift.",
+  "words": [
+   {
+    "w": "Deshalb",
+    "t": 0.25
+   },
+   {
+    "w": "verlangt",
+    "t": 0.67
+   },
+   {
+    "w": "die",
+    "t": 1.14
+   },
+   {
+    "w": "europäische",
+    "t": 1.37
+   },
+   {
+    "w": "Aufzugsnorm",
+    "t": 1.99
+   },
+   {
+    "w": "auch",
+    "t": 2.61
+   },
+   {
+    "w": "dagegen",
+    "t": 2.88
+   },
+   {
+    "w": "einen",
+    "t": 3.3
+   },
+   {
+    "w": "Schutz,",
+    "t": 3.62
+   },
+   {
+    "w": "etwa",
+    "t": 3.99
+   },
+   {
+    "w": "eine",
+    "t": 4.27
+   },
+   {
+    "w": "Fangvorrichtung,",
+    "t": 4.54
+   },
+   {
+    "w": "die",
+    "t": 5.36
+   },
+   {
+    "w": "auch",
+    "t": 5.58
+   },
+   {
+    "w": "nach",
+    "t": 5.85
+   },
+   {
+    "w": "oben",
+    "t": 6.13
+   },
+   {
+    "w": "greift.",
+    "t": 6.4
+   }
+  ]
+ },
+ {
+  "id": "s27_a",
+  "template": "ucmp",
+  "start": 419.992,
+  "end": 428.731,
+  "duration": 8.739,
+  "narration": "Einer der gefährlichsten realen Fehler ist ein anderer: eine Kabine, die bei offener Tür losfährt. Solche tödlichen Unfälle gab es, etwa zweitausendsechs in Tokio.",
+  "words": [
+   {
+    "w": "Einer",
+    "t": 0
+   },
+   {
+    "w": "der",
+    "t": 0.28
+   },
+   {
+    "w": "gefährlichsten",
+    "t": 0.48
+   },
+   {
+    "w": "realen",
+    "t": 1.16
+   },
+   {
+    "w": "Fehler",
+    "t": 1.49
+   },
+   {
+    "w": "ist",
+    "t": 1.81
+   },
+   {
+    "w": "ein",
+    "t": 2.01
+   },
+   {
+    "w": "anderer:",
+    "t": 2.21
+   },
+   {
+    "w": "eine",
+    "t": 2.58
+   },
+   {
+    "w": "Kabine,",
+    "t": 2.82
+   },
+   {
+    "w": "die",
+    "t": 3.15
+   },
+   {
+    "w": "bei",
+    "t": 3.34
+   },
+   {
+    "w": "offener",
+    "t": 3.54
+   },
+   {
+    "w": "Tür",
+    "t": 3.91
+   },
+   {
+    "w": "losfährt.",
+    "t": 4.11
+   },
+   {
+    "w": "Solche",
+    "t": 4.87
+   },
+   {
+    "w": "tödlichen",
+    "t": 5.29
+   },
+   {
+    "w": "Unfälle",
+    "t": 5.88
+   },
+   {
+    "w": "gab",
+    "t": 6.35
+   },
+   {
+    "w": "es,",
+    "t": 6.6
+   },
+   {
+    "w": "etwa",
+    "t": 6.8
+   },
+   {
+    "w": "zweitausendsechs",
+    "t": 7.11
+   },
+   {
+    "w": "in",
+    "t": 8.09
+   },
+   {
+    "w": "Tokio.",
+    "t": 8.28
+   }
+  ]
+ },
+ {
+  "id": "s27_b",
+  "template": "timeline",
+  "start": 428.731,
+  "end": 437.915,
+  "duration": 9.184,
+  "narration": "Seit einer Ergänzung von zweitausendneun verlangt die europäische Aufzugsnorm einen eigenen Schutz dagegen. Für neue Aufzüge ist er seit zweitausendzwölf praktisch Pflicht.",
+  "words": [
+   {
+    "w": "Seit",
+    "t": 0.25
+   },
+   {
+    "w": "einer",
+    "t": 0.5
+   },
+   {
+    "w": "Ergänzung",
+    "t": 0.81
+   },
+   {
+    "w": "von",
+    "t": 1.29
+   },
+   {
+    "w": "zweitausendneun",
+    "t": 1.5
+   },
+   {
+    "w": "verlangt",
+    "t": 2.27
+   },
+   {
+    "w": "die",
+    "t": 2.71
+   },
+   {
+    "w": "europäische",
+    "t": 2.92
+   },
+   {
+    "w": "Aufzugsnorm",
+    "t": 3.5
+   },
+   {
+    "w": "einen",
+    "t": 4.08
+   },
+   {
+    "w": "eigenen",
+    "t": 4.38
+   },
+   {
+    "w": "Schutz",
+    "t": 4.77
+   },
+   {
+    "w": "dagegen.",
+    "t": 5.12
+   },
+   {
+    "w": "Für",
+    "t": 5.86
+   },
+   {
+    "w": "neue",
+    "t": 6.07
+   },
+   {
+    "w": "Aufzüge",
+    "t": 6.33
+   },
+   {
+    "w": "ist",
+    "t": 6.73
+   },
+   {
+    "w": "er",
+    "t": 6.94
+   },
+   {
+    "w": "seit",
+    "t": 7.11
+   },
+   {
+    "w": "zweitausendzwölf",
+    "t": 7.37
+   },
+   {
+    "w": "praktisch",
+    "t": 8.19
+   },
+   {
+    "w": "Pflicht.",
+    "t": 8.69
+   }
+  ]
+ },
+ {
+  "id": "s27_c",
+  "template": "ucmp",
+  "start": 437.915,
+  "end": 443.063,
+  "duration": 5.148,
+  "narration": "Er stoppt die Kabine spätestens einen Meter zwanzig nach dem Verlassen der Haltestelle.",
+  "words": [
+   {
+    "w": "Er",
+    "t": 0.25
+   },
+   {
+    "w": "stoppt",
+    "t": 0.41
+   },
+   {
+    "w": "die",
+    "t": 0.75
+   },
+   {
+    "w": "Kabine",
+    "t": 0.96
+   },
+   {
+    "w": "spätestens",
+    "t": 1.3
+   },
+   {
+    "w": "einen",
+    "t": 1.83
+   },
+   {
+    "w": "Meter",
+    "t": 2.13
+   },
+   {
+    "w": "zwanzig",
+    "t": 2.42
+   },
+   {
+    "w": "nach",
+    "t": 2.81
+   },
+   {
+    "w": "dem",
+    "t": 3.06
+   },
+   {
+    "w": "Verlassen",
+    "t": 3.27
+   },
+   {
+    "w": "der",
+    "t": 3.75
+   },
+   {
+    "w": "Haltestelle.",
+    "t": 3.96
+   }
+  ]
+ },
+ {
+  "id": "s28_a",
+  "template": "stat_counter",
+  "start": 443.063,
+  "end": 451.001,
+  "duration": 7.938,
+  "narration": "Und in Zahlen? Eine ältere amerikanische Auswertung kam auf rund dreißig Tote pro Jahr, Aufzüge und Fahrtreppen zusammen, Beschäftigte eingerechnet.",
+  "words": [
+   {
+    "w": "Und",
+    "t": 0
+   },
+   {
+    "w": "in",
+    "t": 0.25
+   },
+   {
+    "w": "Zahlen?",
+    "t": 0.45
+   },
+   {
+    "w": "Eine",
+    "t": 1.22
+   },
+   {
+    "w": "ältere",
+    "t": 1.48
+   },
+   {
+    "w": "amerikanische",
+    "t": 1.83
+   },
+   {
+    "w": "Auswertung",
+    "t": 2.52
+   },
+   {
+    "w": "kam",
+    "t": 3.07
+   },
+   {
+    "w": "auf",
+    "t": 3.28
+   },
+   {
+    "w": "rund",
+    "t": 3.5
+   },
+   {
+    "w": "dreißig",
+    "t": 3.76
+   },
+   {
+    "w": "Tote",
+    "t": 4.16
+   },
+   {
+    "w": "pro",
+    "t": 4.43
+   },
+   {
+    "w": "Jahr,",
+    "t": 4.64
+   },
+   {
+    "w": "Aufzüge",
+    "t": 4.9
+   },
+   {
+    "w": "und",
+    "t": 5.31
+   },
+   {
+    "w": "Fahrtreppen",
+    "t": 5.52
+   },
+   {
+    "w": "zusammen,",
+    "t": 6.11
+   },
+   {
+    "w": "Beschäftigte",
+    "t": 6.56
+   },
+   {
+    "w": "eingerechnet.",
+    "t": 7.21
+   }
+  ]
+ },
+ {
+  "id": "s28_b",
+  "template": "comparison_split",
+  "start": 451.001,
+  "end": 461.669,
+  "duration": 10.668,
+  "narration": "Etwa die Hälfte der Toten an Aufzügen waren Menschen, die dort arbeiteten. Im Vordergrund standen Stürze in offene Schächte, Einklemmen und Stolpern, nicht der Seilriss aus dem Kino.",
+  "words": [
+   {
+    "w": "Etwa",
+    "t": 0.25
+   },
+   {
+    "w": "die",
+    "t": 0.51
+   },
+   {
+    "w": "Hälfte",
+    "t": 0.72
+   },
+   {
+    "w": "der",
+    "t": 1.07
+   },
+   {
+    "w": "Toten",
+    "t": 1.28
+   },
+   {
+    "w": "an",
+    "t": 1.58
+   },
+   {
+    "w": "Aufzügen",
+    "t": 1.75
+   },
+   {
+    "w": "waren",
+    "t": 2.19
+   },
+   {
+    "w": "Menschen,",
+    "t": 2.49
+   },
+   {
+    "w": "die",
+    "t": 2.94
+   },
+   {
+    "w": "dort",
+    "t": 3.15
+   },
+   {
+    "w": "arbeiteten.",
+    "t": 3.4
+   },
+   {
+    "w": "Im",
+    "t": 4.28
+   },
+   {
+    "w": "Vordergrund",
+    "t": 4.46
+   },
+   {
+    "w": "standen",
+    "t": 5.1
+   },
+   {
+    "w": "Stürze",
+    "t": 5.53
+   },
+   {
+    "w": "in",
+    "t": 5.91
+   },
+   {
+    "w": "offene",
+    "t": 6.09
+   },
+   {
+    "w": "Schächte,",
+    "t": 6.48
+   },
+   {
+    "w": "Einklemmen",
+    "t": 6.96
+   },
+   {
+    "w": "und",
+    "t": 7.55
+   },
+   {
+    "w": "Stolpern,",
+    "t": 7.78
+   },
+   {
+    "w": "nicht",
+    "t": 8.26
+   },
+   {
+    "w": "der",
+    "t": 8.59
+   },
+   {
+    "w": "Seilriss",
+    "t": 8.82
+   },
+   {
+    "w": "aus",
+    "t": 9.31
+   },
+   {
+    "w": "dem",
+    "t": 9.54
+   },
+   {
+    "w": "Kino.",
+    "t": 9.77
+   }
+  ]
+ },
+ {
+  "id": "s29_a",
+  "template": "stat_counter",
+  "start": 461.669,
+  "end": 467.733,
+  "duration": 6.064,
+  "narration": "Dem stehen nach älteren Branchenangaben aus anderen Jahren rund achtzehn Milliarden Aufzugsfahrten pro Jahr gegenüber.",
+  "words": [
+   {
+    "w": "Dem",
+    "t": 0
+   },
+   {
+    "w": "stehen",
+    "t": 0.21
+   },
+   {
+    "w": "nach",
+    "t": 0.57
+   },
+   {
+    "w": "älteren",
+    "t": 0.83
+   },
+   {
+    "w": "Branchenangaben",
+    "t": 1.24
+   },
+   {
+    "w": "aus",
+    "t": 2.02
+   },
+   {
+    "w": "anderen",
+    "t": 2.24
+   },
+   {
+    "w": "Jahren",
+    "t": 2.64
+   },
+   {
+    "w": "rund",
+    "t": 3
+   },
+   {
+    "w": "achtzehn",
+    "t": 3.26
+   },
+   {
+    "w": "Milliarden",
+    "t": 3.71
+   },
+   {
+    "w": "Aufzugsfahrten",
+    "t": 4.26
+   },
+   {
+    "w": "pro",
+    "t": 5
+   },
+   {
+    "w": "Jahr",
+    "t": 5.21
+   },
+   {
+    "w": "gegenüber.",
+    "t": 5.47
+   }
+  ]
+ },
+ {
+  "id": "s29_b",
+  "template": "map_or_scale",
+  "start": 467.733,
+  "end": 475.198,
+  "duration": 7.465,
+  "narration": "Grob überschlagen ergibt das für alle, die nicht am Aufzug arbeiten, in der Größenordnung einen Todesfall pro Milliarde Fahrten.",
+  "words": [
+   {
+    "w": "Grob",
+    "t": 0.25
+   },
+   {
+    "w": "überschlagen",
+    "t": 0.52
+   },
+   {
+    "w": "ergibt",
+    "t": 1.18
+   },
+   {
+    "w": "das",
+    "t": 1.54
+   },
+   {
+    "w": "für",
+    "t": 1.76
+   },
+   {
+    "w": "alle,",
+    "t": 1.98
+   },
+   {
+    "w": "die",
+    "t": 2.25
+   },
+   {
+    "w": "nicht",
+    "t": 2.46
+   },
+   {
+    "w": "am",
+    "t": 2.78
+   },
+   {
+    "w": "Aufzug",
+    "t": 2.95
+   },
+   {
+    "w": "arbeiten,",
+    "t": 3.32
+   },
+   {
+    "w": "in",
+    "t": 3.78
+   },
+   {
+    "w": "der",
+    "t": 3.95
+   },
+   {
+    "w": "Größenordnung",
+    "t": 4.17
+   },
+   {
+    "w": "einen",
+    "t": 4.87
+   },
+   {
+    "w": "Todesfall",
+    "t": 5.19
+   },
+   {
+    "w": "pro",
+    "t": 5.7
+   },
+   {
+    "w": "Milliarde",
+    "t": 5.92
+   },
+   {
+    "w": "Fahrten.",
+    "t": 6.43
+   }
+  ]
+ },
+ {
+  "id": "s30_a",
+  "template": "stat_counter",
+  "start": 475.198,
+  "end": 486.16,
+  "duration": 10.962,
+  "narration": "Und die Treppe? Eine Studie hat amerikanische Notaufnahmen von neunzehnhundertneunzig bis zweitausendzwölf ausgewertet. Im Schnitt kam dort etwa alle dreißig Sekunden jemand nach einem Treppenunfall an.",
+  "words": [
+   {
+    "w": "Und",
+    "t": 0
+   },
+   {
+    "w": "die",
+    "t": 0.21
+   },
+   {
+    "w": "Treppe?",
+    "t": 0.42
+   },
+   {
+    "w": "Eine",
+    "t": 1.11
+   },
+   {
+    "w": "Studie",
+    "t": 1.39
+   },
+   {
+    "w": "hat",
+    "t": 1.77
+   },
+   {
+    "w": "amerikanische",
+    "t": 1.99
+   },
+   {
+    "w": "Notaufnahmen",
+    "t": 2.72
+   },
+   {
+    "w": "von",
+    "t": 3.4
+   },
+   {
+    "w": "neunzehnhundertneunzig",
+    "t": 3.62
+   },
+   {
+    "w": "bis",
+    "t": 4.8
+   },
+   {
+    "w": "zweitausendzwölf",
+    "t": 5.02
+   },
+   {
+    "w": "ausgewertet.",
+    "t": 5.9
+   },
+   {
+    "w": "Im",
+    "t": 6.87
+   },
+   {
+    "w": "Schnitt",
+    "t": 7.03
+   },
+   {
+    "w": "kam",
+    "t": 7.41
+   },
+   {
+    "w": "dort",
+    "t": 7.62
+   },
+   {
+    "w": "etwa",
+    "t": 7.86
+   },
+   {
+    "w": "alle",
+    "t": 8.11
+   },
+   {
+    "w": "dreißig",
+    "t": 8.36
+   },
+   {
+    "w": "Sekunden",
+    "t": 8.75
+   },
+   {
+    "w": "jemand",
+    "t": 9.18
+   },
+   {
+    "w": "nach",
+    "t": 9.52
+   },
+   {
+    "w": "einem",
+    "t": 9.76
+   },
+   {
+    "w": "Treppenunfall",
+    "t": 10.06
+   },
+   {
+    "w": "an.",
+    "t": 10.71
+   }
+  ]
+ },
+ {
+  "id": "s30_b",
+  "template": "comparison_split",
+  "start": 486.16,
+  "end": 492.412,
+  "duration": 6.252,
+  "narration": "Das sind über eine Million Fälle pro Jahr, gegenüber rund siebzehntausend ernsthaften Verletzungen an Aufzügen und Fahrtreppen.",
+  "words": [
+   {
+    "w": "Das",
+    "t": 0.25
+   },
+   {
+    "w": "sind",
+    "t": 0.45
+   },
+   {
+    "w": "über",
+    "t": 0.69
+   },
+   {
+    "w": "eine",
+    "t": 0.93
+   },
+   {
+    "w": "Million",
+    "t": 1.17
+   },
+   {
+    "w": "Fälle",
+    "t": 1.55
+   },
+   {
+    "w": "pro",
+    "t": 1.83
+   },
+   {
+    "w": "Jahr,",
+    "t": 2.03
+   },
+   {
+    "w": "gegenüber",
+    "t": 2.27
+   },
+   {
+    "w": "rund",
+    "t": 2.73
+   },
+   {
+    "w": "siebzehntausend",
+    "t": 2.97
+   },
+   {
+    "w": "ernsthaften",
+    "t": 3.7
+   },
+   {
+    "w": "Verletzungen",
+    "t": 4.25
+   },
+   {
+    "w": "an",
+    "t": 4.84
+   },
+   {
+    "w": "Aufzügen",
+    "t": 5
+   },
+   {
+    "w": "und",
+    "t": 5.41
+   },
+   {
+    "w": "Fahrtreppen.",
+    "t": 5.61
+   }
+  ]
+ },
+ {
+  "id": "s30_c",
+  "template": "map_or_scale",
+  "start": 492.412,
+  "end": 497.642,
+  "duration": 5.23,
+  "narration": "Quellen und Definitionen unterscheiden sich, aber die Größenordnung ist deutlich.",
+  "words": [
+   {
+    "w": "Quellen",
+    "t": 0.25
+   },
+   {
+    "w": "und",
+    "t": 0.69
+   },
+   {
+    "w": "Definitionen",
+    "t": 0.92
+   },
+   {
+    "w": "unterscheiden",
+    "t": 1.61
+   },
+   {
+    "w": "sich,",
+    "t": 2.35
+   },
+   {
+    "w": "aber",
+    "t": 2.64
+   },
+   {
+    "w": "die",
+    "t": 2.92
+   },
+   {
+    "w": "Größenordnung",
+    "t": 3.15
+   },
+   {
+    "w": "ist",
+    "t": 3.89
+   },
+   {
+    "w": "deutlich.",
+    "t": 4.12
+   }
+  ]
+ },
+ {
+  "id": "s31_a",
+  "template": "timeline",
+  "start": 498.072,
+  "end": 501.673,
+  "duration": 3.601,
+  "narration": "Zurück zum achtundzwanzigsten Juli neunzehnhundertfünfundvierzig.",
+  "words": [
+   {
+    "w": "Zurück",
+    "t": 0
+   },
+   {
+    "w": "zum",
+    "t": 0.39
+   },
+   {
+    "w": "achtundzwanzigsten",
+    "t": 0.62
+   },
+   {
+    "w": "Juli",
+    "t": 1.64
+   },
+   {
+    "w": "neunzehnhundertfünfundvierzig.",
+    "t": 1.93
+   }
+  ]
+ },
+ {
+  "id": "s31_b",
+  "template": "historic_scene",
+  "start": 501.673,
+  "end": 509.503,
+  "duration": 7.83,
+  "narration": "Im dichten Nebel prallt ein amerikanischer Bomber gegen den Wolkenkratzer, auf Höhe des neunundsiebzigsten Stockwerks. Vierzehn Menschen sterben.",
+  "words": [
+   {
+    "w": "Im",
+    "t": 0.25
+   },
+   {
+    "w": "dichten",
+    "t": 0.41
+   },
+   {
+    "w": "Nebel",
+    "t": 0.81
+   },
+   {
+    "w": "prallt",
+    "t": 1.11
+   },
+   {
+    "w": "ein",
+    "t": 1.46
+   },
+   {
+    "w": "amerikanischer",
+    "t": 1.67
+   },
+   {
+    "w": "Bomber",
+    "t": 2.39
+   },
+   {
+    "w": "gegen",
+    "t": 2.74
+   },
+   {
+    "w": "den",
+    "t": 3.05
+   },
+   {
+    "w": "Wolkenkratzer,",
+    "t": 3.25
+   },
+   {
+    "w": "auf",
+    "t": 3.93
+   },
+   {
+    "w": "Höhe",
+    "t": 4.14
+   },
+   {
+    "w": "des",
+    "t": 4.4
+   },
+   {
+    "w": "neunundsiebzigsten",
+    "t": 4.61
+   },
+   {
+    "w": "Stockwerks.",
+    "t": 5.51
+   },
+   {
+    "w": "Vierzehn",
+    "t": 6.39
+   },
+   {
+    "w": "Menschen",
+    "t": 6.86
+   },
+   {
+    "w": "sterben.",
+    "t": 7.32
+   }
+  ]
+ },
+ {
+  "id": "s31_c",
+  "template": "shaft_xray",
+  "start": 509.503,
+  "end": 515.969,
+  "duration": 6.466,
+  "narration": "Ein Triebwerk durchschlägt das ganze Haus, das andere stürzt in einen Aufzugsschacht und beschädigt dort Seile.",
+  "words": [
+   {
+    "w": "Ein",
+    "t": 0.25
+   },
+   {
+    "w": "Triebwerk",
+    "t": 0.46
+   },
+   {
+    "w": "durchschlägt",
+    "t": 0.96
+   },
+   {
+    "w": "das",
+    "t": 1.6
+   },
+   {
+    "w": "ganze",
+    "t": 1.81
+   },
+   {
+    "w": "Haus,",
+    "t": 2.12
+   },
+   {
+    "w": "das",
+    "t": 2.38
+   },
+   {
+    "w": "andere",
+    "t": 2.6
+   },
+   {
+    "w": "stürzt",
+    "t": 2.95
+   },
+   {
+    "w": "in",
+    "t": 3.31
+   },
+   {
+    "w": "einen",
+    "t": 3.47
+   },
+   {
+    "w": "Aufzugsschacht",
+    "t": 3.78
+   },
+   {
+    "w": "und",
+    "t": 4.52
+   },
+   {
+    "w": "beschädigt",
+    "t": 4.73
+   },
+   {
+    "w": "dort",
+    "t": 5.28
+   },
+   {
+    "w": "Seile.",
+    "t": 5.54
+   }
+  ]
+ },
+ {
+  "id": "s32_a",
+  "template": "historic_scene",
+  "start": 515.969,
+  "end": 525.772,
+  "duration": 9.803,
+  "narration": "Oliver, die junge Frau vom Anfang, ist dort Liftführerin und erleidet im achtzigsten Stock schwere Verbrennungen. Helfer setzen sie in eine andere Kabine, um sie nach unten zu bringen.",
+  "words": [
+   {
+    "w": "Oliver,",
+    "t": 0
+   },
+   {
+    "w": "die",
+    "t": 0.38
+   },
+   {
+    "w": "junge",
+    "t": 0.6
+   },
+   {
+    "w": "Frau",
+    "t": 0.93
+   },
+   {
+    "w": "vom",
+    "t": 1.2
+   },
+   {
+    "w": "Anfang,",
+    "t": 1.43
+   },
+   {
+    "w": "ist",
+    "t": 1.81
+   },
+   {
+    "w": "dort",
+    "t": 2.03
+   },
+   {
+    "w": "Liftführerin",
+    "t": 2.31
+   },
+   {
+    "w": "und",
+    "t": 2.99
+   },
+   {
+    "w": "erleidet",
+    "t": 3.21
+   },
+   {
+    "w": "im",
+    "t": 3.69
+   },
+   {
+    "w": "achtzigsten",
+    "t": 3.87
+   },
+   {
+    "w": "Stock",
+    "t": 4.49
+   },
+   {
+    "w": "schwere",
+    "t": 4.82
+   },
+   {
+    "w": "Verbrennungen.",
+    "t": 5.25
+   },
+   {
+    "w": "Helfer",
+    "t": 6.32
+   },
+   {
+    "w": "setzen",
+    "t": 6.65
+   },
+   {
+    "w": "sie",
+    "t": 6.99
+   },
+   {
+    "w": "in",
+    "t": 7.19
+   },
+   {
+    "w": "eine",
+    "t": 7.35
+   },
+   {
+    "w": "andere",
+    "t": 7.6
+   },
+   {
+    "w": "Kabine,",
+    "t": 7.94
+   },
+   {
+    "w": "um",
+    "t": 8.27
+   },
+   {
+    "w": "sie",
+    "t": 8.43
+   },
+   {
+    "w": "nach",
+    "t": 8.63
+   },
+   {
+    "w": "unten",
+    "t": 8.88
+   },
+   {
+    "w": "zu",
+    "t": 9.17
+   },
+   {
+    "w": "bringen.",
+    "t": 9.33
+   }
+  ]
+ },
+ {
+  "id": "s32_b",
+  "template": "shaft_xray",
+  "start": 525.772,
+  "end": 530.377,
+  "duration": 4.605,
+  "narration": "Doch deren beschädigte Seile reißen, und die Kabine stürzt bis ins Untergeschoss.",
+  "words": [
+   {
+    "w": "Doch",
+    "t": 0.25
+   },
+   {
+    "w": "deren",
+    "t": 0.49
+   },
+   {
+    "w": "beschädigte",
+    "t": 0.77
+   },
+   {
+    "w": "Seile",
+    "t": 1.31
+   },
+   {
+    "w": "reißen,",
+    "t": 1.6
+   },
+   {
+    "w": "und",
+    "t": 1.92
+   },
+   {
+    "w": "die",
+    "t": 2.12
+   },
+   {
+    "w": "Kabine",
+    "t": 2.31
+   },
+   {
+    "w": "stürzt",
+    "t": 2.64
+   },
+   {
+    "w": "bis",
+    "t": 2.96
+   },
+   {
+    "w": "ins",
+    "t": 3.16
+   },
+   {
+    "w": "Untergeschoss.",
+    "t": 3.35
+   }
+  ]
+ },
+ {
+  "id": "s33_a",
+  "template": "shaft_xray",
+  "start": 530.377,
+  "end": 538.193,
+  "duration": 7.816,
+  "narration": "Warum griff keine Fangvorrichtung? Sicher belegt ist das nicht. Ein Fachbeitrag nennt ein ebenfalls beschädigtes Begrenzerseil.",
+  "words": [
+   {
+    "w": "Warum",
+    "t": 0
+   },
+   {
+    "w": "griff",
+    "t": 0.31
+   },
+   {
+    "w": "keine",
+    "t": 0.62
+   },
+   {
+    "w": "Fangvorrichtung?",
+    "t": 0.93
+   },
+   {
+    "w": "Sicher",
+    "t": 2.06
+   },
+   {
+    "w": "belegt",
+    "t": 2.44
+   },
+   {
+    "w": "ist",
+    "t": 2.83
+   },
+   {
+    "w": "das",
+    "t": 3.06
+   },
+   {
+    "w": "nicht.",
+    "t": 3.29
+   },
+   {
+    "w": "Ein",
+    "t": 3.96
+   },
+   {
+    "w": "Fachbeitrag",
+    "t": 4.21
+   },
+   {
+    "w": "nennt",
+    "t": 4.92
+   },
+   {
+    "w": "ein",
+    "t": 5.29
+   },
+   {
+    "w": "ebenfalls",
+    "t": 5.54
+   },
+   {
+    "w": "beschädigtes",
+    "t": 6.14
+   },
+   {
+    "w": "Begrenzerseil.",
+    "t": 6.9
+   }
+  ]
+ },
+ {
+  "id": "s33_b",
+  "template": "layers_overview",
+  "start": 538.193,
+  "end": 545.73,
+  "duration": 7.537,
+  "narration": "Dann hätte ein einziges Ereignis Tragseile und Auslöser zugleich getroffen, genau der Fall, gegen den getrennte Schichten sonst schützen.",
+  "words": [
+   {
+    "w": "Dann",
+    "t": 0.25
+   },
+   {
+    "w": "hätte",
+    "t": 0.5
+   },
+   {
+    "w": "ein",
+    "t": 0.8
+   },
+   {
+    "w": "einziges",
+    "t": 1.01
+   },
+   {
+    "w": "Ereignis",
+    "t": 1.45
+   },
+   {
+    "w": "Tragseile",
+    "t": 1.89
+   },
+   {
+    "w": "und",
+    "t": 2.37
+   },
+   {
+    "w": "Auslöser",
+    "t": 2.58
+   },
+   {
+    "w": "zugleich",
+    "t": 3.02
+   },
+   {
+    "w": "getroffen,",
+    "t": 3.46
+   },
+   {
+    "w": "genau",
+    "t": 3.94
+   },
+   {
+    "w": "der",
+    "t": 4.24
+   },
+   {
+    "w": "Fall,",
+    "t": 4.45
+   },
+   {
+    "w": "gegen",
+    "t": 4.7
+   },
+   {
+    "w": "den",
+    "t": 5
+   },
+   {
+    "w": "getrennte",
+    "t": 5.21
+   },
+   {
+    "w": "Schichten",
+    "t": 5.69
+   },
+   {
+    "w": "sonst",
+    "t": 6.18
+   },
+   {
+    "w": "schützen.",
+    "t": 6.48
+   }
+  ]
+ },
+ {
+  "id": "s34_a",
+  "template": "comparison_split",
+  "start": 545.73,
+  "end": 554.326,
+  "duration": 8.596,
+  "narration": "Und warum überlebte sie? Auch das ist nur rekonstruiert. Vermutlich wirkte die Kabine im engen Schacht wie ein Kolben und staute ein Luftpolster unter sich.",
+  "words": [
+   {
+    "w": "Und",
+    "t": 0
+   },
+   {
+    "w": "warum",
+    "t": 0.25
+   },
+   {
+    "w": "überlebte",
+    "t": 0.62
+   },
+   {
+    "w": "sie?",
+    "t": 1.21
+   },
+   {
+    "w": "Auch",
+    "t": 1.8
+   },
+   {
+    "w": "das",
+    "t": 2.07
+   },
+   {
+    "w": "ist",
+    "t": 2.3
+   },
+   {
+    "w": "nur",
+    "t": 2.53
+   },
+   {
+    "w": "rekonstruiert.",
+    "t": 2.75
+   },
+   {
+    "w": "Vermutlich",
+    "t": 3.82
+   },
+   {
+    "w": "wirkte",
+    "t": 4.32
+   },
+   {
+    "w": "die",
+    "t": 4.65
+   },
+   {
+    "w": "Kabine",
+    "t": 4.85
+   },
+   {
+    "w": "im",
+    "t": 5.18
+   },
+   {
+    "w": "engen",
+    "t": 5.33
+   },
+   {
+    "w": "Schacht",
+    "t": 5.61
+   },
+   {
+    "w": "wie",
+    "t": 5.99
+   },
+   {
+    "w": "ein",
+    "t": 6.18
+   },
+   {
+    "w": "Kolben",
+    "t": 6.38
+   },
+   {
+    "w": "und",
+    "t": 6.71
+   },
+   {
+    "w": "staute",
+    "t": 6.91
+   },
+   {
+    "w": "ein",
+    "t": 7.24
+   },
+   {
+    "w": "Luftpolster",
+    "t": 7.43
+   },
+   {
+    "w": "unter",
+    "t": 7.98
+   },
+   {
+    "w": "sich.",
+    "t": 8.26
+   }
+  ]
+ },
+ {
+  "id": "s34_b",
+  "template": "shaft_xray",
+  "start": 554.326,
+  "end": 563.711,
+  "duration": 9.385,
+  "narration": "Dazu hatte sich wohl Seil in der Grube aufgehäuft und federte den Aufprall ab. Luftdicht ist aber kein Aufzugsschacht, und meist ist der Kolbeneffekt deutlich schwächer.",
+  "words": [
+   {
+    "w": "Dazu",
+    "t": 0.25
+   },
+   {
+    "w": "hatte",
+    "t": 0.5
+   },
+   {
+    "w": "sich",
+    "t": 0.8
+   },
+   {
+    "w": "wohl",
+    "t": 1.05
+   },
+   {
+    "w": "Seil",
+    "t": 1.3
+   },
+   {
+    "w": "in",
+    "t": 1.55
+   },
+   {
+    "w": "der",
+    "t": 1.71
+   },
+   {
+    "w": "Grube",
+    "t": 1.92
+   },
+   {
+    "w": "aufgehäuft",
+    "t": 2.22
+   },
+   {
+    "w": "und",
+    "t": 2.74
+   },
+   {
+    "w": "federte",
+    "t": 2.95
+   },
+   {
+    "w": "den",
+    "t": 3.34
+   },
+   {
+    "w": "Aufprall",
+    "t": 3.54
+   },
+   {
+    "w": "ab.",
+    "t": 3.98
+   },
+   {
+    "w": "Luftdicht",
+    "t": 4.48
+   },
+   {
+    "w": "ist",
+    "t": 4.95
+   },
+   {
+    "w": "aber",
+    "t": 5.15
+   },
+   {
+    "w": "kein",
+    "t": 5.4
+   },
+   {
+    "w": "Aufzugsschacht,",
+    "t": 5.65
+   },
+   {
+    "w": "und",
+    "t": 6.35
+   },
+   {
+    "w": "meist",
+    "t": 6.55
+   },
+   {
+    "w": "ist",
+    "t": 6.85
+   },
+   {
+    "w": "der",
+    "t": 7.05
+   },
+   {
+    "w": "Kolbeneffekt",
+    "t": 7.25
+   },
+   {
+    "w": "deutlich",
+    "t": 7.86
+   },
+   {
+    "w": "schwächer.",
+    "t": 8.29
+   }
+  ]
+ },
+ {
+  "id": "s35_a",
+  "template": "physics_fall",
+  "start": 563.711,
+  "end": 570.313,
+  "duration": 6.602,
+  "narration": "Ungebremst hätte der Fall über rund fünfundsiebzig Stockwerke rechnerisch mehr als zweihundertfünfzig Kilometer pro Stunde ergeben.",
+  "words": [
+   {
+    "w": "Ungebremst",
+    "t": 0
+   },
+   {
+    "w": "hätte",
+    "t": 0.54
+   },
+   {
+    "w": "der",
+    "t": 0.84
+   },
+   {
+    "w": "Fall",
+    "t": 1.05
+   },
+   {
+    "w": "über",
+    "t": 1.31
+   },
+   {
+    "w": "rund",
+    "t": 1.57
+   },
+   {
+    "w": "fünfundsiebzig",
+    "t": 1.83
+   },
+   {
+    "w": "Stockwerke",
+    "t": 2.55
+   },
+   {
+    "w": "rechnerisch",
+    "t": 3.09
+   },
+   {
+    "w": "mehr",
+    "t": 3.68
+   },
+   {
+    "w": "als",
+    "t": 3.93
+   },
+   {
+    "w": "zweihundertfünfzig",
+    "t": 4.15
+   },
+   {
+    "w": "Kilometer",
+    "t": 5.06
+   },
+   {
+    "w": "pro",
+    "t": 5.55
+   },
+   {
+    "w": "Stunde",
+    "t": 5.76
+   },
+   {
+    "w": "ergeben.",
+    "t": 6.11
+   }
+  ]
+ },
+ {
+  "id": "s35_b",
+  "template": "comparison_split",
+  "start": 570.313,
+  "end": 579.331,
+  "duration": 9.018,
+  "narration": "Oliver brach sich Becken, Rücken und Hals, aber sie überlebte. Nach allem, was sich rekonstruieren lässt, retteten sie eher Glück und Physik als Sicherheitstechnik.",
+  "words": [
+   {
+    "w": "Oliver",
+    "t": 0.25
+   },
+   {
+    "w": "brach",
+    "t": 0.65
+   },
+   {
+    "w": "sich",
+    "t": 1
+   },
+   {
+    "w": "Becken,",
+    "t": 1.29
+   },
+   {
+    "w": "Rücken",
+    "t": 1.69
+   },
+   {
+    "w": "und",
+    "t": 2.09
+   },
+   {
+    "w": "Hals,",
+    "t": 2.33
+   },
+   {
+    "w": "aber",
+    "t": 2.63
+   },
+   {
+    "w": "sie",
+    "t": 2.92
+   },
+   {
+    "w": "überlebte.",
+    "t": 3.16
+   },
+   {
+    "w": "Nach",
+    "t": 4.06
+   },
+   {
+    "w": "allem,",
+    "t": 4.32
+   },
+   {
+    "w": "was",
+    "t": 4.61
+   },
+   {
+    "w": "sich",
+    "t": 4.82
+   },
+   {
+    "w": "rekonstruieren",
+    "t": 5.07
+   },
+   {
+    "w": "lässt,",
+    "t": 5.78
+   },
+   {
+    "w": "retteten",
+    "t": 6.08
+   },
+   {
+    "w": "sie",
+    "t": 6.52
+   },
+   {
+    "w": "eher",
+    "t": 6.73
+   },
+   {
+    "w": "Glück",
+    "t": 6.98
+   },
+   {
+    "w": "und",
+    "t": 7.28
+   },
+   {
+    "w": "Physik",
+    "t": 7.48
+   },
+   {
+    "w": "als",
+    "t": 7.83
+   },
+   {
+    "w": "Sicherheitstechnik.",
+    "t": 8.03
+   }
+  ]
+ },
+ {
+  "id": "s35_c",
+  "template": "layers_overview",
+  "start": 579.331,
+  "end": 584.11,
+  "duration": 4.779,
+  "narration": "Heute müssten dafür alle Seile reißen und zugleich die Fangvorrichtung versagen.",
+  "words": [
+   {
+    "w": "Heute",
+    "t": 0.25
+   },
+   {
+    "w": "müssten",
+    "t": 0.55
+   },
+   {
+    "w": "dafür",
+    "t": 0.94
+   },
+   {
+    "w": "alle",
+    "t": 1.23
+   },
+   {
+    "w": "Seile",
+    "t": 1.48
+   },
+   {
+    "w": "reißen",
+    "t": 1.78
+   },
+   {
+    "w": "und",
+    "t": 2.12
+   },
+   {
+    "w": "zugleich",
+    "t": 2.33
+   },
+   {
+    "w": "die",
+    "t": 2.76
+   },
+   {
+    "w": "Fangvorrichtung",
+    "t": 2.97
+   },
+   {
+    "w": "versagen.",
+    "t": 3.72
+   }
+  ]
+ },
+ {
+  "id": "s36_a",
+  "template": "shaft_xray",
+  "start": 584.54,
+  "end": 590.264,
+  "duration": 5.724,
+  "narration": "Zusammengefasst: Die Kabine hängt an mehreren Seilen, in Europa jedes mit mindestens zwölffacher Sicherheit.",
+  "words": [
+   {
+    "w": "Zusammengefasst:",
+    "t": 0
+   },
+   {
+    "w": "Die",
+    "t": 0.82
+   },
+   {
+    "w": "Kabine",
+    "t": 1.05
+   },
+   {
+    "w": "hängt",
+    "t": 1.42
+   },
+   {
+    "w": "an",
+    "t": 1.75
+   },
+   {
+    "w": "mehreren",
+    "t": 1.92
+   },
+   {
+    "w": "Seilen,",
+    "t": 2.39
+   },
+   {
+    "w": "in",
+    "t": 2.77
+   },
+   {
+    "w": "Europa",
+    "t": 2.94
+   },
+   {
+    "w": "jedes",
+    "t": 3.32
+   },
+   {
+    "w": "mit",
+    "t": 3.64
+   },
+   {
+    "w": "mindestens",
+    "t": 3.86
+   },
+   {
+    "w": "zwölffacher",
+    "t": 4.44
+   },
+   {
+    "w": "Sicherheit.",
+    "t": 5.06
+   }
+  ]
+ },
+ {
+  "id": "s36_b",
+  "template": "governor",
+  "start": 590.264,
+  "end": 596.024,
+  "duration": 5.76,
+  "narration": "Wird sie zu schnell, lässt ein Schalter die Bremse einfallen, spätestens wenn der Begrenzer sein Seil festhält.",
+  "words": [
+   {
+    "w": "Wird",
+    "t": 0.25
+   },
+   {
+    "w": "sie",
+    "t": 0.5
+   },
+   {
+    "w": "zu",
+    "t": 0.71
+   },
+   {
+    "w": "schnell,",
+    "t": 0.87
+   },
+   {
+    "w": "lässt",
+    "t": 1.26
+   },
+   {
+    "w": "ein",
+    "t": 1.56
+   },
+   {
+    "w": "Schalter",
+    "t": 1.77
+   },
+   {
+    "w": "die",
+    "t": 2.21
+   },
+   {
+    "w": "Bremse",
+    "t": 2.42
+   },
+   {
+    "w": "einfallen,",
+    "t": 2.76
+   },
+   {
+    "w": "spätestens",
+    "t": 3.25
+   },
+   {
+    "w": "wenn",
+    "t": 3.78
+   },
+   {
+    "w": "der",
+    "t": 4.03
+   },
+   {
+    "w": "Begrenzer",
+    "t": 4.24
+   },
+   {
+    "w": "sein",
+    "t": 4.72
+   },
+   {
+    "w": "Seil",
+    "t": 4.98
+   },
+   {
+    "w": "festhält.",
+    "t": 5.23
+   }
+  ]
+ },
+ {
+  "id": "s36_c",
+  "template": "layers_overview",
+  "start": 596.024,
+  "end": 604.652,
+  "duration": 8.628,
+  "narration": "Dann klemmen Keile die Kabine an den Schienen fest. Puffer sind für langsame Überfahrten da, und Prüfer kontrollieren regelmäßig die ganze Kette.",
+  "words": [
+   {
+    "w": "Dann",
+    "t": 0.25
+   },
+   {
+    "w": "klemmen",
+    "t": 0.53
+   },
+   {
+    "w": "Keile",
+    "t": 0.96
+   },
+   {
+    "w": "die",
+    "t": 1.28
+   },
+   {
+    "w": "Kabine",
+    "t": 1.51
+   },
+   {
+    "w": "an",
+    "t": 1.89
+   },
+   {
+    "w": "den",
+    "t": 2.07
+   },
+   {
+    "w": "Schienen",
+    "t": 2.29
+   },
+   {
+    "w": "fest.",
+    "t": 2.77
+   },
+   {
+    "w": "Puffer",
+    "t": 3.39
+   },
+   {
+    "w": "sind",
+    "t": 3.74
+   },
+   {
+    "w": "für",
+    "t": 4
+   },
+   {
+    "w": "langsame",
+    "t": 4.21
+   },
+   {
+    "w": "Überfahrten",
+    "t": 4.66
+   },
+   {
+    "w": "da,",
+    "t": 5.24
+   },
+   {
+    "w": "und",
+    "t": 5.41
+   },
+   {
+    "w": "Prüfer",
+    "t": 5.62
+   },
+   {
+    "w": "kontrollieren",
+    "t": 5.97
+   },
+   {
+    "w": "regelmäßig",
+    "t": 6.65
+   },
+   {
+    "w": "die",
+    "t": 7.19
+   },
+   {
+    "w": "ganze",
+    "t": 7.4
+   },
+   {
+    "w": "Kette.",
+    "t": 7.7
+   }
+  ]
+ },
+ {
+  "id": "s37_a",
+  "template": "title_card",
+  "start": 604.652,
+  "end": 612.053,
+  "duration": 7.401,
+  "narration": "Das war die Sicherheitskette im Röntgenblick. Wenn du ab jetzt mit anderen Augen in den Aufzug steigst, dann abonniere Visual Science.",
+  "words": [
+   {
+    "w": "Das",
+    "t": 0
+   },
+   {
+    "w": "war",
+    "t": 0.21
+   },
+   {
+    "w": "die",
+    "t": 0.42
+   },
+   {
+    "w": "Sicherheitskette",
+    "t": 0.63
+   },
+   {
+    "w": "im",
+    "t": 1.45
+   },
+   {
+    "w": "Röntgenblick.",
+    "t": 1.61
+   },
+   {
+    "w": "Wenn",
+    "t": 2.59
+   },
+   {
+    "w": "du",
+    "t": 2.83
+   },
+   {
+    "w": "ab",
+    "t": 2.99
+   },
+   {
+    "w": "jetzt",
+    "t": 3.14
+   },
+   {
+    "w": "mit",
+    "t": 3.43
+   },
+   {
+    "w": "anderen",
+    "t": 3.63
+   },
+   {
+    "w": "Augen",
+    "t": 4.01
+   },
+   {
+    "w": "in",
+    "t": 4.29
+   },
+   {
+    "w": "den",
+    "t": 4.45
+   },
+   {
+    "w": "Aufzug",
+    "t": 4.65
+   },
+   {
+    "w": "steigst,",
+    "t": 4.98
+   },
+   {
+    "w": "dann",
+    "t": 5.36
+   },
+   {
+    "w": "abonniere",
+    "t": 5.6
+   },
+   {
+    "w": "Visual",
+    "t": 6.07
+   },
+   {
+    "w": "Science.",
+    "t": 6.4
+   }
+  ]
+ },
+ {
+  "id": "s38_a",
+  "template": "end_card",
+  "start": 612.053,
+  "end": 622.664,
+  "duration": 10.611,
+  "narration": "Nächstes Mal wird es richtig schnell. Was passiert im Motor bei achttausend Umdrehungen pro Minute? Bis dahin: gute Fahrt, egal in welche Richtung.",
+  "words": [
+   {
+    "w": "Nächstes",
+    "t": 0
+   },
+   {
+    "w": "Mal",
+    "t": 0.4
+   },
+   {
+    "w": "wird",
+    "t": 0.58
+   },
+   {
+    "w": "es",
+    "t": 0.81
+   },
+   {
+    "w": "richtig",
+    "t": 0.96
+   },
+   {
+    "w": "schnell.",
+    "t": 1.31
+   },
+   {
+    "w": "Was",
+    "t": 2.01
+   },
+   {
+    "w": "passiert",
+    "t": 2.24
+   },
+   {
+    "w": "im",
+    "t": 2.73
+   },
+   {
+    "w": "Motor",
+    "t": 2.91
+   },
+   {
+    "w": "bei",
+    "t": 3.24
+   },
+   {
+    "w": "achttausend",
+    "t": 3.47
+   },
+   {
+    "w": "Umdrehungen",
+    "t": 4.12
+   },
+   {
+    "w": "pro",
+    "t": 4.76
+   },
+   {
+    "w": "Minute?",
+    "t": 4.99
+   },
+   {
+    "w": "Bis",
+    "t": 5.72
+   },
+   {
+    "w": "dahin:",
+    "t": 5.97
+   },
+   {
+    "w": "gute",
+    "t": 6.34
+   },
+   {
+    "w": "Fahrt,",
+    "t": 6.65
+   },
+   {
+    "w": "egal",
+    "t": 7.02
+   },
+   {
+    "w": "in",
+    "t": 7.33
+   },
+   {
+    "w": "welche",
+    "t": 7.53
+   },
+   {
+    "w": "Richtung.",
+    "t": 7.95
+   }
+  ]
+ }
+]

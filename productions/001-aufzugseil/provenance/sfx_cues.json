@@ -1,0 +1,330 @@
+[
+ {
+  "t": 0,
+  "name": "rumble"
+ },
+ {
+  "t": 7.837,
+  "name": "rope_snap"
+ },
+ {
+  "t": 10.306,
+  "name": "riser"
+ },
+ {
+  "t": 19.055,
+  "name": "metal_creak"
+ },
+ {
+  "t": 23.736,
+  "name": "impact"
+ },
+ {
+  "t": 34.586999999999996,
+  "name": "whoosh"
+ },
+ {
+  "t": 41.089,
+  "name": "rope_snap"
+ },
+ {
+  "t": 50.665,
+  "name": "ratchet"
+ },
+ {
+  "t": 58.731,
+  "name": "impact"
+ },
+ {
+  "t": 62.015,
+  "name": "whoosh"
+ },
+ {
+  "t": 65.197,
+  "name": "whoosh"
+ },
+ {
+  "t": 68.72099999999999,
+  "name": "riser"
+ },
+ {
+  "t": 78.85600000000001,
+  "name": "metal_creak"
+ },
+ {
+  "t": 82.69,
+  "name": "click"
+ },
+ {
+  "t": 90.458,
+  "name": "metal_creak"
+ },
+ {
+  "t": 96.066,
+  "name": "click"
+ },
+ {
+  "t": 110.224,
+  "name": "metal_creak"
+ },
+ {
+  "t": 113.502,
+  "name": "riser"
+ },
+ {
+  "t": 126.898,
+  "name": "rumble"
+ },
+ {
+  "t": 132.483,
+  "name": "rope_snap"
+ },
+ {
+  "t": 142.707,
+  "name": "click"
+ },
+ {
+  "t": 147.644,
+  "name": "whoosh"
+ },
+ {
+  "t": 152.554,
+  "name": "click"
+ },
+ {
+  "t": 160.147,
+  "name": "rumble"
+ },
+ {
+  "t": 168.249,
+  "name": "whoosh"
+ },
+ {
+  "t": 174.143,
+  "name": "ratchet"
+ },
+ {
+  "t": 181.378,
+  "name": "click"
+ },
+ {
+  "t": 184.32,
+  "name": "impact"
+ },
+ {
+  "t": 196.926,
+  "name": "metal_creak"
+ },
+ {
+  "t": 204.47199999999998,
+  "name": "click"
+ },
+ {
+  "t": 208.77499999999998,
+  "name": "click"
+ },
+ {
+  "t": 216.802,
+  "name": "impact"
+ },
+ {
+  "t": 224.315,
+  "name": "metal_creak"
+ },
+ {
+  "t": 231.17,
+  "name": "click"
+ },
+ {
+  "t": 240.135,
+  "name": "rumble"
+ },
+ {
+  "t": 248.896,
+  "name": "click"
+ },
+ {
+  "t": 267.015,
+  "name": "whoosh"
+ },
+ {
+  "t": 276.899,
+  "name": "impact"
+ },
+ {
+  "t": 280.61899999999997,
+  "name": "click"
+ },
+ {
+  "t": 290.911,
+  "name": "sparks_screech"
+ },
+ {
+  "t": 297.768,
+  "name": "whoosh"
+ },
+ {
+  "t": 308.02,
+  "name": "impact"
+ },
+ {
+  "t": 315.429,
+  "name": "whoosh"
+ },
+ {
+  "t": 321.24399999999997,
+  "name": "click"
+ },
+ {
+  "t": 331.27799999999996,
+  "name": "click"
+ },
+ {
+  "t": 338.37,
+  "name": "hydraulic_hiss"
+ },
+ {
+  "t": 344.724,
+  "name": "click"
+ },
+ {
+  "t": 348.156,
+  "name": "riser"
+ },
+ {
+  "t": 358.618,
+  "name": "impact"
+ },
+ {
+  "t": 364.651,
+  "name": "riser"
+ },
+ {
+  "t": 373.709,
+  "name": "whoosh"
+ },
+ {
+  "t": 378.293,
+  "name": "click"
+ },
+ {
+  "t": 384.864,
+  "name": "click"
+ },
+ {
+  "t": 388.923,
+  "name": "whoosh"
+ },
+ {
+  "t": 399.05,
+  "name": "click"
+ },
+ {
+  "t": 402.864,
+  "name": "impact"
+ },
+ {
+  "t": 406.679,
+  "name": "rumble"
+ },
+ {
+  "t": 412.8,
+  "name": "metal_creak"
+ },
+ {
+  "t": 417.59200000000004,
+  "name": "riser"
+ },
+ {
+  "t": 428.381,
+  "name": "whoosh"
+ },
+ {
+  "t": 437.915,
+  "name": "impact"
+ },
+ {
+  "t": 443.263,
+  "name": "click"
+ },
+ {
+  "t": 450.65099999999995,
+  "name": "whoosh"
+ },
+ {
+  "t": 459.269,
+  "name": "riser"
+ },
+ {
+  "t": 467.383,
+  "name": "whoosh"
+ },
+ {
+  "t": 475.39799999999997,
+  "name": "click"
+ },
+ {
+  "t": 485.81,
+  "name": "whoosh"
+ },
+ {
+  "t": 497.722,
+  "name": "whoosh"
+ },
+ {
+  "t": 501.673,
+  "name": "impact"
+ },
+ {
+  "t": 509.703,
+  "name": "metal_creak"
+ },
+ {
+  "t": 526.3720000000001,
+  "name": "rope_snap"
+ },
+ {
+  "t": 530.377,
+  "name": "rumble"
+ },
+ {
+  "t": 538.193,
+  "name": "rumble"
+ },
+ {
+  "t": 545.38,
+  "name": "whoosh"
+ },
+ {
+  "t": 554.926,
+  "name": "hydraulic_hiss"
+ },
+ {
+  "t": 563.361,
+  "name": "whoosh"
+ },
+ {
+  "t": 570.513,
+  "name": "click"
+ },
+ {
+  "t": 576.931,
+  "name": "riser"
+ },
+ {
+  "t": 590.764,
+  "name": "ratchet"
+ },
+ {
+  "t": 593.624,
+  "name": "riser"
+ },
+ {
+  "t": 604.302,
+  "name": "whoosh"
+ },
+ {
+  "t": 609.653,
+  "name": "riser"
+ }
+]

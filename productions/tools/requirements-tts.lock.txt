@@ -1,0 +1,15 @@
+# Gepinnte, tatsächlich getestete Python-Abhängigkeiten der lokalen Sprachsynthese.
+# Erzeugt am 2026-09-26 per "pip freeze" aus der in dieser Sitzung laufenden venv.
+# System-Python: 3.11.15 (Ubuntu)
+# Installation: siehe productions/tools/README.md, Abschnitt "Einrichtung".
+coqui-tts==0.27.5
+gruut==2.4.0
+gruut-ipa==0.13.0
+gruut_lang_de==2.0.1
+librosa==0.11.0
+numpy==2.4.6
+scipy==1.17.1
+soundfile==0.14.0
+torch==2.8.0
+torchaudio==2.8.0
+transformers==4.57.6

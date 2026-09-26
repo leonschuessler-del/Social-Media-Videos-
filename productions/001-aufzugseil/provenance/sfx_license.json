@@ -1,0 +1,98 @@
+{
+ "tracks": {
+  "whoosh.wav": {
+   "title": "whoosh",
+   "tags": [
+    "whoosh"
+   ],
+   "license": "own-generated (procedural synthesis, audio_synth.py)",
+   "attributionRequired": false,
+   "source": "Visual Science"
+  },
+  "impact.wav": {
+   "title": "impact",
+   "tags": [
+    "impact"
+   ],
+   "license": "own-generated (procedural synthesis, audio_synth.py)",
+   "attributionRequired": false,
+   "source": "Visual Science"
+  },
+  "rope_snap.wav": {
+   "title": "rope_snap",
+   "tags": [
+    "rope",
+    "snap"
+   ],
+   "license": "own-generated (procedural synthesis, audio_synth.py)",
+   "attributionRequired": false,
+   "source": "Visual Science"
+  },
+  "metal_creak.wav": {
+   "title": "metal_creak",
+   "tags": [
+    "metal",
+    "creak"
+   ],
+   "license": "own-generated (procedural synthesis, audio_synth.py)",
+   "attributionRequired": false,
+   "source": "Visual Science"
+  },
+  "ratchet.wav": {
+   "title": "ratchet",
+   "tags": [
+    "ratchet"
+   ],
+   "license": "own-generated (procedural synthesis, audio_synth.py)",
+   "attributionRequired": false,
+   "source": "Visual Science"
+  },
+  "sparks_screech.wav": {
+   "title": "sparks_screech",
+   "tags": [
+    "sparks",
+    "screech"
+   ],
+   "license": "own-generated (procedural synthesis, audio_synth.py)",
+   "attributionRequired": false,
+   "source": "Visual Science"
+  },
+  "hydraulic_hiss.wav": {
+   "title": "hydraulic_hiss",
+   "tags": [
+    "hydraulic",
+    "hiss"
+   ],
+   "license": "own-generated (procedural synthesis, audio_synth.py)",
+   "attributionRequired": false,
+   "source": "Visual Science"
+  },
+  "click.wav": {
+   "title": "click",
+   "tags": [
+    "click"
+   ],
+   "license": "own-generated (procedural synthesis, audio_synth.py)",
+   "attributionRequired": false,
+   "source": "Visual Science"
+  },
+  "rumble.wav": {
+   "title": "rumble",
+   "tags": [
+    "rumble"
+   ],
+   "license": "own-generated (procedural synthesis, audio_synth.py)",
+   "attributionRequired": false,
+   "source": "Visual Science"
+  },
+  "riser.wav": {
+   "title": "riser",
+   "tags": [
+    "riser"
+   ],
+   "license": "own-generated (procedural synthesis, audio_synth.py)",
+   "attributionRequired": false,
+   "source": "Visual Science"
+  }
+ }
+}
