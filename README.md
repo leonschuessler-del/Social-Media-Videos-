@@ -42,3 +42,23 @@ python scripts/cut_video.py raw_videos/input.mp4 --start 0 --end 15 --vertical
 ```
 
 Fertige Clips landen in `exports/`.
+
+## Produktvideo aus einem Produktbild (TikTok, 20 s)
+
+`scripts/product_video.py` rendert ein 9:16-Produktvideo (1080x1920, 30 fps, 20 s) aus einem
+freigestellten Produktbild (PNG mit Transparenz), animierten Text-Overlays und dem Song aus
+`assets/audio/`. Die Szenen (Hook, Leder-Detail, Passform, 4 Farben, Bewertungen/Preis, Call-to-Action)
+sind im Skript unter `SCENES` definiert und lassen sich dort anpassen.
+
+```bash
+pip install -r requirements.txt
+python scripts/product_video.py \
+    --product assets/images/skiin_more_cognac.png \
+    --audio assets/audio/song_tiktok.m4a \
+    --out exports/skiin_more_tiktok.mp4
+
+# nur Standbilder pro Szene zur Kontrolle rendern
+python scripts/product_video.py --preview --out exports/check.mp4
+```
+
+Ein systemweites `ffmpeg` wird nicht benötigt, das Skript nutzt das Binary aus `imageio-ffmpeg`.
