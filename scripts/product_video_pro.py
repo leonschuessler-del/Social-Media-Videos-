@@ -66,8 +66,8 @@ T_MACRO2 = (6.30, 7.79)
 T_CAMERA = (7.79, 10.75)
 T_FIT = (10.75, 12.98)
 T_COLORS = (12.98, 16.68)
-T_FINALE = (16.68, 18.91)
-T_END = (18.91, 20.0)
+T_FINALE = (16.68, 18.16)
+T_END = (18.16, 20.0)
 
 
 # ----------------------------------------------------------------------------
@@ -164,7 +164,10 @@ def tint(img, target):
     mask = alpha[..., 0] > 128
     l0 = lum[mask].mean()
     t = np.array(target, dtype=np.float32)
-    out = np.clip(t * (lum[..., None] / l0), 0, 255)
+    tinted = np.clip(t * (lum[..., None] / l0), 0, 255)
+    sat = rgb.max(axis=2) - rgb.min(axis=2)
+    w = np.clip((sat - 14) / 36.0, 0, 1)[..., None]      # nur gesättigtes Leder/Plateau umfärben
+    out = rgb * (1 - w) + tinted * w
     return Image.fromarray(np.concatenate([out, alpha], axis=2).astype(np.uint8))
 
 
@@ -227,7 +230,8 @@ def add_sweep(img, pos, width=0.10, strength=0.55, angle=-30.0):
     a = np.array(img).astype(np.float32)
     d = _diag(a.shape[:2], angle)
     band = np.exp(-((d - pos) / width) ** 2)
-    m = band * strength * (a[..., 3] / 255.0)
+    lum = (a[..., :3] @ np.array([0.299, 0.587, 0.114], dtype=np.float32)) / 255.0
+    m = band * strength * (a[..., 3] / 255.0) * np.sqrt(np.clip(lum, 0, 1))
     a[..., :3] += m[..., None] * (255 - a[..., :3])
     return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
 
@@ -328,12 +332,12 @@ def text_layer(text, size, color, bold=True, tracking=0.0, alpha=1.0):
     return layer
 
 
-def caption(canvas, text, cy, t, size=30, color=GOLD, cx=W / 2, hairline=True, fade_out=None):
+def caption(canvas, text, cy, t, size=30, color=GOLD, cx=W / 2, hairline=True, fade_out=None, fade_in=0.45):
     """Kleine, gesperrte Versalien mit Tracking-In-Animation und Haarlinie."""
     if t <= 0:
         return
-    e = ease_out_expo(t / 0.7)
-    a = smoothstep(t / 0.45)
+    e = ease_out_expo(t / (fade_in * 1.55))
+    a = smoothstep(t / fade_in)
     if fade_out is not None:
         a *= 1 - smoothstep(fade_out)
     if a <= 0:
@@ -353,6 +357,9 @@ def headline(canvas, text, cy, t, size=104, color=WHITE, stagger=0.09, dur=0.55,
     if t <= 0:
         return
     words = text.split(" ")
+    full = font(size, True).getlength(text)
+    if full > 0.72 * W:
+        size = int(size * 0.72 * W / full)
     f = font(size, True)
     space = f.getlength(" ")
     layers = [text_layer(wd, size, color, True) for wd in words]
@@ -534,7 +541,7 @@ def ring_callout(canvas, cx, cy, r, t, label=None, t_label=0.0, color=WHITE):
         el = ease_out_expo(t_label / 0.6)
         lay = text_layer(label.upper(), 26, color, True, tracking=7, alpha=smoothstep((t_label - 0.25) / 0.45))
         # Label rechtsbündig am Sicherheitsrand, Haarlinie wächst vom Ring dorthin
-        lx = W - 72 - lay.width
+        lx = int(W * 0.87) - lay.width
         x0 = cx + r + 10
         ln = int(lerp(0, max(10, lx - 14 - x0), el))
         line = Image.new("RGBA", (max(1, ln), 2), color + (210,))
@@ -553,7 +560,7 @@ def s_reveal(t):
     if t < 1.0:
         e = ease_out_expo(t / 0.5)
         width = int(720 * e)
-        fade = 1 - smoothstep((t - 0.55) / 0.4)
+        fade = 1 - smoothstep((t - 0.45) / 0.25)
         if width > 2 and fade > 0:
             line = Image.new("RGBA", (width, 3), WHITE + (int(255 * fade),))
             glow = Image.new("RGBA", (width + 80, 60), (0, 0, 0, 0))
@@ -596,7 +603,7 @@ def s_macro1(t):
     off = (off[0] + whip * 900, off[1])
     c = macro(CTX["product"], lm["grain"], 2.1, off)
     c = depth_of_field(c, radius=0.7, blur=4)
-    caption(c, "Natürliche Maserung", H * 0.80, t - 0.2, size=32, fade_out=(t - 1.18) / 0.14)
+    caption(c, "Natürliche Maserung", H * 0.80, t - 0.05, size=34, fade_out=(t - 1.22) / 0.1)
     return c, {"mblur": int(whip * 70)}
 
 
@@ -605,10 +612,12 @@ def s_macro2(t):
     lm = CTX["lm"]
     win = 1 - ease_out_expo(t / 0.22)
     drift = ease_in_out(t / 1.4)
-    off = (lerp(40, -30, drift) - win * 900, lerp(30, -30, drift))
-    c = macro(CTX["product"], lm["logo"], 2.4, off)
+    # Bildmitte so weit über dem Logo, dass der Ausschnitt nicht unter die Hülle hinausläuft
+    center = (lm["logo"][0], CTX["product"].height - H / 2.1 / 2 - 40)
+    off = (lerp(40, -30, drift) - win * 900, lerp(12, -12, drift))
+    c = macro(CTX["product"], center, 2.1, off)
     c = depth_of_field(c, radius=0.7, blur=4)
-    caption(c, "Geprägtes Logo", H * 0.80, t - 0.3, size=32, fade_out=(t - 1.3) / 0.15)
+    caption(c, "Geprägtes Logo", H * 0.22, t - 0.2, size=34, fade_out=(t - 1.3) / 0.15)
     return c, {"mblur": int(win * 70)}
 
 
@@ -652,7 +661,7 @@ def s_fit(t):
     scale = 0.80
     w, h = int(prod.width * scale), int(prod.height * scale)
     im = prod.resize((w, h), Image.BICUBIC)
-    im = add_sweep(im, lerp(-0.4, 1.4, ease_in_out((t - 0.9) / 1.2)), 0.09, 0.45)
+    im = add_sweep(im, lerp(-0.4, 1.4, ease_in_out((t - 0.9) / 1.2)), 0.08, 0.38)
     cx, cy = W / 2, H * 0.56
     x0, y0 = cx - w / 2, cy - h / 2
     cuts = [0.0, 0.34, 0.66, 1.0]
@@ -661,22 +670,23 @@ def s_fit(t):
     seam_flash = []
     for i in range(3):
         p = ease_out_expo((t - 0.05 - i * 0.09) / 0.75)
-        if p < 0.999:
+        if p > 0.985:
+            p = 1.0
+        if p < 1.0:
             done = False
         ya, yb = int(h * cuts[i]), int(h * cuts[i + 1])
         seg = im.crop((0, ya, w, yb))
         ox, oy = offsets[i]
         blit(c, set_alpha(seg, smoothstep(p * 3)), x0 + ox * (1 - p), y0 + ya + oy * (1 - p))
         if i < 2:
-            seam_flash.append((y0 + yb, clamp(1 - (t - 0.8 - i * 0.09) / 0.45)))
+            seam_flash.append((y0 + yb, clamp(1 - (t - 0.72 - i * 0.09) / 0.22)))
     if done:
         blit(c, reflection(im), x0, y0 + h + 4)
         blit(c, im, x0, y0)
-    else:
-        for sy, k in seam_flash:
-            if 0 < k < 1:
-                line = Image.new("RGBA", (w - 40, 2), (255, 240, 220, int(200 * k)))
-                blit_center(c, line, cx, sy)
+    for sy, k in seam_flash:
+        if 0 < k < 1:
+            line = Image.new("RGBA", (w - 60, 1), (255, 240, 220, int(110 * k)))
+            blit_center(c, line, cx, sy)
     headline(c, "Wie angegossen.", 300, t - 0.74, size=104, fade_out=(t - 2.08) / 0.15)
     caption(c, "iPhone 17 Pro · Pro Max", 420, t - 1.25, fade_out=(t - 2.08) / 0.15)
     return c, {}
@@ -686,7 +696,7 @@ def s_colors(t):
     """12.98-16.68: Farbwechsel als diagonale Wipes auf den Downbeats, dann Auffächern."""
     variants = CTX["variants"]
     times = [BEAT, 2 * BEAT, 3 * BEAT]   # Wipes -> Anthrazit, Dunkelbraun, Oliv
-    fan_t = 4 * BEAT
+    fan_t = 3.5 * BEAT
     idx = sum(1 for ts in times if t >= ts)
     cur, prev = idx, max(0, idx - 1)
     ts = times[idx - 1] if idx > 0 else -1
@@ -694,26 +704,30 @@ def s_colors(t):
     c = new_canvas(0.85, warm_shift=(0.0 if cur == 0 else 0.5) * smoothstep(p))
     particles(c, t + T_COLORS[0], alpha=0.5)
     if t < fan_t:
+        settle = ease_out_expo(t / 0.6)
         yaw = lerp(-8, 8, ease_in_out(t / fan_t))
         if p < 1.2:
             img = color_morph(variants[prev][1], variants[cur][1], lerp(-0.2, 1.25, ease_in_out(p)))
         else:
             img = variants[cur][1]
-        place_product(c, img, W / 2, H * 0.54, 0.80, yaw=yaw)
+        place_product(c, img, W / 2, lerp(H * 0.56, H * 0.50, settle), lerp(0.80, 0.74, settle), yaw=yaw)
         nxt = times[idx] if idx < len(times) else fan_t
-        caption(c, variants[cur][0], H * 0.86, t - (ts + 0.1 if idx > 0 else 0.15), size=30,
-                fade_out=(t - (nxt - 0.12)) / 0.12)
+        if cur < 3:  # Oliv wird gleich im Auffächern benannt
+            caption(c, variants[cur][0], H * 0.82, t - (ts + 0.1 if idx > 0 else 0.15), size=30,
+                    fade_out=(t - (nxt - 0.12)) / 0.12)
     else:
-        fan = ease_out_back((t - fan_t) / 0.5, s=0.9)
-        xs = [-372, -124, 124, 372]
+        fan = ease_out_back((t - fan_t) / 0.45, s=0.9)
+        cx0 = W / 2 - 30
+        xs = [-330, -110, 110, 330]
         for i, (name, img, dot) in enumerate(variants):
-            sx = lerp(0, xs[i], fan)
-            sc = lerp(0.80, 0.30, ease_out_cubic((t - fan_t) / 0.5))
-            place_product(c, img, W / 2 + sx, H * 0.54, sc, yaw=lerp(0, (i - 1.5) * 9, fan), reflect=True,
+            sx = lerp(W / 2 - cx0, xs[i], fan)
+            sc = lerp(0.74, 0.26, ease_out_cubic((t - fan_t) / 0.45))
+            place_product(c, img, cx0 + sx, H * 0.50, sc, yaw=lerp(0, (i - 1.5) * 9, fan), reflect=True,
                           alpha=1.0 if i == 3 else smoothstep(fan * 1.5))
-        headline(c, "Vier Charaktere.", 300, t - fan_t - 0.1, size=104)
+        headline(c, "Vier Charaktere.", 300, t - fan_t - 0.05, size=104)
         for i, (name, img, dot) in enumerate(variants):
-            caption(c, name, H * 0.74, t - fan_t - 0.3 - i * 0.06, size=17, cx=W / 2 + xs[i], hairline=False, color=GREY)
+            caption(c, name, H * 0.665, t - fan_t - 0.22 - i * 0.04, size=17, cx=cx0 + xs[i], hairline=False,
+                    color=GREY, fade_in=0.22)
     return c, {}
 
 
@@ -721,13 +735,13 @@ def s_finale(t):
     """16.6-18.8: Hero-Totale mit Markenclaim."""
     c = new_canvas(1.0)
     particles(c, t + T_FINALE[0])
-    yaw = lerp(-12, 10, ease_in_out(t / 2.23))
-    sweep = (lerp(-0.4, 1.4, ease_in_out((t - 0.35) / 1.3)), 0.09, 0.5)
+    yaw = lerp(-12, 10, ease_in_out(t / 1.48))
+    sweep = (lerp(-0.4, 1.4, ease_in_out((t - 0.25) / 1.0)), 0.09, 0.5)
     place_product(c, CTX["product"], W / 2, H * 0.60, 0.86, yaw=yaw, pitch=-3, sweep=sweep)
-    layer = text_layer("skiin MORE.", 128, WHITE, True, tracking=lerp(22, 4, ease_out_expo((t - 0.2) / 0.9)),
-                       alpha=smoothstep((t - 0.2) / 0.5))
+    layer = text_layer("skiin MORE.", 128, WHITE, True, tracking=lerp(22, 4, ease_out_expo((t - 0.1) / 0.7)),
+                       alpha=smoothstep((t - 0.1) / 0.4))
     blit_center(c, layer, W / 2, 300)
-    caption(c, "Hülle Leder für iPhone 17", 420, t - 0.8, size=28)
+    caption(c, "Lederhülle für iPhone 17", 420, t - 0.5, size=28)
     return c, {}
 
 
@@ -742,7 +756,7 @@ def s_end(t):
     if lw > 0:
         blit_center(c, Image.new("RGBA", (lw, 2), GOLD + (220,)), W / 2, H * 0.47 + 110)
     caption(c, "wiiuka.de", H * 0.47 + 170, t - 0.3, size=26, hairline=False, color=GREY)
-    fade = smoothstep((t - 0.62) / 0.45)
+    fade = smoothstep((t - 1.35) / 0.45)
     return c, {"fade": fade}
 
 
@@ -960,10 +974,10 @@ def build_audio(song_path, ffmpeg, out_wav):
     put(bank["hit"](1.2, soft=True), col, 0.65)
     for k in (1, 2, 3):
         put(bank["whoosh"](0.45, 0.7, 2.0, 400, 5000), col + k * BEAT, 0.5, -0.7, 0.7)
-    put(bank["whoosh"](0.6, 0.5, 1.8), col + 4 * BEAT, 0.45, 0.0, 0.0)
+    put(bank["whoosh"](0.6, 0.5, 1.8), col + 3.5 * BEAT, 0.45, 0.0, 0.0)
     put(bank["hit"](1.6), fin, 0.95)
-    put(bank["swell"](2.2), fin, 0.45)
-    put(bank["whoosh"](1.0), fin + 0.35, 0.3, -0.6, 0.6)
+    put(bank["swell"](1.6), fin, 0.45)
+    put(bank["whoosh"](0.9), fin + 0.25, 0.3, -0.6, 0.6)
     put(bank["boom"](1.6, 60, 34, 2.2), end, 0.7)
     put(bank["shimmer"](0.9), end + 0.05, 0.25)
 
