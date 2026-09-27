@@ -3,3 +3,4 @@ ffmpeg-python>=0.2.0
 pillow>=10
 numpy>=1.26
 imageio-ffmpeg>=0.5
+scipy>=1.11

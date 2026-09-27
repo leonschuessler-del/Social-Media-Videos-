@@ -62,3 +62,19 @@ python scripts/product_video.py --preview --out exports/check.mp4
 ```
 
 Ein systemweites `ffmpeg` wird nicht benötigt, das Skript nutzt das Binary aus `imageio-ffmpeg`.
+
+## High-End-Produktfilm (TikTok, 20 s, 60 fps)
+
+`scripts/product_video_pro.py` rendert die Agentur-Variante: dunkles Studio-Setup, Lichtsweeps,
+Pseudo-3D-Drehung, Makro-Shots mit Tiefenschärfe, Callouts, kinetische Typografie, Spiegelung,
+Filmkorn und ein komplett synthetisiertes Sound-Design (Booms, Whooshes, Ticks, Shimmer).
+Alle Schnitte liegen auf dem Beat-Raster des Songs (81 BPM), der Song wird taktgenau geloopt.
+
+```bash
+python scripts/product_video_pro.py --out exports/skiin_more_pro.mp4
+python scripts/product_video_pro.py --preview --out exports/check.mp4   # Standbilder je Szene
+python scripts/product_video_pro.py --fps 30 --workers 2                 # schneller, kleiner
+```
+
+Timeline, Texte und Sound-Events stehen oben im Skript (`T_*`, Szenenfunktionen `s_*`,
+`build_audio`). Landmarken der Hülle (Linsen, Logo) sind in `LM` hinterlegt.
